@@ -25,7 +25,7 @@ const VolunteerSchema = new Schema(
     },
     previousRole: {
       type: String,
-      required: true,
+      required: false,
       enum: roles,
     },
     previousOrganization: {
@@ -47,7 +47,7 @@ const VolunteerSchema = new Schema(
       },
       required: false,
     },
-    roleVerification: {
+    roleVerifications: {
       type: [
         {
           verifier: {
