@@ -10,7 +10,7 @@ export const zOrganizationResponse = zOrganization.extend(zBase.shape);
 export const zCreateOrganizationRequest = zOrganization.omit({
   softDelete: true,
 });
-export const zUpdateOrganizationRequest = zCreateOrganizationRequest.partial();
+export const zUpdateOrganizationRequest = zCreateOrganizationRequest;
 
 export interface Organization extends z.infer<typeof zOrganization> {}
 export interface OrganizationResponse

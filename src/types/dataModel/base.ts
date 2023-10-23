@@ -4,7 +4,7 @@ import { z } from 'zod';
 export const zObjectId = z.string().refine((val) => ObjectId.isValid(val));
 
 const zBase = z.object({
-  id: zObjectId,
+  _id: zObjectId,
   createdAt: z.date(),
   updatedAt: z.date(),
 });
