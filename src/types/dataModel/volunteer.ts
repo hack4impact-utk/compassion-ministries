@@ -9,7 +9,6 @@ export const backgroundCheckStatuses = [
   'Passed',
   'Failed',
   'In Progress',
-  'Not Checked',
 ] as const;
 export const zBackgroundCheckStatus = z.enum(backgroundCheckStatuses);
 
@@ -18,7 +17,7 @@ const zVolunteer = z.object({
   lastName: z.string(),
   email: z.string().email(),
   phoneNumber: z.string(),
-  previousRole: zRole,
+  previousRole: zRole.optional(),
   previousOrganization: zOrganization.optional(),
   backgroundCheck: z
     .object({
@@ -26,7 +25,7 @@ const zVolunteer = z.object({
       lastUpdated: z.date(),
     })
     .optional(),
-  roleVerification: z
+  roleVerifications: z
     .array(
       z.object({
         verifier: z.string(), // TODO: after discussing with bill determine if this should actually be a user
