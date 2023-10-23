@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import zOrganization from './organization';
+import zBase from './base';
 
 export const roles = ['Medical', 'Dental', 'Food', 'Save the Babies'] as const;
 export const zRole = z.enum(roles);
@@ -37,6 +38,24 @@ const zVolunteer = z.object({
   softDelete: z.boolean(),
 });
 
+export const zVolunteerResponse = zVolunteer.extend(zBase.shape);
+
+export const zCreateVolunteerRequest = zVolunteer.omit({
+  roleVerifications: true,
+  softDelete: true,
+  backgroundCheck: true,
+  previousOrganization: true,
+  previousRole: true,
+});
+
+export const zUpdateVolunteerRequest = zCreateVolunteerRequest.partial();
+
 export interface Volunteer extends z.infer<typeof zVolunteer> {}
+
+export interface VolunteerResponse extends z.infer<typeof zVolunteerResponse> {}
+export interface CreateVolunteerRequest
+  extends z.infer<typeof zCreateVolunteerRequest> {}
+export interface UpdateVolunteerRequest
+  extends z.infer<typeof zUpdateVolunteerRequest> {}
 
 export default zVolunteer;
