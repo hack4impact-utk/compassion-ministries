@@ -1,9 +1,6 @@
 import dbConnect from '@/utils/db-connect';
 import OrganizationSchema from '@/server/models/Organization';
-import {
-  OrganizationEntity,
-  zOrganizationEntity,
-} from '@/types/dataModel/organization';
+import { OrganizationEntity } from '@/types/dataModel/organization';
 
 /**
  * Soft delete an organization
@@ -19,8 +16,6 @@ export async function softDeleteOrganization(
     await OrganizationSchema.findByIdAndUpdate(organizationId, {
       softDelete: true,
     });
-
-  zOrganizationEntity.parse(res);
 
   return res;
 }
