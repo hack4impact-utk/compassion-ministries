@@ -2,6 +2,7 @@ import { softDeleteOrganization } from '@/server/actions/Organizations';
 import { zObjectId } from '@/types/dataModel/base';
 import { NextRequest, NextResponse } from 'next/server';
 
+// @route DELETE /api/organizations/[organizationId] - Soft deletes an organization
 export async function DELETE(
   _request: NextRequest,
   { params }: { params: { organizationId: string } }
