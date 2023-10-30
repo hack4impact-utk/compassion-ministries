@@ -1,5 +1,5 @@
 import {
-  Volunteer,
+  VolunteerEntity,
   backgroundCheckStatuses,
   roles,
 } from '@/types/dataModel/volunteer';
@@ -74,7 +74,9 @@ const VolunteerSchema = new Schema(
   }
 );
 
-export type VolunteerDocument = Volunteer & Document;
+export interface VolunteerDocument
+  extends Omit<VolunteerEntity, '_id'>,
+    Document {}
 
 export default (models.Volunteer as Model<VolunteerDocument>) ||
   model<VolunteerDocument>('Volunteer', VolunteerSchema);

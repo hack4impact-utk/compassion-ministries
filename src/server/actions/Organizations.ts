@@ -1,6 +1,9 @@
 import dbConnect from '@/utils/db-connect';
-import OrganizationSchema from '../models/Organization';
-import { Organization } from '@/types/dataModel/organization';
+import OrganizationSchema from '@/server/models/Organization';
+import {
+  OrganizationEntity,
+  zOrganizationEntity,
+} from '@/types/dataModel/organization';
 
 /**
  * Soft delete an organization
@@ -9,16 +12,15 @@ import { Organization } from '@/types/dataModel/organization';
  */
 export async function softDeleteOrganization(
   organizationId: string
-): Promise<Organization | null> {
+): Promise<OrganizationEntity | null> {
   await dbConnect();
 
-  // TODO update this to OrganizationEntity as a part of #20
-  const res: Organization | null = await OrganizationSchema.findByIdAndUpdate(
-    organizationId,
-    {
+  const res: OrganizationEntity | null =
+    await OrganizationSchema.findByIdAndUpdate(organizationId, {
       softDelete: true,
-    }
-  );
+    });
+
+  zOrganizationEntity.parse(res);
 
   return res;
 }

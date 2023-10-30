@@ -38,7 +38,9 @@ const zVolunteer = z.object({
   softDelete: z.boolean(),
 });
 
-export const zVolunteerResponse = zVolunteer.extend(zBase.shape);
+export const zVolunteerEntity = zVolunteer.extend(zBase.shape);
+
+export const zVolunteerResponse = zVolunteerEntity;
 
 export const zCreateVolunteerRequest = zVolunteer.omit({
   roleVerifications: true,
@@ -48,10 +50,10 @@ export const zCreateVolunteerRequest = zVolunteer.omit({
   previousRole: true,
 });
 
-export const zUpdateVolunteerRequest = zCreateVolunteerRequest;
+export const zUpdateVolunteerRequest = zCreateVolunteerRequest.partial();
 
 export interface Volunteer extends z.infer<typeof zVolunteer> {}
-
+export interface VolunteerEntity extends z.infer<typeof zVolunteerEntity> {}
 export interface VolunteerResponse extends z.infer<typeof zVolunteerResponse> {}
 export interface CreateVolunteerRequest
   extends z.infer<typeof zCreateVolunteerRequest> {}

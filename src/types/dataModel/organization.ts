@@ -6,13 +6,16 @@ const zOrganization = z.object({
   softDelete: z.boolean(),
 });
 
-export const zOrganizationResponse = zOrganization.extend(zBase.shape);
+export const zOrganizationEntity = zOrganization.extend(zBase.shape);
+export const zOrganizationResponse = zOrganizationEntity;
 export const zCreateOrganizationRequest = zOrganization.omit({
   softDelete: true,
 });
-export const zUpdateOrganizationRequest = zCreateOrganizationRequest;
+export const zUpdateOrganizationRequest = zCreateOrganizationRequest.partial();
 
 export interface Organization extends z.infer<typeof zOrganization> {}
+export interface OrganizationEntity
+  extends z.infer<typeof zOrganizationEntity> {}
 export interface OrganizationResponse
   extends z.infer<typeof zOrganizationResponse> {}
 export interface CreateOrganizationRequest
