@@ -11,5 +11,5 @@ export async function POST(
     return NextResponse.json({ message: 'Conflict' }, { status: 409 });
   }
 
-  return NextResponse.json({ id: res._id }, { status: 201 });
+  return NextResponse.json({ id: res }, { status: 201 });
 }
