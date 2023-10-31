@@ -1,21 +1,15 @@
 import { createOrganization } from '@/server/actions/Organizations';
 import { NextRequest, NextResponse } from 'next/server';
 
-//import OrganizationDocument from '@/server/models/Organization';
-//import OrganizationModel from '@/server/models/Organization';
-//import { CreateOrganizationRequest } from '@/types/dataModel/organization';
-
 export async function POST(
-  request: NextRequest,
-  { params }: { params: { name: string } }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _request: NextRequest
+  //{ params }: { params: { name: string, softDelete: boolean } }
 ) {
-  const res = await createOrganization(params.name);
+  const res = await createOrganization(); //params.name, params.softDelete);
   if (!res) {
     return NextResponse.json({ message: 'Conflict' }, { status: 409 });
   }
 
-  return NextResponse.json(
-    { message: 'Organization Created' },
-    { status: 201 }
-  );
+  return NextResponse.json({ id: res._id }, { status: 201 });
 }

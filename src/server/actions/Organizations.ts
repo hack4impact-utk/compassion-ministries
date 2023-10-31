@@ -1,15 +1,15 @@
 import dbConnect from '@/utils/db-connect';
 import OrganizationSchema from '../models/Organization';
-import { Organization } from '@/types/dataModel/organization';
 
-export async function createOrganization(
-  name: string
-): Promise<Organization | null> {
+export async function createOrganization() {
+//name: string,
+//softDelete: boolean,
   await dbConnect();
 
-  const res: Organization | null = await OrganizationSchema.create({
-    name: name,
+  const organization = await OrganizationSchema.create({
+    //name: name,
+    //softDelete: softDelete,
   });
 
-  return res;
+  return organization;
 }
