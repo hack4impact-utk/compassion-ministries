@@ -10,6 +10,7 @@ const OrganizationSchema = new Schema(
     softDelete: {
       type: Boolean,
       required: true,
+      default: false,
     },
   },
   {

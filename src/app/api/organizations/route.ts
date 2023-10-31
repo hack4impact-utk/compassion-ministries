@@ -3,10 +3,12 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _request: NextRequest
+  request: NextRequest
   //{ params }: { params: { name: string, softDelete: boolean } }
 ) {
-  const res = await createOrganization(); //params.name, params.softDelete);
+  const req = await request.json();
+  //validate zod object shape
+  const res = await createOrganization(req); //params.name, params.softDelete);
   if (!res) {
     return NextResponse.json({ message: 'Conflict' }, { status: 409 });
   }
