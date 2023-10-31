@@ -1,14 +1,12 @@
 import { createOrganization } from '@/server/actions/Organizations';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  request: NextRequest
-  //{ params }: { params: { name: string, softDelete: boolean } }
-) {
+// @route Post /api/organizations/ - Creates an organization
+
+export async function POST(request: NextRequest) {
   const req = await request.json();
-  //validate zod object shape
-  const res = await createOrganization(req); //params.name, params.softDelete);
+
+  const res = await createOrganization(req);
   if (!res) {
     return NextResponse.json({ message: 'Conflict' }, { status: 409 });
   }
