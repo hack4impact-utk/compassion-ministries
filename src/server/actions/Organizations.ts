@@ -19,7 +19,7 @@ export async function createOrganization(
   } catch (error) {
     throw new Error('Failed to create organization');
   }
-
+}
 
 /**
  * Soft delete an organization
