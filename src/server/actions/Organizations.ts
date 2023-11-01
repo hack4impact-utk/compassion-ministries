@@ -12,13 +12,9 @@ import { CreateOrganizationRequest } from '@/types/dataModel/organization';
 export async function createOrganization(
   request: CreateOrganizationRequest
 ): Promise<string> {
-  try {
-    await dbConnect();
-    const organization = await OrganizationSchema.create(request);
-    return organization._id.toString();
-  } catch (error) {
-    throw new Error('Failed to create organization');
-  }
+  await dbConnect();
+  const organization = await OrganizationSchema.create(request);
+  return organization._id.toString();
 }
 
 /**
