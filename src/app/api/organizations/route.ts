@@ -8,7 +8,10 @@ export async function POST(request: NextRequest) {
 
   const res = await createOrganization(req);
   if (!res) {
-    return NextResponse.json({ message: 'Conflict' }, { status: 409 });
+    return NextResponse.json(
+      { message: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 
   return NextResponse.json({ id: res }, { status: 201 });
