@@ -1,5 +1,5 @@
-import { Organization } from '@/types/dataModel/organization';
-import { Model, Schema, model, models } from 'mongoose';
+import { OrganizationEntity } from '@/types/dataModel/organization';
+import { Model, Schema, model, models, Document } from 'mongoose';
 
 const OrganizationSchema = new Schema(
   {
@@ -18,7 +18,9 @@ const OrganizationSchema = new Schema(
   }
 );
 
-export type OrganizationDocument = Organization & Document;
+export interface OrganizationDocument
+  extends Omit<OrganizationEntity, '_id'>,
+    Document {}
 
 export default (models.Organization as Model<OrganizationDocument>) ||
   model<OrganizationDocument>('Organization', OrganizationSchema);
