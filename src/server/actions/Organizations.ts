@@ -29,12 +29,12 @@ export async function softDeleteOrganization(
 export async function updateOrganization(
   organizationId: string,
   updatedData: object
-): Promise<Organization | null> {
+): Promise<OrganizationEntity | null> {
   await dbConnect();
 
   // Find the organization by its ID and update it with the new data
-  // TODO: should I block updating "softDelete"? What about "createdAt"?
-  const updatedOrganization: Organization | null =
+  // TODO: should I block updating "softDelete"?
+  const updatedOrganization: OrganizationEntity | null =
     await OrganizationSchema.findByIdAndUpdate(organizationId, {
       $set: updatedData,
       updatedAt: new Date().toJSON(), //set "updatedAt" into timenow
