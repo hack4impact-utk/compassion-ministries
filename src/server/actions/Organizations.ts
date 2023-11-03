@@ -42,3 +42,19 @@ export async function updateOrganization(
 
   return updatedOrganization;
 }
+
+/**
+ * returns ALL organizations in the database
+ * @param organizations all organization in the database
+ * @returns all organization in the database
+ */
+export async function getAllOrganizations(): Promise<
+  OrganizationEntity[] | null
+> {
+  await dbConnect();
+
+  const organizations: OrganizationEntity[] | null =
+    await OrganizationSchema.find();
+
+  return organizations;
+}

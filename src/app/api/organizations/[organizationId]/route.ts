@@ -56,5 +56,3 @@ export async function PUT(
   }
   return new NextResponse(undefined, { status: 204 });
 }
-
-// @route GET /api/organizations/[organizationId] - returns all organizations in the database
