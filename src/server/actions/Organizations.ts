@@ -13,8 +13,13 @@ export async function createOrganization(
   request: CreateOrganizationRequest
 ): Promise<string> {
   try {
-    await dbConnect();
+    const connection = await dbConnect();
     const organization = await OrganizationSchema.create(request);
+
+    connection.connection.on('error', (err) => {
+      throw new Error(err.code);
+    });
+
     return organization._id.toString();
   } catch (error) {
     throw error;
