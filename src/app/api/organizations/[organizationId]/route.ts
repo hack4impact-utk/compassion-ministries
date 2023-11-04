@@ -16,7 +16,7 @@ export async function DELETE(
   }
 
   const res = await softDeleteOrganization(params.organizationId);
-  if (!res) {
+  if (!res || res.softDelete) {
     return NextResponse.json(
       { message: 'Organization not found' },
       { status: 404 }
