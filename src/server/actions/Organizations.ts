@@ -30,17 +30,25 @@ export async function updateOrganization(
   organizationId: string,
   updatedData: object
 ): Promise<OrganizationEntity | null> {
-  await dbConnect();
-
-  // Find the organization by its ID and update it with the new data
-  // TODO: should I block updating "softDelete"?
-  const updatedOrganization: OrganizationEntity | null =
-    await OrganizationSchema.findByIdAndUpdate(organizationId, {
-      $set: updatedData,
-      updatedAt: new Date().toJSON(), //set "updatedAt" into timenow
+  try {
+    const connection = await dbConnect();
+    connection.connection.on('error', (err) => {
+      throw new Error(err.code);
     });
 
-  return updatedOrganization;
+    // Find the organization by its ID and update it with the new data
+    // TODO: should I block updating "softDelete"?
+    const updatedOrganization: OrganizationEntity | null =
+      await OrganizationSchema.findByIdAndUpdate(organizationId, {
+        $set: updatedData,
+        updatedAt: new Date().toJSON(), // set "updatedAt" into timenow
+      });
+
+    return updatedOrganization;
+  } catch (error) {
+    const errorMessage = 'Internal Server Error';
+    throw { status: 500, message: errorMessage };
+  }
 }
 
 /**
@@ -51,10 +59,18 @@ export async function updateOrganization(
 export async function getAllOrganizations(): Promise<
   OrganizationEntity[] | null
 > {
-  await dbConnect();
+  try {
+    const connection = await dbConnect();
+    connection.connection.on('error', (err) => {
+      throw new Error(err.code);
+    });
 
-  const organizations: OrganizationEntity[] | null =
-    await OrganizationSchema.find();
+    const organizations: OrganizationEntity[] | null =
+      await OrganizationSchema.find();
 
-  return organizations;
+    return organizations;
+  } catch (error) {
+    const errorMessage = 'Internal Server Error';
+    throw { status: 500, message: errorMessage };
+  }
 }
