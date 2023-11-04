@@ -2,7 +2,7 @@ import dbConnect from '@/utils/db-connect';
 import OrganizationSchema from '../models/Organization';
 import { Organization } from '@/types/dataModel/organization';
 import { CreateOrganizationRequest } from '@/types/dataModel/organization';
-
+import { OrganizationEntity } from '@/types/dataModel/organization';
 /**
  * Create an organization
  * @param CreateOrganizationRequest requires the name of the organization
@@ -26,6 +26,8 @@ export async function createOrganization(
   }
 }
 
+
+
 /**
  * Soft delete an organization
  * @param organizationId The Id of the organization to be deleted
@@ -33,16 +35,13 @@ export async function createOrganization(
  */
 export async function softDeleteOrganization(
   organizationId: string
-): Promise<Organization | null> {
+): Promise<OrganizationEntity | null> {
   await dbConnect();
 
-  // TODO update this to OrganizationEntity as a part of #20
-  const res: Organization | null = await OrganizationSchema.findByIdAndUpdate(
-    organizationId,
-    {
+  const res: OrganizationEntity | null =
+    await OrganizationSchema.findByIdAndUpdate(organizationId, {
       softDelete: true,
-    }
-  );
+    });
 
   return res;
 }
