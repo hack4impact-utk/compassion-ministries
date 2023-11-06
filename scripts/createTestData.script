@@ -1,0 +1,774 @@
+use("test")
+
+// if specified, clear out all existing collections (except the users collection)
+if (true) {
+   db.volunteers.deleteMany({})
+   db.organizations.deleteMany({})
+   db.eventVolunteers.deleteMany({})
+}
+
+// create 10 organizationId variables
+for (let i = 1; i <= 10; i++) {
+  this[`organizationId${i}`] = ObjectId();
+}
+
+db.organizations.insertMany([
+    {
+        "_id": organizationId1,
+        "name": "Harmony Haven Outreach",
+        "softDelete": true,
+        "createdAt": new Date(),
+        "updatedAt": new Date()
+    },
+    {
+        "_id": organizationId2,
+        "name": "Lighthouse Legacy Foundation",
+        "softDelete": false,
+        "createdAt": new Date(),
+        "updatedAt": new Date()
+    },
+    {
+        "_id": organizationId3,
+        "name": "Compassionate Crossroads Mission",
+        "softDelete": false,
+        "createdAt": new Date(),
+        "updatedAt": new Date()
+    },
+    {
+        "_id": organizationId4,
+        "name": "Faithful Friends Collective",
+        "softDelete": false,
+        "createdAt": new Date(),
+        "updatedAt": new Date()
+    },
+    {
+        "_id": organizationId5,
+        "name": "Serenity Springs Community Service",
+        "softDelete": false,
+        "createdAt": new Date(),
+        "updatedAt": new Date()
+    },
+    {
+        "_id": organizationId6,
+        "name": "Graceful Giving Guild",
+        "softDelete": false,
+        "createdAt": new Date(),
+        "updatedAt": new Date()
+    },
+    {
+        "_id": organizationId7,
+        "name": "Benevolent Blessings Brigade",
+        "softDelete": false,
+        "createdAt": new Date(),
+        "updatedAt": new Date()
+    },
+    {
+        "_id": organizationId8,
+        "name": "Charity's Chosen Circle",
+        "softDelete": false,
+        "createdAt": new Date(),
+        "updatedAt": new Date()
+    },
+    {
+        "_id": organizationId9,
+        "name": "Pathways of Promise Partnership",
+        "softDelete": false,
+        "createdAt": new Date(),
+        "updatedAt": new Date()
+    },
+    {
+        "_id": organizationId10,
+        "name": "Divine Deeds Coalition",
+        "softDelete": false,
+        "createdAt": new Date(),
+        "updatedAt": new Date()
+    },
+])
+
+// creates 31 volunteerId variables
+for (let i = 1; i <= 31; i++) {
+  this[`volunteerId${i}`] = ObjectId();
+}
+
+db.volunteers.insertMany([
+{
+    "_id": volunteerId1,
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@example.com",
+    "phoneNumber": "1234567890",
+    "address": "123 Main St, Anytown, USA",
+    "previousRole": "Medical",
+    "previousOrganization": organizationId1,
+    "backgroundCheck": {
+      "status": "Passed",
+      "lastUpdated": "2023-04-30T14:15:22Z"
+    },
+    "roleVerifications": [
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-04-29T10:00:00Z",
+        "role": "Medical"
+      }
+    ],
+    "softDelete": false,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId2,
+    "firstName": "Jane",
+    "lastName": "Smith",
+    "email": "jane.smith@example.com",
+    "phoneNumber": "2345678901",
+    "address": "456 Elm St, Sometown, USA",
+    "previousRole": "Dental",
+    "previousOrganization": organizationId2,
+    "backgroundCheck": {
+      "status": "In Progress",
+      "lastUpdated": "2023-04-29T09:30:00Z"
+    },
+    "roleVerifications": [
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-04-25T11:20:00Z",
+        "role": "Dental"
+      }
+    ],
+    "softDelete": true,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId3,
+    "firstName": "Alice",
+    "lastName": "Johnson",
+    "email": "alice.johnson@example.com",
+    "phoneNumber": "3456789012",
+    "address": "789 Oak St, Anycity, USA",
+    "backgroundCheck": {
+      "status": "Failed",
+      "lastUpdated": "2023-04-15T17:45:30Z"
+    },
+    "roleVerifications": [],
+    "softDelete": false,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId4,
+    "firstName": "Michael",
+    "lastName": "Brown",
+    "email": "michael.brown@example.com",
+    "phoneNumber": "4567890123",
+    "address": "101 Pine St, Mytown, USA",
+    "previousRole": "Save the Babies",
+    "previousOrganization": organizationId6,
+    "backgroundCheck": {
+      "status": "Passed",
+      "lastUpdated": "2023-04-20T18:55:00Z"
+    },
+    "roleVerifications": [
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-04-19T13:33:00Z",
+        "role": "Save the Babies"
+      },
+      {
+        "lastUpdated": "2023-04-16T13:33:00Z",
+        "role": "Medical"
+      }
+    ],
+    "softDelete": false,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId5,
+    "firstName": "Emily",
+    "lastName": "White",
+    "email": "emily.white@example.com",
+    "phoneNumber": "5678901234",
+    "address": "202 Cherry St, Yourtown, USA",
+    "backgroundCheck": {
+      "status": "Passed",
+      "lastUpdated": "2023-04-22T14:25:47Z"
+    },
+    "roleVerifications": [
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-04-21T15:10:00Z",
+        "role": "Medical"
+      }
+    ],
+    "softDelete": false,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId6,
+    "firstName": "David",
+    "lastName": "Harris",
+    "email": "david.harris@example.com",
+    "phoneNumber": "6789012345",
+    "address": "303 Birch St, Ourtown, USA",
+    "previousRole": "Dental",
+    "backgroundCheck": {
+      "status": "In Progress",
+      "lastUpdated": "2023-04-18T16:50:35Z"
+    },
+    "roleVerifications": [
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-04-17T16:00:00Z",
+        "role": "Dental"
+      }
+    ],
+    "softDelete": true,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId7,
+    "firstName": "Olivia",
+    "lastName": "Lewis",
+    "email": "olivia.lewis@example.com",
+    "phoneNumber": "7890123456",
+    "address": "404 Maple St, Webtown, USA",
+    "previousRole": "Food",
+    "previousOrganization": organizationId4,
+    "backgroundCheck": {
+      "status": "Passed",
+      "lastUpdated": "2023-04-27T19:00:10Z"
+    },
+    "roleVerifications": [],
+    "softDelete": false,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId8,
+    "firstName": "Ethan",
+    "lastName": "Clark",
+    "email": "ethan.clark@example.com",
+    "phoneNumber": "8901234567",
+    "address": "505 Walnut St, Cloudtown, USA",
+    "previousRole": "Save the Babies",
+    "previousOrganization": organizationId10,
+    "backgroundCheck": {
+      "status": "Failed",
+      "lastUpdated": "2023-04-05T20:20:20Z"
+    },
+    "roleVerifications": [
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-04-04T18:30:00Z",
+        "role": "Save the Babies"
+      }
+    ],
+    "softDelete": false,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId9,
+    "firstName": "Sophia",
+    "lastName": "Martinez",
+    "email": "sophia.martinez@example.com",
+    "phoneNumber": "9012345678",
+    "address": "606 Cedar St, Rivertown, USA",
+    "backgroundCheck": {
+      "status": "In Progress",
+      "lastUpdated": "2023-04-08T21:10:40Z"
+    },
+    "roleVerifications": [
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-04-07T19:05:00Z",
+        "role": "Medical"
+      }
+    ],
+    "softDelete": false,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId10,
+    "firstName": "Liam",
+    "lastName": "Sanchez",
+    "email": "liam.sanchez@example.com",
+    "phoneNumber": "0123456789",
+    "address": "707 Spruce St, Laketown, USA",
+    "previousRole": "Dental",
+    "previousOrganization": organizationId10,
+    "backgroundCheck": {
+      "status": "Passed",
+      "lastUpdated": "2023-04-11T22:30:00Z"
+    },
+    "roleVerifications": [
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-04-10T20:40:00Z",
+        "role": "Dental"
+      }
+    ],
+    "softDelete": true,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId11,
+    "firstName": "Charlotte",
+    "lastName": "Rodriguez",
+    "email": "charlotte.rodriguez@example.com",
+    "phoneNumber": "1234509876",
+    "address": "808 Palm St, Hilltown, USA",
+    "backgroundCheck": {
+      "status": "Passed",
+      "lastUpdated": "2023-04-14T23:59:59Z"
+    },
+    "roleVerifications": [],
+    "softDelete": false,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId12,
+    "firstName": "Isabella",
+    "lastName": "Garcia",
+    "email": "isabella.garcia@example.com",
+    "phoneNumber": "1987654321",
+    "address": "909 Willow St, Mountainview, USA",
+    "previousRole": "Medical",
+    "previousOrganization": organizationId3,
+    "backgroundCheck": {
+      "status": "Passed",
+      "lastUpdated": "2023-03-30T14:15:22Z"
+    },
+    "softDelete": false,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId13,
+    "firstName": "Noah",
+    "lastName": "Martinez",
+    "email": "noah.martinez@example.com",
+    "phoneNumber": "1897654321",
+    "address": "1010 Redwood St, Silicon Valley, USA",
+    "previousRole": "Dental",
+    "previousOrganization": organizationId7,
+    "backgroundCheck": {
+      "status": "In Progress",
+      "lastUpdated": "2023-03-29T09:30:00Z"
+    },
+    "roleVerifications": [
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-03-25T11:20:00Z",
+        "role": "Dental"
+      }
+    ],
+    "softDelete": false,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId14,
+    "firstName": "Mia",
+    "lastName": "Lee",
+    "email": "mia.lee@example.com",
+    "phoneNumber": "1787654321",
+    "address": "1111 Pine St, Seaside, USA",
+    "previousRole": "Food",
+    "softDelete": false,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId15,
+    "firstName": "Aiden",
+    "lastName": "Kim",
+    "email": "aiden.kim@example.com",
+    "phoneNumber": "1677654321",
+    "address": "1212 Maple Drive, Lakeside, USA",
+    "previousRole": "Save the Babies",
+    "previousOrganization": organizationId8,
+    "roleVerifications": [
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-03-19T13:33:00Z",
+        "role": "Save the Babies"
+      }
+    ],
+    "softDelete": true,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId16,
+    "firstName": "Ava",
+    "lastName": "Wilson",
+    "email": "ava.wilson@example.com",
+    "phoneNumber": "1567654321",
+    "address": "1313 Birch Circle, Highland, USA",
+    "previousRole": "Medical",
+    "previousOrganization": organizationId5,
+    "backgroundCheck": {
+      "status": "In Progress",
+      "lastUpdated": "2023-03-22T14:25:47Z"
+    },
+    "roleVerifications": [
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-03-21T15:10:00Z",
+        "role": "Medical"
+      }
+    ],
+    "softDelete": false,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId17,
+    "firstName": "Oliver",
+    "lastName": "Smith",
+    "email": "oliver.smith@example.com",
+    "phoneNumber": "1457654321",
+    "address": "1414 Cedar Ave, Summit, USA",
+    "previousRole": "Dental",
+    "previousOrganization": organizationId7,
+    "backgroundCheck": {
+      "status": "Failed",
+      "lastUpdated": "2023-03-05T20:20:20Z"
+    },
+    "roleVerifications": [
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-03-04T18:30:00Z",
+        "role": "Dental"
+      },
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-03-08T18:30:00Z",
+        "role": "Save the Babies"
+      }
+    ],
+    "softDelete": false,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId18,
+    "firstName": "Sophie",
+    "lastName": "Nguyen",
+    "email": "sophie.nguyen@example.com",
+    "phoneNumber": "1347654321",
+    "address": "1515 Oak St, Meadowview, USA",
+    "previousRole": "Food",
+    "backgroundCheck": {
+      "status": "Passed",
+      "lastUpdated": "2023-03-08T21:10:40Z"
+    },
+    "softDelete": false,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId19,
+    "firstName": "William",
+    "lastName": "Thompson",
+    "email": "william.thompson@example.com",
+    "phoneNumber": "1237654321",
+    "address": "1616 Willow Way, Maplewood, USA",
+    "previousOrganization": organizationId6,
+    "backgroundCheck": {
+      "status": "In Progress",
+      "lastUpdated": "2023-03-11T22:30:00Z"
+    },
+    "roleVerifications": [
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-03-10T20:40:00Z",
+        "role": "Save the Babies"
+      }
+    ],
+    "softDelete": true,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId20,
+    "firstName": "Zoe",
+    "lastName": "Anderson",
+    "email": "zoe.anderson@example.com",
+    "phoneNumber": "1127654321",
+    "address": "1717 Palm Road, Greenfield, USA",
+    "previousRole": "Medical",
+    "previousOrganization": organizationId7,
+    "backgroundCheck": {
+      "status": "Passed",
+      "lastUpdated": "2023-03-14T23:59:59Z"
+    },
+    "roleVerifications": [
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-03-13T21:15:00Z",
+        "role": "Medical"
+      }
+    ],
+    "softDelete": false,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId21,
+    "firstName": "Lucas",
+    "lastName": "Hernandez",
+    "email": "lucas.hernandez@example.com",
+    "phoneNumber": "1017654321",
+    "address": "1818 Cherry St, Pinecrest, USA",
+    "previousRole": "Dental",
+    "previousOrganization": organizationId6,
+    "backgroundCheck": {
+      "status": "Failed",
+      "lastUpdated": "2023-03-17T19:45:07Z"
+    },
+    "roleVerifications": [
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-03-16T22:30:00Z",
+        "role": "Dental"
+      }
+    ],
+    "softDelete": true,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  }, 
+  {
+    "_id": volunteerId22,
+    "firstName": "Ethan",
+    "lastName": "Brown",
+    "email": "ethan.brown@example.com",
+    "phoneNumber": "2012345678",
+    "address": "1919 Maple Avenue, Springtown, USA",
+    "previousRole": "Medical",
+    "backgroundCheck": {
+      "status": "Passed",
+      "lastUpdated": "2023-04-01T08:30:00Z"
+    },
+    "roleVerifications": [
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-03-31T11:00:00Z",
+        "role": "Medical"
+      }
+    ],
+    "softDelete": false,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId23,
+    "firstName": "Emily",
+    "lastName": "Davis",
+    "email": "emily.davis@example.com",
+    "phoneNumber": "2023456789",
+    "address": "2020 Birchwood Road, Lakeville, USA",
+    "previousRole": "Dental",
+    "previousOrganization": organizationId2,
+    "backgroundCheck": {
+      "status": "In Progress",
+      "lastUpdated": "2023-04-02T09:45:00Z"
+    },
+    "roleVerifications": [
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-03-31T15:20:00Z",
+        "role": "Dental"
+      }
+    ],
+    "softDelete": false,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId24,
+    "firstName": "Olivia",
+    "lastName": "Miller",
+    "email": "olivia.miller@example.com",
+    "phoneNumber": "2034567890",
+    "address": "2121 Cedar Lane, Ridgewood, USA",
+    "previousRole": "Food",
+    "previousOrganization": organizationId3,
+    "backgroundCheck": {
+      "status": "Failed",
+      "lastUpdated": "2023-04-03T10:35:00Z"
+    },
+    "roleVerifications": [
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-03-30T16:05:00Z",
+        "role": "Food"
+      }
+    ],
+    "softDelete": false,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId25,
+    "firstName": "James",
+    "lastName": "Taylor",
+    "email": "james.taylor@example.com",
+    "phoneNumber": "2045678901",
+    "address": "2222 Pine Street, Westview, USA",
+    "previousRole": "Save the Babies",
+    "previousOrganization": organizationId4,
+    "backgroundCheck": {
+      "status": "In Progress",
+      "lastUpdated": "2023-04-04T12:00:00Z"
+    },
+    "roleVerifications": [
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-04-03T17:30:00Z",
+        "role": "Save the Babies"
+      }
+    ],
+    "softDelete": true,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId26,
+    "firstName": "Grace",
+    "lastName": "Wilson",
+    "email": "grace.wilson@example.com",
+    "phoneNumber": "2056789012",
+    "address": "2333 Elm Street, Eastville, USA",
+    "previousRole": "Medical",
+    "previousOrganization": organizationId10,
+    "roleVerifications": [
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-04-04T18:45:00Z",
+        "role": "Medical"
+      }
+    ],
+    "softDelete": false,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId27,
+    "firstName": "Jackson",
+    "lastName": "Martinez",
+    "email": "jackson.martinez@example.com",
+    "phoneNumber": "2067890123",
+    "address": "2444 Oak Avenue, Northtown, USA",
+    "previousRole": "Dental",
+    "backgroundCheck": {
+      "status": "Failed",
+      "lastUpdated": "2023-04-06T14:10:00Z"
+    },
+    "roleVerifications": [
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-04-05T19:50:00Z",
+        "role": "Dental"
+      }
+    ],
+    "softDelete": false,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId28,
+    "firstName": "Amelia",
+    "lastName": "Hernandez",
+    "email": "amelia.hernandez@example.com",
+    "phoneNumber": "2078901234",
+    "address": "2555 Maple Court, Southtown, USA",
+    "previousRole": "Food",
+    "previousOrganization": organizationId8,
+    "backgroundCheck": {
+      "status": "Passed",
+      "lastUpdated": "2023-04-07T15:20:00Z"
+    },
+    "softDelete": false,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId29,
+    "firstName": "Mia",
+    "lastName": "Garcia",
+    "email": "mia.garcia@example.com",
+    "phoneNumber": "2089012345",
+    "address": "2666 Walnut Street, Rivertown, USA",
+    "previousRole": "Save the Babies",
+    "backgroundCheck": {
+      "status": "In Progress",
+      "lastUpdated": "2023-04-08T16:30:00Z"
+    },
+    "roleVerifications": [
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-04-07T21:30:00Z",
+        "role": "Save the Babies"
+      }
+    ],
+    "softDelete": true,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId30,
+    "firstName": "Aiden",
+    "lastName": "Robinson",
+    "email": "aiden.robinson@example.com",
+    "phoneNumber": "2090123456",
+    "address": "2777 Birchwood Park, Creekview, USA",
+    "previousRole": "Medical",
+    "previousOrganization": organizationId1,
+    "backgroundCheck": {
+      "status": "Failed",
+      "lastUpdated": "2023-04-09T17:45:00Z"
+    },
+    "roleVerifications": [
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-04-08T22:10:00Z",
+        "role": "Medical"
+      }
+    ],
+    "softDelete": false,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId31,
+    "firstName": "Sophia",
+    "lastName": "Lee",
+    "email": "sophia.lee@example.com",
+    "phoneNumber": "2101234567",
+    "address": "2888 Cedarwood Road, Hillside, USA",
+    "previousRole": "Dental",
+    "previousOrganization": organizationId1,
+    "backgroundCheck": {
+      "status": "Passed",
+      "lastUpdated": "2023-04-10T18:50:00Z"
+    },
+    "roleVerifications": [
+      {
+        "verifier": ObjectId(),
+        "lastUpdated": "2023-04-09T23:00:00Z",
+        "role": "Dental"
+      }
+    ],
+    "softDelete": true,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
+  }
+])
