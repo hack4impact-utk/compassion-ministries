@@ -1,6 +1,5 @@
 import dbConnect from '@/utils/db-connect';
 import OrganizationSchema from '../models/Organization';
-import { Organization } from '@/types/dataModel/organization';
 import { CreateOrganizationRequest } from '@/types/dataModel/organization';
 import { OrganizationEntity } from '@/types/dataModel/organization';
 /**
@@ -13,20 +12,14 @@ export async function createOrganization(
   request: CreateOrganizationRequest
 ): Promise<string> {
   try {
-    const connection = await dbConnect();
+    await dbConnect();
     const organization = await OrganizationSchema.create(request);
-
-    connection.connection.on('error', (err) => {
-      throw new Error(err.code);
-    });
 
     return organization._id.toString();
   } catch (error) {
     throw error;
   }
 }
-
-
 
 /**
  * Soft delete an organization
