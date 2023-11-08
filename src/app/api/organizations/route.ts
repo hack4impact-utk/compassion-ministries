@@ -22,7 +22,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ id: res }, { status: 201 });
   } catch (error) {
-    console.log(error);
     if (error instanceof mongo.MongoServerError) {
       return NextResponse.json({ message: error }, { status: 409 });
     }
