@@ -17,12 +17,20 @@ export async function DELETE(
     }*/
     const req = await request.json();
     const res = await deleteVolunteer(req);
-    console.log('ASDF');
-    return NextResponse.json({ id: res }, { status: 204 });
+
+    if (!res) {
+      return NextResponse.json(
+        { message: 'Volunteer not found' },
+        { status: 404 }
+      );
+    }
+    return new NextResponse(null, { status: 204 });
   } catch (error) {
+    console.error('Error in DELETE endpoint:', error);
+
     if (error instanceof mongo.MongoServerError) {
       return NextResponse.json({ message: error }, { status: 409 });
     }
-    return NextResponse.json({ message: error }, { status: 500 });
+    return NextResponse.json({ message: '500 ERROR' }, { status: 500 });
   }
 }

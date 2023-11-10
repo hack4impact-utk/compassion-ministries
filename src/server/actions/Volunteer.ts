@@ -13,7 +13,11 @@ export async function deleteVolunteer(
   try {
     await dbConnect();
     const volunteer: VolunteerEntity | null =
-      await VolunteerSchema.findByIdAndDelete(_id);
+      await VolunteerSchema.findByIdAndUpdate(
+        _id,
+        { $unset: { roleVerifications: 1 } },
+        { new: true }
+      );
 
     return volunteer;
   } catch (error) {
