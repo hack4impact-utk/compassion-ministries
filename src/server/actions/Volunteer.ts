@@ -1,5 +1,5 @@
 import dbConnect from '@/utils/db-connect';
-import OrganizationSchema from '../models/Organization';
+import VolunteerSchema from '../models/Volunteer';
 import { VolunteerEntity } from '@/types/dataModel/volunteer';
 /**
  * Deletes a volunteer
@@ -8,12 +8,12 @@ import { VolunteerEntity } from '@/types/dataModel/volunteer';
  */
 
 export async function deleteVolunteer(
-  volunteerId: string
+  _id: string
 ): Promise<VolunteerEntity | null> {
   try {
     await dbConnect();
     const volunteer: VolunteerEntity | null =
-      await OrganizationSchema.findByIdAndDelete(volunteerId);
+      await VolunteerSchema.findByIdAndDelete(_id);
 
     return volunteer;
   } catch (error) {

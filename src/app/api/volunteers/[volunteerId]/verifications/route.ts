@@ -7,7 +7,6 @@ export async function DELETE(
   //{ params }: { params: { volunteerId: string } }
 ) {
   try {
-    console.log('BRUHBRHUHBRUHUBHUR');
     //const req = await request.nextUrl.searchParams.get("role");
     //const validationResult = verificationRoles.safeParse(req);
     /*if (!validationResult.success) {
@@ -18,15 +17,12 @@ export async function DELETE(
     }*/
     const req = await request.json();
     const res = await deleteVolunteer(req);
-
+    console.log('ASDF');
     return NextResponse.json({ id: res }, { status: 201 });
   } catch (error) {
     if (error instanceof mongo.MongoServerError) {
       return NextResponse.json({ message: error }, { status: 409 });
     }
-    return NextResponse.json(
-      { message: 'Internal Server Error ' },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: error }, { status: 500 });
   }
 }
