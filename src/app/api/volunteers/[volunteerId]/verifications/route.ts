@@ -18,7 +18,7 @@ export async function DELETE(
     const req = await request.json();
     const res = await deleteVolunteer(req);
     console.log('ASDF');
-    return NextResponse.json({ id: res }, { status: 201 });
+    return NextResponse.json({ id: res }, { status: 204 });
   } catch (error) {
     if (error instanceof mongo.MongoServerError) {
       return NextResponse.json({ message: error }, { status: 409 });
