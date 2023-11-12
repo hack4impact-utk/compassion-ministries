@@ -30,3 +30,33 @@ export async function getVolunteer(
     throw { status: 500, message: errorMessage };
   }
 }
+
+export async function getAllEventsForVolunteer(
+  VolunteerId: string
+): Promise<VolunteerEntity | null> {
+  try {
+    // error check
+    const connection = await dbConnect();
+    connection.connection.on('error', (err) => {
+      throw new Error(err.code);
+    });
+
+    // actually look for all the events a volunteer with the given ID has attented
+    const Volunteer: VolunteerEntity | null = await VolunteerSchema.findById(
+      VolunteerId,
+      {}
+    );
+
+    if (Volunteer === null) {
+      const errorMessage = 'Volunteer not found';
+      throw { status: 404, message: errorMessage };
+    }
+
+    // found the Volunteer, now need to tind all the events they attended
+
+    return null;
+  } catch (error) {
+    const errorMessage = 'Internal Server Error';
+    throw { status: 500, message: errorMessage };
+  }
+}
