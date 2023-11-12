@@ -16,6 +16,7 @@ export async function GET(
     );
   }
 
+  // Error check - not sure if this part is needed
   const res = await getVolunteer(params.volunteerId);
   if (!res) {
     return NextResponse.json(
@@ -23,5 +24,7 @@ export async function GET(
       { status: 404 }
     );
   }
-  return new NextResponse(undefined, { status: 204 });
+
+  // if no error: return the specific Volunteer found
+  return NextResponse.json(res, { status: 200 });
 }
