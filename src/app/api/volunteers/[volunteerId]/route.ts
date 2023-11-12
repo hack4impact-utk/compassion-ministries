@@ -16,7 +16,6 @@ export async function GET(
     );
   }
 
-  // Error check - not sure if this part is needed
   const res = await getVolunteer(params.volunteerId);
   if (!res) {
     return NextResponse.json(
