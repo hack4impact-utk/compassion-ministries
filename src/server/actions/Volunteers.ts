@@ -1,6 +1,8 @@
 import dbConnect from '@/utils/db-connect';
 import VolunteerSchema from '@/server/models/Volunteer';
-import { VolunteerEntity } from '@/types/dataModel/volunteer';
+import { VolunteerResponse } from '@/types/dataModel/volunteer';
+import OrganizationSchema from '@/server/models/Organization';
+OrganizationSchema;
 
 /**
  * Get a specific Volunteer
@@ -9,22 +11,16 @@ import { VolunteerEntity } from '@/types/dataModel/volunteer';
  */
 
 export async function getVolunteer(
-  VolunteerId: string
-): Promise<VolunteerEntity | null> {
+  volunteerId: string
+): Promise<VolunteerResponse | null> {
   try {
-    // error check
-    const connection = await dbConnect();
-    connection.connection.on('error', (err) => {
-      throw new Error(err.code);
-    });
+    await dbConnect();
 
-    // actually find the volunteer by id
-    const Volunteer: VolunteerEntity | null = await VolunteerSchema.findById(
-      VolunteerId,
-      {}
-    );
+    // find the volunteer by id
+    const volunteer: VolunteerResponse | null = await 
+    VolunteerSchema.findById(volunteerId).populate('previousOrganization')
 
-    return Volunteer;
+    return volunteer;
   } catch (error) {
     const errorMessage = 'Internal Server Error';
     throw { status: 500, message: errorMessage };
