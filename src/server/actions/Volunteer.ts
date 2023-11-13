@@ -4,6 +4,7 @@ import { CreateVolunteerRequest } from '@/types/dataModel/volunteer';
 
 /**
  * Creates a volunteer
+ * @param request The CreateVolunteerRequest containing data for the new volunteer
  * @returns The id of the new volunteer
  */
 export async function createVolunteer(
