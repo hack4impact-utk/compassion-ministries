@@ -14,8 +14,7 @@ export async function softDeleteVolunteer(
 
   const res: VolunteerEntity | null = await VolunteerSchema.findByIdAndUpdate(
     volunteerId,
-    { softDelete: true },
-    { strict: false } //Makes sure to add a softDelete field to the volunteer if it does not already have one
+    { softDelete: true }
   );
 
   return res;
