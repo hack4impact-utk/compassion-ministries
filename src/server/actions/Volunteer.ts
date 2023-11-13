@@ -1,4 +1,4 @@
-import { VolunteerEntity } from '@/types/dataModel/volunteer';
+import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import VolunteerSchema from '@/server/models/Volunteer';
 import dbConnect from '@/utils/db-connect';
 
@@ -6,10 +6,13 @@ import dbConnect from '@/utils/db-connect';
  * Gets all volunteers.
  * @returns Collection of VolunteerEntities in the database, or null if there are none.
  */
-export async function getAllVolunteers(): Promise<VolunteerEntity[] | null> {
+export async function getAllVolunteers(): Promise<VolunteerResponse[] | null> {
   try {
     await dbConnect();
-    const volunteers: VolunteerEntity[] | null = await VolunteerSchema.find();
+    require('../models/Organization'); // surely there's a way to accomplish this on app startup? this feels like a bad practice
+    const volunteers: VolunteerResponse[] =
+      await VolunteerSchema.find().populate('previousOrganization');
+
     return volunteers;
   } catch (error) {
     throw error;

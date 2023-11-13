@@ -5,12 +5,6 @@ import { NextResponse } from 'next/server';
 export async function GET() {
   try {
     const volunteers = await getAllVolunteers();
-    if (!volunteers) {
-      return NextResponse.json(
-        { message: 'No volunteers found.' },
-        { status: 404 }
-      );
-    }
     return NextResponse.json(volunteers, { status: 200 });
   } catch (error) {
     return NextResponse.json(
