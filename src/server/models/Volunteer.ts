@@ -18,10 +18,12 @@ const VolunteerSchema = new Schema(
     email: {
       type: String,
       required: true,
+      unique: true,
     },
     phoneNumber: {
       type: String,
       required: true,
+      unique: true,
     },
     previousRole: {
       type: String,
