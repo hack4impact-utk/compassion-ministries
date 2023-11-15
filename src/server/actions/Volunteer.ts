@@ -1,10 +1,13 @@
 import dbConnect from '@/utils/db-connect';
 import VolunteerSchema from '@/server/models/Volunteer';
-import { VolunteerEntity } from '@/types/dataModel/volunteer';
+import {
+  UpdateVolunteerRequest,
+  VolunteerEntity,
+} from '@/types/dataModel/volunteer';
 
 export async function updateVolunteer(
   volunteerId: string,
-  updatedData: object
+  updatedData: UpdateVolunteerRequest
 ): Promise<VolunteerEntity | null> {
   await dbConnect();
 
