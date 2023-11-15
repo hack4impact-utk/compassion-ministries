@@ -1,14 +1,16 @@
 import { updateVolunteer } from '@/server/actions/Volunteer';
 import { zObjectId } from '@/types/dataModel/base';
+import {
+  zCreateVolunteerRequest,
+  zVolunteerResponse,
+} from '@/types/dataModel/volunteer';
 import { NextRequest, NextResponse } from 'next/server';
 
 // @route PUT /api/volunteers/[volunteerId] - updates an existing volunteer in the database
 export async function PUT(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: { volunteerId: string } }
 ) {
-  console.log('in put func\n');
-
   const validationResult = zObjectId.safeParse(params.volunteerId);
   if (!validationResult.success) {
     return NextResponse.json(
@@ -17,18 +19,26 @@ export async function PUT(
     );
   }
 
-  // Get the updated volunteer data
-  const requestBody = await _request.json();
+  const vId = validationResult.data;
 
-  const updatedVolunteer = await updateVolunteer(
-    params.volunteerId,
-    requestBody
-  );
-  if (!updatedVolunteer) {
+  // Get the updated volunteer data
+  const res = await request.json();
+  const volunteerRequest = zCreateVolunteerRequest.safeParse(res);
+
+  let updatedVolunteer;
+  if (volunteerRequest.success) {
+    updatedVolunteer = await updateVolunteer(vId, volunteerRequest.data);
+  } else {
     return NextResponse.json(
       { message: 'Volunteer not found' },
       { status: 404 }
     );
   }
-  return new NextResponse(undefined, { status: 204 });
+
+  const responseValidation = zVolunteerResponse.safeParse(updatedVolunteer);
+  if (responseValidation.success) {
+    return new NextResponse(undefined, { status: 204 });
+  } else {
+    return new NextResponse(undefined, { status: 400 });
+  }
 }
