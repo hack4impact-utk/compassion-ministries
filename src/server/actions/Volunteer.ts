@@ -13,10 +13,7 @@ export async function updateVolunteer(
 
   // Find the volunteer by its ID and update it with the new data
   const updatedVolunteer: VolunteerEntity | null =
-    await VolunteerSchema.findByIdAndUpdate(volunteerId, {
-      $set: updatedData,
-      updatedAt: new Date().toJSON(),
-    });
+    await VolunteerSchema.findByIdAndUpdate(volunteerId, updatedData);
 
   return updatedVolunteer;
 }
