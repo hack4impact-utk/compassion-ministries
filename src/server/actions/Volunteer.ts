@@ -1,6 +1,28 @@
-import dbConnect from '@/utils/db-connect';
+import {
+  VolunteerResponse,
+  CreateVolunteerRequest,
+} from '@/types/dataModel/volunteer';
 import VolunteerSchema from '@/server/models/Volunteer';
-import { CreateVolunteerRequest } from '@/types/dataModel/volunteer';
+import dbConnect from '@/utils/db-connect';
+
+// Temporary code to load org schema until we are using it elsewhere
+import OrganizationSchema from '@/server/models/Organization';
+OrganizationSchema;
+
+/**
+ * Gets all volunteers.
+ * @returns Collection of VolunteerEntities in the database, or null if there are none.
+ */
+export async function getAllVolunteers(): Promise<VolunteerResponse[] | null> {
+  try {
+    await dbConnect();
+    const volunteers: VolunteerResponse[] =
+      await VolunteerSchema.find().populate('previousOrganization');
+    return volunteers;
+  } catch (error) {
+    throw error;
+  }
+}
 
 /**
  * Creates a volunteer

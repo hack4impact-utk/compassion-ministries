@@ -1,6 +1,19 @@
-import { createVolunteer } from '@/server/actions/Volunteer';
+import { getAllVolunteers, createVolunteer } from '@/server/actions/Volunteer';
 import { NextRequest, NextResponse } from 'next/server';
 import { zCreateVolunteerRequest } from '@/types/dataModel/volunteer';
+
+// @route GET /api/volunteers - Get all volunteers
+export async function GET() {
+  try {
+    const volunteers = await getAllVolunteers();
+    return NextResponse.json(volunteers, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { message: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
 
 // @route POST /api/volunteers - Creates a volunteer
 export async function POST(request: NextRequest) {
