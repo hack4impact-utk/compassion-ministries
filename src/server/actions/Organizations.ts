@@ -1,6 +1,9 @@
 import dbConnect from '@/utils/db-connect';
 import OrganizationSchema from '@/server/models/Organization';
-import { OrganizationEntity } from '@/types/dataModel/organization';
+import {
+  OrganizationEntity,
+  UpdateOrganizationRequest,
+} from '@/types/dataModel/organization';
 
 /**
  * Soft delete an organization
@@ -29,7 +32,7 @@ export async function softDeleteOrganization(
 export async function updateOrganization(
   organizationId: string,
   updatedData: object
-): Promise<OrganizationEntity | null> {
+): Promise<UpdateOrganizationRequest | null> {
   try {
     const connection = await dbConnect();
     connection.connection.on('error', (err) => {
@@ -39,15 +42,13 @@ export async function updateOrganization(
     // Find the organization by its ID and update it with the new data
     // TODO: should I block updating "softDelete"?
     const updatedOrganization: OrganizationEntity | null =
-      await OrganizationSchema.findByIdAndUpdate(organizationId, {
-        $set: updatedData,
-        updatedAt: new Date().toJSON(), // set "updatedAt" into timenow
-      });
+      await OrganizationSchema.findByIdAndUpdate(organizationId, updatedData);
 
     return updatedOrganization;
   } catch (error) {
-    const errorMessage = 'Internal Server Error';
-    throw { status: 500, message: errorMessage };
+    // const errorMessage = 'Internal Server Error';
+    // throw { status: 500, message: errorMessage };
+    throw error;
   }
 }
 
@@ -70,7 +71,8 @@ export async function getAllOrganizations(): Promise<
 
     return organizations;
   } catch (error) {
-    const errorMessage = 'Internal Server Error';
-    throw { status: 500, message: errorMessage };
+    // const errorMessage = 'Internal Server Error';
+    // throw { status: 500, message: errorMessage };
+    throw error;
   }
 }
