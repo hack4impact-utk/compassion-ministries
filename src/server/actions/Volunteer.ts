@@ -1,6 +1,7 @@
 import {
   VolunteerResponse,
   CreateVolunteerRequest,
+  VolunteerEntity,
 } from '@/types/dataModel/volunteer';
 import VolunteerSchema from '@/server/models/Volunteer';
 import dbConnect from '@/utils/db-connect';
@@ -36,6 +37,22 @@ export async function createVolunteer(
     await dbConnect();
     const volunteer = await VolunteerSchema.create(request);
     return volunteer._id.toString();
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function deleteVolunteer(
+  volunteerId: string,
+  eventId: string
+): Promise<VolunteerEntity | null> {
+  try {
+    await dbConnect();
+    const res: VolunteerEntity | null = await VolunteerSchema.findOneAndDelete({
+      volunteerId: volunteerId,
+      eventId: eventId,
+    });
+    return res;
   } catch (error) {
     throw error;
   }
