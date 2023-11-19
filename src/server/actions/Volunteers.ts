@@ -1,6 +1,12 @@
 import dbConnect from '@/utils/db-connect';
 import VolunteerSchema from '@/server/models/Volunteer';
-import { VolunteerEntity } from '@/types/dataModel/volunteer';
+import {
+  VolunteerEntity,
+  VolunteerResponse,
+} from '@/types/dataModel/volunteer';
+import { OrganizationEntity } from '@/types/dataModel/organization';
+import OrganizationSchema from '@/server/models/Organization';
+OrganizationSchema;
 
 /**
  * Get a specific Volunteer
@@ -9,22 +15,17 @@ import { VolunteerEntity } from '@/types/dataModel/volunteer';
  */
 
 export async function getVolunteer(
-  VolunteerId: string
-): Promise<VolunteerEntity | null> {
+  volunteerId: string
+): Promise<VolunteerResponse | null> {
   try {
-    // error check
-    const connection = await dbConnect();
-    connection.connection.on('error', (err) => {
-      throw new Error(err.code);
-    });
+    await dbConnect();
 
-    // actually find the volunteer by id
-    const Volunteer: VolunteerEntity | null = await VolunteerSchema.findById(
-      VolunteerId,
-      {}
-    );
+    // find the volunteer by id
+    const volunteer: VolunteerResponse | null = await VolunteerSchema.findById(
+      volunteerId
+    ).populate('previousOrganization');
 
-    return Volunteer;
+    return volunteer;
   } catch (error) {
     const errorMessage = 'Internal Server Error';
     throw { status: 500, message: errorMessage };
@@ -33,13 +34,10 @@ export async function getVolunteer(
 
 export async function getAllEventsForVolunteer(
   VolunteerId: string
-): Promise<VolunteerEntity | null> {
+): Promise<OrganizationEntity[] | null> {
   try {
     // error check
-    const connection = await dbConnect();
-    connection.connection.on('error', (err) => {
-      throw new Error(err.code);
-    });
+    await dbConnect();
 
     // actually look for all the events a volunteer with the given ID has attented
     const Volunteer: VolunteerEntity | null = await VolunteerSchema.findById(
@@ -53,6 +51,7 @@ export async function getAllEventsForVolunteer(
     }
 
     // found the Volunteer, now need to tind all the events they attended
+    //const organization : OrganizationEntity | null = await OrganizationSchema.findById(volunteerId)
 
     return null;
   } catch (error) {
