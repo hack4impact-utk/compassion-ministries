@@ -1,4 +1,4 @@
-import zCMErrorType, { CMErrorType } from '@/types/dataModel/cmerrortypes';
+import zCMErrorType, { CMErrorType } from '@/types/dataModel/cmerrortype';
 
 const defaultErrorMessages: Map<CMErrorType, string> = new Map<
   CMErrorType,
