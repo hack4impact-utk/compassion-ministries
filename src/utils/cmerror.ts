@@ -5,6 +5,9 @@ export default class CMError extends Error {
   type: CMErrorType;
   status: number;
 
+  // Constructs a CMError based on a CMErrorType value
+  // Default status and message for a CMErrorType can be overridden with options param
+  // By convention, cause is used to encapsulate a parent error
   constructor(
     type: CMErrorType,
     options?: { status?: number; message?: string; cause?: unknown }
@@ -50,6 +53,7 @@ export default class CMError extends Error {
     [zCMErrorType.Enum.DuplicateKey, 409],
   ]);
 
+  // Get a response object representing this CMError
   toResponse(): { message: string; status: number } {
     return {
       message: this.message,
