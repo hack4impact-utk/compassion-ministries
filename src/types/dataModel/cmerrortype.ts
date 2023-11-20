@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+// Enum of error types
+// DELETING ANY OF THESE MAY BREAK CODE ELSEWHERE
 const cmErrorTypes = [
   'OK',
   'UnknownError',
