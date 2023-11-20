@@ -24,18 +24,17 @@ const zEventVolunteerResponse = zEventVolunteerEntity.extend({
   volunteer: zVolunteerResponse,
 });
 
-//TODO: uncomment this (once zEventResponse exists)
-/*
 const zVolunteerEventResponse = zEventVolunteerEntity.extend({
-    event: zEventResponse
+  event: zObjectId, // TODO: Change type to zEventResponse once it exists
 });
-*/
 
 export interface EventVolunteer extends z.infer<typeof zEventVolunteer> {}
 export interface EventVolunteerEntity
   extends z.infer<typeof zEventVolunteerEntity> {}
 export interface EventVolunteerResponse
   extends z.infer<typeof zEventVolunteerResponse> {}
+export interface VolunteerEventResponse
+  extends z.infer<typeof zVolunteerEventResponse> {}
 export interface CreateEventVolunteerRequest
   extends z.infer<typeof zCreateEventVolunteerRequest> {}
 
