@@ -1,12 +1,13 @@
 import { EventVolunteerEntity } from '@/types/dataModel/eventVolunteer';
+import { roles } from '@/types/dataModel/volunteer';
 import { Model, Schema, model, models } from 'mongoose';
 
 const EventVolunteerSchema = new Schema(
   {
     role: {
-      type: Schema.Types.ObjectId,
-      ref: 'Role',
-      required: true,
+      type: String,
+      required: false,
+      enum: roles,
     },
     organization: {
       type: Schema.Types.ObjectId,

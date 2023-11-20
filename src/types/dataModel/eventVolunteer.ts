@@ -12,13 +12,16 @@ const zEventVolunteer = z.object({
 
 const zEventVolunteerEntity = zEventVolunteer.extend({
   ...zBase.shape,
-  role: zObjectId,
   organization: zObjectId,
   volunteer: zObjectId,
   event: zObjectId,
 });
 
-const zCreateEventVolunteerRequest = zEventVolunteer;
+const zCreateEventVolunteerRequest = zEventVolunteer.extend({
+  organization: zObjectId,
+  volunteer: zObjectId,
+  event: zObjectId,
+});
 
 const zEventVolunteerResponse = zEventVolunteerEntity.extend({
   volunteer: zVolunteerResponse,
