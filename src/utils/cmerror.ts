@@ -1,32 +1,56 @@
-import zCMErrorType, { CMErrorType } from '@/types/dataModel/cmerror';
+import zCMErrorType, { CMErrorType } from '@/types/dataModel/cmerrortypes';
+
+const defaultErrorMessages: Map<CMErrorType, string> = new Map<
+  CMErrorType,
+  string
+>([
+  [zCMErrorType.Enum.OK, 'Ok'],
+  [zCMErrorType.Enum.UnknownError, 'Unknown error'],
+  [zCMErrorType.Enum.InternalError, 'Internal error'],
+  [zCMErrorType.Enum.BadValue, 'Invalid value'],
+  [zCMErrorType.Enum.NoSuchKey, 'Key not found'],
+  [zCMErrorType.Enum.DuplicateKey, 'Duplicate entry'],
+]);
+
+const defaultStatusCodes: Map<CMErrorType, number> = new Map<
+  CMErrorType,
+  number
+>([
+  [zCMErrorType.Enum.OK, 200],
+  [zCMErrorType.Enum.UnknownError, 500],
+  [zCMErrorType.Enum.InternalError, 500],
+  [zCMErrorType.Enum.BadValue, 400],
+  [zCMErrorType.Enum.NoSuchKey, 404],
+  [zCMErrorType.Enum.DuplicateKey, 409],
+]);
 
 export default class CMError extends Error {
   type: CMErrorType;
+  status: number;
 
-  constructor(type: CMErrorType, message?: string, options?: ErrorOptions) {
-    super(message ?? CMError.getDefaultMessage(type), options);
+  constructor(
+    type: CMErrorType,
+    options?: { status?: number; message?: string; cause?: unknown }
+  ) {
+    super(
+      options?.message ??
+        defaultErrorMessages.get(type) ??
+        defaultErrorMessages.get(zCMErrorType.Enum.UnknownError),
+      options ? { cause: options.cause } : undefined
+    );
+
     this.type = type;
+    this.status =
+      options?.status ??
+      defaultStatusCodes.get(type) ??
+      defaultStatusCodes.get(zCMErrorType.Enum.UnknownError) ??
+      500;
   }
 
-  static getDefaultMessage(type: CMErrorType): string {
-    switch (type) {
-      case zCMErrorType.Enum.OK:
-        return 'Ok';
-
-      case zCMErrorType.Enum.InternalError:
-        return 'Internal error';
-
-      case zCMErrorType.Enum.FailedToParse:
-        return 'Invalid value';
-
-      case zCMErrorType.Enum.NoSuchKey:
-        return 'Key not found';
-
-      case zCMErrorType.Enum.DuplicateKey:
-        return 'Duplicate entry';
-
-      default:
-        return 'Unknown error';
-    }
+  toResponse() {
+    return {
+      message: this.message,
+      status: this.status,
+    };
   }
 }

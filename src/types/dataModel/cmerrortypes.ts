@@ -2,9 +2,9 @@ import { z } from 'zod';
 
 const cmErrorTypes = [
   'OK',
-  'InternalError',
   'UnknownError',
-  'FailedToParse',
+  'InternalError',
+  'BadValue',
   'NoSuchKey',
   'DuplicateKey',
 ] as const;
