@@ -1,6 +1,6 @@
 import dbConnect from '@/utils/db-connect';
 import VolunteerSchema from '@/server/models/Volunteer';
-import { VolunteerResponse, VolunteerEntity } from '@/types/dataModel/volunteer';
+import { VolunteerResponse } from '@/types/dataModel/volunteer';
 
 import OrganizationSchema from '@/server/models/Organization';
 OrganizationSchema;
@@ -12,10 +12,10 @@ OrganizationSchema;
  */
 export async function softDeleteVolunteer(
   volunteerId: string
-): Promise<VolunteerEntity | null> {
+): Promise<VolunteerResponse | null> {
   await dbConnect();
 
-  const res: VolunteerEntity | null = await VolunteerSchema.findByIdAndUpdate(
+  const res: VolunteerResponse | null = await VolunteerSchema.findByIdAndUpdate(
     volunteerId,
     { softDelete: true }
   );
@@ -35,8 +35,9 @@ export async function getVolunteer(
     await dbConnect();
 
     // find the volunteer by id
-    const volunteer: VolunteerResponse | null = await 
-    VolunteerSchema.findById(volunteerId).populate('previousOrganization')
+    const volunteer: VolunteerResponse | null = await VolunteerSchema.findById(
+      volunteerId
+    ).populate('previousOrganization');
 
     return volunteer;
   } catch (error) {
