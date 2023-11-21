@@ -1,9 +1,34 @@
-import zCMErrorType, { CMErrorType } from '@/types/dataModel/cmerrortype';
+enum CMErrorType {
+  OK,
+  UnknownError,
+  InternalError,
+  BadValue,
+  NoSuchKey,
+  DuplicateKey,
+}
+
+const defaultStatusCodes: { readonly [id: number]: number } = {
+  [CMErrorType.OK]: 200,
+  [CMErrorType.UnknownError]: 500,
+  [CMErrorType.InternalError]: 500,
+  [CMErrorType.BadValue]: 400,
+  [CMErrorType.NoSuchKey]: 404,
+  [CMErrorType.DuplicateKey]: 409,
+};
+
+const defaultErrorMessages: { readonly [id: number]: string } = {
+  [CMErrorType.OK]: 'Ok',
+  [CMErrorType.UnknownError]: 'Unknown error',
+  [CMErrorType.InternalError]: 'Internal error',
+  [CMErrorType.BadValue]: 'Invalid value',
+  [CMErrorType.NoSuchKey]: 'Key not found',
+  [CMErrorType.DuplicateKey]: 'Duplicate entry',
+};
 
 // Custom error type constructed with CMErrorType values
 export default class CMError extends Error {
-  type: CMErrorType;
-  status: number;
+  readonly type: CMErrorType;
+  readonly status: number;
 
   // Constructs a CMError based on a CMErrorType value
   // Default status and message for a CMErrorType can be overridden with options param
@@ -14,44 +39,17 @@ export default class CMError extends Error {
   ) {
     super(
       options?.message ??
-        CMError.defaultErrorMessages.get(type) ??
-        CMError.defaultErrorMessages.get(zCMErrorType.Enum.UnknownError),
+        defaultErrorMessages[type] ??
+        defaultErrorMessages[CMErrorType.UnknownError],
       options ? { cause: options.cause } : undefined
     );
 
     this.type = type;
     this.status =
       options?.status ??
-      CMError.defaultStatusCodes.get(type) ??
-      CMError.defaultStatusCodes.get(zCMErrorType.Enum.UnknownError) ??
-      500;
+      defaultStatusCodes[type] ??
+      defaultStatusCodes[CMErrorType.UnknownError];
   }
-
-  // Default error messages for each CMErrorType value
-  static defaultErrorMessages: Map<CMErrorType, string> = new Map<
-    CMErrorType,
-    string
-  >([
-    [zCMErrorType.Enum.OK, 'Ok'],
-    [zCMErrorType.Enum.UnknownError, 'Unknown error'],
-    [zCMErrorType.Enum.InternalError, 'Internal error'],
-    [zCMErrorType.Enum.BadValue, 'Invalid value'],
-    [zCMErrorType.Enum.NoSuchKey, 'Key not found'],
-    [zCMErrorType.Enum.DuplicateKey, 'Duplicate entry'],
-  ]);
-
-  // Default status codes for each CMErrorType value
-  static defaultStatusCodes: Map<CMErrorType, number> = new Map<
-    CMErrorType,
-    number
-  >([
-    [zCMErrorType.Enum.OK, 200],
-    [zCMErrorType.Enum.UnknownError, 500],
-    [zCMErrorType.Enum.InternalError, 500],
-    [zCMErrorType.Enum.BadValue, 400],
-    [zCMErrorType.Enum.NoSuchKey, 404],
-    [zCMErrorType.Enum.DuplicateKey, 409],
-  ]);
 
   // Get a response object representing this CMError
   toResponse(): { message: string; status: number } {
