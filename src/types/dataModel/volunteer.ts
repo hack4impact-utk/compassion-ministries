@@ -2,8 +2,17 @@ import { z } from 'zod';
 import zOrganization, { zOrganizationResponse } from './organization';
 import zBase, { zObjectId } from './base';
 
-export const roles = ['Medical', 'Dental', 'Food', 'Save the Babies'] as const;
-export const zRole = z.enum(roles);
+export const verifiedRoles = ['Medical', 'Dental', 'Save the Babies'] as const;
+export const zVerfiedRoles = z.enum(verifiedRoles);
+
+export const allRoles = [
+  'Medical',
+  'Dental',
+  'Food',
+  'Save the Babies',
+] as const;
+export const zRole = z.enum(allRoles);
+
 export type Role = z.infer<typeof zRole>;
 
 export const backgroundCheckStatuses = [
