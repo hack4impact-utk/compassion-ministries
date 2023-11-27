@@ -1,8 +1,9 @@
 import dbConnect from '@/utils/db-connect';
 import VolunteerSchema from '@/server/models/Volunteer';
-import { VolunteerResponse } from '@/types/dataModel/volunteer';
-import OrganizationSchema from '@/server/models/Organization';
-OrganizationSchema;
+import { VolunteerResponse,
+         VolunteerEntity,
+         RoleVerificationRequest 
+} from '@/types/dataModel/volunteer';
 
 /**
  * Get a specific Volunteer
@@ -24,5 +25,26 @@ export async function getVolunteer(
   } catch (error) {
     const errorMessage = 'Internal Server Error';
     throw { status: 500, message: errorMessage };
+  }
+}
+
+export async function verifyRole(
+  volunteerId: string,
+  updatedData: RoleVerificationRequest
+) {
+  try {
+    await dbConnect(); 
+
+    const volunteer: VolunteerResponse | null = 
+      await VolunteerSchema.findById(volunteerId).exec(); 
+
+    const verifications = volunteer?.roleVerifications; 
+
+    if (verifications) {
+
+    }
+
+  } catch (error) {
+    throw error; 
   }
 }

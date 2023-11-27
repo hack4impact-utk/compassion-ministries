@@ -3,17 +3,17 @@ import zOrganization, { zOrganizationResponse } from './organization';
 import zBase, { zObjectId } from './base';
 
 export const verifiedRoles = ['Medical', 'Dental', 'Save the Babies'] as const;
-export const zVerfiedRoles = z.enum(verifiedRoles);
+export const zVerifiedRole = z.enum(verifiedRoles);
+export type VerifiedRole = z.infer<typeof zVerifiedRole>;
 
-export const allRoles = [
-  'Medical',
-  'Dental',
-  'Food',
-  'Save the Babies',
-] as const;
-export const zRole = z.enum(allRoles);
-
+export const roles = ['Food', ...verifiedRoles] as const;
+export const zRole = z.enum(roles);
 export type Role = z.infer<typeof zRole>;
+
+export const zRoleVerification = z.object({
+  verifier: z.string(), // TODO: after discussing with bill determine if this should actually be a user
+  role: zVerifiedRole,
+});
 
 export const backgroundCheckStatuses = [
   'Passed',
@@ -35,15 +35,7 @@ const zVolunteer = z.object({
       lastUpdated: z.date(),
     })
     .optional(),
-  roleVerifications: z
-    .array(
-      z.object({
-        verifier: z.string(), // TODO: after discussing with bill determine if this should actually be a user
-        lastUpdated: z.date(),
-        role: zRole,
-      })
-    )
-    .optional(),
+  roleVerifications: z.array(zRoleVerification).optional(),
   softDelete: z.boolean(),
 });
 
@@ -75,3 +67,6 @@ export interface UpdateVolunteerRequest
   extends z.infer<typeof zUpdateVolunteerRequest> {}
 
 export default zVolunteer;
+
+export const zRoleVerificationRequest = zRoleVerification; 
+export interface RoleVerificationRequest extends z.infer<typeof zRoleVerificationRequest> {};
