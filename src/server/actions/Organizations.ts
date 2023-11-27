@@ -40,7 +40,6 @@ export async function updateOrganization(
     });
 
     // Find the organization by its ID and update it with the new data
-    // TODO: should I block updating "softDelete"?
     const updatedOrganization: OrganizationEntity | null =
       await OrganizationSchema.findByIdAndUpdate(organizationId, updatedData);
 
