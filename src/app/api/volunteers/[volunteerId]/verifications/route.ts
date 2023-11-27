@@ -10,6 +10,7 @@ export async function PATCH (
   { params }: { params: { volunteerId: string } }
 ) {
   const validationResult = zObjectId.safeParse(params.volunteerId);
+  
   if (!validationResult.success) {
     return NextResponse.json(
       { message: 'Invalid Volunteer ID' },

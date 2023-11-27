@@ -1,7 +1,6 @@
 import dbConnect from '@/utils/db-connect';
 import VolunteerSchema from '@/server/models/Volunteer';
 import { VolunteerResponse,
-         VolunteerEntity,
          RoleVerificationRequest 
 } from '@/types/dataModel/volunteer';
 
@@ -36,13 +35,12 @@ export async function verifyRole(
     await dbConnect(); 
 
     const volunteer: VolunteerResponse | null = 
-      await VolunteerSchema.findById(volunteerId).exec(); 
+      await VolunteerSchema.findById(volunteerId); 
 
     const verifications = volunteer?.roleVerifications; 
 
-    if (verifications) {
-
-    }
+    console.log(verifications);
+    console.log(updatedData)
 
   } catch (error) {
     throw error; 
