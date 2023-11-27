@@ -31,7 +31,7 @@ export async function PUT(
   } else {
     return NextResponse.json(
       { message: 'Volunteer not found' },
-      { status: 404 }
+      { status: 400 }
     );
   }
 
