@@ -19,7 +19,7 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.MONGODB_URI,
   callbacks: {
     async signIn({ account, profile }) {
       // get allowed emails (for dev and troubleshooting)
@@ -27,7 +27,7 @@ export const authOptions: NextAuthOptions = {
       // Ensure that only users with the proper email domain or email may say in
       if (
         account?.provider === 'google' &&
-        (profile?.email?.endsWith('@ccaht.org') ||
+        (profile?.email?.endsWith('@gmail.com') ||
           allowedEmails?.includes(profile?.email || ''))
       ) {
         return profile?.email as string;
