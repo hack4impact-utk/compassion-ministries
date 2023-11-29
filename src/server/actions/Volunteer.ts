@@ -1,9 +1,10 @@
 import {
   VolunteerResponse,
   CreateVolunteerRequest,
-  VolunteerEntity,
 } from '@/types/dataModel/volunteer';
+import { EventVolunteerEntity } from '@/types/dataModel/eventVolunteer';
 import VolunteerSchema from '@/server/models/Volunteer';
+import EventVolunteerSchema from '@/server/models/EventVolunteer';
 import dbConnect from '@/utils/db-connect';
 
 // Temporary code to load org schema until we are using it elsewhere
@@ -45,13 +46,14 @@ export async function createVolunteer(
 export async function deleteVolunteer(
   volunteerId: string,
   eventId: string
-): Promise<VolunteerEntity | null> {
+): Promise<EventVolunteerEntity | null> {
   try {
     await dbConnect();
-    const res: VolunteerEntity | null = await VolunteerSchema.findOneAndDelete({
-      volunteerId: volunteerId,
-      eventId: eventId,
-    });
+    const res: EventVolunteerEntity | null =
+      await EventVolunteerSchema.findOneAndDelete({
+        volunteer: volunteerId,
+        event: eventId,
+      });
     return res;
   } catch (error) {
     throw error;

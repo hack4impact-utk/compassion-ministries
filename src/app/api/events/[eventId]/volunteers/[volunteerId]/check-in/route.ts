@@ -6,11 +6,19 @@ import { mongo } from 'mongoose';
 // @route DELETE /api/organizations/[organizationId] - Soft deletes an organization
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: { volunteerId: string; eventId: string } }
+  { params }: { params: { eventId: string; volunteerId: string } }
 ) {
   try {
-    const validationResult = zObjectId.safeParse(params.volunteerId);
-    if (!validationResult.success) {
+    const validationVolunteer = zObjectId.safeParse(params.volunteerId);
+    if (!validationVolunteer.success) {
+      return NextResponse.json(
+        { message: 'Invalid Organization Id' },
+        { status: 400 }
+      );
+    }
+
+    const validationEvent = zObjectId.safeParse(params.eventId);
+    if (!validationEvent.success) {
       return NextResponse.json(
         { message: 'Invalid Organization Id' },
         { status: 400 }
