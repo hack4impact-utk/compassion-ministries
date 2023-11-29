@@ -1,10 +1,10 @@
 import dbConnect from '@/utils/db-connect';
-import OrganizationSchema from '@/server/models/Organization';
+import OrganizationSchema from '../models/Organization';
 import {
-  OrganizationEntity,
+  CreateOrganizationRequest,
   UpdateOrganizationRequest,
 } from '@/types/dataModel/organization';
-import { CreateOrganizationRequest } from '@/types/dataModel/organization';
+import { OrganizationEntity } from '@/types/dataModel/organization';
 /**
  * Create an organization
  * @param CreateOrganizationRequest requires the name of the organization
