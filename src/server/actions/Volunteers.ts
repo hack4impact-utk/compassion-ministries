@@ -1,12 +1,9 @@
 import dbConnect from '@/utils/db-connect';
 import VolunteerSchema from '@/server/models/Volunteer';
-import {
-  VolunteerEntity,
-  VolunteerResponse,
-} from '@/types/dataModel/volunteer';
-import { OrganizationEntity } from '@/types/dataModel/organization';
+import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import OrganizationSchema from '@/server/models/Organization';
 OrganizationSchema;
+import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
 
 /**
  * Get a specific Volunteer
@@ -33,27 +30,18 @@ export async function getVolunteer(
 }
 
 export async function getAllEventsForVolunteer(
-  VolunteerId: string
-): Promise<OrganizationEntity[] | null> {
+  volunteerId: string
+): Promise<EventVolunteerResponse | null> {
   try {
-    // error check
     await dbConnect();
 
-    // actually look for all the events a volunteer with the given ID has attented
-    const Volunteer: VolunteerEntity | null = await VolunteerSchema.findById(
-      VolunteerId,
-      {}
-    );
+    const organization: EventVolunteerResponse | null =
+      await OrganizationSchema.findById(volunteerId).populate(
+        'event',
+        'organization'
+      );
 
-    if (Volunteer === null) {
-      const errorMessage = 'Volunteer not found';
-      throw { status: 404, message: errorMessage };
-    }
-
-    // found the Volunteer, now need to tind all the events they attended
-    //const organization : OrganizationEntity | null = await OrganizationSchema.findById(volunteerId)
-
-    return null;
+    return organization;
   } catch (error) {
     const errorMessage = 'Internal Server Error';
     throw { status: 500, message: errorMessage };
