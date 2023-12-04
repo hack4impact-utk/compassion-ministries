@@ -50,7 +50,7 @@ export async function softDeleteOrganization(
  */
 export async function updateOrganization(
   organizationId: string,
-  updatedData: object
+  updatedData: UpdateOrganizationRequest
 ): Promise<UpdateOrganizationRequest | null> {
   try {
     const connection = await dbConnect();
