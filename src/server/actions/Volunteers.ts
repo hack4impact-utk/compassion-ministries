@@ -36,10 +36,7 @@ export async function getAllEventsForVolunteer(
     await dbConnect();
 
     const organization: EventVolunteerResponse | null =
-      await OrganizationSchema.findById(volunteerId).populate(
-        'event',
-        'organization'
-      );
+      await OrganizationSchema.findById(volunteerId).populate('_id');
 
     return organization;
   } catch (error) {
