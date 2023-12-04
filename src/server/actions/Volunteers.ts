@@ -34,11 +34,11 @@ export async function getAllEventsForVolunteer(
 ): Promise<EventVolunteerResponse | null> {
   try {
     await dbConnect();
-
-    const organization: EventVolunteerResponse | null =
+    // find the events the volunteer has volunteered and populate the object id
+    const events: EventVolunteerResponse | null =
       await OrganizationSchema.findById(volunteerId).populate('_id');
 
-    return organization;
+    return events;
   } catch (error) {
     const errorMessage = 'Internal Server Error';
     throw { status: 500, message: errorMessage };
