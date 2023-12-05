@@ -1,4 +1,4 @@
-import { deleteVolunteer } from '@/server/actions/Volunteer';
+import { deleteEventVolunteer } from '@/server/actions/Volunteer';
 import { zObjectId } from '@/types/dataModel/base';
 import { NextRequest, NextResponse } from 'next/server';
 import { mongo } from 'mongoose';
@@ -12,7 +12,7 @@ export async function DELETE(
     const validationVolunteer = zObjectId.safeParse(params.volunteerId);
     if (!validationVolunteer.success) {
       return NextResponse.json(
-        { message: 'Invalid Organization Id' },
+        { message: 'Invalid Volunteer Id' },
         { status: 400 }
       );
     }
@@ -20,15 +20,15 @@ export async function DELETE(
     const validationEvent = zObjectId.safeParse(params.eventId);
     if (!validationEvent.success) {
       return NextResponse.json(
-        { message: 'Invalid Organization Id' },
+        { message: 'Invalid Event Id' },
         { status: 400 }
       );
     }
 
-    const res = await deleteVolunteer(params.volunteerId, params.eventId);
+    const res = await deleteEventVolunteer(params.volunteerId, params.eventId);
     if (!res) {
       return NextResponse.json(
-        { message: 'Organization not found' },
+        { message: 'Object not found' },
         { status: 404 }
       );
     }

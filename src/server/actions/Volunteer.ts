@@ -43,7 +43,7 @@ export async function createVolunteer(
   }
 }
 
-export async function deleteVolunteer(
+export async function deleteEventVolunteer(
   volunteerId: string,
   eventId: string
 ): Promise<EventVolunteerEntity | null> {
