@@ -43,6 +43,12 @@ export async function createVolunteer(
   }
 }
 
+/**
+ * Delete an EventVolunteer
+ * @param volunteerId The id of the existing volunteer
+ * @param eventId The id of the existing event
+ * @returns The object needs to be deleted
+ */
 export async function deleteEventVolunteer(
   volunteerId: string,
   eventId: string
