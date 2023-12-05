@@ -2,7 +2,9 @@ import {
   VolunteerResponse,
   CreateVolunteerRequest,
 } from '@/types/dataModel/volunteer';
+import { EventVolunteerEntity } from '@/types/dataModel/eventVolunteer';
 import VolunteerSchema from '@/server/models/Volunteer';
+import EventVolunteerSchema from '@/server/models/EventVolunteer';
 import dbConnect from '@/utils/db-connect';
 
 // Temporary code to load org schema until we are using it elsewhere
@@ -36,6 +38,29 @@ export async function createVolunteer(
     await dbConnect();
     const volunteer = await VolunteerSchema.create(request);
     return volunteer._id.toString();
+  } catch (error) {
+    throw error;
+  }
+}
+
+/**
+ * Delete an EventVolunteer
+ * @param volunteerId The id of the existing volunteer
+ * @param eventId The id of the existing event
+ * @returns The object needs to be deleted
+ */
+export async function deleteEventVolunteer(
+  volunteerId: string,
+  eventId: string
+): Promise<EventVolunteerEntity | null> {
+  try {
+    await dbConnect();
+    const res: EventVolunteerEntity | null =
+      await EventVolunteerSchema.findOneAndDelete({
+        volunteer: volunteerId,
+        event: eventId,
+      });
+    return res;
   } catch (error) {
     throw error;
   }

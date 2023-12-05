@@ -36,4 +36,8 @@ export interface EventVolunteerDocument
     Document {}
 
 export default (models.EventVolunteer as Model<EventVolunteerDocument>) ||
-  model<EventVolunteerDocument>('EventVolunteer', EventVolunteerSchema);
+  model<EventVolunteerDocument>(
+    'EventVolunteer',
+    EventVolunteerSchema,
+    'eventVolunteers'
+  );
