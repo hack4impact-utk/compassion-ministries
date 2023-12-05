@@ -4,6 +4,7 @@ import { VolunteerResponse } from '@/types/dataModel/volunteer';
 
 import OrganizationSchema from '@/server/models/Organization';
 OrganizationSchema;
+import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
 
 /**
  * Soft delete a volunteer
@@ -40,6 +41,22 @@ export async function getVolunteer(
     ).populate('previousOrganization');
 
     return volunteer;
+  } catch (error) {
+    const errorMessage = 'Internal Server Error';
+    throw { status: 500, message: errorMessage };
+  }
+}
+
+export async function getAllEventsForVolunteer(
+  volunteerId: string
+): Promise<EventVolunteerResponse | null> {
+  try {
+    await dbConnect();
+    // find the events the volunteer has volunteered and populate the object id
+    const events: EventVolunteerResponse | null =
+      await OrganizationSchema.findById(volunteerId).populate('_id');
+
+    return events;
   } catch (error) {
     const errorMessage = 'Internal Server Error';
     throw { status: 500, message: errorMessage };
