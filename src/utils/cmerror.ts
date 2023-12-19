@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 
+// All defined error types for CMError objects
+// Do not remove or re-order pre-existing values
 export enum CMErrorType {
   OK,
   UnknownError,
@@ -9,7 +11,46 @@ export enum CMErrorType {
   DuplicateKey,
 }
 
-const cmErrorTypeStatusCodes: { readonly [id: number]: number } = {
+// Placeholder in error message templates to replace with given source string
+const CMERRORTYPE_MSG_SRC_STR = '%s';
+
+// Default messages and templates for each error type
+const CMERRORTYPE_MSGS: {
+  readonly [id: number]: {
+    template: string;
+    default: string;
+  };
+} = {
+  [CMErrorType.OK]: {
+    template: `${CMERRORTYPE_MSG_SRC_STR} ok`,
+    default: 'Ok',
+  },
+  [CMErrorType.UnknownError]: {
+    template: `Unknown ${CMERRORTYPE_MSG_SRC_STR} error`,
+    default: 'Unknown error',
+  },
+  [CMErrorType.InternalError]: {
+    template: `Internal ${CMERRORTYPE_MSG_SRC_STR} error`,
+    default: 'Internal error',
+  },
+  [CMErrorType.BadValue]: {
+    template: `Invalid ${CMERRORTYPE_MSG_SRC_STR}`,
+    default: 'Invalid value',
+  },
+  [CMErrorType.NoSuchKey]: {
+    template: `${CMERRORTYPE_MSG_SRC_STR} not found`,
+    default: 'Key not found',
+  },
+  [CMErrorType.DuplicateKey]: {
+    template: `Duplicate ${CMERRORTYPE_MSG_SRC_STR}`,
+    default: 'Duplicate key',
+  },
+};
+
+// Corresponding response status codes for error types
+const CMERRORTYPE_STATUS_CODES: {
+  readonly [id: number]: number;
+} = {
   [CMErrorType.OK]: 200,
   [CMErrorType.UnknownError]: 500,
   [CMErrorType.InternalError]: 500,
@@ -18,24 +59,15 @@ const cmErrorTypeStatusCodes: { readonly [id: number]: number } = {
   [CMErrorType.DuplicateKey]: 409,
 };
 
-const cmErrorDefaultErrMsgs: {
-  readonly [id: number]: { template: string; source: string };
-} = {
-  [CMErrorType.OK]: { template: 'Ok', source: '' },
-  [CMErrorType.UnknownError]: { template: 'Unknown error', source: '' },
-  [CMErrorType.InternalError]: { template: 'Internal error', source: '' },
-  [CMErrorType.BadValue]: { template: 'Invalid %s', source: 'Value' },
-  [CMErrorType.NoSuchKey]: { template: '%s not found', source: 'Key' },
-  [CMErrorType.DuplicateKey]: { template: 'Duplicate %s', source: 'Entry' },
-};
-
 // Generate an error message for an error type, optionally filling in contextual info
-export function getCMErrMsg(errtype: CMErrorType, source?: string): string {
-  const defaultErrMsgInfo = cmErrorDefaultErrMsgs[errtype];
-  return defaultErrMsgInfo.template.replace(
-    '%s',
-    source ?? defaultErrMsgInfo.source
-  );
+export function getCMErrorTypeMsg(
+  errorType: CMErrorType,
+  source?: string
+): string {
+  const defaultErrMsgInfo = CMERRORTYPE_MSGS[errorType];
+  return typeof source !== 'undefined'
+    ? defaultErrMsgInfo.template.replace(CMERRORTYPE_MSG_SRC_STR, source)
+    : defaultErrMsgInfo.default;
 }
 
 // Custom error type constructed with CMErrorType values
@@ -43,28 +75,29 @@ export default class CMError extends Error {
   readonly type: CMErrorType;
 
   // Constructs a CMError based on a CMErrorType value
-  // Default message for a CMErrorType can be overridden with options param
-  // Generally best to use cmErrorMsg() for error messages
-  constructor(type: CMErrorType, message?: string) {
-    super(message ?? getCMErrMsg(type));
-    this.type = type;
+  // If message is not defined, uses a default message for the CMErrorType
+  constructor(errorType: CMErrorType, message?: string) {
+    super(message ?? getCMErrorTypeMsg(errorType));
+    this.type = errorType;
   }
 
-  // Get a response object representing this CMError
-  toResponse(): Response {
+  // Construct a NextResponse object representing the error
+  toNextResponse(): NextResponse<{
+    message: string;
+  }> {
     return NextResponse.json(
       { message: this.message },
-      { status: cmErrorTypeStatusCodes[this.type] }
+      { status: CMERRORTYPE_STATUS_CODES[this.type] }
     );
   }
 }
 
-// If err is a CMError, return the value from toResponse()
-// Otherwise, create a CMError with err type UnknownError and return its toResponse()
-export function CMErrorResponse(err: unknown): Response {
-  if (err instanceof CMError) {
-    return err.toResponse();
-  } else {
-    return new CMError(CMErrorType.UnknownError).toResponse();
-  }
+// If err is a CMError, constructs a corresponding NextResponse object
+// Otherwise, constructs a generic NextResponse object
+export function CMErrorResponse(err: unknown): NextResponse<{
+  message: string;
+}> {
+  return err instanceof CMError
+    ? err.toNextResponse()
+    : new CMError(CMErrorType.UnknownError).toNextResponse();
 }
