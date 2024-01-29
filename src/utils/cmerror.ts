@@ -1,7 +1,12 @@
 import { NextResponse } from 'next/server';
 
-// All defined error types for CMError objects
-// Do not remove or re-order pre-existing values
+/*
+  All defined error types for CMError objects
+  Do not remove or rearrange existing types
+
+  When adding a new error type, always add at the bottom of the list and
+  update CMERRORTYPE_DEFS below with the associated constants
+*/
 export enum CMErrorType {
   UnknownError,
   InternalError,
@@ -10,48 +15,42 @@ export enum CMErrorType {
   DuplicateKey,
 }
 
-// Placeholder in error message templates to replace with given source string
-const CMERRORTYPE_MSG_SRC_STR = '%s';
+/*  
+    Error message templates and defaults for each error type
+    Make sure to add an entry here when you add a new CMErrorType value
+
+    Entry format:
+      error type      (CMErrorType)
+      status code     (number)
+      errmsg template (string)
+      default errmsg  (string)
+*/
+const CMERRORTYPE_DEFS = [
+  [CMErrorType.UnknownError, 500, 'Unknown %s error', 'Unknown error'],
+  [CMErrorType.InternalError, 500, 'Internal %s error', 'Internal error'],
+  [CMErrorType.BadValue, 400, 'Invalid %s', 'Invalid value'],
+  [CMErrorType.NoSuchKey, 404, '%s not found', 'Key not found'],
+  [CMErrorType.DuplicateKey, 409, 'Duplicate %s', 'Duplicate key'],
+] as const;
+
+// Populate mappings from defs matrix
+CMERRORTYPE_DEFS.forEach((def) => {
+  CMERRORTYPE_STATUS_CODES[def[0]] = def[1];
+  CMERRORTYPE_MSGS[def[0]] = { template: def[2], default: def[3] };
+});
 
 // Default messages and templates for each error type
 const CMERRORTYPE_MSGS: {
-  readonly [id: number]: {
+  [id: number]: {
     template: string;
     default: string;
   };
-} = {
-  [CMErrorType.UnknownError]: {
-    template: `Unknown ${CMERRORTYPE_MSG_SRC_STR} error`,
-    default: 'Unknown error',
-  },
-  [CMErrorType.InternalError]: {
-    template: `Internal ${CMERRORTYPE_MSG_SRC_STR} error`,
-    default: 'Internal error',
-  },
-  [CMErrorType.BadValue]: {
-    template: `Invalid ${CMERRORTYPE_MSG_SRC_STR}`,
-    default: 'Invalid value',
-  },
-  [CMErrorType.NoSuchKey]: {
-    template: `${CMERRORTYPE_MSG_SRC_STR} not found`,
-    default: 'Key not found',
-  },
-  [CMErrorType.DuplicateKey]: {
-    template: `Duplicate ${CMERRORTYPE_MSG_SRC_STR}`,
-    default: 'Duplicate key',
-  },
-};
+} = {};
 
 // Corresponding response status codes for error types
 export const CMERRORTYPE_STATUS_CODES: {
-  readonly [id: number]: number;
-} = {
-  [CMErrorType.UnknownError]: 500,
-  [CMErrorType.InternalError]: 500,
-  [CMErrorType.BadValue]: 400,
-  [CMErrorType.NoSuchKey]: 404,
-  [CMErrorType.DuplicateKey]: 409,
-};
+  [id: number]: number;
+} = {};
 
 // Generate an error message for an error type, optionally filling in contextual info
 export function getCMErrorTypeMsg(
@@ -60,7 +59,7 @@ export function getCMErrorTypeMsg(
 ): string {
   const defaultErrMsgInfo = CMERRORTYPE_MSGS[errorType];
   return source !== undefined
-    ? defaultErrMsgInfo.template.replace(CMERRORTYPE_MSG_SRC_STR, source)
+    ? defaultErrMsgInfo.template.replace('%s', source)
     : defaultErrMsgInfo.default;
 }
 
