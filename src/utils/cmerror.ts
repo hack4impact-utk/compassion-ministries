@@ -3,7 +3,6 @@ import { NextResponse } from 'next/server';
 // All defined error types for CMError objects
 // Do not remove or re-order pre-existing values
 export enum CMErrorType {
-  OK,
   UnknownError,
   InternalError,
   BadValue,
@@ -21,10 +20,6 @@ const CMERRORTYPE_MSGS: {
     default: string;
   };
 } = {
-  [CMErrorType.OK]: {
-    template: `${CMERRORTYPE_MSG_SRC_STR} ok`,
-    default: 'Ok',
-  },
   [CMErrorType.UnknownError]: {
     template: `Unknown ${CMERRORTYPE_MSG_SRC_STR} error`,
     default: 'Unknown error',
@@ -48,10 +43,9 @@ const CMERRORTYPE_MSGS: {
 };
 
 // Corresponding response status codes for error types
-const CMERRORTYPE_STATUS_CODES: {
+export const CMERRORTYPE_STATUS_CODES: {
   readonly [id: number]: number;
 } = {
-  [CMErrorType.OK]: 200,
   [CMErrorType.UnknownError]: 500,
   [CMErrorType.InternalError]: 500,
   [CMErrorType.BadValue]: 400,
@@ -65,7 +59,7 @@ export function getCMErrorTypeMsg(
   source?: string
 ): string {
   const defaultErrMsgInfo = CMERRORTYPE_MSGS[errorType];
-  return typeof source !== 'undefined'
+  return source !== undefined
     ? defaultErrMsgInfo.template.replace(CMERRORTYPE_MSG_SRC_STR, source)
     : defaultErrMsgInfo.default;
 }
