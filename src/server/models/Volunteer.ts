@@ -69,6 +69,11 @@ const VolunteerSchema = new Schema(
       ],
       required: false,
     },
+    softDelete: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
   },
   {
     versionKey: false,
