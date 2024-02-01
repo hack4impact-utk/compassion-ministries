@@ -1,6 +1,9 @@
 'use client';
 import React from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
+
+// Creates A Sign In and Sign Out button
+
 const SigninButton = () => {
   const { data: session } = useSession();
 
