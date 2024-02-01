@@ -4,7 +4,7 @@ import NextAuth from 'next-auth/next';
 import GoogleProvider from 'next-auth/providers/google';
 import dbConnect from '@/utils/db-connect';
 
-//NextAuth using Google Provider and strategy using JWT
+//NextAuth using Google Provider and JWT trategy
 const clientPromise = dbConnect().then((mon) => {
   return mon.connection.getClient() as unknown as Promise<MongoClient>;
 });
