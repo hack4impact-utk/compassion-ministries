@@ -24,7 +24,7 @@ export async function GET(
   if (!res) {
     return NextResponse.json(
       { message: 'Volunteer not found' },
-      { status: 400 }
+      { status: 404 }
     );
   }
 
