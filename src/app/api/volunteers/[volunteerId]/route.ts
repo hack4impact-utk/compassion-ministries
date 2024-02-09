@@ -64,7 +64,7 @@ export async function PUT(
     );
   }
 
-  return NextResponse.json(undefined, { status: 204 });
+  return new NextResponse(undefined, { status: 204 });
 }
 
 // @route GET /api/volunteers/[volunteerId] - get a specific volunteer
