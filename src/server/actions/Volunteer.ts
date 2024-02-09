@@ -56,7 +56,13 @@ export async function updateVolunteer(
   try {
     await dbConnect();
 
-    await VolunteerSchema.findByIdAndUpdate(volunteerId, updatedVolunteer);
+    const res = await VolunteerSchema.findByIdAndUpdate(
+      volunteerId,
+      updatedVolunteer
+    );
+    if (!res) {
+      throw new Error('Volunteer not found'); // TODO: update error handling
+    }
   } catch (error) {
     throw error;
   }
