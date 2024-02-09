@@ -1,5 +1,5 @@
 import { EventVolunteerEntity } from '@/types/dataModel/eventVolunteer';
-import { roles } from '@/types/dataModel/volunteer';
+import { roles } from '@/types/dataModel/roleVerifications';
 import { Model, Schema, model, models } from 'mongoose';
 
 const EventVolunteerSchema = new Schema(

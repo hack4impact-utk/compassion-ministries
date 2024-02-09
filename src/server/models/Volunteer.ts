@@ -1,7 +1,7 @@
+import { roles } from '@/types/dataModel/roleVerifications';
 import {
   VolunteerEntity,
   backgroundCheckStatuses,
-  roles,
 } from '@/types/dataModel/volunteer';
 import { Model, Schema, model, models } from 'mongoose';
 
