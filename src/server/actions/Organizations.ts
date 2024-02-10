@@ -1,6 +1,9 @@
 import dbConnect from '@/utils/db-connect';
 import OrganizationSchema from '../models/Organization';
-import { CreateOrganizationRequest } from '@/types/dataModel/organization';
+import {
+  CreateOrganizationRequest,
+  UpdateOrganizationRequest,
+} from '@/types/dataModel/organization';
 import { OrganizationEntity } from '@/types/dataModel/organization';
 /**
  * Create an organization
@@ -37,4 +40,57 @@ export async function softDeleteOrganization(
     });
 
   return res;
+}
+
+/**
+ * update existing organization information
+ * @param organizationId The Id of the organization to be updated
+ * @param updatedData The data to be updated in database
+ * @returns The organization in the database before soft-deletion, or null
+ */
+export async function updateOrganization(
+  organizationId: string,
+  updatedData: UpdateOrganizationRequest
+): Promise<UpdateOrganizationRequest | null> {
+  try {
+    const connection = await dbConnect();
+    connection.connection.on('error', (err) => {
+      throw new Error(err.code);
+    });
+
+    // Find the organization by its ID and update it with the new data
+    const updatedOrganization: OrganizationEntity | null =
+      await OrganizationSchema.findByIdAndUpdate(organizationId, updatedData);
+
+    return updatedOrganization;
+  } catch (error) {
+    // const errorMessage = 'Internal Server Error';
+    // throw { status: 500, message: errorMessage };
+    throw error;
+  }
+}
+
+/**
+ * returns ALL organizations in the database
+ * @param organizations all organization in the database
+ * @returns all organization in the database
+ */
+export async function getAllOrganizations(): Promise<
+  OrganizationEntity[] | null
+> {
+  try {
+    const connection = await dbConnect();
+    connection.connection.on('error', (err) => {
+      throw new Error(err.code);
+    });
+
+    const organizations: OrganizationEntity[] | null =
+      await OrganizationSchema.find();
+
+    return organizations;
+  } catch (error) {
+    // const errorMessage = 'Internal Server Error';
+    // throw { status: 500, message: errorMessage };
+    throw error;
+  }
 }
