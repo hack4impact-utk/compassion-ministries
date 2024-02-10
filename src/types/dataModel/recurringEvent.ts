@@ -16,4 +16,8 @@ export const zRecurringEventResponse = zRecurringEventEntity.extend({
   event: zEventResponse,
 });
 
+export type RecurringEvent = z.infer<typeof zRecurringEvent>;
+export type RecurringEventEntity = z.infer<typeof zRecurringEventEntity>;
+export type RecurringEventResponse = z.infer<typeof zRecurringEventResponse>;
+
 export default zRecurringEvent;
