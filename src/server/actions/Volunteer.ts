@@ -1,6 +1,7 @@
 import {
   VolunteerResponse,
   CreateVolunteerRequest,
+  UpdateVolunteerRequest,
 } from '@/types/dataModel/volunteer';
 import { EventVolunteerEntity } from '@/types/dataModel/eventVolunteer';
 import VolunteerSchema from '@/server/models/Volunteer';
@@ -38,6 +39,30 @@ export async function createVolunteer(
     await dbConnect();
     const volunteer = await VolunteerSchema.create(request);
     return volunteer._id.toString();
+  } catch (error) {
+    throw error;
+  }
+}
+
+/**
+ * Takes in a volunteer id and updates the corresponding volunteer with the new data
+ * @param volunteerId  The id of the existing volunteer
+ * @param updatedVolunteer The updated volunteer
+ */
+export async function updateVolunteer(
+  volunteerId: string,
+  updatedVolunteer: UpdateVolunteerRequest
+): Promise<void> {
+  try {
+    await dbConnect();
+
+    const res = await VolunteerSchema.findByIdAndUpdate(
+      volunteerId,
+      updatedVolunteer
+    );
+    if (!res) {
+      throw new Error('Volunteer not found'); // TODO: update error handling
+    }
   } catch (error) {
     throw error;
   }
