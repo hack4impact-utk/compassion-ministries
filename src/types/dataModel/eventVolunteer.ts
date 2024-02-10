@@ -3,12 +3,13 @@ import zVolunteer, { zVolunteerResponse } from './volunteer';
 import zOrganization from './organization';
 import zBase, { zObjectId } from './base';
 import { zRole } from './roles';
+import zEvent from './event';
 
 const zEventVolunteer = z.object({
   role: zRole,
   organization: zOrganization.optional(),
   volunteer: zVolunteer,
-  event: zObjectId, //TODO: Replace with zEvent
+  event: zEvent,
 });
 
 const zEventVolunteerEntity = zEventVolunteer.extend({
@@ -29,7 +30,7 @@ const zEventVolunteerResponse = zEventVolunteerEntity.extend({
 });
 
 const zVolunteerEventResponse = zEventVolunteerEntity.extend({
-  event: zObjectId, // TODO: Change type to zEventResponse once it exists
+  event: zEvent,
 });
 
 export interface EventVolunteer extends z.infer<typeof zEventVolunteer> {}
