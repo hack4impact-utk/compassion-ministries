@@ -1,4 +1,4 @@
-import { roles } from '@/types/dataModel/roleVerifications';
+import { roles } from '@/types/dataModel/roles';
 import {
   VolunteerEntity,
   backgroundCheckStatuses,

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import zOrganization, { zOrganizationResponse } from './organization';
 import zBase, { zObjectId } from './base';
-import { zRole, zRoleVerification } from './roleVerifications';
+import { zRole, zRoleVerification } from './roles';
 
 export const backgroundCheckStatuses = [
   'Passed',

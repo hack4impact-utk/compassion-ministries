@@ -11,7 +11,7 @@ export const zRole = z.enum(roles);
 export type Role = z.infer<typeof zRole>;
 
 export const zRoleVerification = z.object({
-  verifier: z.string(), // TODO: after discussing with bill determine if this should actually be a user
+  verifier: z.string(),
   lastUpdated: z.date(),
   role: zVerifiedRole,
 });

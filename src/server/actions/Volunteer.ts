@@ -9,7 +9,7 @@ import dbConnect from '@/utils/db-connect';
 
 // Temporary code to load org schema until we are using it elsewhere
 import OrganizationSchema from '@/server/models/Organization';
-import { RoleVerificationRequest } from '@/types/dataModel/roleVerifications';
+import { RoleVerificationRequest } from '@/types/dataModel/roles';
 OrganizationSchema;
 
 /**

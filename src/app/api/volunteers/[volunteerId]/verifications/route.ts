@@ -1,6 +1,6 @@
 import { upsertVolunteerRoleVerification } from '@/server/actions/Volunteer';
 import { zObjectId } from '@/types/dataModel/base';
-import { zRoleVerificationRequest } from '@/types/dataModel/roleVerifications';
+import { zRoleVerificationRequest } from '@/types/dataModel/roles';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function PATCH(
