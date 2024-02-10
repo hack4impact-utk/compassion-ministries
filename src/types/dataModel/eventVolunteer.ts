@@ -1,7 +1,8 @@
 import { z } from 'zod';
-import zVolunteer, { zRole, zVolunteerResponse } from './volunteer';
+import zVolunteer, { zVolunteerResponse } from './volunteer';
 import zOrganization from './organization';
 import zBase, { zObjectId } from './base';
+import { zRole } from './roles';
 
 const zEventVolunteer = z.object({
   role: zRole,

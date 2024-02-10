@@ -10,6 +10,7 @@ import dbConnect from '@/utils/db-connect';
 
 // Temporary code to load org schema until we are using it elsewhere
 import OrganizationSchema from '@/server/models/Organization';
+import { RoleVerificationRequest } from '@/types/dataModel/roles';
 OrganizationSchema;
 
 /**
@@ -86,6 +87,57 @@ export async function deleteEventVolunteer(
         event: eventId,
       });
     return res;
+  } catch (error) {
+    throw error;
+  }
+}
+
+/**
+ * Create or update a volunteer's role verification for a specific role
+ * @param volunteerId The ID of the volunteer to verify
+ * @param roleVerificationRequest The role verification request
+ * @returns The updated volunteer
+ */
+export async function upsertVolunteerRoleVerification(
+  volunteerId: string,
+  roleVerificationRequest: RoleVerificationRequest
+) {
+  try {
+    // TODO: we could save a database call by structuring role verifications like
+    // { 'Medical': { verifier: '...', lastUpdated: '...' }, 'Dental': { verifier: '...', lastUpdated: '...' } }
+    await dbConnect();
+
+    const currentVerifications = await VolunteerSchema.findById(volunteerId)
+      .select('roleVerifications')
+      .exec();
+
+    // update the role verification if it exists
+    let roleVerificationExists = false;
+    currentVerifications?.roleVerifications?.forEach((roleVerification) => {
+      if (roleVerification.role === roleVerificationRequest.role) {
+        roleVerification.verifier = roleVerificationRequest.verifier;
+        roleVerification.lastUpdated = new Date();
+        roleVerificationExists = true;
+      }
+    });
+
+    // add the role verification if it doesn't exist
+    if (!roleVerificationExists) {
+      currentVerifications?.roleVerifications?.push({
+        verifier: roleVerificationRequest.verifier,
+        lastUpdated: new Date(),
+        role: roleVerificationRequest.role,
+      });
+    }
+
+    // update the volunteer with the new role verifications
+    const res = await VolunteerSchema.findByIdAndUpdate(volunteerId, {
+      roleVerifications: currentVerifications?.roleVerifications,
+    });
+
+    if (!res) {
+      throw new Error('Volunteer not found');
+    }
   } catch (error) {
     throw error;
   }
