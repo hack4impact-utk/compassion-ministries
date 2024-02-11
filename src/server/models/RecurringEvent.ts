@@ -17,7 +17,7 @@ export interface RecurringEventDocument
   extends Omit<RecurringEventEntity, '_id'>,
     Document {}
 
-export default (models.Event as Model<RecurringEventDocument>) ||
+export default (models.RecurringEvent as Model<RecurringEventDocument>) ||
   model<RecurringEventDocument>(
     'RecurringEvent',
     RecurringEventSchema,

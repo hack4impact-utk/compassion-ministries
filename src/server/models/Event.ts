@@ -25,7 +25,7 @@ const EventSchema = new Schema({
   },
   date: {
     type: Date, // only using date
-    required: true,
+    required: false,
   },
   eventRoles: {
     type: [
