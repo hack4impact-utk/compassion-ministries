@@ -6,9 +6,9 @@ const zEvent = z.object({
   name: z.string(),
   description: z.string().optional(),
   eventLocation: z.string().optional(),
-  startAt: z.date(),
-  endAt: z.date(),
-  date: z.date(),
+  startAt: z.coerce.date(),
+  endAt: z.coerce.date(),
+  date: z.coerce.date().optional(),
   eventRoles: z.array(zRole),
   emailBodies: z.array(z.string()),
   isRecurring: z.boolean(),
@@ -21,8 +21,16 @@ export const zEventEntity = zEvent.extend({
 
 export const zEventResponse = zEventEntity;
 
+export const zCreateEventRequest = z.discriminatedUnion('isRecurring', [
+  zEvent
+    .omit({ parentEvent: true })
+    .extend({ isRecurring: z.literal(true), recurrence: z.string() }),
+  zEvent.omit({ parentEvent: true }).extend({ isRecurring: z.literal(false) }),
+]);
+
 export interface Event extends z.infer<typeof zEvent> {}
 export interface EventEntity extends z.infer<typeof zEventEntity> {}
 export interface EventResponse extends z.infer<typeof zEventResponse> {}
+export type CreateEventRequest = z.infer<typeof zCreateEventRequest>; // needs to be a type to support discriminated union
 
 export default zEvent;
