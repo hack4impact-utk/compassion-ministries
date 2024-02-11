@@ -25,7 +25,9 @@ export const zCreateEventRequest = z.discriminatedUnion('isRecurring', [
   zEvent
     .omit({ parentEvent: true })
     .extend({ isRecurring: z.literal(true), recurrence: z.string() }),
-  zEvent.omit({ parentEvent: true }).extend({ isRecurring: z.literal(false) }),
+  zEvent
+    .omit({ parentEvent: true, date: true })
+    .extend({ isRecurring: z.literal(false) }),
 ]);
 
 export interface Event extends z.infer<typeof zEvent> {}
