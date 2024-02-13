@@ -45,9 +45,9 @@ export async function getVolunteer(
 
   } catch (error) {
     if (error === "Volunteer not found") {
-      throw new CMError(CMErrorType.NoSuchKey, "Volunteer not found");
+      throw new CMError(CMErrorType.NoSuchKey, "Volunteer not found").toNextResponse();
     } else {
-      throw new CMError(CMErrorType.InternalError, "Internal Server Error");
+      throw new CMError(CMErrorType.InternalError, "Internal Server Error").toNextResponse();
     }
   }
 }
