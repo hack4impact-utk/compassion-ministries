@@ -6,6 +6,7 @@ import OrganizationSchema from '@/server/models/Organization';
 OrganizationSchema;
 import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
 import EventVolunteerSchema from '@/server/models/EventVolunteer';
+import CMError, { CMErrorType } from '@/utils/cmerror';
 
 /**
  * Soft delete a volunteer
@@ -35,16 +36,19 @@ export async function getVolunteer(
 ): Promise<VolunteerResponse | null> {
   try {
     await dbConnect();
-
-    // find the volunteer by id
-    const volunteer: VolunteerResponse | null = await VolunteerSchema.findById(
-      volunteerId
-    ).populate('previousOrganization');
-
+    const volunteer: VolunteerResponse | null = await 
+     VolunteerSchema.findById(volunteerId).populate('previousOrganization');
+    if (!volunteer) {
+      throw "Volunteer not found";
+    }
     return volunteer;
+
   } catch (error) {
-    const errorMessage = 'Internal Server Error';
-    throw { status: 500, message: errorMessage };
+    if (error === "Volunteer not found") {
+      throw new CMError(CMErrorType.NoSuchKey, "Volunteer not found");
+    } else {
+      throw new CMError(CMErrorType.InternalError, "Internal Server Error");
+    }
   }
 }
 
