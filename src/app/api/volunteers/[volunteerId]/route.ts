@@ -2,6 +2,7 @@ import { updateVolunteer } from '@/server/actions/Volunteer';
 import { softDeleteVolunteer, getVolunteer } from '@/server/actions/Volunteers';
 import { zObjectId } from '@/types/dataModel/base';
 import { zUpdateVolunteerRequest } from '@/types/dataModel/volunteer';
+import CMError, { CMErrorType } from '@/utils/cmerror';
 import { NextRequest, NextResponse } from 'next/server';
 
 // @route DELETE /api/volunteers/[volunteerId] - Soft deletes a volunteer
@@ -74,18 +75,22 @@ export async function GET(
 ) {
   const validationResult = zObjectId.safeParse(params.volunteerId);
   if (!validationResult.success) {
-    return NextResponse.json(
-      { message: 'Invalid Volunteer Id' },
-      { status: 400 }
-    );
+    return new CMError(CMErrorType.BadValue, 'Invalid Volunteer').toNextResponse();
+    // PREVIOUS CODE: 
+    //return NextResponse.json(
+    //  { message: 'Invalid Volunteer Id' },
+    //  { status: 400 }
+    //);
   }
 
   const res = await getVolunteer(params.volunteerId);
   if (!res) {
-    return NextResponse.json(
-      { message: 'Volunteer not found' },
-      { status: 404 }
-    );
+    return new CMError(CMErrorType.NoSuchKey, 'Volunteer not found').toNextResponse();
+    // PREVIOUS CODE: 
+    //return NextResponse.json(
+    //  { message: 'Volunteer not found' },
+    //  { status: 404 }
+    //);
   }
 
   // if no error: return the specific Volunteer found
