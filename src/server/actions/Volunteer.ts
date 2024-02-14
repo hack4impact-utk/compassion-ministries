@@ -7,11 +7,36 @@ import { EventVolunteerEntity } from '@/types/dataModel/eventVolunteer';
 import VolunteerSchema from '@/server/models/Volunteer';
 import EventVolunteerSchema from '@/server/models/EventVolunteer';
 import dbConnect from '@/utils/db-connect';
+import { VolunteerEntity } from '@/types/dataModel/volunteer';
 
 // Temporary code to load org schema until we are using it elsewhere
 import OrganizationSchema from '@/server/models/Organization';
 import { RoleVerificationRequest } from '@/types/dataModel/roles';
 OrganizationSchema;
+
+/**
+ * Deletes a volunteer's role object
+ * @param volunteerId requires the id of the volunteer
+ * @returns the volunteer in the DB or null for error
+ */
+
+export async function deleteVolunteer(
+  _id: string
+): Promise<VolunteerEntity | null> {
+  try {
+    await dbConnect();
+    const volunteer: VolunteerEntity | null =
+      await VolunteerSchema.findByIdAndUpdate(
+        _id,
+        { $unset: { roleVerifications: 1 } },
+        { new: true }
+      );
+
+    return volunteer;
+  } catch (error) {
+    throw error;
+  }
+}
 
 /**
  * Gets all volunteers.
