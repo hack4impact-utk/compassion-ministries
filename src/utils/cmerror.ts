@@ -68,9 +68,14 @@ export default class CMError extends Error {
   readonly type: CMErrorType;
 
   // Constructs a CMError based on a CMErrorType value
-  // If message is not defined, uses a default message for the CMErrorType
-  constructor(errorType: CMErrorType, message?: string) {
-    super(message ?? getCMErrorTypeMsg(errorType));
+  // Generates CMError.message from source and the message template for the given errorType
+  // If overrideErrMsg = true, the template is ignored source is copied directly to CMError.message
+  constructor(
+    errorType: CMErrorType,
+    source?: string,
+    overrideErrMsg: boolean = false
+  ) {
+    super(overrideErrMsg ? source : getCMErrorTypeMsg(errorType, source));
     this.type = errorType;
   }
 
