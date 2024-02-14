@@ -73,26 +73,19 @@ export async function GET(
   _request: NextRequest,
   { params }: { params: { volunteerId: string } }
 ) {
-  const validationResult = zObjectId.safeParse(params.volunteerId);
-  if (!validationResult.success) {
-    return new CMError(CMErrorType.BadValue, 'Invalid Volunteer').toNextResponse();
-    // PREVIOUS CODE: 
-    //return NextResponse.json(
-    //  { message: 'Invalid Volunteer Id' },
-    //  { status: 400 }
-    //);
-  }
+  try {
+    const validationResult = zObjectId.safeParse(params.volunteerId);
+    if (!validationResult.success) {
+      return new CMError(CMErrorType.BadValue, 'Volunteer').toNextResponse();
+    }
+    const res = await getVolunteer(params.volunteerId);
+    return NextResponse.json(res, { status: 200 });
 
-  const res = await getVolunteer(params.volunteerId);
-  if (!res) {
-    return new CMError(CMErrorType.NoSuchKey, 'Volunteer not found').toNextResponse();
-    // PREVIOUS CODE: 
-    //return NextResponse.json(
-    //  { message: 'Volunteer not found' },
-    //  { status: 404 }
-    //);
+  } catch(error) {
+    if (error instanceof CMError) {
+      return error.toNextResponse();
+    } else {
+      return new CMError(CMErrorType.UnknownError, "API").toNextResponse();
+    }
   }
-
-  // if no error: return the specific Volunteer found
-  return NextResponse.json(res, { status: 200 });
 }
