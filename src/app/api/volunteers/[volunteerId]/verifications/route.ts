@@ -33,7 +33,7 @@ export async function DELETE(
     }
 
     const roles = {
-      verifier: '',
+      verifier: req.name ? req.name : '',
       lastUpdated: new Date(),
       role: req.role,
     };
