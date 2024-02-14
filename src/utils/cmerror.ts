@@ -69,7 +69,7 @@ export default class CMError extends Error {
 
   // Constructs a CMError based on a CMErrorType value
   // Generates CMError.message from source and the message template for the given errorType
-  // If overrideErrMsg = true, the template is ignored source is copied directly to CMError.message
+  // If overrideErrMsg = true, the template is ignored and source is copied directly to CMError.message
   constructor(
     errorType: CMErrorType,
     source?: string,
