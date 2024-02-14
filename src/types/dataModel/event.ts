@@ -21,13 +21,15 @@ export const zEventEntity = zEvent.extend({
 
 export const zEventResponse = zEventEntity;
 
+/* This is a union between two types.
+ * If the event is a recurring event, it will not have a date property, but it will have a recurrence property
+ * If the event is not a recurring event, it will have a date property, but will not have a recurrence property
+ */
 export const zCreateEventRequest = z.discriminatedUnion('isRecurring', [
   zEvent
-    .omit({ parentEvent: true })
-    .extend({ isRecurring: z.literal(true), recurrence: z.string() }),
-  zEvent
     .omit({ parentEvent: true, date: true })
-    .extend({ isRecurring: z.literal(false) }),
+    .extend({ isRecurring: z.literal(true), recurrence: z.string() }),
+  zEvent.omit({ parentEvent: true }).extend({ isRecurring: z.literal(false) }),
 ]);
 
 export interface Event extends z.infer<typeof zEvent> {}
