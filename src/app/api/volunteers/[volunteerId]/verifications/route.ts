@@ -6,22 +6,9 @@ import {
 } from '@/types/dataModel/roles';
 import { NextRequest, NextResponse } from 'next/server';
 import { deleteVolunteer } from '@/server/actions/Volunteer';
-//import { mongo } from 'mongoose';
 
-export async function DELETE(
-  request: NextRequest
-  //{ params }: { params: { volunteerId: string, role: string } }
-) {
+export async function DELETE(request: NextRequest) {
   try {
-    //const req = await request.nextUrl.searchParams.get("role");
-    //const validationResult = verificationRoles.safeParse(req);
-    /*if (!validationResult.success) {
-      return NextResponse.json(
-        { message: 'Invalid Organization Id' },
-        { status: 400 }
-      );
-    }*/
-
     const req = await request.json();
 
     const objectIdValidationResult = zObjectId.safeParse(req._id);
@@ -47,9 +34,6 @@ export async function DELETE(
       );
     }
 
-    //const volunteerId = request.nextUrl.searchParams.get("_id") as string
-    //const role = request.nextUrl.searchParams.get("role") as string
-    //const res = await deleteVolunteer(volunteerId);//, role);
     const res = await deleteVolunteer(req);
     if (!res) {
       return NextResponse.json(
@@ -64,53 +48,6 @@ export async function DELETE(
     return NextResponse.json({ message: '500 ERROR' }, { status: 500 });
   }
 }
-
-/*
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { volunteerId: string, role: string } }
-) {
-  try {
-    //const role = await request.nextUrl.searchParams.get("role") as string
-  
-    const objectIdValidationResult = zObjectId.safeParse(params.volunteerId);
-    if (!objectIdValidationResult.success) {
-      return NextResponse.json(
-        { message: 'Invalid Volunteer Id' },
-        { status: 400 }
-      );
-    }
-
-    
-    const body = await request.json();
-    const roleVerificationRequestValidationResult =
-    zRoleVerification.safeParse(body);
-    zRoleVerification
-  if (!roleVerificationRequestValidationResult.success) {
-    return NextResponse.json(
-      { message: 'Invalid Role Verification Request' },
-      { status: 400 }
-    );
-  }
-  
-
-    const res = await deleteVolunteer(params.volunteerId, params.role);
-
-    if (!res) {
-      return NextResponse.json(
-        { message: 'Volunteer not found' },
-        { status: 404 }
-      );
-    } 
-    return new NextResponse(null, { status: 204 });
-  } catch (error) {
-    
-    return NextResponse.json(
-      { message: 'Internal Server Error' },
-      { status: 500 }
-    );
-  }
-}*/
 
 export async function PATCH(
   request: NextRequest,
