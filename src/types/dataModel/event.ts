@@ -10,7 +10,7 @@ const zEvent = z.object({
   endAt: z.coerce.date(),
   date: z.coerce.date().optional(),
   eventRoles: z.array(zRole),
-  emailBodies: z.array(z.string()),
+  emailBodies: z.array(z.string()).optional(),
   isRecurring: z.boolean(),
   parentEvent: zObjectId, // we'll never populate this
 });
