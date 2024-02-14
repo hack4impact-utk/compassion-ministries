@@ -66,12 +66,10 @@ const VolunteerSchema = new Schema(
             required: true,
             enum: roles,
           },
-          //_id: false,
+          _id: false,
         },
-        //{ _id: false },
       ],
       required: false,
-      //_id: false
     },
     softDelete: {
       type: Boolean,
