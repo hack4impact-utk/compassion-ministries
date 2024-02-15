@@ -1,4 +1,7 @@
-import { deleteEventVolunteer } from '@/server/actions/Volunteer';
+import {
+  deleteEventVolunteer,
+  updateVolunteer,
+} from '@/server/actions/Volunteer';
 import { zObjectId } from '@/types/dataModel/base';
 import { NextRequest, NextResponse } from 'next/server';
 import { mongo } from 'mongoose';
@@ -7,6 +10,7 @@ import {
   zCreateEventVolunteerRequest,
 } from '@/types/dataModel/eventVolunteer';
 import { checkInVolunteer } from '@/server/actions/Event';
+import { UpdateVolunteerRequest } from '@/types/dataModel/volunteer';
 
 // @route POST /api/events/[eventId]/volunteers/[volunteerId]/check-in - Create an EventVolunteer
 export async function POST(
@@ -50,6 +54,15 @@ export async function POST(
     }
 
     const res = await checkInVolunteer(validationResult.data);
+
+    if (res) {
+      const updateRequest: UpdateVolunteerRequest = {
+        previousRole: validationResult.data.role,
+        previousOrganization: validationResult.data.organization,
+      };
+
+      await updateVolunteer(params.volunteerId, updateRequest);
+    }
 
     return NextResponse.json({ id: res }, { status: 201 });
   } catch (error) {
