@@ -1,19 +1,15 @@
 import { upsertVolunteerRoleVerification } from '@/server/actions/Volunteer';
 import { zObjectId } from '@/types/dataModel/base';
-import {
-  zRoleVerification,
-  zRoleVerificationRequest,
-} from '@/types/dataModel/roles';
+import { zRoleVerificationRequest } from '@/types/dataModel/roles';
 import { NextRequest, NextResponse } from 'next/server';
-import { deleteVolunteerRole } from '@/server/actions/Volunteer';
-
+import { deleteVolunteerRoleVerification } from '@/server/actions/Volunteer';
+import { zVerifiedRole } from '@/types/dataModel/roles';
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { volunteerId: string } }
 ) {
   try {
-    // Get Query & Parse volunteerID
-    const req = await request.json();
+    // Parse volunteerID
     const objectIdValidationResult = zObjectId.safeParse(params.volunteerId);
     if (!objectIdValidationResult.success) {
       return NextResponse.json(
@@ -23,14 +19,10 @@ export async function DELETE(
     }
 
     // Create role object, with verifier name autofilled and validate it using zRoleVerification schema
-    const roles = {
-      verifier: req.name ? req.name : '',
-      lastUpdated: new Date(),
-      role: req.role,
-    };
+    const req = await request.nextUrl.searchParams.get('role');
+    console.log(req);
     const roleVerificationRequestValidationResult =
-      zRoleVerification.safeParse(roles);
-
+      zVerifiedRole.safeParse(req);
     if (!roleVerificationRequestValidationResult.success) {
       return NextResponse.json(
         { message: 'Invalid Role Verification Request' },
@@ -39,7 +31,10 @@ export async function DELETE(
     }
 
     // delete the volunteer role using deleteVolunteerRole function - volunteerId & role needed
-    const res = await deleteVolunteerRole(params.volunteerId, req.role);
+    const res = await deleteVolunteerRoleVerification(
+      params.volunteerId,
+      roleVerificationRequestValidationResult.data
+    );
     if (!res) {
       return NextResponse.json({ message: 'Not Found' }, { status: 404 });
     }
