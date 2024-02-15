@@ -44,7 +44,15 @@ export const zCreateVolunteerRequest = zVolunteer.omit({
   previousRole: true,
 });
 
-export const zUpdateVolunteerRequest = zCreateVolunteerRequest.partial();
+export const zUpdateVolunteerRequest = zVolunteer
+  .extend({
+    previousOrganization: zObjectId.optional(),
+  })
+  .omit({
+    softDelete: true,
+    backgroundCheck: true,
+  })
+  .partial();
 
 export interface Volunteer extends z.infer<typeof zVolunteer> {}
 export interface VolunteerEntity extends z.infer<typeof zVolunteerEntity> {}
