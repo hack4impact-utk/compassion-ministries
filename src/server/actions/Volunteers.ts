@@ -1,7 +1,6 @@
 import dbConnect from '@/utils/db-connect';
 import VolunteerSchema from '@/server/models/Volunteer';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
-
 import OrganizationSchema from '@/server/models/Organization';
 OrganizationSchema;
 import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
@@ -16,14 +15,21 @@ import CMError, { CMErrorType } from '@/utils/cmerror';
 export async function softDeleteVolunteer(
   volunteerId: string
 ): Promise<VolunteerResponse | null> {
+  let res: VolunteerResponse | null = null;
+  try {
   await dbConnect();
-
-  const res: VolunteerResponse | null = await VolunteerSchema.findByIdAndUpdate(
+  res = await VolunteerSchema.findByIdAndUpdate(
     volunteerId,
     { softDelete: true }
   );
 
-  return res;
+  } catch (error) {
+    throw new CMError(CMErrorType.InternalError, "Server");
+  }
+  if (!res) {
+    throw new CMError(CMErrorType.NoSuchKey, "Volunteer");
+  }
+  return res; 
 }
 
 /**
@@ -38,7 +44,7 @@ export async function getVolunteer(
   try {
     await dbConnect();
     volunteer = await VolunteerSchema.findById(volunteerId)
-    .populate('previousOrganization');
+     .populate('previousOrganization');
   } catch (error) {
       throw new CMError(CMErrorType.InternalError, "Server");
     }
@@ -47,21 +53,26 @@ export async function getVolunteer(
   }
   return volunteer;
 }
-
+/** 
+ * Get all events that a volunteer has attended
+ * @param volunteerId // Id of the volunteer
+ * @returns // Collection of EventVolunteerEntities, or null
+ */
 export async function getAllEventsForVolunteer(
   volunteerId: string
 ): Promise<EventVolunteerResponse[]| null> {
+  let events: EventVolunteerResponse[] | null = null;
   try {
     await dbConnect();
-    
-    const events: EventVolunteerResponse[] | null =
-      await EventVolunteerSchema.find({volunteerId}).
-      populate('volunteer').populate('organization');
-    // TODO: populate evnts
+    events = await EventVolunteerSchema.find({volunteerId})
+     .populate('volunteer').populate('organization');
+    // TODO: populate events
 
-    return events;
   } catch (error) {
-    const errorMessage = 'Internal Server Error';
-    throw { status: 500, message: errorMessage };
+    throw new CMError(CMErrorType.InternalError, "Server");
   }
+  if (!events) {
+    throw new CMError(CMErrorType.NoSuchKey, "Events");
+  }
+  return events;
 }
