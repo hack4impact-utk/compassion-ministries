@@ -10,8 +10,7 @@ import { deleteVolunteer } from '@/server/actions/Volunteer';
 export async function DELETE(request: NextRequest) {
   try {
     const req = await request.json();
-
-    const objectIdValidationResult = zObjectId.safeParse(req._id);
+    const objectIdValidationResult = zObjectId.safeParse(req.volunteerId);
     if (!objectIdValidationResult.success) {
       return NextResponse.json(
         { message: 'Invalid Volunteer Id' },
@@ -43,8 +42,6 @@ export async function DELETE(request: NextRequest) {
     }
     return new NextResponse(null, { status: 204 });
   } catch (error) {
-    console.error('Error in DELETE endpoint:', error);
-
     return NextResponse.json({ message: '500 ERROR' }, { status: 500 });
   }
 }

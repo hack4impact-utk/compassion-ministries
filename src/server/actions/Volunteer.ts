@@ -21,7 +21,7 @@ OrganizationSchema;
  */
 
 interface VolunteerIdentifier {
-  _id: string;
+  volunteerId: string;
   role: string; // Assuming role is also passed as a string, adjust the type if necessary
 }
 
@@ -32,7 +32,7 @@ export async function deleteVolunteer(
     await dbConnect();
     const volunteer: VolunteerEntity | null =
       await VolunteerSchema.findByIdAndUpdate(
-        volunteerIdentifier._id,
+        volunteerIdentifier.volunteerId,
         { $pull: { roleVerifications: { role: volunteerIdentifier.role } } },
         { new: true }
       );
