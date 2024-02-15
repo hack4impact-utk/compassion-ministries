@@ -34,22 +34,18 @@ export async function softDeleteVolunteer(
 export async function getVolunteer(
   volunteerId: string
 ): Promise<VolunteerResponse | null> {
+  let volunteer: VolunteerResponse | null = null;
   try {
     await dbConnect();
-    const volunteer: VolunteerResponse | null = await 
-     VolunteerSchema.findById(volunteerId).populate('previousOrganization');
-    if (!volunteer) {
-      throw "Volunteer not found";
-    }
-    return volunteer;
-
+    volunteer = await VolunteerSchema.findById(volunteerId)
+    .populate('previousOrganization');
   } catch (error) {
-    if (error === "Volunteer not found") {
-      throw new CMError(CMErrorType.NoSuchKey, "Volunteer");
-    } else {
       throw new CMError(CMErrorType.InternalError, "Server");
     }
+  if (!volunteer) {
+    throw new CMError(CMErrorType.NoSuchKey, "Volunteer");
   }
+  return volunteer;
 }
 
 export async function getAllEventsForVolunteer(

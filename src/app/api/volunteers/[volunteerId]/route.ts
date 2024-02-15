@@ -2,7 +2,7 @@ import { updateVolunteer } from '@/server/actions/Volunteer';
 import { softDeleteVolunteer, getVolunteer } from '@/server/actions/Volunteers';
 import { zObjectId } from '@/types/dataModel/base';
 import { zUpdateVolunteerRequest } from '@/types/dataModel/volunteer';
-import CMError, { CMErrorType } from '@/utils/cmerror';
+import CMError, { CMErrorResponse, CMErrorType } from '@/utils/cmerror';
 import { NextRequest, NextResponse } from 'next/server';
 
 // @route DELETE /api/volunteers/[volunteerId] - Soft deletes a volunteer
@@ -82,10 +82,6 @@ export async function GET(
     return NextResponse.json(res, { status: 200 });
 
   } catch(error) {
-    if (error instanceof CMError) {
-      return error.toNextResponse();
-    } else {
-      return new CMError(CMErrorType.UnknownError, "API").toNextResponse();
-    }
+    return CMErrorResponse(error);
   }
 }
