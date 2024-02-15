@@ -9,6 +9,7 @@ export async function createEvent(
   createEventReq: CreateEventRequest
 ): Promise<string> {
   try {
+    await dbConnect();
     // first create the event
     const res = await Event.create(createEventReq);
     if (!res) {

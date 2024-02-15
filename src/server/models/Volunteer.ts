@@ -48,6 +48,7 @@ const VolunteerSchema = new Schema(
         },
       },
       required: false,
+      _id: false,
     },
     roleVerifications: {
       type: [
@@ -65,6 +66,7 @@ const VolunteerSchema = new Schema(
             required: true,
             enum: roles,
           },
+          _id: false,
         },
       ],
       required: false,
