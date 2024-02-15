@@ -20,7 +20,7 @@ export async function DELETE(
 
     // Create role object, with verifier name autofilled and validate it using zRoleVerification schema
     const req = await request.nextUrl.searchParams.get('role');
-    console.log(req);
+
     const roleVerificationRequestValidationResult =
       zVerifiedRole.safeParse(req);
     if (!roleVerificationRequestValidationResult.success) {
