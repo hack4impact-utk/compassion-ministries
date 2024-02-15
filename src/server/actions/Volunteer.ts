@@ -20,20 +20,16 @@ OrganizationSchema;
  * @returns the volunteer in the DB or null for error
  */
 
-interface VolunteerIdentifier {
-  volunteerId: string;
-  role: string; // Assuming role is also passed as a string, adjust the type if necessary
-}
-
-export async function deleteVolunteer(
-  volunteerIdentifier: VolunteerIdentifier
+export async function deleteVolunteerRole(
+  volunteerId: string,
+  role: string
 ): Promise<VolunteerEntity | null> {
   try {
     await dbConnect();
     const volunteer: VolunteerEntity | null =
       await VolunteerSchema.findByIdAndUpdate(
-        volunteerIdentifier.volunteerId,
-        { $pull: { roleVerifications: { role: volunteerIdentifier.role } } },
+        volunteerId,
+        { $pull: { roleVerifications: { role: role } } },
         { new: true }
       );
 

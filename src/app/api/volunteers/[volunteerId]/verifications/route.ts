@@ -5,12 +5,16 @@ import {
   zRoleVerificationRequest,
 } from '@/types/dataModel/roles';
 import { NextRequest, NextResponse } from 'next/server';
-import { deleteVolunteer } from '@/server/actions/Volunteer';
+import { deleteVolunteerRole } from '@/server/actions/Volunteer';
 
-export async function DELETE(request: NextRequest) {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { volunteerId: string } }
+) {
   try {
+    // Get Query & Parse volunteerID
     const req = await request.json();
-    const objectIdValidationResult = zObjectId.safeParse(req.volunteerId);
+    const objectIdValidationResult = zObjectId.safeParse(params.volunteerId);
     if (!objectIdValidationResult.success) {
       return NextResponse.json(
         { message: 'Invalid Volunteer Id' },
@@ -18,6 +22,7 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
+    // Create role object, with verifier name autofilled and validate it using zRoleVerification schema
     const roles = {
       verifier: req.name ? req.name : '',
       lastUpdated: new Date(),
@@ -33,16 +38,21 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    const res = await deleteVolunteer(req);
+    // delete the volunteer role using deleteVolunteerRole function - volunteerId & role needed
+    const res = await deleteVolunteerRole(params.volunteerId, req.role);
     if (!res) {
-      return NextResponse.json(
-        { message: 'Volunteer not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: 'Not Found' }, { status: 404 });
     }
+
+    // If the deletion was successful, return a 204 No Content response
     return new NextResponse(null, { status: 204 });
   } catch (error) {
-    return NextResponse.json({ message: '500 ERROR' }, { status: 500 });
+    // If an internal server error occurs, return a 500 Internal Server Error response
+
+    return NextResponse.json(
+      { message: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }
 
