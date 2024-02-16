@@ -37,9 +37,8 @@ export default function VolunteerPage({
 }) {
   return (
     <h1>
-      {' '}
-      Volunteer Page {params.volunteerId}{' '}
-      <VolunteerInfoComponent volunteer={sampleVolunteer} />{' '}
+      Volunteer Page {params.volunteerId}
+      <VolunteerInfoComponent volunteer={sampleVolunteer} />
     </h1>
   );
 }
