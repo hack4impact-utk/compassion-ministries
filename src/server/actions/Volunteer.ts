@@ -44,12 +44,12 @@ export async function deleteVolunteerRoleVerification(
  * Gets all volunteers.
  * @returns Collection of VolunteerEntities in the database, or null if there are none.
  */
-export async function getAllVolunteers(): Promise<VolunteerResponse[] | null> {
+export async function getAllVolunteers(): Promise<VolunteerResponse[]> {
   try {
     await dbConnect();
     const volunteers: VolunteerResponse[] =
       await VolunteerSchema.find().populate('previousOrganization');
-    return volunteers;
+    return volunteers ?? [];
   } catch (error) {
     throw error;
   }
