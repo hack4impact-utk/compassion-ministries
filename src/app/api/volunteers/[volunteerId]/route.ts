@@ -10,21 +10,20 @@ export async function DELETE(
   _request: NextRequest,
   { params }: { params: { volunteerId: string } }
 ) {
-  const validationResult = zObjectId.safeParse(params.volunteerId);
+  try {
+    const validationResult = zObjectId.safeParse(params.volunteerId);
   if (!validationResult.success) {
-    return NextResponse.json(
-      { message: 'Invalid Volunteer Id' },
-      { status: 400 }
-    );
+    return new CMError(CMErrorType.BadValue, 'Volunteer').toNextResponse();
   }
   const res = await softDeleteVolunteer(params.volunteerId);
   if (!res || res.softDelete) {
-    return NextResponse.json(
-      { message: 'Volunteer not found' },
-      { status: 404 }
-    );
+    return new CMError(CMErrorType.NoSuchKey, 'Volunteer').toNextResponse();
   }
+
   return new NextResponse(undefined, { status: 204 });
+  } catch(error) {
+    return CMErrorResponse(error);
+  }
 }
 
 export async function PUT(
@@ -34,10 +33,8 @@ export async function PUT(
   // validate volunteer id
   const objectIdValidationResult = zObjectId.safeParse(params.volunteerId);
   if (!objectIdValidationResult.success) {
-    return NextResponse.json(
-      { message: 'Invalid Volunteer Id' },
-      { status: 400 }
-    );
+    // This was originally a bad body error
+    return new CMError(CMErrorType.BadValue, 'Volunteer').toNextResponse();
   }
 
   // validate request body is a valid updateVolunteerRequest
@@ -45,10 +42,7 @@ export async function PUT(
   const updateVolunteerRequestValidationResult =
     zUpdateVolunteerRequest.safeParse(body);
   if (!updateVolunteerRequestValidationResult.success) {
-    return NextResponse.json(
-      { message: 'Invalid Request Body' },
-      { status: 400 }
-    );
+    return new CMError(CMErrorType.BadValue, 'Volunteer').toNextResponse();
   }
 
   // update the volunteer
@@ -58,11 +52,7 @@ export async function PUT(
       updateVolunteerRequestValidationResult.data
     );
   } catch (error) {
-    // TODO: update error handling
-    return NextResponse.json(
-      { message: 'Internal server error' },
-      { status: 500 }
-    );
+    return CMErrorResponse(error);
   }
 
   return new NextResponse(undefined, { status: 204 });
