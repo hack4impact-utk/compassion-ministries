@@ -15,6 +15,7 @@ const zVolunteer = z.object({
   lastName: z.string(),
   email: z.string().email(),
   phoneNumber: z.string(),
+  address: z.string(),
   previousRole: zRole.optional(),
   previousOrganization: zOrganization.optional(),
   backgroundCheck: z
