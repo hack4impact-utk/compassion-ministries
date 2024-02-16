@@ -5,6 +5,7 @@ import {
   UpdateOrganizationRequest,
 } from '@/types/dataModel/organization';
 import { OrganizationEntity } from '@/types/dataModel/organization';
+import CMError, { CMErrorType } from '@/utils/cmerror';
 /**
  * Create an organization
  * @param CreateOrganizationRequest requires the name of the organization
@@ -20,7 +21,7 @@ export async function createOrganization(
 
     return organization._id.toString();
   } catch (error) {
-    throw error;
+    throw new CMError(CMErrorType.InternalError, 'Server');
   }
 }
 
@@ -32,13 +33,19 @@ export async function createOrganization(
 export async function softDeleteOrganization(
   organizationId: string
 ): Promise<OrganizationEntity | null> {
-  await dbConnect();
-
-  const res: OrganizationEntity | null =
-    await OrganizationSchema.findByIdAndUpdate(organizationId, {
+  let res: OrganizationEntity | null = null;
+  try {
+    await dbConnect();
+    res = await OrganizationSchema.findByIdAndUpdate(organizationId, {
       softDelete: true,
     });
 
+  } catch (error) {
+    throw new CMError(CMErrorType.InternalError, 'Server');
+  }
+  if (!res) {
+    throw new CMError(CMErrorType.NoSuchKey, 'Organization');
+  }
   return res;
 }
 
@@ -52,6 +59,7 @@ export async function updateOrganization(
   organizationId: string,
   updatedData: UpdateOrganizationRequest
 ): Promise<UpdateOrganizationRequest | null> {
+  let updatedOrganization: UpdateOrganizationRequest | null = null;
   try {
     const connection = await dbConnect();
     connection.connection.on('error', (err) => {
@@ -59,15 +67,15 @@ export async function updateOrganization(
     });
 
     // Find the organization by its ID and update it with the new data
-    const updatedOrganization: OrganizationEntity | null =
-      await OrganizationSchema.findByIdAndUpdate(organizationId, updatedData);
-
-    return updatedOrganization;
+    updatedOrganization = await OrganizationSchema
+    .findByIdAndUpdate(organizationId, updatedData);;
   } catch (error) {
-    // const errorMessage = 'Internal Server Error';
-    // throw { status: 500, message: errorMessage };
-    throw error;
+    throw new CMError(CMErrorType.InternalError, 'Server');
   }
+  if (!updatedOrganization) {
+    throw new CMError(CMErrorType.NoSuchKey, 'Organization');
+  }
+  return updatedOrganization;
 }
 
 /**
