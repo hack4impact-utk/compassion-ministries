@@ -17,53 +17,33 @@ export default function VolunteerInfo({
         {volunteer.firstName} {volunteer.lastName}
       </Typography>
       <Typography>
-        <Typography
-          component="span"
-          variant="subtitle1"
-          sx={{ fontWeight: 'bold' }}
-        >
+        <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
           Email:
-        </Typography>{' '}
+        </Typography>
         {volunteer.email}
       </Typography>
       <Typography>
-        <Typography
-          component="span"
-          variant="subtitle1"
-          sx={{ fontWeight: 'bold' }}
-        >
+        <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
           Phone number:
-        </Typography>{' '}
+        </Typography>
         {volunteer.phoneNumber}
       </Typography>
       <Typography>
-        <Typography
-          component="span"
-          variant="subtitle1"
-          sx={{ fontWeight: 'bold' }}
-        >
+        <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
           Address:
-        </Typography>{' '}
+        </Typography>
         {volunteer.address}
       </Typography>
       <Typography>
-        <Typography
-          component="span"
-          variant="subtitle1"
-          sx={{ fontWeight: 'bold' }}
-        >
+        <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
           Previous role:
-        </Typography>{' '}
+        </Typography>
         {volunteer.previousRole}
       </Typography>
       <Typography>
-        <Typography
-          component="span"
-          variant="subtitle1"
-          sx={{ fontWeight: 'bold' }}
-        >
+        <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
           Previous organization:
-        </Typography>{' '}
+        </Typography>
         {volunteer.previousOrganization?.name}
       </Typography>
       <Typography>Role Verifications</Typography>
@@ -71,33 +51,21 @@ export default function VolunteerInfo({
         {volunteer.roleVerifications?.map((verification, index) => (
           <Typography component="li" key={index}>
             <Typography>
-              <Typography
-                component="span"
-                variant="subtitle1"
-                sx={{ fontWeight: 'bold' }}
-              >
+              <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
                 Role:
-              </Typography>{' '}
+              </Typography>
               {verification.role}
             </Typography>
             <Typography>
-              <Typography
-                component="span"
-                variant="subtitle1"
-                sx={{ fontWeight: 'bold' }}
-              >
+              <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
                 Verified by:
-              </Typography>{' '}
+              </Typography>
               {verification.verifier}
             </Typography>
             <Typography>
-              <Typography
-                component="span"
-                variant="subtitle1"
-                sx={{ fontWeight: 'bold' }}
-              >
+              <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
                 Verification date:
-              </Typography>{' '}
+              </Typography>
               {new Date(verification.lastUpdated).toLocaleDateString()}
             </Typography>
           </Typography>
