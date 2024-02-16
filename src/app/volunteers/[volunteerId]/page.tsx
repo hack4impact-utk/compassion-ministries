@@ -1,6 +1,6 @@
 // page that will eventually contain information about a single volunteer
 // Page that will eventually contain a list of all volunteers
-import VolunteerInfoComponent from '@/components/volunteers/Volunteer';
+import VolunteerInfo from '@/components/volunteers/Volunteer';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 
 // test case to call VolunteerInfoComponent
@@ -38,7 +38,7 @@ export default function VolunteerPage({
   return (
     <h1>
       Volunteer Page {params.volunteerId}
-      <VolunteerInfoComponent volunteer={sampleVolunteer} />
+      <VolunteerInfo volunteer={sampleVolunteer} />
     </h1>
   );
 }

@@ -12,43 +12,97 @@ export default function VolunteerInfo({
   volunteer,
 }: VolunteerProps): React.ReactElement {
   return (
-    <div>
+    <Typography component="div">
       <Typography variant="h1">
         {volunteer.firstName} {volunteer.lastName}
       </Typography>
       <Typography>
-        <strong>Email:</strong> {volunteer.email}
+        <Typography
+          component="span"
+          variant="subtitle1"
+          sx={{ fontWeight: 'bold' }}
+        >
+          Email:
+        </Typography>{' '}
+        {volunteer.email}
       </Typography>
       <Typography>
-        <strong>Phone number:</strong> {volunteer.phoneNumber}
+        <Typography
+          component="span"
+          variant="subtitle1"
+          sx={{ fontWeight: 'bold' }}
+        >
+          Phone number:
+        </Typography>{' '}
+        {volunteer.phoneNumber}
       </Typography>
       <Typography>
-        <strong>Address:</strong> {volunteer.address}
+        <Typography
+          component="span"
+          variant="subtitle1"
+          sx={{ fontWeight: 'bold' }}
+        >
+          Address:
+        </Typography>{' '}
+        {volunteer.address}
       </Typography>
       <Typography>
-        <strong>Previous role:</strong> {volunteer.previousRole}
+        <Typography
+          component="span"
+          variant="subtitle1"
+          sx={{ fontWeight: 'bold' }}
+        >
+          Previous role:
+        </Typography>{' '}
+        {volunteer.previousRole}
       </Typography>
       <Typography>
-        <strong>Previous organization:</strong>{' '}
+        <Typography
+          component="span"
+          variant="subtitle1"
+          sx={{ fontWeight: 'bold' }}
+        >
+          Previous organization:
+        </Typography>{' '}
         {volunteer.previousOrganization?.name}
       </Typography>
       <Typography>Role Verifications</Typography>
-      <ul>
+      <Typography component="ul">
         {volunteer.roleVerifications?.map((verification, index) => (
-          <li key={index}>
+          <Typography component="li" key={index}>
             <Typography>
-              <strong>Role:</strong> {verification.role}
+              <Typography
+                component="span"
+                variant="subtitle1"
+                sx={{ fontWeight: 'bold' }}
+              >
+                Role:
+              </Typography>{' '}
+              {verification.role}
             </Typography>
             <Typography>
-              <strong>Verified by:</strong> {verification.verifier}
+              <Typography
+                component="span"
+                variant="subtitle1"
+                sx={{ fontWeight: 'bold' }}
+              >
+                Verified by:
+              </Typography>{' '}
+              {verification.verifier}
             </Typography>
             <Typography>
-              <strong>Verification date:</strong>{' '}
+              <Typography
+                component="span"
+                variant="subtitle1"
+                sx={{ fontWeight: 'bold' }}
+              >
+                Verification date:
+              </Typography>{' '}
               {new Date(verification.lastUpdated).toLocaleDateString()}
             </Typography>
-          </li>
+          </Typography>
         ))}
-      </ul>
-    </div>
+      </Typography>
+    </Typography>
   );
 }
