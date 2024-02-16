@@ -36,9 +36,9 @@ export default function VolunteerPage({
   params: { volunteerId: string };
 }) {
   return (
-    <h1>
+    <>
       Volunteer Page {params.volunteerId}
       <VolunteerInfo volunteer={sampleVolunteer} />
-    </h1>
+    </>
   );
 }

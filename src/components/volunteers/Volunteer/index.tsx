@@ -1,6 +1,6 @@
 import React from 'react';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
-import { Typography } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 
 // Use VolunteerResponse Props
 interface VolunteerProps {
@@ -12,65 +12,61 @@ export default function VolunteerInfo({
   volunteer,
 }: VolunteerProps): React.ReactElement {
   return (
-    <Typography component="div">
+    <Box>
       <Typography variant="h1">
         {volunteer.firstName} {volunteer.lastName}
       </Typography>
-      <Typography>
-        <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+      <Box sx={{ display: 'flex' }}>
+        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', pr: 1 }}>
           Email:
         </Typography>
-        {volunteer.email}
-      </Typography>
-      <Typography>
-        <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+        <Typography display="inline">{volunteer.email}</Typography>
+      </Box>
+      <Box sx={{ display: 'flex' }}>
+        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', pr: 1 }}>
           Phone number:
         </Typography>
-        {volunteer.phoneNumber}
-      </Typography>
-      <Typography>
-        <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
-          Address:
-        </Typography>
-        {volunteer.address}
-      </Typography>
-      <Typography>
-        <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+        <Typography display="inline">{volunteer.phoneNumber}</Typography>
+      </Box>
+      <Box sx={{ display: 'flex' }}>
+        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', pr: 1 }}>
           Previous role:
         </Typography>
-        {volunteer.previousRole}
-      </Typography>
-      <Typography>
-        <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+        <Typography display="inline">{volunteer.previousRole}</Typography>
+      </Box>
+      <Box sx={{ display: 'flex' }}>
+        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', pr: 1 }}>
           Previous organization:
         </Typography>
-        {volunteer.previousOrganization?.name}
-      </Typography>
-      <Typography>Role Verifications</Typography>
-      <Typography component="ul">
-        {volunteer.roleVerifications?.map((verification, index) => (
-          <Typography component="li" key={index}>
-            <Typography>
-              <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
-                Role:
-              </Typography>
-              {verification.role}
+        <Typography display="inline">
+          {volunteer.previousOrganization?.name}
+        </Typography>
+      </Box>
+      <Typography variant="h5">Role Verifications</Typography>
+      {volunteer.roleVerifications?.map((verification, index) => (
+        <Box key={index}>
+          <Box sx={{ display: 'flex' }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', pr: 1 }}>
+              Role:
             </Typography>
-            <Typography>
-              <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
-                Verified by:
-              </Typography>
-              {verification.verifier}
+            <Typography display="inline">{verification.role}</Typography>
+          </Box>
+          <Box sx={{ display: 'flex' }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', pr: 1 }}>
+              Verified by:
             </Typography>
-            <Typography>
-              <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
-                Verification date:
-              </Typography>
-              {new Date(verification.lastUpdated).toLocaleDateString()}
+            <Typography display="inline">{verification.verifier}</Typography>
+          </Box>
+          <Box sx={{ display: 'flex' }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', pr: 1 }}>
+              Verification date::
             </Typography>
-          </Typography>
-        ))}
-      </Typography>
-    </Typography>
+            <Typography display="inline">
+              {verification.lastUpdated.toLocaleDateString()}
+            </Typography>
+          </Box>
+        </Box>
+      ))}
+    </Box>
   );
 }
