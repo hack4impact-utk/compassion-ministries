@@ -1,53 +1,54 @@
 import React from 'react';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
+import { Typography } from '@mui/material';
 
 // Use VolunteerResponse Props
 interface VolunteerProps {
   volunteer: VolunteerResponse;
 }
 
-// VolunteerInfoComponent displays volunteer information
-const VolunteerInfoComponent: React.FC<VolunteerProps> = ({ volunteer }) => {
+// VolunteerInfo displays volunteer information
+export default function VolunteerInfo({
+  volunteer,
+}: VolunteerProps): React.ReactElement {
   return (
     <div>
-      <h1 style={{ fontSize: '2rem' }}>
+      <Typography variant="h1">
         {volunteer.firstName} {volunteer.lastName}
-      </h1>
-      <p>
+      </Typography>
+      <Typography>
         <strong>Email:</strong> {volunteer.email}
-      </p>
-      <p>
+      </Typography>
+      <Typography>
         <strong>Phone number:</strong> {volunteer.phoneNumber}
-      </p>
-      <p>
+      </Typography>
+      <Typography>
         <strong>Address:</strong> {volunteer.address}
-      </p>
-      <p>
+      </Typography>
+      <Typography>
         <strong>Previous role:</strong> {volunteer.previousRole}
-      </p>
-      <p>
+      </Typography>
+      <Typography>
         <strong>Previous organization:</strong>{' '}
         {volunteer.previousOrganization?.name}
-      </p>
-      <h2>Role Verifications</h2>
+      </Typography>
+      <Typography>Role Verifications</Typography>
       <ul>
         {volunteer.roleVerifications?.map((verification, index) => (
           <li key={index}>
-            <p>
+            <Typography>
               <strong>Role:</strong> {verification.role}
-            </p>
-            <p>
+            </Typography>
+            <Typography>
               <strong>Verified by:</strong> {verification.verifier}
-            </p>
-            <p>
+            </Typography>
+            <Typography>
               <strong>Verification date:</strong>{' '}
               {new Date(verification.lastUpdated).toLocaleDateString()}
-            </p>
+            </Typography>
           </li>
         ))}
       </ul>
     </div>
   );
-};
-
-export default VolunteerInfoComponent;
+}
