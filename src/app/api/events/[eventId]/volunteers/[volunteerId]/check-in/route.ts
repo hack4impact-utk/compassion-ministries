@@ -2,6 +2,7 @@ import { deleteEventVolunteer } from '@/server/actions/Volunteer';
 import { zObjectId } from '@/types/dataModel/base';
 import { NextRequest, NextResponse } from 'next/server';
 import { mongo } from 'mongoose';
+import CMError, { CMErrorResponse, CMErrorType } from '@/utils/cmerror';
 
 // @route DELETE /api/events/[eventId]/volunteers/[volunteerId]/check-in - Delete an EventVolunteer
 export async function DELETE(
@@ -12,37 +13,25 @@ export async function DELETE(
     // Check Volunteer ID
     const validationVolunteer = zObjectId.safeParse(params.volunteerId);
     if (!validationVolunteer.success) {
-      return NextResponse.json(
-        { message: 'Invalid Volunteer Id' },
-        { status: 400 }
-      );
+      return new CMError(CMErrorType.BadValue, 'Volunteer Id').toNextResponse();
     }
 
     // Check Event ID
     const validationEvent = zObjectId.safeParse(params.eventId);
     if (!validationEvent.success) {
-      return NextResponse.json(
-        { message: 'Invalid Event Id' },
-        { status: 400 }
-      );
+      return new CMError(CMErrorType.BadValue, 'Event Id').toNextResponse();
     }
 
     // Delete EventVolunteer using Volunteer ID and Event ID
     const res = await deleteEventVolunteer(params.volunteerId, params.eventId);
     if (!res) {
-      return NextResponse.json(
-        { message: 'Object not found' },
-        { status: 404 }
-      );
+      return new CMError(CMErrorType.NoSuchKey, 'EventVolunteer').toNextResponse();
     }
     return new NextResponse(undefined, { status: 204 });
   } catch (error) {
     if (error instanceof mongo.MongoServerError) {
-      return NextResponse.json({ message: error }, { status: 409 });
+      return new CMError(CMErrorType.DuplicateKey, 'EventVolunteer').toNextResponse();
     }
-    return NextResponse.json(
-      { message: 'Internal Server Error' },
-      { status: 500 }
-    );
+    return CMErrorResponse(error);
   }
 }
