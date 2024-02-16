@@ -11,6 +11,7 @@ import dbConnect from '@/utils/db-connect';
 // Temporary code to load org schema until we are using it elsewhere
 import OrganizationSchema from '@/server/models/Organization';
 import { RoleVerificationRequest } from '@/types/dataModel/roles';
+import CMError, { CMErrorType } from '@/utils/cmerror';
 OrganizationSchema;
 
 /**
@@ -18,14 +19,17 @@ OrganizationSchema;
  * @returns Collection of VolunteerEntities in the database, or null if there are none.
  */
 export async function getAllVolunteers(): Promise<VolunteerResponse[] | null> {
+  let volunteers: VolunteerResponse[] | null = null;
   try {
     await dbConnect();
-    const volunteers: VolunteerResponse[] =
-      await VolunteerSchema.find().populate('previousOrganization');
-    return volunteers;
+    volunteers = await VolunteerSchema.find().populate('previousOrganization');
   } catch (error) {
-    throw error;
+    throw new CMError(CMErrorType.InternalError, 'Server');
   }
+  if (!volunteers) {
+    throw new CMError(CMErrorType.NoSuchKey, 'Volunteers');
+  }
+  return volunteers;
 }
 
 /**
@@ -41,7 +45,7 @@ export async function createVolunteer(
     const volunteer = await VolunteerSchema.create(request);
     return volunteer._id.toString();
   } catch (error) {
-    throw error;
+    throw new CMError(CMErrorType.InternalError, 'Server');
   }
 }
 
@@ -54,19 +58,20 @@ export async function updateVolunteer(
   volunteerId: string,
   updatedVolunteer: UpdateVolunteerRequest
 ): Promise<void> {
+  let res;
   try {
     await dbConnect();
-
-    const res = await VolunteerSchema.findByIdAndUpdate(
+    res = await VolunteerSchema.findByIdAndUpdate(
       volunteerId,
       updatedVolunteer
     );
-    if (!res) {
-      throw new Error('Volunteer not found'); // TODO: update error handling
-    }
+
   } catch (error) {
-    throw error;
+    throw new CMError(CMErrorType.InternalError, 'Server');
   }
+  if (!res) {
+    throw new CMError(CMErrorType.NoSuchKey, 'Volunteer');
+  } 
 }
 
 /**
@@ -79,17 +84,20 @@ export async function deleteEventVolunteer(
   volunteerId: string,
   eventId: string
 ): Promise<EventVolunteerEntity | null> {
+  let res: EventVolunteerEntity | null = null;
   try {
     await dbConnect();
-    const res: EventVolunteerEntity | null =
-      await EventVolunteerSchema.findOneAndDelete({
-        volunteer: volunteerId,
-        event: eventId,
-      });
-    return res;
+    res = await EventVolunteerSchema.findOneAndDelete({
+      volunteer: volunteerId,
+      event: eventId,
+    });
   } catch (error) {
-    throw error;
+    throw new CMError(CMErrorType.InternalError, 'Server');
   }
+  if (!res) {
+    throw new CMError(CMErrorType.NoSuchKey, 'EventVolunteer');
+  }
+  return res;
 }
 
 /**
@@ -136,9 +144,9 @@ export async function upsertVolunteerRoleVerification(
     });
 
     if (!res) {
-      throw new Error('Volunteer not found');
+      throw new CMError(CMErrorType.NoSuchKey, 'Volunteer'); 
     }
   } catch (error) {
-    throw error;
+    throw new CMError(CMErrorType.InternalError, 'Server');
   }
 }
