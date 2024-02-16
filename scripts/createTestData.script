@@ -163,7 +163,7 @@ db.volunteers.insertMany([
     },
     "roleVerifications": [
       {
-        "verifier": "Michael Johnson,
+        "verifier": "Michael Johnson",
         "lastUpdated": "2023-04-19T13:33:00Z",
         "role": "Save the Babies"
       },
@@ -189,7 +189,7 @@ db.volunteers.insertMany([
     },
     "roleVerifications": [
       {
-        "verifier": "Olivia Martinez,
+        "verifier": "Olivia Martinez",
         "lastUpdated": "2023-04-21T15:10:00Z",
         "role": "Medical"
       }
