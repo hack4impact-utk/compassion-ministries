@@ -86,19 +86,21 @@ export async function updateOrganization(
 export async function getAllOrganizations(): Promise<
   OrganizationEntity[] | null
 > {
+  let organizations: OrganizationEntity[] | null = null;
   try {
     const connection = await dbConnect();
+    // cant move this due to 'err' 
     connection.connection.on('error', (err) => {
       throw new Error(err.code);
     });
 
-    const organizations: OrganizationEntity[] | null =
-      await OrganizationSchema.find();
+    organizations = await OrganizationSchema.find();
 
-    return organizations;
   } catch (error) {
-    // const errorMessage = 'Internal Server Error';
-    // throw { status: 500, message: errorMessage };
-    throw error;
+    throw new CMError(CMErrorType.InternalError, 'Server');
   }
+  if (!organizations) {
+    throw new CMError(CMErrorType.NoSuchKey, 'Organization');
+  }
+  return organizations;
 }
