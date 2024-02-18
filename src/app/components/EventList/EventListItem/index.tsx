@@ -1,5 +1,6 @@
 import { EventResponse } from '@/types/dataModel/event';
-import { ListItem, Stack, Typography } from '@mui/material';
+import { roleIcons } from '@/utils/icons';
+import { ListItem, Stack, SvgIcon, Typography } from '@mui/material';
 
 export default function EventListItem({
   eventResponse,
@@ -9,6 +10,7 @@ export default function EventListItem({
   return (
     <ListItem>
       <Stack direction="column">
+        <SvgIcon></SvgIcon>
         <Typography variant="h5">{eventResponse.name}</Typography>
         <Typography variant="body1">
           Date: {eventResponse.startAt.toDateString()}
@@ -17,19 +19,9 @@ export default function EventListItem({
           Description: {eventResponse.description}
         </Typography>
         <Stack direction="row" justifyContent="flex-end">
-          {eventResponse.eventRoles.map((eventRole) => (
-            <Typography variant="body2" key={eventRole}>
-              {eventRole}
-            </Typography>
-          ))}
+          {eventResponse.eventRoles.map((eventRole) => roleIcons[eventRole])}
         </Stack>
       </Stack>
-      {/* <ListItemText primary={eventResponse.name} />
-      <ListItemText primary={eventResponse.startAt.toDateString()} />
-      <ListItemText primary={eventResponse.description} />
-      {eventResponse.eventRoles.map((eventRole) => (
-        <ListItemText primary={eventRole} key={eventRole} />
-      ))} */}
     </ListItem>
   );
 }
