@@ -11,6 +11,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  //Render HTML body with Providers and Navbar components, including children.
   return (
     <html lang="en">
       <body>
