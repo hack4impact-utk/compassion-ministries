@@ -3,8 +3,8 @@ import EventList from './components/EventList';
 
 const eventResponses: EventResponse[] = [
   {
-    name: 'test',
-    description: 'desc',
+    name: 'Event 1',
+    description: 'Description of Event 1.',
     startAt: new Date(2024, 2, 1),
     endAt: new Date(2024, 2, 2),
     eventRoles: ['Food', 'Medical'],
@@ -15,8 +15,8 @@ const eventResponses: EventResponse[] = [
     _id: '0',
   },
   {
-    name: 'test2',
-    description: 'desc2',
+    name: 'Event 2',
+    description: "Event 2's description!",
     startAt: new Date(2024, 4),
     endAt: new Date(2024, 5),
     eventRoles: ['Food'],
