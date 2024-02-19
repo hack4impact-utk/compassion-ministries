@@ -6,7 +6,7 @@ const EventVolunteerSchema = new Schema(
   {
     role: {
       type: String,
-      required: false,
+      required: true,
       enum: roles,
     },
     organization: {
@@ -30,6 +30,8 @@ const EventVolunteerSchema = new Schema(
     timestamps: true,
   }
 );
+
+EventVolunteerSchema.index({ event: 1, volunteer: 1 }, { unique: true });
 
 export interface EventVolunteerDocument
   extends Omit<EventVolunteerEntity, '_id'>,
