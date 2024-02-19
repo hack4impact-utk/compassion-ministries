@@ -1,15 +1,27 @@
 import Link from 'next/link';
 import React from 'react';
 import SigninButton from './SigninButton';
-import { AppBar } from '@mui/material';
+import { AppBar, Typography } from '@mui/material';
 
 // Navigation bar with 3 links and Signin Button
 const Navbar = () => {
   return (
-    <AppBar position="static" style={{ backgroundColor: 'orange' }}>
-      <Link href={'/'}>Home</Link>
-      <Link href={'/events'}>Events</Link>
-      <Link href={'/volunteers'}>Volunteers</Link>
+    <AppBar position="static">
+      <Typography>
+        <Link href={'/'} color="inherit">
+          Home
+        </Link>
+      </Typography>
+      <Typography>
+        <Link href={'/events'} color="inherit">
+          Events
+        </Link>
+      </Typography>
+      <Typography>
+        <Link href={'/volunteers'} color="inherit">
+          Volunteers
+        </Link>
+      </Typography>
       <SigninButton />
     </AppBar>
   );
