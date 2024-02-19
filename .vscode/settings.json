@@ -8,5 +8,7 @@
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
     "**/.keep": true
-  }
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true
 }

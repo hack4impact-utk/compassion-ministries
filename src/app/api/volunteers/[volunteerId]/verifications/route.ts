@@ -8,19 +8,22 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: { volunteerId: string } }
 ) {
-  try { 
+  try {
     const objectIdValidationResult = zObjectId.safeParse(params.volunteerId);
     if (!objectIdValidationResult.success) {
-      return new CMError(CMErrorType.BadValue, 'Volunteer').toNextResponse();
+      return new CMError(CMErrorType.BadValue, 'Volunteer Id').toNextResponse();
     }
 
     const body = await request.json();
     const roleVerificationRequestValidationResult =
       zRoleVerificationRequest.safeParse(body);
     if (!roleVerificationRequestValidationResult.success) {
-      return new CMError(CMErrorType.BadValue, 'Role Verification Request').toNextResponse();
+      return new CMError(
+        CMErrorType.BadValue,
+        'Role Verification Request'
+      ).toNextResponse();
     }
-  
+
     await upsertVolunteerRoleVerification(
       params.volunteerId,
       roleVerificationRequestValidationResult.data

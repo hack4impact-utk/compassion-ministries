@@ -12,22 +12,20 @@ import dbConnect from '@/utils/db-connect';
 import OrganizationSchema from '@/server/models/Organization';
 import { RoleVerificationRequest } from '@/types/dataModel/roles';
 import CMError, { CMErrorType } from '@/utils/cmerror';
+import { mongo } from 'mongoose';
 OrganizationSchema;
 
 /**
  * Gets all volunteers.
  * @returns Collection of VolunteerEntities in the database, or null if there are none.
  */
-export async function getAllVolunteers(): Promise<VolunteerResponse[] | null> {
-  let volunteers: VolunteerResponse[] | null = null;
+export async function getAllVolunteers(): Promise<VolunteerResponse[]> {
+  let volunteers: VolunteerResponse[];
   try {
     await dbConnect();
     volunteers = await VolunteerSchema.find().populate('previousOrganization');
   } catch (error) {
-    throw new CMError(CMErrorType.InternalError, 'Server');
-  }
-  if (!volunteers) {
-    throw new CMError(CMErrorType.NoSuchKey, 'Volunteers');
+    throw new CMError(CMErrorType.InternalError);
   }
   return volunteers;
 }
@@ -45,7 +43,15 @@ export async function createVolunteer(
     const volunteer = await VolunteerSchema.create(request);
     return volunteer._id.toString();
   } catch (error) {
-    throw new CMError(CMErrorType.InternalError, 'Server');
+    if (
+      error instanceof mongo.MongoError ||
+      error instanceof mongo.MongoServerError
+    ) {
+      if (error.code === 11000) {
+        throw new CMError(CMErrorType.DuplicateKey, 'Volunteer Phone/Email');
+      }
+    }
+    throw new CMError(CMErrorType.InternalError);
   }
 }
 
@@ -65,13 +71,12 @@ export async function updateVolunteer(
       volunteerId,
       updatedVolunteer
     );
-
   } catch (error) {
-    throw new CMError(CMErrorType.InternalError, 'Server');
+    throw new CMError(CMErrorType.InternalError);
   }
   if (!res) {
     throw new CMError(CMErrorType.NoSuchKey, 'Volunteer');
-  } 
+  }
 }
 
 /**
@@ -92,7 +97,7 @@ export async function deleteEventVolunteer(
       event: eventId,
     });
   } catch (error) {
-    throw new CMError(CMErrorType.InternalError, 'Server');
+    throw new CMError(CMErrorType.InternalError);
   }
   if (!res) {
     throw new CMError(CMErrorType.NoSuchKey, 'EventVolunteer');
@@ -119,6 +124,9 @@ export async function upsertVolunteerRoleVerification(
       .select('roleVerifications')
       .exec();
 
+    if (!currentVerifications) {
+      throw new CMError(CMErrorType.NoSuchKey, 'Volunteer');
+    }
     // update the role verification if it exists
     let roleVerificationExists = false;
     currentVerifications?.roleVerifications?.forEach((roleVerification) => {
@@ -144,9 +152,12 @@ export async function upsertVolunteerRoleVerification(
     });
 
     if (!res) {
-      throw new CMError(CMErrorType.NoSuchKey, 'Volunteer'); 
+      throw new CMError(CMErrorType.NoSuchKey, 'Volunteer');
     }
   } catch (error) {
-    throw new CMError(CMErrorType.InternalError, 'Server');
+    if (error instanceof CMError) {
+      throw error;
+    }
+    throw new CMError(CMErrorType.InternalError);
   }
 }

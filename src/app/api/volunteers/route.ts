@@ -19,16 +19,12 @@ export async function POST(request: NextRequest) {
     const req = await request.json();
     const validationResult = zCreateVolunteerRequest.safeParse(req);
     if (!validationResult.success) {
-      // this was originally a bad body error using 400 so I might make new one
       return new CMError(CMErrorType.BadValue, 'Volunteer').toNextResponse();
     }
 
     const res = await createVolunteer(validationResult.data);
     return NextResponse.json({ _id: res }, { status: 201 });
   } catch (error) {
-    if ((error = 11000)) {
-      return new CMError(CMErrorType.DuplicateKey, 'Volunteer').toNextResponse();
-    }
     return CMErrorResponse(error);
   }
 }

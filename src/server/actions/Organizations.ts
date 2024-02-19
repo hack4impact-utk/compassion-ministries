@@ -6,6 +6,7 @@ import {
 } from '@/types/dataModel/organization';
 import { OrganizationEntity } from '@/types/dataModel/organization';
 import CMError, { CMErrorType } from '@/utils/cmerror';
+import { mongo } from 'mongoose';
 /**
  * Create an organization
  * @param CreateOrganizationRequest requires the name of the organization
@@ -21,7 +22,15 @@ export async function createOrganization(
 
     return organization._id.toString();
   } catch (error) {
-    throw new CMError(CMErrorType.InternalError, 'Server');
+    if (
+      error instanceof mongo.MongoError ||
+      error instanceof mongo.MongoServerError
+    ) {
+      if (error.code === 11000) {
+        throw new CMError(CMErrorType.DuplicateKey, 'Organization name');
+      }
+    }
+    throw new CMError(CMErrorType.InternalError);
   }
 }
 
@@ -39,9 +48,8 @@ export async function softDeleteOrganization(
     res = await OrganizationSchema.findByIdAndUpdate(organizationId, {
       softDelete: true,
     });
-
   } catch (error) {
-    throw new CMError(CMErrorType.InternalError, 'Server');
+    throw new CMError(CMErrorType.InternalError);
   }
   if (!res) {
     throw new CMError(CMErrorType.NoSuchKey, 'Organization');
@@ -61,16 +69,23 @@ export async function updateOrganization(
 ): Promise<UpdateOrganizationRequest | null> {
   let updatedOrganization: UpdateOrganizationRequest | null = null;
   try {
-    const connection = await dbConnect();
-    connection.connection.on('error', (err) => {
-      throw new Error(err.code);
-    });
+    await dbConnect();
 
     // Find the organization by its ID and update it with the new data
-    updatedOrganization = await OrganizationSchema
-    .findByIdAndUpdate(organizationId, updatedData);;
+    updatedOrganization = await OrganizationSchema.findByIdAndUpdate(
+      organizationId,
+      updatedData
+    );
   } catch (error) {
-    throw new CMError(CMErrorType.InternalError, 'Server');
+    if (
+      error instanceof mongo.MongoError ||
+      error instanceof mongo.MongoServerError
+    ) {
+      if (error.code === 11000) {
+        throw new CMError(CMErrorType.DuplicateKey, 'Organization name');
+      }
+    }
+    throw new CMError(CMErrorType.InternalError);
   }
   if (!updatedOrganization) {
     throw new CMError(CMErrorType.NoSuchKey, 'Organization');
@@ -83,24 +98,14 @@ export async function updateOrganization(
  * @param organizations all organization in the database
  * @returns all organization in the database
  */
-export async function getAllOrganizations(): Promise<
-  OrganizationEntity[] | null
-> {
-  let organizations: OrganizationEntity[] | null = null;
+export async function getAllOrganizations(): Promise<OrganizationEntity[]> {
+  let organizations: OrganizationEntity[];
   try {
-    const connection = await dbConnect();
-    // cant move this due to 'err' 
-    connection.connection.on('error', (err) => {
-      throw new Error(err.code);
-    });
+    await dbConnect();
 
     organizations = await OrganizationSchema.find();
-
   } catch (error) {
-    throw new CMError(CMErrorType.InternalError, 'Server');
-  }
-  if (!organizations) {
-    throw new CMError(CMErrorType.NoSuchKey, 'Organization');
+    throw new CMError(CMErrorType.InternalError);
   }
   return organizations;
 }

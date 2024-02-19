@@ -13,12 +13,9 @@ export async function DELETE(
   try {
     const validationResult = zObjectId.safeParse(params.volunteerId);
     if (!validationResult.success) {
-      return new CMError(CMErrorType.BadValue, 'Volunteer').toNextResponse();
+      return new CMError(CMErrorType.BadValue, 'Volunteer Id').toNextResponse();
     }
-    const res = await softDeleteVolunteer(params.volunteerId);
-    if (!res || res.softDelete) {
-      return new CMError(CMErrorType.NoSuchKey, 'Volunteer').toNextResponse();
-    }
+    await softDeleteVolunteer(params.volunteerId);
 
     return new NextResponse(undefined, { status: 204 });
   } catch(error) {
@@ -34,8 +31,7 @@ export async function PUT(
   try {
     const objectIdValidationResult = zObjectId.safeParse(params.volunteerId);
     if (!objectIdValidationResult.success) {
-      // This was originally a bad body error
-      return new CMError(CMErrorType.BadValue, 'Volunteer').toNextResponse();
+      return new CMError(CMErrorType.BadValue, 'Volunteer Id').toNextResponse();
     }
 
     // validate request body is a valid updateVolunteerRequest
@@ -65,7 +61,7 @@ export async function GET(
   try {
     const validationResult = zObjectId.safeParse(params.volunteerId);
     if (!validationResult.success) {
-      return new CMError(CMErrorType.BadValue, 'Volunteer').toNextResponse();
+      return new CMError(CMErrorType.BadValue, 'Volunteer Id').toNextResponse();
     }
     const res = await getVolunteer(params.volunteerId);
     return NextResponse.json(res, { status: 200 });

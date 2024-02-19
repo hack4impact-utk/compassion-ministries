@@ -5,7 +5,6 @@ import {
 import { zObjectId } from '@/types/dataModel/base';
 import { zUpdateOrganizationRequest } from '@/types/dataModel/organization';
 import { NextRequest, NextResponse } from 'next/server';
-import { mongo } from 'mongoose';
 import CMError, { CMErrorResponse, CMErrorType } from '@/utils/cmerror';
 
 // @route DELETE /api/organizations/[organizationId] - Soft deletes an organization
@@ -16,18 +15,17 @@ export async function DELETE(
   try {
     const validationResult = zObjectId.safeParse(params.organizationId);
     if (!validationResult.success) {
-      return new CMError(CMErrorType.BadValue, 'Organization Id').toNextResponse();
+      return new CMError(
+        CMErrorType.BadValue,
+        'Organization Id'
+      ).toNextResponse();
     }
 
-    const res = await softDeleteOrganization(params.organizationId);
-    if (!res || res.softDelete) {
-      return new CMError(CMErrorType.NoSuchKey, 'Organization').toNextResponse();
-    }
+    await softDeleteOrganization(params.organizationId);
     return new NextResponse(undefined, { status: 204 });
-  } catch (error){
-    return CMErrorResponse(error)
+  } catch (error) {
+    return CMErrorResponse(error);
   }
-
 }
 
 // @route PUT /api/organizations/[organizationId] - updates an existing organization in the database
@@ -38,7 +36,10 @@ export async function PUT(
   try {
     const validationResult = zObjectId.safeParse(params.organizationId);
     if (!validationResult.success) {
-      return new CMError(CMErrorType.BadValue, 'Organization Id').toNextResponse();
+      return new CMError(
+        CMErrorType.BadValue,
+        'Organization Id'
+      ).toNextResponse();
     }
 
     // Get the updated organization data
@@ -49,20 +50,10 @@ export async function PUT(
       return new CMError(CMErrorType.BadValue, 'Organization').toNextResponse();
     }
 
-    const updatedOrganization = await updateOrganization(
-      params.organizationId,
-      validationRequest.data
-    );
-
-    if (!updatedOrganization) {
-      return new CMError(CMErrorType.NoSuchKey, 'Organization').toNextResponse();
-    }
+    await updateOrganization(params.organizationId, validationRequest.data);
 
     return new NextResponse(undefined, { status: 204 });
   } catch (error) {
-    if (error instanceof mongo.MongoServerError) {
-      return new CMError(CMErrorType.DuplicateKey, "Organization").toNextResponse();
-    }
     return CMErrorResponse(error);
   }
 }

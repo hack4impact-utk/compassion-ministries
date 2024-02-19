@@ -15,16 +15,12 @@ export async function GET(
   try {
     const validationResult = zObjectId.safeParse(params.volunteerId);
     if (!validationResult.success) {
-      return new CMError(CMErrorType.BadValue, 'Volunteer').toNextResponse();
+      return new CMError(CMErrorType.BadValue, 'Volunteer Id').toNextResponse();
     }
 
     // calls the server function to get all events for volunteer
     const res = await getAllEventsForVolunteer(params.volunteerId);
-    if (!res) {
-      return new CMError(CMErrorType.NoSuchKey, 'Volunteer').toNextResponse();
-    }
     return NextResponse.json(res, { status: 200 });
-
   } catch (error) {
     return CMErrorResponse(error);
   }

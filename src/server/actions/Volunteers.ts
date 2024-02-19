@@ -24,7 +24,7 @@ export async function softDeleteVolunteer(
     );
 
   } catch (error) {
-      throw new CMError(CMErrorType.InternalError, "Server");
+      throw new CMError(CMErrorType.InternalError);
   }
   if (!res) {
     throw new CMError(CMErrorType.NoSuchKey, "Volunteer");
@@ -46,7 +46,7 @@ export async function getVolunteer(
     volunteer = await VolunteerSchema.findById(volunteerId)
      .populate('previousOrganization');
   } catch (error) {
-      throw new CMError(CMErrorType.InternalError, "Server");
+      throw new CMError(CMErrorType.InternalError);
   }
   if (!volunteer) {
     throw new CMError(CMErrorType.NoSuchKey, "Volunteer");
@@ -60,19 +60,16 @@ export async function getVolunteer(
  */
 export async function getAllEventsForVolunteer(
   volunteerId: string
-): Promise<EventVolunteerResponse[]| null> {
-  let events: EventVolunteerResponse[] | null = null;
+): Promise<EventVolunteerResponse[]> {
+  let events: EventVolunteerResponse[];
   try {
     await dbConnect();
-    events = await EventVolunteerSchema.find({volunteerId})
+    events = await EventVolunteerSchema.find({volunteer: volunteerId})
      .populate('volunteer').populate('organization');
-    // TODO: populate events
+     // TODO: populate events
 
   } catch (error) {
-    throw new CMError(CMErrorType.InternalError, "Server");
-  }
-  if (!events) {
-    throw new CMError(CMErrorType.NoSuchKey, "Events");
+    throw new CMError(CMErrorType.InternalError);
   }
   return events;
 }
