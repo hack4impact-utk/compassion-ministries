@@ -5,6 +5,8 @@ import {
   UpdateOrganizationRequest,
 } from '@/types/dataModel/organization';
 import { OrganizationEntity } from '@/types/dataModel/organization';
+import CMError, { CMErrorType } from '@/utils/cmerror';
+import { mongo } from 'mongoose';
 /**
  * Create an organization
  * @param CreateOrganizationRequest requires the name of the organization
@@ -20,7 +22,15 @@ export async function createOrganization(
 
     return organization._id.toString();
   } catch (error) {
-    throw error;
+    if (
+      error instanceof mongo.MongoError ||
+      error instanceof mongo.MongoServerError
+    ) {
+      if (error.code === 11000) {
+        throw new CMError(CMErrorType.DuplicateKey, 'Organization name');
+      }
+    }
+    throw new CMError(CMErrorType.InternalError);
   }
 }
 
@@ -32,13 +42,18 @@ export async function createOrganization(
 export async function softDeleteOrganization(
   organizationId: string
 ): Promise<OrganizationEntity | null> {
-  await dbConnect();
-
-  const res: OrganizationEntity | null =
-    await OrganizationSchema.findByIdAndUpdate(organizationId, {
+  let res: OrganizationEntity | null = null;
+  try {
+    await dbConnect();
+    res = await OrganizationSchema.findByIdAndUpdate(organizationId, {
       softDelete: true,
     });
-
+  } catch (error) {
+    throw new CMError(CMErrorType.InternalError);
+  }
+  if (!res) {
+    throw new CMError(CMErrorType.NoSuchKey, 'Organization');
+  }
   return res;
 }
 
@@ -52,22 +67,30 @@ export async function updateOrganization(
   organizationId: string,
   updatedData: UpdateOrganizationRequest
 ): Promise<UpdateOrganizationRequest | null> {
+  let updatedOrganization: UpdateOrganizationRequest | null = null;
   try {
-    const connection = await dbConnect();
-    connection.connection.on('error', (err) => {
-      throw new Error(err.code);
-    });
+    await dbConnect();
 
     // Find the organization by its ID and update it with the new data
-    const updatedOrganization: OrganizationEntity | null =
-      await OrganizationSchema.findByIdAndUpdate(organizationId, updatedData);
-
-    return updatedOrganization;
+    updatedOrganization = await OrganizationSchema.findByIdAndUpdate(
+      organizationId,
+      updatedData
+    );
   } catch (error) {
-    // const errorMessage = 'Internal Server Error';
-    // throw { status: 500, message: errorMessage };
-    throw error;
+    if (
+      error instanceof mongo.MongoError ||
+      error instanceof mongo.MongoServerError
+    ) {
+      if (error.code === 11000) {
+        throw new CMError(CMErrorType.DuplicateKey, 'Organization name');
+      }
+    }
+    throw new CMError(CMErrorType.InternalError);
   }
+  if (!updatedOrganization) {
+    throw new CMError(CMErrorType.NoSuchKey, 'Organization');
+  }
+  return updatedOrganization;
 }
 
 /**
@@ -75,22 +98,14 @@ export async function updateOrganization(
  * @param organizations all organization in the database
  * @returns all organization in the database
  */
-export async function getAllOrganizations(): Promise<
-  OrganizationEntity[] | null
-> {
+export async function getAllOrganizations(): Promise<OrganizationEntity[]> {
+  let organizations: OrganizationEntity[];
   try {
-    const connection = await dbConnect();
-    connection.connection.on('error', (err) => {
-      throw new Error(err.code);
-    });
+    await dbConnect();
 
-    const organizations: OrganizationEntity[] | null =
-      await OrganizationSchema.find();
-
-    return organizations;
+    organizations = await OrganizationSchema.find();
   } catch (error) {
-    // const errorMessage = 'Internal Server Error';
-    // throw { status: 500, message: errorMessage };
-    throw error;
+    throw new CMError(CMErrorType.InternalError);
   }
+  return organizations;
 }
