@@ -2,12 +2,12 @@ import { z } from 'zod';
 import { zRole } from '../dataModel/roles';
 
 const zCheckInFormData = z.object({
-  firstName: z.string().optional(),
-  lastName: z.string().optional(),
-  email: z.string().email().optional(),
-  phoneNumber: z.string().optional(),
-  address: z.string().optional(),
-  role: zRole.optional(),
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string().email(),
+  phoneNumber: z.string(),
+  address: z.string(),
+  role: zRole,
   organization: z.string().optional(),
 });
 

@@ -27,7 +27,9 @@ export default function CheckInForm(props: Props) {
   const [volunteerOptions, setVolunteerOptions] = useState<VolunteerResponse[]>(
     props.volunteers
   );
-  const [checkInData, setCheckInData] = useState<CheckInFormData>({});
+  const [checkInData, setCheckInData] = useState<CheckInFormData>(
+    {} as CheckInFormData
+  );
 
   // when the parent updates the volunteers it's passing in, update our state
   useEffect(() => setVolunteerOptions(props.volunteers), [props.volunteers]);
@@ -182,7 +184,12 @@ export default function CheckInForm(props: Props) {
       <Typography sx={{ fontWeight: 'bold' }} variant="h6" pt={2}>
         Volunteer Role:{' '}
       </Typography>
-      <RadioGroup sx={{ pb: 2 }}>
+      <RadioGroup
+        sx={{ pb: 2 }}
+        onChange={(e) =>
+          onPropertyChange({ ...checkInData, address: e.target.value })
+        }
+      >
         {roles.map((role, i) => (
           <FormControlLabel
             key={i}
