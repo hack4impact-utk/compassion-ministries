@@ -9,7 +9,7 @@ interface OrganizationProps {
   volunteers: VolunteerResponse[];
 }
 
-// OrganizationInfo displays organization information
+// OrganizationInfo displays organization information and volunteers who have attended an event by said organization
 export default function OrganizationInfo({
   organization,
   volunteers,
