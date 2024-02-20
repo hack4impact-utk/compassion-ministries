@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import zBase from './base';
-import { ReactNode } from 'react';
 
 const zOrganization = z.object({
   name: z.string(),
