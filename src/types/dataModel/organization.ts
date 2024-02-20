@@ -18,9 +18,7 @@ export interface Organization extends z.infer<typeof zOrganization> {}
 export interface OrganizationEntity
   extends z.infer<typeof zOrganizationEntity> {}
 export interface OrganizationResponse
-  extends z.infer<typeof zOrganizationResponse> {
-    [x: string]: ReactNode | string | Date;
-}
+  extends z.infer<typeof zOrganizationResponse> {}
 export interface CreateOrganizationRequest
   extends z.infer<typeof zCreateOrganizationRequest> {}
 export interface UpdateOrganizationRequest
