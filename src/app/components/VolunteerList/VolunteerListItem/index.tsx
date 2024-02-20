@@ -12,15 +12,25 @@ export default function VolunteerListItem({
   // display the volunteer's firstName + lastName, email located direct under the name, and role verification
   return (
     <>
-      <h1>VolunteerListItem</h1>
       <ListItem>
         <ListItemText
           primary={
             <Typography variant="body1">
-              Name: {`${volunteer.firstName} ${volunteer.lastName}`}
+              {`${volunteer.firstName} ${volunteer.lastName}`}
             </Typography>
           }
-          secondary={<Typography variant="body2"> Email: {volunteer.email}</Typography>}
+          secondary={
+            <>
+              <Typography variant="body2"> {volunteer.email}</Typography>
+              {volunteer.roleVerifications &&
+                volunteer.roleVerifications[0] && (
+                  <Typography variant="body2" sx={{ textAlign: "left" }}>
+                    {' '}
+                    {volunteer.roleVerifications[0].role}
+                  </Typography>
+                )}
+            </>
+          }
         />
       </ListItem>
     </>
