@@ -1,8 +1,8 @@
 import { EventResponse } from '@/types/dataModel/event';
-import { CreateEventVolunteerRequest } from '@/types/dataModel/eventVolunteer';
 import { OrganizationResponse } from '@/types/dataModel/organization';
 import { roles } from '@/types/dataModel/roles';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
+import { CheckInFormData } from '@/types/forms/checkIn';
 import {
   Autocomplete,
   Box,
@@ -18,21 +18,22 @@ interface Props {
   volunteers: VolunteerResponse[];
   event: EventResponse;
   organizations: OrganizationResponse[];
-  onChange: (checkinReq: CreateEventVolunteerRequest) => void;
+  onChange: (checkInData: CheckInFormData) => void;
 }
 
 // TODO prevent input of role that the volunteer is not verified for
-// TODO populate role and organization option based on current email
+// TODO populate role, organization, and other data based on current email
 export default function CheckInForm(props: Props) {
   const [volunteerOptions, setVolunteerOptions] = useState<VolunteerResponse[]>(
     props.volunteers
   );
+  const [checkInData, setCheckInData] = useState<CheckInFormData>({});
 
   // when the parent updates the volunteers it's passing in, update our state
   useEffect(() => setVolunteerOptions(props.volunteers), [props.volunteers]);
 
-  // when the user enters in a first/last name, filter the options of the other fields to match possible values
-  function onNameChange(value: string) {
+  // when the user enters in a first/last name, filter the options of the first/last/email fields to match possible values
+  function onNameChange(value: string, type: 'first' | 'last') {
     const filterOptions = volunteerOptions ?? props.volunteers;
 
     // if the name text box is cleared, it should go back to displaying all emails
@@ -41,19 +42,29 @@ export default function CheckInForm(props: Props) {
       return;
     }
 
-    // narrow down available options for name/email based on name input
     const regExp = new RegExp(value, 'gi');
-    setVolunteerOptions(
-      filterOptions.filter((vol) =>
-        regExp.test(vol.firstName + ' ' + vol.lastName)
-      )
-    );
+    // narrow down available options for name/email based on name input
+    if (type === 'first') {
+      setVolunteerOptions(
+        filterOptions.filter((vol) => regExp.test(vol.firstName))
+      );
+    } else {
+      setVolunteerOptions(
+        filterOptions.filter((vol) => regExp.test(vol.lastName))
+      );
+    }
+  }
+
+  // whenever any field changes, update the state in the component and pass it up to the parent
+  function onPropertyChange(newCheckInData: CheckInFormData) {
+    setCheckInData(newCheckInData);
+    props.onChange(newCheckInData);
   }
 
   return (
     <>
       <Box pt={2}>
-        {/* Name */}
+        {/* First name */}
         <Autocomplete
           sx={{ mt: 2 }}
           freeSolo
@@ -61,24 +72,61 @@ export default function CheckInForm(props: Props) {
           options={volunteerOptions}
           isOptionEqualToValue={(option, value) => option._id === value._id}
           getOptionLabel={(vol) =>
-            typeof vol === 'string' ? vol : vol.firstName + ' ' + vol.lastName
+            typeof vol === 'string' ? vol : vol.firstName
           }
           renderOption={(props, option) => {
             return (
               <li {...props} key={option._id}>
-                {option.firstName + ' ' + option.lastName}
+                {option.firstName}
               </li>
             );
           }}
           renderInput={(params) => (
             <TextField
               {...params}
-              label="Name"
-              onChange={(e) => onNameChange(e.target.value)}
+              label="First Name"
+              onChange={(e) => {
+                onNameChange(e.target.value, 'first');
+                onPropertyChange({ ...checkInData, firstName: e.target.value });
+              }}
             />
           )}
           onInputChange={(_, value) => {
-            onNameChange(value);
+            onNameChange(value, 'first');
+            onPropertyChange({ ...checkInData, firstName: value });
+          }}
+        />
+
+        {/* Last name */}
+        <Autocomplete
+          sx={{ mt: 2 }}
+          freeSolo
+          autoComplete
+          options={volunteerOptions}
+          isOptionEqualToValue={(option, value) => option._id === value._id}
+          getOptionLabel={(vol) =>
+            typeof vol === 'string' ? vol : vol.lastName
+          }
+          renderOption={(props, option) => {
+            return (
+              <li {...props} key={option._id}>
+                {option.lastName}
+              </li>
+            );
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Last Name"
+              onChange={(e) => {
+                onNameChange(e.target.value, 'last');
+                onPropertyChange({ ...checkInData, lastName: e.target.value });
+              }}
+            />
+          )}
+          onInputChange={(_, value) => {
+            onNameChange(value, 'last');
+            onPropertyChange({ ...checkInData, lastName: value });
           }}
         />
 
@@ -98,12 +146,36 @@ export default function CheckInForm(props: Props) {
             );
           }}
           renderInput={(params) => (
-            <TextField {...params} label="Email Address" />
+            <TextField
+              {...params}
+              label="Email Address"
+              onChange={(e) => {
+                onPropertyChange({ ...checkInData, email: e.target.value });
+              }}
+            />
           )}
+          onInputChange={(_, value) => {
+            onPropertyChange({ ...checkInData, email: value });
+          }}
+        />
+
+        {/* Phone Number */}
+        <TextField
+          sx={{ mt: 2 }}
+          label="Phone Number"
+          onChange={(e) => {
+            onPropertyChange({ ...checkInData, phoneNumber: e.target.value });
+          }}
         />
 
         {/* Address */}
-        <TextField sx={{ mt: 2 }} label="Address" />
+        <TextField
+          sx={{ mt: 2 }}
+          label="Address"
+          onChange={(e) => {
+            onPropertyChange({ ...checkInData, address: e.target.value });
+          }}
+        />
       </Box>
 
       {/* Role */}
@@ -136,8 +208,20 @@ export default function CheckInForm(props: Props) {
           );
         }}
         renderInput={(params) => (
-          <TextField {...params} label="Organization (optional)" />
+          <TextField
+            {...params}
+            label="Organization (optional)"
+            onChange={(e) => {
+              onPropertyChange({
+                ...checkInData,
+                organization: e.target.value,
+              });
+            }}
+          />
         )}
+        onInputChange={(_, value) => {
+          onPropertyChange({ ...checkInData, organization: value });
+        }}
       />
     </>
   );
