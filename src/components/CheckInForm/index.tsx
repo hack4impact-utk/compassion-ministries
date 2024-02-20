@@ -190,14 +190,16 @@ export default function CheckInForm(props: Props) {
           onPropertyChange({ ...checkInData, address: e.target.value })
         }
       >
-        {roles.map((role, i) => (
-          <FormControlLabel
-            key={i}
-            value={role}
-            control={<Radio />}
-            label={role}
-          />
-        ))}
+        {roles
+          .filter((role) => props.event.eventRoles.includes(role)) // only display roles that the event has
+          .map((role, i) => (
+            <FormControlLabel
+              key={i}
+              value={role}
+              control={<Radio />}
+              label={role}
+            />
+          ))}
       </RadioGroup>
 
       {/* Organization */}
