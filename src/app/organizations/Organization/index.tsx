@@ -17,15 +17,14 @@ export default function OrganizationInfo({
   return (
     <Box>
       <Typography variant="h1">{organization.name}</Typography>
-      <Typography variant="h5">Volunteers</Typography>
+      <Typography variant="h5" sx={{ textDecoration: 'underline' }}>
+        {' '}
+        Volunteers{' '}
+      </Typography>
       {volunteers.map((volunteer, index) => (
-        <Box key={index}>
-          <Box sx={{ display: 'flex' }}>
-            <Typography display="inline">
-              {volunteer.firstName} {volunteer.lastName}
-            </Typography>
-          </Box>
-        </Box>
+        <Typography key={index}>
+          {volunteer.firstName} {volunteer.lastName}
+        </Typography>
       ))}
     </Box>
   );
