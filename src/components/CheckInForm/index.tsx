@@ -18,49 +18,48 @@ interface Props {
   volunteers: VolunteerResponse[];
   event: EventResponse;
   organizations: OrganizationResponse[];
+  checkInData: CheckInFormData;
   onChange: (checkInData: CheckInFormData) => void;
 }
 
 // TODO prevent input of role that the volunteer is not verified for
 // TODO populate role, organization, and other data based on current email
+// TODO on submit, display errors for bad fields
 export default function CheckInForm(props: Props) {
   const [volunteerOptions, setVolunteerOptions] = useState<VolunteerResponse[]>(
     props.volunteers
   );
-  const [checkInData, setCheckInData] = useState<CheckInFormData>(
-    {} as CheckInFormData
-  );
 
   // when the parent updates the volunteers it's passing in, update our state
+  // TODO this can be removed once SSR provides props
   useEffect(() => setVolunteerOptions(props.volunteers), [props.volunteers]);
 
   // when the user enters in a first/last name, filter the options of the first/last/email fields to match possible values
   function onNameChange(value: string, type: 'first' | 'last') {
+    // TODO this can be revmoed once SSR provides props
     const filterOptions = volunteerOptions ?? props.volunteers;
 
-    // if the name text box is cleared, it should go back to displaying all emails
-    if (!value) {
-      setVolunteerOptions(props.volunteers);
-      return;
-    }
-
-    const regExp = new RegExp(value, 'gi');
+    const regExp = new RegExp(value, 'i');
     // narrow down available options for name/email based on name input
     if (type === 'first') {
+      // if both name text boxes are cleared, it should go back to displaying all options
+      if (!value && !props.checkInData.lastName) {
+        setVolunteerOptions(props.volunteers);
+        return;
+      }
       setVolunteerOptions(
         filterOptions.filter((vol) => regExp.test(vol.firstName))
       );
     } else {
+      // if both name text boxes are cleared, it should go back to displaying all options
+      if (!value && !props.checkInData.firstName) {
+        setVolunteerOptions(props.volunteers);
+        return;
+      }
       setVolunteerOptions(
         filterOptions.filter((vol) => regExp.test(vol.lastName))
       );
     }
-  }
-
-  // whenever any field changes, update the state in the component and pass it up to the parent
-  function onPropertyChange(newCheckInData: CheckInFormData) {
-    setCheckInData(newCheckInData);
-    props.onChange(newCheckInData);
   }
 
   return (
@@ -89,13 +88,16 @@ export default function CheckInForm(props: Props) {
               label="First Name"
               onChange={(e) => {
                 onNameChange(e.target.value, 'first');
-                onPropertyChange({ ...checkInData, firstName: e.target.value });
+                props.onChange({
+                  ...props.checkInData,
+                  firstName: e.target.value,
+                });
               }}
             />
           )}
           onInputChange={(_, value) => {
             onNameChange(value, 'first');
-            onPropertyChange({ ...checkInData, firstName: value });
+            props.onChange({ ...props.checkInData, firstName: value });
           }}
         />
 
@@ -122,13 +124,16 @@ export default function CheckInForm(props: Props) {
               label="Last Name"
               onChange={(e) => {
                 onNameChange(e.target.value, 'last');
-                onPropertyChange({ ...checkInData, lastName: e.target.value });
+                props.onChange({
+                  ...props.checkInData,
+                  lastName: e.target.value,
+                });
               }}
             />
           )}
           onInputChange={(_, value) => {
             onNameChange(value, 'last');
-            onPropertyChange({ ...checkInData, lastName: value });
+            props.onChange({ ...props.checkInData, lastName: value });
           }}
         />
 
@@ -152,12 +157,15 @@ export default function CheckInForm(props: Props) {
               {...params}
               label="Email Address"
               onChange={(e) => {
-                onPropertyChange({ ...checkInData, email: e.target.value });
+                props.onChange({
+                  ...props.checkInData,
+                  email: e.target.value,
+                });
               }}
             />
           )}
           onInputChange={(_, value) => {
-            onPropertyChange({ ...checkInData, email: value });
+            props.onChange({ ...props.checkInData, email: value });
           }}
         />
 
@@ -166,7 +174,10 @@ export default function CheckInForm(props: Props) {
           sx={{ mt: 2 }}
           label="Phone Number"
           onChange={(e) => {
-            onPropertyChange({ ...checkInData, phoneNumber: e.target.value });
+            props.onChange({
+              ...props.checkInData,
+              phoneNumber: e.target.value,
+            });
           }}
         />
 
@@ -175,7 +186,7 @@ export default function CheckInForm(props: Props) {
           sx={{ mt: 2 }}
           label="Address"
           onChange={(e) => {
-            onPropertyChange({ ...checkInData, address: e.target.value });
+            props.onChange({ ...props.checkInData, address: e.target.value });
           }}
         />
       </Box>
@@ -187,7 +198,7 @@ export default function CheckInForm(props: Props) {
       <RadioGroup
         sx={{ pb: 2 }}
         onChange={(e) =>
-          onPropertyChange({ ...checkInData, address: e.target.value })
+          props.onChange({ ...props.checkInData, address: e.target.value })
         }
       >
         {roles
@@ -221,15 +232,15 @@ export default function CheckInForm(props: Props) {
             {...params}
             label="Organization (optional)"
             onChange={(e) => {
-              onPropertyChange({
-                ...checkInData,
+              props.onChange({
+                ...props.checkInData,
                 organization: e.target.value,
               });
             }}
           />
         )}
         onInputChange={(_, value) => {
-          onPropertyChange({ ...checkInData, organization: value });
+          props.onChange({ ...props.checkInData, organization: value });
         }}
       />
     </>
