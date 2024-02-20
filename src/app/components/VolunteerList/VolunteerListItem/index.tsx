@@ -24,7 +24,7 @@ export default function VolunteerListItem({
               <Typography variant="body2"> {volunteer.email}</Typography>
               {volunteer.roleVerifications &&
                 volunteer.roleVerifications[0] && (
-                  <Typography variant="body2" sx={{ textAlign: "left" }}>
+                  <Typography variant="body2" sx={{ textAlign: 'left' }}>
                     {' '}
                     {volunteer.roleVerifications[0].role}
                   </Typography>
