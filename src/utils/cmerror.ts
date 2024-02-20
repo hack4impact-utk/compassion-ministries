@@ -33,11 +33,10 @@ const CMERRORTYPE_DEFS = [
   [CMErrorType.DuplicateKey, 409, 'Duplicate %s', 'Duplicate key'],
 ] as const;
 
-// Populate mappings from defs matrix
-CMERRORTYPE_DEFS.forEach((def) => {
-  CMERRORTYPE_STATUS_CODES[def[0]] = def[1];
-  CMERRORTYPE_MSGS[def[0]] = { template: def[2], default: def[3] };
-});
+// Corresponding response status codes for error types
+export const CMERRORTYPE_STATUS_CODES: {
+  [id: number]: number;
+} = {};
 
 // Default messages and templates for each error type
 const CMERRORTYPE_MSGS: {
@@ -47,10 +46,12 @@ const CMERRORTYPE_MSGS: {
   };
 } = {};
 
-// Corresponding response status codes for error types
-export const CMERRORTYPE_STATUS_CODES: {
-  [id: number]: number;
-} = {};
+// Populate mappings from defs matrix
+CMERRORTYPE_DEFS.forEach((def) => {
+  CMERRORTYPE_STATUS_CODES[def[0]] = def[1];
+  CMERRORTYPE_MSGS[def[0]] = { template: def[2], default: def[3] };
+});
+
 
 // Generate an error message for an error type, optionally filling in contextual info
 export function getCMErrorTypeMsg(
@@ -68,9 +69,14 @@ export default class CMError extends Error {
   readonly type: CMErrorType;
 
   // Constructs a CMError based on a CMErrorType value
-  // If message is not defined, uses a default message for the CMErrorType
-  constructor(errorType: CMErrorType, message?: string) {
-    super(message ?? getCMErrorTypeMsg(errorType));
+  // Generates CMError.message from source and the message template for the given errorType
+  // If overrideErrMsg = true, the template is ignored and source is copied directly to CMError.message
+  constructor(
+    errorType: CMErrorType,
+    source?: string,
+    overrideErrMsg: boolean = false
+  ) {
+    super(overrideErrMsg ? source : getCMErrorTypeMsg(errorType, source));
     this.type = errorType;
   }
 

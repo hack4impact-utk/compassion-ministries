@@ -1,5 +1,5 @@
 import Providers from '../components/Providers';
-import AppBar from '../components/Appbar';
+import Navbar from '../components/Navbar';
 
 export const metadata = {
   title: 'Next.js',
@@ -11,11 +11,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  //Render HTML body with Providers and Navbar components, including children.
   return (
     <html lang="en">
       <body>
         <Providers>
-          <AppBar />
+          <Navbar />
           {children}
         </Providers>
       </body>
