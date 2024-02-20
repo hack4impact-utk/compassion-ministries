@@ -2,6 +2,7 @@ import { updateVolunteer } from '@/server/actions/Volunteer';
 import { softDeleteVolunteer, getVolunteer } from '@/server/actions/Volunteers';
 import { zObjectId } from '@/types/dataModel/base';
 import { zUpdateVolunteerRequest } from '@/types/dataModel/volunteer';
+import CMError, { CMErrorResponse, CMErrorType } from '@/utils/cmerror';
 import { NextRequest, NextResponse } from 'next/server';
 
 // @route DELETE /api/volunteers/[volunteerId] - Soft deletes a volunteer
@@ -9,21 +10,17 @@ export async function DELETE(
   _request: NextRequest,
   { params }: { params: { volunteerId: string } }
 ) {
-  const validationResult = zObjectId.safeParse(params.volunteerId);
-  if (!validationResult.success) {
-    return NextResponse.json(
-      { message: 'Invalid Volunteer Id' },
-      { status: 400 }
-    );
+  try {
+    const validationResult = zObjectId.safeParse(params.volunteerId);
+    if (!validationResult.success) {
+      return new CMError(CMErrorType.BadValue, 'Volunteer Id').toNextResponse();
+    }
+    await softDeleteVolunteer(params.volunteerId);
+
+    return new NextResponse(undefined, { status: 204 });
+  } catch (error) {
+    return CMErrorResponse(error);
   }
-  const res = await softDeleteVolunteer(params.volunteerId);
-  if (!res || res.softDelete) {
-    return NextResponse.json(
-      { message: 'Volunteer not found' },
-      { status: 404 }
-    );
-  }
-  return new NextResponse(undefined, { status: 204 });
 }
 
 export async function PUT(
@@ -31,40 +28,29 @@ export async function PUT(
   { params }: { params: { volunteerId: string } }
 ) {
   // validate volunteer id
-  const objectIdValidationResult = zObjectId.safeParse(params.volunteerId);
-  if (!objectIdValidationResult.success) {
-    return NextResponse.json(
-      { message: 'Invalid Volunteer Id' },
-      { status: 400 }
-    );
-  }
-
-  // validate request body is a valid updateVolunteerRequest
-  const body = await request.json();
-  const updateVolunteerRequestValidationResult =
-    zUpdateVolunteerRequest.safeParse(body);
-  if (!updateVolunteerRequestValidationResult.success) {
-    return NextResponse.json(
-      { message: 'Invalid Request Body' },
-      { status: 400 }
-    );
-  }
-
-  // update the volunteer
   try {
+    const objectIdValidationResult = zObjectId.safeParse(params.volunteerId);
+    if (!objectIdValidationResult.success) {
+      return new CMError(CMErrorType.BadValue, 'Volunteer Id').toNextResponse();
+    }
+
+    // validate request body is a valid updateVolunteerRequest
+    const body = await request.json();
+    const updateVolunteerRequestValidationResult =
+      zUpdateVolunteerRequest.safeParse(body);
+    if (!updateVolunteerRequestValidationResult.success) {
+      return new CMError(CMErrorType.BadValue, 'Volunteer').toNextResponse();
+    }
+
+    // update the volunteer
     await updateVolunteer(
       params.volunteerId,
       updateVolunteerRequestValidationResult.data
     );
+    return new NextResponse(undefined, { status: 204 });
   } catch (error) {
-    // TODO: update error handling
-    return NextResponse.json(
-      { message: 'Internal server error' },
-      { status: 500 }
-    );
+    return CMErrorResponse(error);
   }
-
-  return new NextResponse(undefined, { status: 204 });
 }
 
 // @route GET /api/volunteers/[volunteerId] - get a specific volunteer
@@ -72,22 +58,14 @@ export async function GET(
   _request: NextRequest,
   { params }: { params: { volunteerId: string } }
 ) {
-  const validationResult = zObjectId.safeParse(params.volunteerId);
-  if (!validationResult.success) {
-    return NextResponse.json(
-      { message: 'Invalid Volunteer Id' },
-      { status: 400 }
-    );
+  try {
+    const validationResult = zObjectId.safeParse(params.volunteerId);
+    if (!validationResult.success) {
+      return new CMError(CMErrorType.BadValue, 'Volunteer Id').toNextResponse();
+    }
+    const res = await getVolunteer(params.volunteerId);
+    return NextResponse.json(res, { status: 200 });
+  } catch (error) {
+    return CMErrorResponse(error);
   }
-
-  const res = await getVolunteer(params.volunteerId);
-  if (!res) {
-    return NextResponse.json(
-      { message: 'Volunteer not found' },
-      { status: 404 }
-    );
-  }
-
-  // if no error: return the specific Volunteer found
-  return NextResponse.json(res, { status: 200 });
 }

@@ -12,6 +12,8 @@ import { VerifiedRole } from '@/types/dataModel/roles';
 // Temporary code to load org schema until we are using it elsewhere
 import OrganizationSchema from '@/server/models/Organization';
 import { RoleVerificationRequest } from '@/types/dataModel/roles';
+import CMError, { CMErrorType } from '@/utils/cmerror';
+import { mongo } from 'mongoose';
 OrganizationSchema;
 
 /**
@@ -45,14 +47,14 @@ export async function deleteVolunteerRoleVerification(
  * @returns Collection of VolunteerEntities in the database, or null if there are none.
  */
 export async function getAllVolunteers(): Promise<VolunteerResponse[]> {
+  let volunteers: VolunteerResponse[];
   try {
     await dbConnect();
-    const volunteers: VolunteerResponse[] =
-      await VolunteerSchema.find().populate('previousOrganization');
-    return volunteers ?? [];
+    volunteers = await VolunteerSchema.find().populate('previousOrganization');
   } catch (error) {
-    throw error;
+    throw new CMError(CMErrorType.InternalError);
   }
+  return volunteers;
 }
 
 /**
@@ -68,7 +70,15 @@ export async function createVolunteer(
     const volunteer = await VolunteerSchema.create(request);
     return volunteer._id.toString();
   } catch (error) {
-    throw error;
+    if (
+      error instanceof mongo.MongoError ||
+      error instanceof mongo.MongoServerError
+    ) {
+      if (error.code === 11000) {
+        throw new CMError(CMErrorType.DuplicateKey, 'Volunteer Phone/Email');
+      }
+    }
+    throw new CMError(CMErrorType.InternalError);
   }
 }
 
@@ -81,18 +91,18 @@ export async function updateVolunteer(
   volunteerId: string,
   updatedVolunteer: UpdateVolunteerRequest
 ): Promise<void> {
+  let res;
   try {
     await dbConnect();
-
-    const res = await VolunteerSchema.findByIdAndUpdate(
+    res = await VolunteerSchema.findByIdAndUpdate(
       volunteerId,
       updatedVolunteer
     );
-    if (!res) {
-      throw new Error('Volunteer not found'); // TODO: update error handling
-    }
   } catch (error) {
-    throw error;
+    throw new CMError(CMErrorType.InternalError);
+  }
+  if (!res) {
+    throw new CMError(CMErrorType.NoSuchKey, 'Volunteer');
   }
 }
 
@@ -106,17 +116,20 @@ export async function deleteEventVolunteer(
   volunteerId: string,
   eventId: string
 ): Promise<EventVolunteerEntity | null> {
+  let res: EventVolunteerEntity | null = null;
   try {
     await dbConnect();
-    const res: EventVolunteerEntity | null =
-      await EventVolunteerSchema.findOneAndDelete({
-        volunteer: volunteerId,
-        event: eventId,
-      });
-    return res;
+    res = await EventVolunteerSchema.findOneAndDelete({
+      volunteer: volunteerId,
+      event: eventId,
+    });
   } catch (error) {
-    throw error;
+    throw new CMError(CMErrorType.InternalError);
   }
+  if (!res) {
+    throw new CMError(CMErrorType.NoSuchKey, 'EventVolunteer');
+  }
+  return res;
 }
 
 /**
@@ -138,6 +151,9 @@ export async function upsertVolunteerRoleVerification(
       .select('roleVerifications')
       .exec();
 
+    if (!currentVerifications) {
+      throw new CMError(CMErrorType.NoSuchKey, 'Volunteer');
+    }
     // update the role verification if it exists
     let roleVerificationExists = false;
     currentVerifications?.roleVerifications?.forEach((roleVerification) => {
@@ -163,9 +179,12 @@ export async function upsertVolunteerRoleVerification(
     });
 
     if (!res) {
-      throw new Error('Volunteer not found');
+      throw new CMError(CMErrorType.NoSuchKey, 'Volunteer');
     }
   } catch (error) {
-    throw error;
+    if (error instanceof CMError) {
+      throw error;
+    }
+    throw new CMError(CMErrorType.InternalError);
   }
 }
