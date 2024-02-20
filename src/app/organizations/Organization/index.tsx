@@ -25,10 +25,6 @@ export default function OrganizationInfo({
               {volunteer.firstName} {volunteer.lastName}
             </Typography>
           </Box>
-          <Box sx={{ display: 'flex' }}>
-            <Typography display="inline">{volunteer.email}</Typography>
-          </Box>
-          <br />
         </Box>
       ))}
     </Box>

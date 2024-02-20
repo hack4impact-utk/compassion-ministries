@@ -5,7 +5,7 @@ import OrganizationInfo from "../Organization";
 const sampleOrganization: OrganizationResponse = {
     name: 'Yep, Another Organization',
     softDelete: false,
-    _id: "",
+    _id: "1234567890",
     createdAt: new Date(),
     updatedAt: new Date(),
 };
