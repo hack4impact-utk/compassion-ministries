@@ -41,6 +41,7 @@ export default function Home() {
   }, []);
 
   return (
+    // <EventList eventResponses={[event]} />
     <CheckInForm
       volunteers={volunteers}
       event={event}
