@@ -2,6 +2,7 @@ import { EventResponse } from '@/types/dataModel/event';
 import EventList from './components/EventList';
 import { Box } from '@mui/material';
 
+// Example events, delete before merging
 const eventResponses: EventResponse[] = [
   {
     name: 'Event 1',
@@ -33,8 +34,11 @@ export default function Home() {
   return (
     <Box>
       <h1>Home Page</h1>
-      <h2>Example events:</h2>
-      <EventList eventResponses={eventResponses} />
+      {/* EventList example, delete before merging */}
+      <Box>
+        <h2>Example events:</h2>
+        <EventList eventResponses={eventResponses} />
+      </Box>
     </Box>
   );
 }

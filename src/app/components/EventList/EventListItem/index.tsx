@@ -1,7 +1,14 @@
 import { EventResponse } from '@/types/dataModel/event';
 import { roleIcons } from '@/utils/icons';
-import { ListItem, Stack, SvgIcon, Typography } from '@mui/material';
+import { ListItem, Stack, Typography } from '@mui/material';
 
+/*
+Returns a ListItem component containing the following info about the provided Event
+ - Name
+ - Start Date
+ - Description
+ - Roles
+*/
 export default function EventListItem({
   eventResponse,
 }: {
@@ -10,7 +17,6 @@ export default function EventListItem({
   return (
     <ListItem>
       <Stack direction="column">
-        <SvgIcon></SvgIcon>
         <Typography variant="h5">{eventResponse.name}</Typography>
         <Typography variant="body1">
           Date: {eventResponse.startAt.toDateString()}
