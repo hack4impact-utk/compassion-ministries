@@ -7,7 +7,7 @@ const eventResponses: EventResponse[] = [
     description: 'Description of Event 1.',
     startAt: new Date(2024, 2, 1),
     endAt: new Date(2024, 2, 2),
-    eventRoles: ['Food', 'Medical'],
+    eventRoles: ['Food', 'Medical', 'Dental', 'Save the Babies'],
     isRecurring: false,
     parentEvent: '',
     createdAt: new Date(2024, 1, 1),
