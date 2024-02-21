@@ -1,6 +1,6 @@
 import { EventResponse } from '@/types/dataModel/event';
 import { OrganizationResponse } from '@/types/dataModel/organization';
-import { roles } from '@/types/dataModel/roles';
+import { Role } from '@/types/dataModel/roles';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { CheckInFormData } from '@/types/forms/checkIn';
 import {
@@ -36,9 +36,6 @@ export default function CheckInForm(props: Props) {
 
   // when the user enters in a first/last name, filter the options of the first/last/email fields to match possible values
   function onNameChange(value: string, type: 'first' | 'last') {
-    // TODO this can be revmoed once SSR provides props
-    const filterOptions = volunteerOptions ?? props.volunteers;
-
     const regExp = new RegExp(value, 'i');
     // narrow down available options for name/email based on name input
     if (type === 'first') {
@@ -48,7 +45,7 @@ export default function CheckInForm(props: Props) {
         return;
       }
       setVolunteerOptions(
-        filterOptions.filter((vol) => regExp.test(vol.firstName))
+        volunteerOptions.filter((vol) => regExp.test(vol.firstName))
       );
     } else {
       // if both name text boxes are cleared, it should go back to displaying all options
@@ -57,7 +54,7 @@ export default function CheckInForm(props: Props) {
         return;
       }
       setVolunteerOptions(
-        filterOptions.filter((vol) => regExp.test(vol.lastName))
+        volunteerOptions.filter((vol) => regExp.test(vol.lastName))
       );
     }
   }
@@ -69,7 +66,6 @@ export default function CheckInForm(props: Props) {
         <Autocomplete
           sx={{ mt: 2 }}
           freeSolo
-          autoComplete
           options={volunteerOptions}
           isOptionEqualToValue={(option, value) => option._id === value._id}
           getOptionLabel={(vol) =>
@@ -193,24 +189,22 @@ export default function CheckInForm(props: Props) {
 
       {/* Role */}
       <Typography sx={{ fontWeight: 'bold' }} variant="h6" pt={2}>
-        Volunteer Role:{' '}
+        Volunteer Role:
       </Typography>
       <RadioGroup
         sx={{ pb: 2 }}
         onChange={(e) =>
-          props.onChange({ ...props.checkInData, address: e.target.value })
+          props.onChange({ ...props.checkInData, role: e.target.value as Role })
         }
       >
-        {roles
-          .filter((role) => props.event.eventRoles.includes(role)) // only display roles that the event has
-          .map((role, i) => (
-            <FormControlLabel
-              key={i}
-              value={role}
-              control={<Radio />}
-              label={role}
-            />
-          ))}
+        {props.event.eventRoles.map((role, i) => (
+          <FormControlLabel
+            key={i}
+            value={role}
+            control={<Radio />}
+            label={role}
+          />
+        ))}
       </RadioGroup>
 
       {/* Organization */}
