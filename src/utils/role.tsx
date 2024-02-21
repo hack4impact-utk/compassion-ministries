@@ -17,7 +17,7 @@ export const roleIcons: { [id: string]: ReactNode } = {
 
 // Gets a list containing the same roles but in the order as defined by the data model
 export function sortRoles(roleList: Role[]): Role[] {
-  return roleList.toSorted((role) => roles.indexOf(role as Role));
+  return [...roleList].sort((a, b) => roles.indexOf(a) - roles.indexOf(b));
 }
 
 // Gets a list of role icons for all roles in roleList, preserving order
