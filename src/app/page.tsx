@@ -1,5 +1,6 @@
 import { EventResponse } from '@/types/dataModel/event';
 import EventList from './components/EventList';
+import { Box } from '@mui/material';
 
 const eventResponses: EventResponse[] = [
   {
@@ -29,5 +30,11 @@ const eventResponses: EventResponse[] = [
 ];
 
 export default function Home() {
-  return <EventList eventResponses={eventResponses} />;
+  return (
+    <Box>
+      <h1>Home Page</h1>
+      <h2>Example events:</h2>
+      <EventList eventResponses={eventResponses} />
+    </Box>
+  );
 }
