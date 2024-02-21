@@ -4,15 +4,15 @@ import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { List } from '@mui/material';
 
 interface VolunteerListProps {
-  VolunteerResponses: VolunteerResponse[];
+  volunteerResponses: VolunteerResponse[];
 }
 
 export default function VolunteerList({
-  VolunteerResponses,
+  volunteerResponses,
 }: VolunteerListProps) {
   return (
     <List>
-      {VolunteerResponses.map((volunteer) => (
+      {volunteerResponses.map((volunteer) => (
         <VolunteerListItem key={volunteer._id} volunteer={volunteer} />
       ))}
     </List>

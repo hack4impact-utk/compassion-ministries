@@ -4,6 +4,8 @@ import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import MasksIcon from '@mui/icons-material/Masks';
 import ChildFriendlyIcon from '@mui/icons-material/ChildFriendly';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
+import Box from '@mui/material/Box';
+import { zVerifiedRole } from '@/types/dataModel/roles';
 
 interface VolunteerListItemProps {
   volunteer: VolunteerResponse;
@@ -19,35 +21,20 @@ export default function VolunteerListItem({
         primary={`${volunteer.firstName} ${volunteer.lastName}`}
         secondary={volunteer.email}
       />
-      <div style={{ position: 'absolute', top: 0, right: 0 }}>
-        {volunteer.roleVerifications &&
-          volunteer.roleVerifications.map((roleVerification, index) => {
-            if (roleVerification.role === 'Medical') {
-              return (
-                <LocalHospitalIcon
-                  key={`medical-${index}`}
-                  style={{ color: 'red' }}
-                />
-              );
-            } else if (roleVerification.role === 'Dental') {
-              return (
-                <MasksIcon
-                  key={`dental-${index}`}
-                  style={{ color: 'skyblue' }}
-                />
-              );
-            } else if (roleVerification.role === 'Save the Babies') {
-              return (
-                <ChildFriendlyIcon
-                  key={`babies-${index}`}
-                  style={{ color: 'lightgray' }}
-                />
-              );
-            } else {
-              return null;
-            }
-          })}
-      </div>
+      <Box>
+        {volunteer.roleVerifications!.find(
+          (roleverification) =>
+            roleverification.role === zVerifiedRole.Values.Medical
+        ) && <LocalHospitalIcon style={{ color: 'red' }} />}
+        {volunteer.roleVerifications!.find(
+          (roleverification) =>
+            roleverification.role === zVerifiedRole.Values.Dental
+        ) && <MasksIcon style={{ color: 'skyblue' }} />}
+        {volunteer.roleVerifications!.find(
+          (roleverification) =>
+            roleverification.role === zVerifiedRole.Values['Save the Babies']
+        ) && <ChildFriendlyIcon style={{ color: 'lightgray' }} />}
+      </Box>
     </ListItem>
   );
 }
