@@ -52,7 +52,6 @@ CMERRORTYPE_DEFS.forEach((def) => {
   CMERRORTYPE_MSGS[def[0]] = { template: def[2], default: def[3] };
 });
 
-
 // Generate an error message for an error type, optionally filling in contextual info
 export function getCMErrorTypeMsg(
   errorType: CMErrorType,

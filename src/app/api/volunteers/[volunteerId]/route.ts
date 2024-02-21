@@ -18,7 +18,7 @@ export async function DELETE(
     await softDeleteVolunteer(params.volunteerId);
 
     return new NextResponse(undefined, { status: 204 });
-  } catch(error) {
+  } catch (error) {
     return CMErrorResponse(error);
   }
 }
@@ -37,11 +37,11 @@ export async function PUT(
     // validate request body is a valid updateVolunteerRequest
     const body = await request.json();
     const updateVolunteerRequestValidationResult =
-    zUpdateVolunteerRequest.safeParse(body);
+      zUpdateVolunteerRequest.safeParse(body);
     if (!updateVolunteerRequestValidationResult.success) {
       return new CMError(CMErrorType.BadValue, 'Volunteer').toNextResponse();
     }
-    
+
     // update the volunteer
     await updateVolunteer(
       params.volunteerId,
@@ -65,8 +65,7 @@ export async function GET(
     }
     const res = await getVolunteer(params.volunteerId);
     return NextResponse.json(res, { status: 200 });
-
-  } catch(error) {
+  } catch (error) {
     return CMErrorResponse(error);
   }
 }

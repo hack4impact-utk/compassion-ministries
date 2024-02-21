@@ -18,18 +18,16 @@ export async function softDeleteVolunteer(
   let res: VolunteerResponse | null = null;
   try {
     await dbConnect();
-    res = await VolunteerSchema.findByIdAndUpdate(
-      volunteerId,
-      { softDelete: true }
-    );
-
+    res = await VolunteerSchema.findByIdAndUpdate(volunteerId, {
+      softDelete: true,
+    });
   } catch (error) {
-      throw new CMError(CMErrorType.InternalError);
+    throw new CMError(CMErrorType.InternalError);
   }
   if (!res) {
-    throw new CMError(CMErrorType.NoSuchKey, "Volunteer");
+    throw new CMError(CMErrorType.NoSuchKey, 'Volunteer');
   }
-  return res; 
+  return res;
 }
 
 /**
@@ -43,17 +41,18 @@ export async function getVolunteer(
   let volunteer: VolunteerResponse | null = null;
   try {
     await dbConnect();
-    volunteer = await VolunteerSchema.findById(volunteerId)
-     .populate('previousOrganization');
+    volunteer = await VolunteerSchema.findById(volunteerId).populate(
+      'previousOrganization'
+    );
   } catch (error) {
-      throw new CMError(CMErrorType.InternalError);
+    throw new CMError(CMErrorType.InternalError);
   }
   if (!volunteer) {
-    throw new CMError(CMErrorType.NoSuchKey, "Volunteer");
+    throw new CMError(CMErrorType.NoSuchKey, 'Volunteer');
   }
   return volunteer;
 }
-/** 
+/**
  * Get all events that a volunteer has attended
  * @param volunteerId // Id of the volunteer
  * @returns // Collection of EventVolunteerEntities, or null
@@ -64,10 +63,10 @@ export async function getAllEventsForVolunteer(
   let events: EventVolunteerResponse[];
   try {
     await dbConnect();
-    events = await EventVolunteerSchema.find({volunteer: volunteerId})
-     .populate('volunteer').populate('organization');
-     // TODO: populate events
-
+    events = await EventVolunteerSchema.find({ volunteer: volunteerId })
+      .populate('volunteer')
+      .populate('organization');
+    // TODO: populate events
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }

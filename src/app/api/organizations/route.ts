@@ -23,10 +23,7 @@ export async function POST(request: NextRequest) {
     const req = await request.json();
     const validationResult = zCreateOrganizationRequest.safeParse(req);
     if (!validationResult.success) {
-      return new CMError(
-        CMErrorType.BadValue,
-        'Organization'
-      ).toNextResponse();
+      return new CMError(CMErrorType.BadValue, 'Organization').toNextResponse();
     }
     const res = await createOrganization(validationResult.data);
 

@@ -6,7 +6,7 @@ export const zVerifiedRole = z.enum(verifiedRoles);
 export type VerifiedRole = z.infer<typeof zVerifiedRole>;
 
 // This is a list of all roles that a volunteer can have
-export const roles = [...verifiedRoles, 'Food'] as const;
+export const roles = ['Food', ...verifiedRoles] as const;
 export const zRole = z.enum(roles);
 export type Role = z.infer<typeof zRole>;
 
