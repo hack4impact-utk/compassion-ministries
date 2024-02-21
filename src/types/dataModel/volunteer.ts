@@ -34,7 +34,7 @@ export const zVolunteerEntity = zVolunteer.extend({
 });
 
 export const zVolunteerResponse = zVolunteerEntity.extend({
-  previousOrganization: zOrganizationResponse,
+  previousOrganization: zOrganizationResponse.optional(),
 });
 
 export const zCreateVolunteerRequest = zVolunteer.omit({
