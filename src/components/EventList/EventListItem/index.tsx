@@ -1,7 +1,6 @@
 import { EventResponse } from '@/types/dataModel/event';
-import { roleIcons } from '@/utils/icons';
+import { getRoleIcons, sortRoles } from '@/utils/role';
 import { ListItem, Stack, Typography } from '@mui/material';
-import { roles } from '@/types/dataModel/roles';
 
 /*
 Returns a ListItem component containing the following info about the provided Event
@@ -26,9 +25,7 @@ export default function EventListItem({
           Description: {eventResponse.description}
         </Typography>
         <Stack direction="row" justifyContent="flex-end">
-          {roles.map(
-            (role) => eventResponse.eventRoles.includes(role) && roleIcons[role]
-          )}
+          {getRoleIcons(sortRoles(eventResponse.eventRoles))}
         </Stack>
       </Stack>
     </ListItem>

@@ -3,6 +3,7 @@ import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import MasksIcon from '@mui/icons-material/Masks';
 import ChildFriendlyIcon from '@mui/icons-material/ChildFriendly';
 import { ReactNode } from 'react';
+import { Role, roles } from '@/types/dataModel/roles';
 
 // SVG icons for each event role
 export const roleIcons: { [id: string]: ReactNode } = {
@@ -13,3 +14,13 @@ export const roleIcons: { [id: string]: ReactNode } = {
     <ChildFriendlyIcon sx={{ color: 'lightgray' }} key="Save the Babies Icon" />
   ),
 };
+
+// Gets a list containing the same roles but in the order as defined by the data model
+export function sortRoles(roleList: Role[]): Role[] {
+  return roleList.toSorted((role) => roles.indexOf(role as Role));
+}
+
+// Gets a list of role icons for all roles in roleList, preserving order
+export function getRoleIcons(roleList: string[] | Role[]): ReactNode[] {
+  return roleList.map((role) => roleIcons[role]);
+}
