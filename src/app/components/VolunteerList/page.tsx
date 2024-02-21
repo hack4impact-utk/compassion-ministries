@@ -80,6 +80,7 @@ const sampleVolunteers: VolunteerResponse[] = [
   },
 ];
 
+// displays the VolunteerList component
 export default function Page() {
   return (
     <div>
