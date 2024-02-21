@@ -30,10 +30,8 @@ function RoleVerificationForm({
     <Box sx={{ minWidth: 120 }} pt={2}>
       {/* Select Role */}
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Role</InputLabel>
+        <InputLabel>Role</InputLabel>
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
           label="Role"
           value={(currentVerification?.role ?? roleVerificationData.role) || ''}
           onChange={(e) =>
