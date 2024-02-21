@@ -1,4 +1,3 @@
-// components/RoleVerificationForm.tsx
 import React from 'react';
 import {
   Box,
@@ -13,36 +12,30 @@ import {
   VerifiedRole,
   verifiedRoles,
 } from '@/types/dataModel/roles';
-// import { Volunteer } from '@/types/dataModel/volunteer';
 import { UpsertRoleVerificationFormData } from '@/types/forms/role-verifications';
 
+// Role and Verifier Information
 interface RoleVerificationFormProps {
-  // volunteer: Volunteer;
   roleVerificationData: UpsertRoleVerificationFormData;
   onChange: (verification: UpsertRoleVerificationFormData) => void;
   currentVerification?: RoleVerification;
 }
 
-const RoleVerificationForm: React.FC<RoleVerificationFormProps> = ({
-  // volunteer,
+function RoleVerificationForm({
   roleVerificationData,
   onChange,
   currentVerification,
-}: RoleVerificationFormProps) => {
-  console.log(`Name: ${roleVerificationData}`);
+}: RoleVerificationFormProps) {
   return (
-    <Box sx={{ minWidth: 120 }}>
+    <Box sx={{ minWidth: 120 }} pt={2}>
+      {/* Select Role */}
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Role</InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           label="Role"
-          value={
-            currentVerification
-              ? currentVerification.role
-              : roleVerificationData.role
-          }
+          value={(currentVerification?.role ?? roleVerificationData.role) || ''}
           onChange={(e) =>
             onChange({
               ...roleVerificationData,
@@ -57,20 +50,18 @@ const RoleVerificationForm: React.FC<RoleVerificationFormProps> = ({
             </MenuItem>
           ))}
         </Select>
+        {/* Type Verifier */}
         <TextField
+          sx={{ mt: 2 }}
           label="Verifier"
-          value={
-            roleVerificationData.verifier
-              ? roleVerificationData.verifier
-              : currentVerification?.verifier ?? ''
-          }
           onChange={(e) =>
             onChange({ ...roleVerificationData, verifier: e.target.value })
           }
+          defaultValue={currentVerification?.verifier ?? ''}
         />
       </FormControl>
     </Box>
   );
-};
+}
 
 export default RoleVerificationForm;
