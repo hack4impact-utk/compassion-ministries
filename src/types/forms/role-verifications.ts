@@ -1,8 +1,9 @@
 import { z } from 'zod';
+import { zVerifiedRole } from '../dataModel/roles';
 
 const zUpsertRoleVerificationFormData = z.object({
-  role: z.string(),
-  lastUpdated: z.date().optional(),
+  role: zVerifiedRole,
+  // lastUpdated: z.date().optional(),
   verifier: z.string(),
 });
 

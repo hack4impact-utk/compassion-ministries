@@ -8,37 +8,28 @@ import {
   MenuItem,
   TextField,
 } from '@mui/material';
-import { RoleVerification } from '@/types/dataModel/roles';
-import { Volunteer } from '@/types/dataModel/volunteer';
+import {
+  RoleVerification,
+  VerifiedRole,
+  verifiedRoles,
+} from '@/types/dataModel/roles';
+// import { Volunteer } from '@/types/dataModel/volunteer';
 import { UpsertRoleVerificationFormData } from '@/types/forms/role-verifications';
 
 interface RoleVerificationFormProps {
-  volunteer: Volunteer;
+  // volunteer: Volunteer;
+  roleVerificationData: UpsertRoleVerificationFormData;
   onChange: (verification: UpsertRoleVerificationFormData) => void;
   currentVerification?: RoleVerification;
 }
 
 const RoleVerificationForm: React.FC<RoleVerificationFormProps> = ({
   // volunteer,
+  roleVerificationData,
   onChange,
   currentVerification,
-}) => {
-  const handleRoleChange = (event: { target: { value: string } }) => {
-    onChange({
-      role: event.target.value || '',
-      lastUpdated: currentVerification?.lastUpdated || new Date(), // Provide a default date
-      verifier: currentVerification?.verifier || '', // Autofill if available
-    });
-  };
-
-  const handleVerifierChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChange({
-      role: currentVerification?.role || '', // Readonly if available
-      lastUpdated: currentVerification?.lastUpdated || new Date(),
-      verifier: event.target.value,
-    });
-  };
-
+}: RoleVerificationFormProps) => {
+  console.log(`Name: ${roleVerificationData}`);
   return (
     <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
@@ -47,17 +38,35 @@ const RoleVerificationForm: React.FC<RoleVerificationFormProps> = ({
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           label="Role"
-          value={currentVerification ? currentVerification.role : ''}
-          onChange={handleRoleChange}
-          // disabled={!!currentVerification}
+          value={
+            currentVerification
+              ? currentVerification.role
+              : roleVerificationData.role
+          }
+          onChange={(e) =>
+            onChange({
+              ...roleVerificationData,
+              role: e.target.value as VerifiedRole,
+            })
+          }
+          inputProps={{ readOnly: !!currentVerification }}
         >
-          <MenuItem value="role1">Role 1</MenuItem>
-          <MenuItem value="role2">Role 2</MenuItem>
+          {verifiedRoles.map((role, i) => (
+            <MenuItem value={role} key={i}>
+              {role}
+            </MenuItem>
+          ))}
         </Select>
         <TextField
           label="Verifier"
-          value={currentVerification ? currentVerification.verifier : ''}
-          onChange={handleVerifierChange}
+          value={
+            roleVerificationData.verifier
+              ? roleVerificationData.verifier
+              : currentVerification?.verifier ?? ''
+          }
+          onChange={(e) =>
+            onChange({ ...roleVerificationData, verifier: e.target.value })
+          }
         />
       </FormControl>
     </Box>
