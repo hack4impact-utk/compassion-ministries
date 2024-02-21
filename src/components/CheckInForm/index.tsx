@@ -36,7 +36,6 @@ export default function CheckInForm(props: Props) {
 
   // when the user enters in a first/last name, filter the options of the first/last/email fields to match possible values
   function onNameChange(value: string, type: 'first' | 'last') {
-    const regExp = new RegExp(value, 'i');
     // narrow down available options for name/email based on name input
     if (type === 'first') {
       // if both name text boxes are cleared, it should go back to displaying all options
@@ -44,8 +43,15 @@ export default function CheckInForm(props: Props) {
         setVolunteerOptions(props.volunteers);
         return;
       }
+
+      const firstNameRegex = new RegExp(value, 'i');
+      const lastNameRegex = new RegExp(props.checkInData.lastName, 'i');
       setVolunteerOptions(
-        volunteerOptions.filter((vol) => regExp.test(vol.firstName))
+        props.volunteers.filter(
+          (vol) =>
+            firstNameRegex.test(vol.firstName) &&
+            lastNameRegex.test(vol.lastName)
+        )
       );
     } else {
       // if both name text boxes are cleared, it should go back to displaying all options
@@ -53,8 +59,15 @@ export default function CheckInForm(props: Props) {
         setVolunteerOptions(props.volunteers);
         return;
       }
+
+      const lastNameRegex = new RegExp(value, 'i');
+      const firstNameRegex = new RegExp(props.checkInData.lastName, 'i');
       setVolunteerOptions(
-        volunteerOptions.filter((vol) => regExp.test(vol.lastName))
+        volunteerOptions.filter(
+          (vol) =>
+            firstNameRegex.test(vol.firstName) &&
+            lastNameRegex.test(vol.lastName)
+        )
       );
     }
   }
