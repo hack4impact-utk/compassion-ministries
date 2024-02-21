@@ -9,17 +9,16 @@ interface VolunteerListItemProps {
   volunteer: VolunteerResponse;
 }
 
+/* Displays the volunteer's names, emails, and their role with a colored icon */
 export default function VolunteerListItem({
   volunteer,
 }: VolunteerListItemProps) {
-  // display the volunteer's firstName + lastName, email located direct under the name, and role verification
   return (
     <ListItem>
       <ListItemText
         primary={`${volunteer.firstName} ${volunteer.lastName}`}
         secondary={volunteer.email}
       />
-      {/* display the local hospital icon if the volunteer has a medical role verification, the masks icon if the volunteer has a Dental role verification, and the child friendly icon if the volunteer has a Save the Babies role verification. the icons also should be top right aligned*/}
       <div style={{ position: 'absolute', top: 0, right: 0 }}>
         {volunteer.roleVerifications &&
           volunteer.roleVerifications.map((roleVerification, index) => {
