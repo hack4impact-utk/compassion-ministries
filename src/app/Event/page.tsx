@@ -10,7 +10,7 @@ const sampleEvent: EventResponse = {
   startAt: new Date(),
   endAt: new Date(),
   date: new Date(),
-  eventRoles: ['Medical', 'Save the Babies', "Dental"],
+  eventRoles: ['Medical', 'Save the Babies', 'Dental'],
   isRecurring: false,
   parentEvent: 'parent_event_id',
   _id: 'event_id',
