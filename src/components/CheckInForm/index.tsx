@@ -282,10 +282,13 @@ export default function CheckInForm(props: Props) {
           const filtered = filter(options, params);
 
           const { inputValue } = params;
+
           // Suggest the creation of a new value
           const isExisting = options.some(
             (option) => inputValue === option.name
           );
+
+          // If the new value is not already an option, display it with "Add" text
           if (inputValue !== '' && !isExisting) {
             filtered.push({
               name: inputValue,
