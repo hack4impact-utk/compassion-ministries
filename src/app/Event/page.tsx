@@ -1,16 +1,16 @@
 import React from 'react';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { EventResponse } from '@/types/dataModel/event';
-import EventComponent from '.';
+import EventComponent from '../../components/Event';
 
 const sampleEvent: EventResponse = {
-  name: 'Yep',
-  description: 'Event Description',
-  eventLocation: 'Event Location',
+  name: 'Union County Health Fair',
+  description: 'Health fair for the community.',
+  eventLocation: 'Cornerstone Church, Farragut, TN',
   startAt: new Date(),
   endAt: new Date(),
   date: new Date(),
-  eventRoles: ['Medical', 'Dental', 'Save the Babies'],
+  eventRoles: ['Medical', 'Save the Babies', "Dental"],
   isRecurring: false,
   parentEvent: 'parent_event_id',
   _id: 'event_id',
@@ -120,7 +120,6 @@ const sampleVolunteers: VolunteerResponse[] = [
 export default function Page() {
   return (
     <div>
-      <h1>Event Page</h1>
       <EventComponent event={sampleEvent} volunteers={sampleVolunteers} />
     </div>
   );
