@@ -1,11 +1,8 @@
 import { ListItem, ListItemText } from '@mui/material';
 import React from 'react';
-import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
-import MasksIcon from '@mui/icons-material/Masks';
-import ChildFriendlyIcon from '@mui/icons-material/ChildFriendly';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import Box from '@mui/material/Box';
-import { zVerifiedRole } from '@/types/dataModel/roles';
+import { getRoleIcons, sortRoles } from '@/utils/role';
 
 interface VolunteerListItemProps {
   volunteer: VolunteerResponse;
@@ -22,18 +19,9 @@ export default function VolunteerListItem({
         secondary={volunteer.email}
       />
       <Box>
-        {volunteer.roleVerifications!.find(
-          (roleverification) =>
-            roleverification.role === zVerifiedRole.Values.Medical
-        ) && <LocalHospitalIcon style={{ color: 'red' }} />}
-        {volunteer.roleVerifications!.find(
-          (roleverification) =>
-            roleverification.role === zVerifiedRole.Values.Dental
-        ) && <MasksIcon style={{ color: 'skyblue' }} />}
-        {volunteer.roleVerifications!.find(
-          (roleverification) =>
-            roleverification.role === zVerifiedRole.Values['Save the Babies']
-        ) && <ChildFriendlyIcon style={{ color: 'lightgray' }} />}
+        {getRoleIcons(
+          sortRoles(volunteer.roleVerifications!.map((verif) => verif.role))
+        )}
       </Box>
     </ListItem>
   );
