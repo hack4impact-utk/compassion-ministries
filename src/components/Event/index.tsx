@@ -3,7 +3,6 @@ import { EventResponse } from '@/types/dataModel/event';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { Box, Typography } from '@mui/material';
 import React from 'react';
-import { DateTimeFormatOptions } from 'intl';
 
 interface EventProps {
   event: EventResponse;
@@ -19,7 +18,7 @@ export default function Event({
 
   // Format the date to a localized string
   const formatDate = (date: Date): string => {
-    const option: DateTimeFormatOptions = {
+    const option: Intl.DateTimeFormatOptions = {
       weekday: 'long',
       month: 'long',
       day: 'numeric',
