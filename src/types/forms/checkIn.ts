@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { zRole } from '../dataModel/roles';
+import { zOrganizationResponse } from '../dataModel/organization';
 
 const zCheckInFormData = z.object({
   firstName: z.string(),
@@ -8,7 +9,7 @@ const zCheckInFormData = z.object({
   phoneNumber: z.string(),
   address: z.string(),
   role: zRole,
-  organization: z.string().optional(),
+  organization: zOrganizationResponse.optional(),
 });
 
 export interface CheckInFormData extends z.infer<typeof zCheckInFormData> {}
