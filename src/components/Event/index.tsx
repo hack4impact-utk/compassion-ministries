@@ -10,13 +10,14 @@ interface EventProps {
   volunteers: VolunteerResponse[];
 }
 
-export default function EventComponent({
+export default function Event({
   event,
   volunteers,
 }: EventProps): React.ReactElement {
   const eventNameLength = event.name.length;
   const eventNameFontSize = eventNameLength > 20 ? 'h4' : 'h3';
 
+  // Format the date to a localized string
   const formatDate = (date: Date): string => {
     const option: DateTimeFormatOptions = {
       weekday: 'long',
@@ -26,6 +27,7 @@ export default function EventComponent({
     return date.toLocaleDateString(undefined, option);
   };
 
+  // Format the time to a localized string
   const formatTime = (date: Date): string => {
     const option = {
       hour: 'numeric' as const,
@@ -34,6 +36,7 @@ export default function EventComponent({
     return date.toLocaleTimeString(undefined, option);
   };
 
+  // Format the end time to a localized string with time zone
   const formatEndTime = (date: Date): string => {
     const option = {
       hour: 'numeric' as const,
@@ -45,6 +48,7 @@ export default function EventComponent({
 
   return (
     <Box>
+      {/* Display the event name with different font size based on its length */}
       <Typography variant={eventNameFontSize}>{event.name}</Typography>
       {event.description && (
         <Typography variant="body1">{event.description}</Typography>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { EventResponse } from '@/types/dataModel/event';
-import EventComponent from '../../components/Event';
+import Event from '../../components/Event';
 
 const sampleEvent: EventResponse = {
   name: 'Union County Health Fair',
@@ -120,7 +120,7 @@ const sampleVolunteers: VolunteerResponse[] = [
 export default function Page() {
   return (
     <div>
-      <EventComponent event={sampleEvent} volunteers={sampleVolunteers} />
+      <Event event={sampleEvent} volunteers={sampleVolunteers} />
     </div>
   );
 }
