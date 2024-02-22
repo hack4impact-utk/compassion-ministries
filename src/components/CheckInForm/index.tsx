@@ -1,5 +1,8 @@
 import { EventResponse } from '@/types/dataModel/event';
-import { OrganizationResponse } from '@/types/dataModel/organization';
+import {
+  CreateOrganizationRequest,
+  OrganizationResponse,
+} from '@/types/dataModel/organization';
 import { Role } from '@/types/dataModel/roles';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { CheckInFormData } from '@/types/forms/checkIn';
@@ -11,6 +14,7 @@ import {
   RadioGroup,
   TextField,
   Typography,
+  createFilterOptions,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
@@ -20,6 +24,36 @@ interface Props {
   organizations: OrganizationResponse[];
   checkInData: CheckInFormData;
   onChange: (checkInData: CheckInFormData) => void;
+}
+
+type OrganizationOption = OrganizationResponse & { display?: string };
+
+const filter = createFilterOptions<OrganizationOption>();
+
+async function createNewOrganization(name: string) {
+  const orgReq: CreateOrganizationRequest = {
+    name,
+  };
+
+  // make post req
+  try {
+    const res = await fetch('/api/organizations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(orgReq),
+    });
+
+    if (res.status === 201) {
+      const data = await res.json();
+
+      // validate response
+      return data.id;
+    }
+  } catch (e) {
+    console.error('failed to create new organization', e);
+  }
 }
 
 // TODO prevent input of role that the volunteer is not verified for
@@ -79,6 +113,7 @@ export default function CheckInForm(props: Props) {
         <Autocomplete
           sx={{ mt: 2 }}
           freeSolo
+          value={props.checkInData.firstName || ''}
           options={volunteerOptions}
           isOptionEqualToValue={(option, value) => option._id === value._id}
           getOptionLabel={(vol) =>
@@ -115,6 +150,7 @@ export default function CheckInForm(props: Props) {
           sx={{ mt: 2 }}
           freeSolo
           autoComplete
+          value={props.checkInData.lastName || ''}
           options={volunteerOptions}
           isOptionEqualToValue={(option, value) => option._id === value._id}
           getOptionLabel={(vol) =>
@@ -151,6 +187,7 @@ export default function CheckInForm(props: Props) {
           sx={{ mt: 2 }}
           freeSolo
           autoComplete
+          value={props.checkInData.email || ''}
           options={volunteerOptions}
           isOptionEqualToValue={(option, value) => option._id === value._id}
           getOptionLabel={(vol) => (typeof vol === 'string' ? vol : vol.email)}
@@ -182,6 +219,7 @@ export default function CheckInForm(props: Props) {
         <TextField
           sx={{ mt: 2 }}
           label="Phone Number"
+          value={props.checkInData.phoneNumber || ''}
           onChange={(e) => {
             props.onChange({
               ...props.checkInData,
@@ -194,6 +232,7 @@ export default function CheckInForm(props: Props) {
         <TextField
           sx={{ mt: 2 }}
           label="Address"
+          value={props.checkInData.address || ''}
           onChange={(e) => {
             props.onChange({ ...props.checkInData, address: e.target.value });
           }}
@@ -206,6 +245,7 @@ export default function CheckInForm(props: Props) {
       </Typography>
       <RadioGroup
         sx={{ pb: 2 }}
+        value={props.checkInData.role || null}
         onChange={(e) =>
           props.onChange({ ...props.checkInData, role: e.target.value as Role })
         }
@@ -224,30 +264,57 @@ export default function CheckInForm(props: Props) {
       <Autocomplete
         freeSolo
         autoComplete
-        options={props.organizations}
+        value={(props.checkInData.organization as OrganizationOption) || ''}
+        options={props.organizations as OrganizationOption[]}
         isOptionEqualToValue={(option, value) => option._id === value._id}
         getOptionLabel={(org) => (typeof org === 'string' ? org : org.name)}
         renderOption={(props, option) => {
           return (
             <li {...props} key={option._id}>
-              {option.name}
+              {option.display ?? option.name}
             </li>
           );
         }}
         renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Organization (optional)"
-            onChange={(e) => {
-              props.onChange({
-                ...props.checkInData,
-                organization: e.target.value,
-              });
-            }}
-          />
+          <TextField {...params} label="Organization (optional)" />
         )}
-        onInputChange={(_, value) => {
-          props.onChange({ ...props.checkInData, organization: value });
+        filterOptions={(options, params) => {
+          const filtered = filter(options, params);
+
+          const { inputValue } = params;
+          // Suggest the creation of a new value
+          const isExisting = options.some(
+            (option) => inputValue === option.name
+          );
+          if (inputValue !== '' && !isExisting) {
+            filtered.push({
+              name: inputValue,
+              display: `Add "${inputValue}"`,
+              softDelete: false,
+              _id: '-1',
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            });
+          }
+
+          return filtered;
+        }}
+        clearOnBlur
+        onChange={(_, value) => {
+          if (typeof value === 'string') {
+            // todo: set error state (idk how this would happen)
+            console.error('string value in organization autocomplete');
+          } else if (value?.display) {
+            // create new organization
+            createNewOrganization(value.name).then((id) => {
+              if (id) {
+                const newOrg = { ...value, _id: id };
+                props.onChange({ ...props.checkInData, organization: newOrg });
+              }
+            });
+          } else if (value) {
+            props.onChange({ ...props.checkInData, organization: value });
+          }
         }}
       />
     </>
