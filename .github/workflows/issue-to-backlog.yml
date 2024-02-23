@@ -9,11 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Add to Backlog Milestone
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
-          const github = require('@actions/github');
           const issue = github.context.issue;
           
           const milestoneTitle = 'backlog';

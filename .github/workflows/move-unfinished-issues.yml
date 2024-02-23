@@ -10,11 +10,10 @@ jobs:
     if: startsWith(github.event.milestone.title, 'sprint')
     steps:
     - name: Move Unfinished Issues to New Milestone
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
-          const github = require('@actions/github');
           const context = github.context;
           
           // Get the title of the created milestone (e.g., 'sprint10')
