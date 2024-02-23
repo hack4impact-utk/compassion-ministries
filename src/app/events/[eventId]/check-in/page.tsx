@@ -1,4 +1,4 @@
-import { getAllOrganizations } from '@/server/actions/Organizations';
+import { getAllOrganizations } from '@/server/actions/Organization';
 import { getAllVolunteers } from '@/server/actions/Volunteer';
 import EventSchema from '@/server/models/Event';
 import { EventResponse } from '@/types/dataModel/event';

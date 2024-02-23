@@ -1,4 +1,4 @@
-import VolunteerList from '@/app/components/VolunteerList';
+import VolunteerList from '@/components/VolunteerList';
 import { EventResponse } from '@/types/dataModel/event';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { Box, Typography } from '@mui/material';
@@ -13,7 +13,6 @@ export default function Event({
   event,
   volunteers,
 }: EventProps): React.ReactElement {
-
   // Format the date to a localized string
   const formatDate = (date: Date): string => {
     const option: Intl.DateTimeFormatOptions = {
@@ -36,7 +35,7 @@ export default function Event({
   return (
     <Box>
       {/* Display the event name with different font size based on its length */}
-      <Typography variant={"h4"}>{event.name}</Typography>
+      <Typography variant={'h4'}>{event.name}</Typography>
       {event.description && (
         <Typography variant="body1">{event.description}</Typography>
       )}
