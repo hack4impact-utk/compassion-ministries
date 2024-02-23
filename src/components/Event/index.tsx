@@ -13,8 +13,6 @@ export default function Event({
   event,
   volunteers,
 }: EventProps): React.ReactElement {
-  const eventNameLength = event.name.length;
-  const eventNameFontSize = eventNameLength > 20 ? 'h4' : 'h3';
 
   // Format the date to a localized string
   const formatDate = (date: Date): string => {
@@ -35,20 +33,10 @@ export default function Event({
     return date.toLocaleTimeString(undefined, option);
   };
 
-  // Format the end time to a localized string with time zone
-  const formatEndTime = (date: Date): string => {
-    const option = {
-      hour: 'numeric' as const,
-      minute: 'numeric' as const,
-      timeZoneName: 'short' as const,
-    };
-    return date.toLocaleTimeString(undefined, option);
-  };
-
   return (
     <Box>
       {/* Display the event name with different font size based on its length */}
-      <Typography variant={eventNameFontSize}>{event.name}</Typography>
+      <Typography variant={"h4"}>{event.name}</Typography>
       {event.description && (
         <Typography variant="body1">{event.description}</Typography>
       )}
@@ -57,7 +45,7 @@ export default function Event({
         <Typography variant="h5">{formatDate(event.date)}</Typography>
       )}
       <Typography variant="h5">
-        {formatTime(event.startAt)} - {formatEndTime(event.endAt)}
+        {formatTime(event.startAt)} - {formatTime(event.endAt)}
       </Typography>
       <Typography variant="h5">
         {Array.isArray(event.eventRoles)
