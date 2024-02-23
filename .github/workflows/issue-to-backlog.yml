@@ -13,7 +13,7 @@ jobs:
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
-          const issue = github.context.issue;
+          const issue = context.issue;
           
           const milestoneTitle = 'backlog';
           

@@ -14,8 +14,6 @@ jobs:
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
-          const context = github.context;
-          
           // Get the title of the created milestone (e.g., 'sprint10')
           const newMilestoneTitle = context.payload.milestone.title;
           const newMilestoneNumber = context.payload.milestone.number;
