@@ -1,0 +1,52 @@
+name: Move Unfinished Tasks to New Sprint
+
+on:
+  milestone:
+    types: [created]
+
+jobs:
+  move-unfinished-issues:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Move Unfinished Issues to New Milestone
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          const github = require('@actions/github');
+          const context = github.context;
+          
+          // Get the title of the created milestone (e.g., 'sprint10')
+          const newMilestoneTitle = context.payload.milestone.title;
+          const newMilestoneNumber = context.payload.milestone.number;
+
+          // Infer old milestone title (e.g., 'sprint9')
+          const oldMilestoneNumber = parseInt(newMilestoneTitle.match(/\d+/)[0]) - 1;
+          const oldMilestoneTitle = `sprint${oldMilestoneNumber}`;
+
+          // Fetch the old milestone ID
+          const milestones = await github.rest.issues.listMilestones({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+          });
+
+          const oldMilestone = milestones.data.find(milestone => milestone.title === oldMilestoneTitle);
+
+          if (oldMilestone) {
+            // Fetch issues from the old milestone
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              milestone: oldMilestone.number,
+              state: 'open', // Assume unfinished issues are open
+            });
+
+            for (const issue of issues.data) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                milestone: newMilestoneNumber
+              });
+            }
+          }

@@ -1,0 +1,38 @@
+name: Move New Issues to Backlog
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  add-to-backlog:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Add to Backlog Milestone
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          const github = require('@actions/github');
+          const issue = github.context.issue;
+          
+          const milestoneTitle = 'backlog';
+          
+          // Fetch milestones
+          const milestones = await github.rest.issues.listMilestones({
+            owner: issue.owner,
+            repo: issue.repo,
+          });
+
+          // Find the milestone ID
+          const milestone = milestones.data.find(milestone => milestone.title === milestoneTitle);
+          
+          // If the milestone exists, add the issue to the milestone
+          if (milestone) {
+            await github.rest.issues.update({
+              owner: issue.owner,
+              repo: issue.repo,
+              issue_number: issue.number,
+              milestone: milestone.number,
+            });
+          }
