@@ -1,17 +1,17 @@
 import VolunteerList from '@/components/VolunteerList';
 import { EventResponse } from '@/types/dataModel/event';
-import { VolunteerResponse } from '@/types/dataModel/volunteer';
+import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 
 interface EventProps {
   event: EventResponse;
-  volunteers: VolunteerResponse[];
+  eventVolunteers: EventVolunteerResponse[];
 }
 
 export default function Event({
   event,
-  volunteers,
+  eventVolunteers,
 }: EventProps): React.ReactElement {
   // Format the date to a localized string
   const formatDate = (date: Date): string => {
@@ -52,7 +52,9 @@ export default function Event({
           : event.eventRoles}
       </Typography>
       <h4 style={{ textDecoration: 'underline' }}>Volunteers</h4>
-      <VolunteerList volunteerResponses={volunteers} />
+      <VolunteerList
+        volunteerResponses={eventVolunteers.map((ev) => ev.volunteer)}
+      />
     </Box>
   );
 }
