@@ -304,6 +304,7 @@ export default function CheckInForm(props: Props) {
           return filtered;
         }}
         clearOnBlur
+        autoHighlight
         onChange={(_, value) => {
           if (typeof value === 'string') {
             // TODO: set error state (unknown how this would happen)
@@ -323,6 +324,11 @@ export default function CheckInForm(props: Props) {
             // if the user selected an existing organization, update it in state
           } else if (value) {
             props.onChange({ ...props.checkInData, organization: value });
+          } else {
+            props.onChange({
+              ...props.checkInData,
+              organization: undefined,
+            });
           }
         }}
       />
