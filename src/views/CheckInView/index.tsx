@@ -25,9 +25,9 @@ export default function CheckInView(props: CheckInViewProps) {
     // find volunteer by email
     const volunteer = props.volunteers.find((v) => v.email === formData.email);
 
-    // todo: better error handling
+    // TODO: better error handling
     if (!volunteer) {
-      console.error('volunteer not found');
+      console.error(`volunteer with email ${formData.email} not found`);
       return;
     }
 
@@ -40,7 +40,7 @@ export default function CheckInView(props: CheckInViewProps) {
     // make post req
     try {
       const res = await fetch(
-        `/api/events/${props.event._id}/volunteers/${volunteer?._id}/check-in`,
+        `/api/events/${props.event._id}/volunteers/${volunteer._id}/check-in`,
         {
           method: 'POST',
           headers: {
@@ -51,7 +51,7 @@ export default function CheckInView(props: CheckInViewProps) {
       );
 
       if (res.status === 201) {
-        // validate response and show success message
+        // TODO: validate response and show success message
 
         // reset form
         setFormData({} as CheckInFormData);

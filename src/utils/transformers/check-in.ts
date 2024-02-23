@@ -9,7 +9,7 @@ export function transformCheckInFormDataToCreateEventVolunteerRequest(
   event: EventResponse
 ): CreateEventVolunteerRequest {
   return {
-    volunteer: volunteer?._id,
+    volunteer: volunteer._id,
     event: event._id,
     role: formData.role,
     organization: formData.organization?._id,

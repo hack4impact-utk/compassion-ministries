@@ -48,11 +48,11 @@ async function createNewOrganization(name: string) {
     if (res.status === 201) {
       const data = await res.json();
 
-      // validate response
+      // TODO validate response
       return data.id;
     }
   } catch (e) {
-    console.error('failed to create new organization', e);
+    console.error('failed to create new organization: ', e);
   }
 }
 
@@ -281,14 +281,15 @@ export default function CheckInForm(props: Props) {
         filterOptions={(options, params) => {
           const filtered = filter(options, params);
 
+          // what is typed in the field
           const { inputValue } = params;
 
-          // Suggest the creation of a new value
+          // Checks if the inputValue match an existing organization
           const isExisting = options.some(
             (option) => inputValue === option.name
           );
 
-          // If the new value is not already an option, display it with "Add" text
+          // If the inputValue does not match an existing organization, display it as `Add "[inputValue]"`
           if (inputValue !== '' && !isExisting) {
             filtered.push({
               name: inputValue,
@@ -305,16 +306,21 @@ export default function CheckInForm(props: Props) {
         clearOnBlur
         onChange={(_, value) => {
           if (typeof value === 'string') {
-            // todo: set error state (idk how this would happen)
-            console.error('string value in organization autocomplete');
+            // TODO: set error state (unknown how this would happen)
+            console.error(
+              'String value in organization autocomplete. Should only be objects'
+            );
+            // if the user has input a custom value
           } else if (value?.display) {
             // create new organization
             createNewOrganization(value.name).then((id) => {
+              // updates the currently selected organization in state
               if (id) {
                 const newOrg = { ...value, _id: id };
                 props.onChange({ ...props.checkInData, organization: newOrg });
               }
             });
+            // if the user selected an existing organization, update it in state
           } else if (value) {
             props.onChange({ ...props.checkInData, organization: value });
           }
