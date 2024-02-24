@@ -1,4 +1,4 @@
-import { getAllEventsForVolunteer } from '@/server/actions/Volunteers';
+import { getAllEventsForVolunteer } from '@/server/actions/Volunteer';
 import { zObjectId } from '@/types/dataModel/base';
 import CMError, { CMErrorResponse, CMErrorType } from '@/utils/cmerror';
 import { NextRequest, NextResponse } from 'next/server';

@@ -1,7 +1,7 @@
 import {
   createOrganization,
   getAllOrganizations,
-} from '@/server/actions/Organizations';
+} from '@/server/actions/Organization';
 import { NextRequest, NextResponse } from 'next/server';
 import { zCreateOrganizationRequest } from '@/types/dataModel/organization';
 import CMError, { CMErrorResponse, CMErrorType } from '@/utils/cmerror';

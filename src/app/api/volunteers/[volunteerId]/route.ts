@@ -1,5 +1,5 @@
 import { updateVolunteer } from '@/server/actions/Volunteer';
-import { softDeleteVolunteer, getVolunteer } from '@/server/actions/Volunteers';
+import { softDeleteVolunteer, getVolunteer } from '@/server/actions/Volunteer';
 import { zObjectId } from '@/types/dataModel/base';
 import { zUpdateVolunteerRequest } from '@/types/dataModel/volunteer';
 import CMError, { CMErrorResponse, CMErrorType } from '@/utils/cmerror';
