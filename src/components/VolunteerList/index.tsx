@@ -1,5 +1,5 @@
 import React from 'react';
-import VolunteerListItem from '@/app/components/VolunteerList/VolunteerListItem';
+import VolunteerListItem from '@/components/VolunteerList/VolunteerListItem';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { List } from '@mui/material';
 

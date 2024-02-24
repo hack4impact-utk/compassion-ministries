@@ -1,7 +1,7 @@
 import {
   softDeleteOrganization,
   updateOrganization,
-} from '@/server/actions/Organizations';
+} from '@/server/actions/Organization';
 import { zObjectId } from '@/types/dataModel/base';
 import { zUpdateOrganizationRequest } from '@/types/dataModel/organization';
 import { NextRequest, NextResponse } from 'next/server';

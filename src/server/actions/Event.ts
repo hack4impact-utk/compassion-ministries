@@ -1,7 +1,10 @@
 import { CreateEventRequest } from '@/types/dataModel/event';
 import Event from '../models/Event';
 import { createRecurringEvent } from './RecurringEvent';
-import { CreateEventVolunteerRequest } from '@/types/dataModel/eventVolunteer';
+import {
+  CreateEventVolunteerRequest,
+  EventVolunteerResponse,
+} from '@/types/dataModel/eventVolunteer';
 import EventVolunteer from '../models/EventVolunteer';
 import dbConnect from '@/utils/db-connect';
 import { EventResponse } from '@/types/dataModel/event';
