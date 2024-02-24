@@ -23,8 +23,13 @@ export const zEventEntity = zEvent.extend({
  * Adds 'recurrence' and 'recurringEventId' if its true
  */
 export const zEventResponse = z.discriminatedUnion('isRecurring', [
-  zEventEntity.extend({ recurrence: z.string(), recurringEventId: zObjectId }),
-  zEventEntity.extend({ ...zBase.shape }),
+  zEventEntity.extend({
+    isRecurring: z.literal(true),
+    recurrence: z.string(),
+    recurringEventId: zObjectId,
+    ...zBase.shape,
+  }),
+  zEventEntity.extend({ isRecurring: z.literal(false), ...zBase.shape }),
 ]);
 
 /* This is a union between two types.
