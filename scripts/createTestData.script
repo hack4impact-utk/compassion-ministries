@@ -5,6 +5,7 @@ if (true) {
    db.volunteers.deleteMany({})
    db.organizations.deleteMany({})
    db.eventVolunteers.deleteMany({})
+   db.events.deleteMany({})
 }
 
 // create 10 organizationId variables
@@ -805,6 +806,80 @@ db.events.insertMany([
       "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
     ],
     "isRecurring": false
+  }
+])
+
+// RECURRING EVENT INSTANCES
+db.events.insertMany([
+  {
+    "_id": eventId6,
+    "name": "Food for Thought Evening",
+    "description": "An evening event focused on discussing and distributing nutritious food.",
+    "eventLocation": "Liberty Community Hall",
+    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3),
+    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 + 3600 * 3),
+    "eventRoles": ["Food", "Dental"],
+    "emailBodies": [
+      "Dear Volunteer, thank you for your hard work during the Food for Thought Evening event on Thursday, September 05, 2024 at Liberty Community Hall. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
+      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
+    ],
+    "isRecurring": true,
+  },
+  {
+    "_id": eventId7,
+    "name": "Smiles Dental Campaign",
+    "description": "A campaign to offer dental services and promote oral hygiene.",
+    "eventLocation": "Pinecrest Event Arena",
+    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5),
+    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5 + 3600 * 3),
+    "eventRoles": ["Dental", "Medical"],
+    "emailBodies": [
+      "Dear Volunteer, thank you for your hard work during the Smiles Dental Campaign event on Wednesday, October 16, 2024 at Pinecrest Event Arena. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
+      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
+    ],
+    "isRecurring": true,
+  },
+  {
+    "_id": eventId8,
+    "name": "Harvest of Health Expo",
+    "description": "An expo offering health screenings, wellness workshops, and more.",
+    "eventLocation": "Oceanview Pavilion",
+    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5),
+    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5 + 3600 * 3),
+    "eventRoles": ["Dental"],
+    "emailBodies": [
+      "Dear Volunteer, thank you for your hard work during the Harvest of Health Expo event on Friday, June 28, 2024 at Oceanview Pavilion. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
+      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
+    ],
+    "isRecurring": true,
+  },
+  {
+    "_id": eventId9,
+    "name": "Well-being and Care Fest",
+    "description": "A festival celebrating health care workers and offering community health services.",
+    "eventLocation": "Mountainview Conference Center",
+    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.7),
+    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.7 + 3600 * 3),
+    "eventRoles": ["Medical", "Save the Babies"],
+    "emailBodies": [
+      "Dear Volunteer, thank you for your hard work during the Well-being and Care Fest event on Sunday, November 10, 2024 at Mountainview Conference Center. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
+      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
+    ],
+    "isRecurring": true,
+  },
+  {
+    "_id": eventId10,
+    "name": "Nourish to Flourish Initiative",
+    "description": "An initiative to provide nourishing meals and nutrition education to those in need.",
+    "eventLocation": "Lakeside Retreat",
+    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.9),
+    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.9 + 3600 * 3),
+    "eventRoles": ["Medical"],
+    "emailBodies": [
+      "Dear Volunteer, thank you for your hard work during the Nourish to Flourish Initiative event on Sunday, September 29, 2024 at Lakeside Retreat. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
+      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
+    ],
+    "isRecurring": true,
   }
 ])
 
@@ -2151,3 +2226,4 @@ db.eventVolunteers.insertMany([
         "updatedAt": new Date()
     },
 ])
+
