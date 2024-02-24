@@ -7,7 +7,6 @@ import {
 } from '@/types/dataModel/eventVolunteer';
 import EventVolunteer from '../models/EventVolunteer';
 import dbConnect from '@/utils/db-connect';
-import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import EventVolunteerSchema from '@/server/models/EventVolunteer';
 import VolunteerSchema from '@/server/models/Volunteer';
 VolunteerSchema;
@@ -59,16 +58,15 @@ export async function checkInVolunteer(
 
 export async function getAllVolunteersForEvent(
   eventId: string
-): Promise<VolunteerResponse[]> {
-  let vols: VolunteerResponse[];
+): Promise<EventVolunteerResponse[]> {
+  let eventVols: EventVolunteerResponse[];
   try {
     await dbConnect();
-    const eventVols: EventVolunteerResponse[] = await EventVolunteerSchema.find(
-      { event: eventId }
-    ).populate('volunteer');
-    vols = eventVols.map((eventVol) => eventVol.volunteer);
+    eventVols = await EventVolunteerSchema.find({ event: eventId }).populate(
+      'volunteer'
+    );
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }
-  return vols;
+  return eventVols;
 }
