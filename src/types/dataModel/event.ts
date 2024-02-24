@@ -19,7 +19,13 @@ export const zEventEntity = zEvent.extend({
   ...zBase.shape,
 });
 
-export const zEventResponse = zEventEntity;
+/* Same as zEventEntity when isRecurring is false
+ * Adds 'recurrence' and 'recurringEventId' if its true
+ */
+export const zEventResponse = z.discriminatedUnion('isRecurring', [
+  zEventEntity.extend({ recurrence: z.string(), recurringEventId: zObjectId }),
+  zEventEntity.extend({ ...zBase.shape }),
+]);
 
 /* This is a union between two types.
  * If the event is a recurring event, it will not have a date property, but it will have a recurrence property
@@ -34,7 +40,7 @@ export const zCreateEventRequest = z.discriminatedUnion('isRecurring', [
 
 export interface Event extends z.infer<typeof zEvent> {}
 export interface EventEntity extends z.infer<typeof zEventEntity> {}
-export interface EventResponse extends z.infer<typeof zEventResponse> {}
+export type EventResponse = z.infer<typeof zEventResponse>;
 export type CreateEventRequest = z.infer<typeof zCreateEventRequest>; // needs to be a type to support discriminated union
 
 export default zEvent;
