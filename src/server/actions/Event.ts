@@ -1,11 +1,16 @@
 import { CreateEventRequest } from '@/types/dataModel/event';
 import Event from '../models/Event';
 import { createRecurringEvent } from './RecurringEvent';
-import { CreateEventVolunteerRequest } from '@/types/dataModel/eventVolunteer';
+import {
+  CreateEventVolunteerRequest,
+  EventVolunteerResponse,
+} from '@/types/dataModel/eventVolunteer';
 import EventVolunteer from '../models/EventVolunteer';
 import dbConnect from '@/utils/db-connect';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import EventVolunteerSchema from '@/server/models/EventVolunteer';
+import VolunteerSchema from '@/server/models/Volunteer';
+VolunteerSchema;
 import CMError, { CMErrorType } from '@/utils/cmerror';
 
 export async function createEvent(
@@ -58,9 +63,10 @@ export async function getAllVolunteersForEvent(
   let vols: VolunteerResponse[];
   try {
     await dbConnect();
-    vols = await EventVolunteerSchema.find({ event: eventId }).populate(
-      'volunteer'
-    );
+    const eventVols: EventVolunteerResponse[] = await EventVolunteerSchema.find(
+      { event: eventId }
+    ).populate('volunteer');
+    vols = eventVols.map((eventVol) => eventVol.volunteer);
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }
