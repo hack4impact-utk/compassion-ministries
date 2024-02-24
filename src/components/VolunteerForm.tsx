@@ -7,6 +7,7 @@ interface VolunteerFormProps {
   onChange: (volunteer: UpsertVolunteerFormData) => void;
   currentVolunteer?: VolunteerResponse;
 }
+
 function VolunteerForm({ onChange, currentVolunteer }: VolunteerFormProps) {
   const handleChange = (
     field: keyof UpsertVolunteerFormData,
@@ -19,6 +20,22 @@ function VolunteerForm({ onChange, currentVolunteer }: VolunteerFormProps) {
       });
     }
   };
+
+  const isValidEmail = (email: string) => {
+    // Regular expression for validating email addresses
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const email = e.target.value;
+    if (email === '' || isValidEmail(email)) {
+      handleChange('email', email);
+    }
+  };
+
+  const emailError =
+    currentVolunteer?.email && !isValidEmail(currentVolunteer.email);
 
   return (
     <Box>
@@ -36,7 +53,8 @@ function VolunteerForm({ onChange, currentVolunteer }: VolunteerFormProps) {
         label="Email"
         type="email"
         value={currentVolunteer?.email || ''}
-        onChange={(e) => handleChange('email', e.target.value)}
+        onChange={handleEmailChange}
+        error={emailError ? true : undefined}
       />
       <TextField
         label="Phone Number"
