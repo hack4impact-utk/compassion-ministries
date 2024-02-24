@@ -18,7 +18,7 @@ import { UpsertRoleVerificationFormData } from '@/types/forms/role-verifications
 interface RoleVerificationFormProps {
   roleVerificationData: UpsertRoleVerificationFormData;
   onChange: (verification: UpsertRoleVerificationFormData) => void;
-  currentVerification?: RoleVerification;
+  currentVerification: RoleVerification;
 }
 
 function RoleVerificationForm({

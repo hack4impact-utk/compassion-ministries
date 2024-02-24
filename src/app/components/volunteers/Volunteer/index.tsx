@@ -1,6 +1,8 @@
+'use client';
 import React from 'react';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { Typography, Box } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
 // Use VolunteerResponse Props
 interface VolunteerProps {
@@ -11,6 +13,7 @@ interface VolunteerProps {
 export default function VolunteerInfo({
   volunteer,
 }: VolunteerProps): React.ReactElement {
+
   return (
     <Box>
       <Typography variant="h1">
@@ -42,7 +45,10 @@ export default function VolunteerInfo({
           {volunteer.previousOrganization?.name}
         </Typography>
       </Box>
-      <Typography variant="h5">Role Verifications</Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography variant="h5">Role Verifications</Typography>
+        <AddIcon sx={{ ml: 1 }} />
+      </Box>
       {volunteer.roleVerifications?.map((verification, index) => (
         <Box key={index}>
           <Box sx={{ display: 'flex' }}>
@@ -59,7 +65,7 @@ export default function VolunteerInfo({
           </Box>
           <Box sx={{ display: 'flex' }}>
             <Typography variant="subtitle1" sx={{ fontWeight: 'bold', pr: 1 }}>
-              Verification date::
+              Verification date:
             </Typography>
             <Typography display="inline">
               {verification.lastUpdated.toLocaleDateString()}
