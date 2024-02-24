@@ -1,15 +1,12 @@
 import React from 'react';
 import { Box, TextField } from '@mui/material';
 import { UpsertOrganizationFormData } from '@/types/forms/organizations';
-import {
-  OrganizationResponse,
-  UpdateOrganizationRequest,
-} from '@/types/dataModel/organization';
+import { OrganizationResponse } from '@/types/dataModel/organization';
 
 // Organization Form Information
 interface OrganizationFormProps {
   organizationData: UpsertOrganizationFormData;
-  onChange: (organization: UpdateOrganizationRequest) => void;
+  onChange: (organization: UpsertOrganizationFormData) => void;
   currentOrganization?: OrganizationResponse;
 }
 

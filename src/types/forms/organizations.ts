@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const zUpsertOrganizationFormData = z.object({
-  name: z.string().optional(),
+  name: z.string(),
 });
 
 export interface UpsertOrganizationFormData
