@@ -18,8 +18,6 @@ function OrganizationForm({
   onChange,
   currentOrganization,
 }: OrganizationFormProps) {
-  console.log(organizationData.name);
-
   React.useEffect(() => {
     onChange({ ...organizationData, name: currentOrganization?.name || '' });
   }, [currentOrganization?.name]);
