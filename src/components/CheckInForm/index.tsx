@@ -111,7 +111,7 @@ export default function CheckInForm(props: Props) {
     );
     if (volunteerMatches.length === 1) {
       const match = volunteerMatches[0];
-      let updatedFormData = {
+      const updatedFormData = {
         firstName: match.firstName,
         lastName: match.lastName,
         email: match.email,
@@ -120,7 +120,7 @@ export default function CheckInForm(props: Props) {
         organization: match.previousOrganization,
       } as CheckInFormData;
       if (match.previousRole) {
-        updatedFormData = { ...updatedFormData, role: match.previousRole };
+        updatedFormData.role = match.previousRole;
       }
       props.onChange(updatedFormData);
     }
