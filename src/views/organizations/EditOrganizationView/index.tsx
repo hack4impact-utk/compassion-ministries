@@ -18,8 +18,15 @@ function EditOrganizationView({
     useState<UpsertOrganizationFormData>({} as UpsertOrganizationFormData);
 
   // Update the organization Name here
-  const placeholderOnChange = (organizationData: any) => {
+  const onChange = () => {
     setOrganizationData(organizationData);
+  };
+
+  const onClick = async () => {
+    await fetch(`/api/organizations/${currentOrganization._id}`, {
+      method: 'PUT',
+      body: JSON.stringify(organizationData),
+    });
   };
 
   return (
@@ -28,12 +35,12 @@ function EditOrganizationView({
         Edit Organization
       </Typography>
       <OrganizationForm
-        onChange={placeholderOnChange}
+        onChange={onChange}
         organizationData={organizationData}
         currentOrganization={currentOrganization}
       />
       <Box mt={2}>
-        <Button variant="contained" fullWidth>
+        <Button variant="contained" onClick={onClick} fullWidth>
           Submit
         </Button>
       </Box>
