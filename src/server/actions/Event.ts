@@ -1,16 +1,14 @@
-import { CreateEventRequest } from '@/types/dataModel/event';
+import { CreateEventRequest, EventResponse } from '@/types/dataModel/event';
 import Event from '../models/Event';
 import { createRecurringEvent } from './RecurringEvent';
-import {
-  CreateEventVolunteerRequest,
-  EventVolunteerResponse,
-} from '@/types/dataModel/eventVolunteer';
+import { CreateEventVolunteerRequest } from '@/types/dataModel/eventVolunteer';
 import EventVolunteer from '../models/EventVolunteer';
 import dbConnect from '@/utils/db-connect';
-import EventVolunteerSchema from '@/server/models/EventVolunteer';
-import VolunteerSchema from '@/server/models/Volunteer';
-VolunteerSchema;
+import EventSchema from '@/server/models/Event';
 import CMError, { CMErrorType } from '@/utils/cmerror';
+import { datesBetweenFromRrule } from '@/utils/dates';
+import RecurringEventSchema from '@/server/models/RecurringEvent';
+import { RecurringEventResponse } from '@/types/dataModel/recurringEvent';
 
 export async function createEvent(
   createEventReq: CreateEventRequest
@@ -56,17 +54,101 @@ export async function checkInVolunteer(
   }
 }
 
-export async function getAllVolunteersForEvent(
-  eventId: string
-): Promise<EventVolunteerResponse[]> {
-  let eventVols: EventVolunteerResponse[];
+export async function getEventsBetweenDates(
+  startDate: Date,
+  endDate: Date
+): Promise<EventResponse[] | null> {
+  await dbConnect();
+
+  // TODO: cover edge case when a new event instance is created when a volunteer is checked in
+
+  // look for events that are between the start and and date
+  const events: EventResponse[] = await EventSchema.find({
+    date: {
+      $gte: startDate,
+      $lte: endDate,
+    },
+  });
+
+  const recurringEvents = (await RecurringEventSchema.find().populate(
+    'event'
+  )) as RecurringEventResponse[];
+
+  for (const recurringEvent of recurringEvents) {
+    const dates = datesBetweenFromRrule(
+      recurringEvent.recurrence,
+      startDate,
+      endDate
+    );
+
+    for (const date of dates) {
+      if (date >= startDate && date <= endDate) {
+        const event: EventResponse = {
+          name: recurringEvent.event.name,
+          description: recurringEvent.event.description,
+          eventLocation: recurringEvent.event.eventLocation,
+          startAt: recurringEvent.event.startAt,
+          endAt: recurringEvent.event.endAt,
+          date,
+          eventRoles: recurringEvent.event.eventRoles,
+          emailBodies: recurringEvent.event.emailBodies,
+          isRecurring: true,
+          parentEvent: recurringEvent.event.parentEvent,
+          recurrence: recurringEvent.recurrence,
+          recurringEventId: recurringEvent._id,
+          _id: recurringEvent.event._id,
+          createdAt: recurringEvent.event.createdAt,
+          updatedAt: recurringEvent.event.updatedAt,
+        };
+        events.push(event);
+      }
+    }
+  }
+
+  //console.log(events);
+  return events;
+}
+
+export async function getEvent(eventId: string): Promise<EventResponse> {
+  let doc;
+
+  // Get event from schema
   try {
     await dbConnect();
-    eventVols = await EventVolunteerSchema.find({ event: eventId }).populate(
-      'volunteer'
-    );
+    doc = await EventSchema.findById(eventId);
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }
-  return eventVols;
+
+  // No event has been located within the database.
+  if (!doc) {
+    throw new CMError(CMErrorType.NoSuchKey, 'Event');
+  }
+
+  // this should never happen
+  if (doc.isRecurring) {
+    throw new CMError(
+      CMErrorType.InternalError,
+      'Attempted to retrieve recurring event',
+      true
+    );
+  }
+
+  // cast all this stuff to the same stuff
+  const event: EventResponse = {
+    name: doc.name,
+    description: doc.description,
+    eventLocation: doc.eventLocation,
+    startAt: doc.startAt,
+    endAt: doc.endAt,
+    date: doc.date,
+    eventRoles: doc.eventRoles,
+    emailBodies: doc.emailBodies,
+    parentEvent: doc.parentEvent,
+    createdAt: doc.createdAt,
+    updatedAt: doc.updatedAt,
+    _id: doc.id,
+    isRecurring: false,
+  };
+  return event;
 }
