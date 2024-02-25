@@ -16,16 +16,16 @@ import { mongo } from 'mongoose';
  */
 export async function getOrganization(
   organizationId: string
-): Promise<OrganizationResponse | null> {
+): Promise<OrganizationResponse> {
   let organization: OrganizationResponse | null = null;
-  try{
+  try {
     await dbConnect();
     organization = await OrganizationSchema.findById(organizationId);
-  } catch (error){
-    throw new CMError (CMErrorType.InternalError);
+  } catch (error) {
+    throw new CMError(CMErrorType.InternalError);
   }
-  if(!organization) {
-    throw new CMError (CMErrorType.NoSuchKey, 'Organization');
+  if (!organization) {
+    throw new CMError(CMErrorType.NoSuchKey, 'Organization');
   }
   return organization;
 }
