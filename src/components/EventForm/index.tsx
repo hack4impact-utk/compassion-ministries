@@ -72,6 +72,7 @@ export default function EventForm({
         <TimePicker
           label="Start at"
           value={eventData.startAt || null}
+          maxTime={eventData.endAt || null}
           onChange={(date) => {
             if (!date) return; // TODO: error handle
             onChange({ ...eventData, startAt: date });
@@ -81,6 +82,7 @@ export default function EventForm({
         <TimePicker
           label="End at"
           value={eventData.endAt || null}
+          minTime={eventData.startAt || null}
           onChange={(date) => {
             if (!date) return; // TODO: error handle
             onChange({ ...eventData, endAt: date });
