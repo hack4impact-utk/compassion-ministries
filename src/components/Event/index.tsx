@@ -42,10 +42,11 @@ export default function Event({
       )}
       <Typography variant="h5">{event.eventLocation}</Typography>
       {event.date && (
-        <Typography variant="h5">{formatDate(event.date)}</Typography>
+        <Typography variant="h5">{formatDate(new Date(event.date))}</Typography>
       )}
       <Typography variant="h5">
-        {formatTime(event.startAt)} - {formatTime(event.endAt)}
+        {formatTime(new Date(event.startAt))} -{' '}
+        {formatTime(new Date(event.endAt))}
       </Typography>
       <Typography variant="h5">
         {Array.isArray(event.eventRoles)
