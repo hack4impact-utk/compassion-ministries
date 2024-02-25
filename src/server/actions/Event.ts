@@ -1,14 +1,15 @@
 import { CreateEventRequest, EventResponse } from '@/types/dataModel/event';
 import Event from '../models/Event';
 import { createRecurringEvent } from './RecurringEvent';
-import {
-  CreateEventVolunteerRequest,
-} from '@/types/dataModel/eventVolunteer';
+import { CreateEventVolunteerRequest } from '@/types/dataModel/eventVolunteer';
 import EventVolunteer from '../models/EventVolunteer';
-import EventVolunteerSchema from '@/server/models/EventVolunteer';
 import dbConnect from '@/utils/db-connect';
 import EventSchema from '@/server/models/Event';
 import CMError, { CMErrorType } from '@/utils/cmerror';
+import { datesBetweenFromRrule } from '@/utils/dates';
+import RecurringEventSchema from '@/server/models/RecurringEvent';
+import { ContentPasteGoOutlined } from '@mui/icons-material';
+import { RecurringEventResponse } from '@/types/dataModel/recurringEvent';
 
 export async function createEvent(
   createEventReq: CreateEventRequest
@@ -54,33 +55,46 @@ export async function checkInVolunteer(
   }
 }
 
-
-export async function getEventsBetweenDates(startDate: Date, endDate: Date): 
-Promise<EventResponse[] | null> {
+export async function getEventsBetweenDates(
+  startDate: Date,
+  endDate: Date
+): Promise<EventResponse[] | null> {
   await dbConnect();
-  
+
   // look for events that are between the start and and date
-  const events =  await EventSchema.find({
+  const events = await EventSchema.find({
     date: {
       $gte: startDate,
       $lte: endDate,
     },
   });
 
-  const recurringEvents = await RecurringEventSchema.find().populate('event');
+  const recurringEvents = await RecurringEventSchema.find().populate('event') as RecurringEventResponse;
   //console.log(recurringEvents);
   // console.log(events);
 
   for (const recurringEvent of recurringEvents) {
-    const dates = DatesBetweenFromRrule(
+    const dates = datesBetweenFromRrule(
       recurringEvent.recurrence,
       startDate,
       endDate
     );
-    console.log(dates);
+    for (const date of dates) {
+      if (date >= startDate && date <= endDate) {
+        const event: EventResponse = {
+          ...recurringEvent.event, 
+          _id: recurringEvent.event.id,
+          isRecurring: true,
+          recurrence: recurringEvent.recurrence,
+          recurringEventId: recurringEvent.id,
+        };
+      }
+    }
   }
-  
-  return null; 
+
+  //console.log(events);
+  // create a EventResponse based for every
+  return null;
 }
 
 export async function getEvent(eventId: string): Promise<EventResponse> {

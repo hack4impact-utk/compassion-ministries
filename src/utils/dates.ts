@@ -1,6 +1,6 @@
 import { rrulestr } from "rrule";
 
-export default function DatesBetweenFromRrule(
+export function datesBetweenFromRrule(
     rrule: string,
     startDate: Date,
     endDate: Date    
