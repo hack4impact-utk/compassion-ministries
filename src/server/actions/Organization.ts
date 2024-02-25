@@ -2,11 +2,34 @@ import dbConnect from '@/utils/db-connect';
 import OrganizationSchema from '../models/Organization';
 import {
   CreateOrganizationRequest,
+  OrganizationResponse,
   UpdateOrganizationRequest,
 } from '@/types/dataModel/organization';
 import { OrganizationEntity } from '@/types/dataModel/organization';
 import CMError, { CMErrorType } from '@/utils/cmerror';
 import { mongo } from 'mongoose';
+
+/**
+ * Get a specific organization
+ * @param organizationId // Id of the organization
+ * @returns // Specific Organization, or null
+ */
+export async function getOrganization(
+  organizationId: string
+): Promise<OrganizationResponse | null> {
+  let organization: OrganizationResponse | null = null;
+  try{
+    await dbConnect();
+    organization = await OrganizationSchema.findById(organizationId);
+  } catch (error){
+    throw new CMError (CMErrorType.InternalError);
+  }
+  if(!organization) {
+    throw new CMError (CMErrorType.NoSuchKey, 'Organization');
+  }
+  return organization;
+}
+
 /**
  * Create an organization
  * @param CreateOrganizationRequest requires the name of the organization
