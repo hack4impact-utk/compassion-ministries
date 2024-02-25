@@ -31,7 +31,7 @@ function VolunteerForm({
     <Box pt={2}>
       <TextField
         label="First Name"
-        value={volunteerData.firstName}
+        value={volunteerData.firstName || ''}
         onChange={(e) =>
           onChange({ ...volunteerData, firstName: e.target.value })
         }
@@ -39,7 +39,7 @@ function VolunteerForm({
       />
       <TextField
         label="Last Name"
-        value={volunteerData.lastName}
+        value={volunteerData.lastName || ''}
         onChange={(e) =>
           onChange({ ...volunteerData, lastName: e.target.value })
         }
@@ -48,13 +48,13 @@ function VolunteerForm({
       <TextField
         label="Email"
         type="email"
-        value={volunteerData.email}
+        value={volunteerData.email || ''}
         onChange={(e) => onChange({ ...volunteerData, email: e.target.value })}
         InputLabelProps={{ shrink: !!volunteerData.email }}
       />
       <TextField
         label="Phone Number"
-        value={volunteerData.phoneNumber}
+        value={volunteerData.phoneNumber || ''}
         onChange={(e) =>
           onChange({ ...volunteerData, phoneNumber: e.target.value })
         }
@@ -62,7 +62,7 @@ function VolunteerForm({
       />
       <TextField
         label="Address"
-        value={volunteerData.address}
+        value={volunteerData.address || ''}
         onChange={(e) =>
           onChange({ ...volunteerData, address: e.target.value })
         }
