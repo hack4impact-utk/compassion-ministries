@@ -71,8 +71,6 @@ export async function getEventsBetweenDates(
   const recurringEvents = (await RecurringEventSchema.find().populate(
     'event'
   )) as RecurringEventResponse[];
-  // console.log(recurringEvents);
-  // console.log(events);
 
   for (const recurringEvent of recurringEvents) {
     const dates = datesBetweenFromRrule(
@@ -80,7 +78,6 @@ export async function getEventsBetweenDates(
       startDate,
       endDate
     );
-    // console.log(recurringEvent.event);
 
     for (const date of dates) {
       if (date >= startDate && date <= endDate) {
@@ -106,8 +103,8 @@ export async function getEventsBetweenDates(
     }
   }
 
-  console.log(events);
-  return null;
+  //console.log(events);
+  return events;
 }
 
 export async function getEvent(eventId: string): Promise<EventResponse> {
