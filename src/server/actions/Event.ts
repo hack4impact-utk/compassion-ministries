@@ -1,15 +1,14 @@
-import { CreateEventRequest } from '@/types/dataModel/event';
+import { CreateEventRequest, EventResponse } from '@/types/dataModel/event';
 import Event from '../models/Event';
 import { createRecurringEvent } from './RecurringEvent';
 import {
   CreateEventVolunteerRequest,
 } from '@/types/dataModel/eventVolunteer';
 import EventVolunteer from '../models/EventVolunteer';
+import EventVolunteerSchema from '@/server/models/EventVolunteer';
 import dbConnect from '@/utils/db-connect';
-import { EventResponse } from '@/types/dataModel/event';
-import EventSchema from '../models/Event';
-import RecurringEventSchema from '../models/RecurringEvent';
-import DatesBetweenFromRrule from '@/utils/dates';
+import EventSchema from '@/server/models/Event';
+import CMError, { CMErrorType } from '@/utils/cmerror';
 
 export async function createEvent(
   createEventReq: CreateEventRequest
@@ -80,7 +79,35 @@ Promise<EventResponse[] | null> {
     );
     console.log(dates);
   }
-  const eventsbetween = 
-
+  
   return null; 
+}
+
+export async function getEvent(eventId: string): Promise<EventResponse> {
+  let doc;
+
+  // Get event from schema
+  try {
+    doc = await EventSchema.findById(eventId);
+  } catch (error) {
+    throw new CMError(CMErrorType.InternalError);
+  }
+
+  // No event has been located within the database.
+  if (!doc) {
+    throw new CMError(CMErrorType.NoSuchKey, 'Event');
+  }
+
+  // this should never happen
+  if (doc.isRecurring) {
+    throw new CMError(CMErrorType.InternalError);
+  }
+
+  // cast all this stuff to the same stuff
+  const event: EventResponse = {
+    ...doc,
+    _id: doc.id,
+    isRecurring: false,
+  };
+  return event;
 }
