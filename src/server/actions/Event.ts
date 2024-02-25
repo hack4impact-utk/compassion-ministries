@@ -8,7 +8,6 @@ import EventSchema from '@/server/models/Event';
 import CMError, { CMErrorType } from '@/utils/cmerror';
 import { datesBetweenFromRrule } from '@/utils/dates';
 import RecurringEventSchema from '@/server/models/RecurringEvent';
-import { ContentPasteGoOutlined } from '@mui/icons-material';
 import { RecurringEventResponse } from '@/types/dataModel/recurringEvent';
 
 export async function createEvent(
@@ -62,15 +61,17 @@ export async function getEventsBetweenDates(
   await dbConnect();
 
   // look for events that are between the start and and date
-  const events = await EventSchema.find({
+  const events: EventResponse[] = await EventSchema.find({
     date: {
       $gte: startDate,
       $lte: endDate,
     },
   });
 
-  const recurringEvents = await RecurringEventSchema.find().populate('event') as RecurringEventResponse;
-  //console.log(recurringEvents);
+  const recurringEvents = (await RecurringEventSchema.find().populate(
+    'event'
+  )) as RecurringEventResponse[];
+  // console.log(recurringEvents);
   // console.log(events);
 
   for (const recurringEvent of recurringEvents) {
@@ -79,21 +80,33 @@ export async function getEventsBetweenDates(
       startDate,
       endDate
     );
+    // console.log(recurringEvent.event);
+
     for (const date of dates) {
       if (date >= startDate && date <= endDate) {
         const event: EventResponse = {
-          ...recurringEvent.event, 
-          _id: recurringEvent.event.id,
+          name: recurringEvent.event.name,
+          description: recurringEvent.event.description,
+          eventLocation: recurringEvent.event.eventLocation,
+          startAt: recurringEvent.event.startAt,
+          endAt: recurringEvent.event.endAt,
+          date,
+          eventRoles: recurringEvent.event.eventRoles,
+          emailBodies: recurringEvent.event.emailBodies,
           isRecurring: true,
+          parentEvent: recurringEvent.event.parentEvent,
           recurrence: recurringEvent.recurrence,
-          recurringEventId: recurringEvent.id,
+          recurringEventId: recurringEvent._id,
+          _id: recurringEvent.event._id,
+          createdAt: recurringEvent.event.createdAt,
+          updatedAt: recurringEvent.event.updatedAt,
         };
+        events.push(event);
       }
     }
   }
 
-  //console.log(events);
-  // create a EventResponse based for every
+  console.log(events);
   return null;
 }
 
