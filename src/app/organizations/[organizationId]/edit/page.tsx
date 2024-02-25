@@ -13,11 +13,7 @@ const EditOrganizationPage: React.FC<EditOrganizationPageProps> = async (
   const currentOrganization = JSON.parse(
     JSON.stringify(await getOrganization(props.params.organizationId))
   );
-  return (
-    <div>
-      <EditOrganizationView currentOrganization={currentOrganization!} />
-    </div>
-  );
+  return <EditOrganizationView currentOrganization={currentOrganization!} />;
 };
 
 export default EditOrganizationPage;
