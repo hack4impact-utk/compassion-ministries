@@ -812,7 +812,6 @@ db.events.insertMany([
 // RECURRING EVENT INSTANCES
 db.events.insertMany([
   {
-    "_id": eventId6,
     "name": "Food for Thought Evening",
     "description": "An evening event focused on discussing and distributing nutritious food.",
     "eventLocation": "Liberty Community Hall",
@@ -824,6 +823,102 @@ db.events.insertMany([
       "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
     ],
     "isRecurring": true,
+  },
+  {
+    "_id": eventId6,
+    "name": "Food for Thought Evening",
+    "description": "An evening event focused on discussing and distributing nutritious food.",
+    "eventLocation": "Liberty Community Hall",
+    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3),
+    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 + 3600 * 3),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 - 3600 * 24 * 7 * 1),
+    "eventRoles": ["Food", "Dental"],
+    "emailBodies": [
+      "Dear Volunteer, thank you for your hard work during the Food for Thought Evening event on Thursday, September 05, 2024 at Liberty Community Hall. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
+      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
+    ],
+    "isRecurring": true,
+    "parentEvent": eventId6
+  },
+  {
+    "_id": eventId6,
+    "name": "Food for Thought Evening",
+    "description": "An evening event focused on discussing and distributing nutritious food.",
+    "eventLocation": "Liberty Community Hall",
+    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3),
+    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 + 3600 * 3),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 - 3600 * 24 * 7 * 2),
+    "eventRoles": ["Food", "Dental"],
+    "emailBodies": [
+      "Dear Volunteer, thank you for your hard work during the Food for Thought Evening event on Thursday, September 05, 2024 at Liberty Community Hall. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
+      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
+    ],
+    "isRecurring": true,
+    "parentEvent": eventId6
+  },
+  {
+    "_id": eventId6,
+    "name": "Food for Thought Evening",
+    "description": "An evening event focused on discussing and distributing nutritious food.",
+    "eventLocation": "Liberty Community Hall",
+    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3),
+    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 + 3600 * 3),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 - 3600 * 24 * 7 * 3),
+    "eventRoles": ["Food", "Dental"],
+    "emailBodies": [
+      "Dear Volunteer, thank you for your hard work during the Food for Thought Evening event on Thursday, September 05, 2024 at Liberty Community Hall. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
+      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
+    ],
+    "isRecurring": true,
+    "parentEvent": eventId6
+  },
+  {
+    "_id": eventId6,
+    "name": "Food for Thought Evening",
+    "description": "An evening event focused on discussing and distributing nutritious food.",
+    "eventLocation": "Liberty Community Hall",
+    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3),
+    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 + 3600 * 3),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 + 3600 * 24 * 7 * 0),
+    "eventRoles": ["Food", "Dental"],
+    "emailBodies": [
+      "Dear Volunteer, thank you for your hard work during the Food for Thought Evening event on Thursday, September 05, 2024 at Liberty Community Hall. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
+      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
+    ],
+    "isRecurring": true,
+    "parentEvent": eventId6
+  },
+  {
+    "_id": eventId6,
+    "name": "Food for Thought Evening",
+    "description": "An evening event focused on discussing and distributing nutritious food.",
+    "eventLocation": "Knoxville County Courthouse",
+    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3),
+    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 + 3600 * 3),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 + 3600 * 24 * 7 * 1),
+    "eventRoles": ["Food", "Dental"],
+    "emailBodies": [
+      "Dear Volunteer, thank you for your hard work during the Food for Thought Evening event on Thursday, September 05, 2024 at Liberty Community Hall. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
+      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
+    ],
+    "isRecurring": true,
+    "parentEvent": eventId6
+  },
+  {
+    "_id": eventId6,
+    "name": "Food for Thought Evening",
+    "description": "An evening event focused on discussing and distributing nutritious food.",
+    "eventLocation": "Liberty Community Hall",
+    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3),
+    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 + 3600 * 3),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 + 3600 * 24 * 7 * 2),
+    "eventRoles": ["Food", "Dental"],
+    "emailBodies": [
+      "Dear Volunteer, thank you for your hard work during the Food for Thought Evening event on Thursday, September 05, 2024 at Liberty Community Hall. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
+      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
+    ],
+    "isRecurring": true,
+    "parentEvent": eventId6
   },
   {
     "_id": eventId7,
