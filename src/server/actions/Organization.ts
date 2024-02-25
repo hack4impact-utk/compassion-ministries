@@ -121,8 +121,8 @@ export async function updateOrganization(
  * @param organizations all organization in the database
  * @returns all organization in the database
  */
-export async function getAllOrganizations(): Promise<OrganizationEntity[]> {
-  let organizations: OrganizationEntity[];
+export async function getAllOrganizations(): Promise<OrganizationResponse[]> {
+  let organizations: OrganizationResponse[];
   try {
     await dbConnect();
 
