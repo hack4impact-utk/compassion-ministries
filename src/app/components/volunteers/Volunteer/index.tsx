@@ -18,7 +18,7 @@ export default function VolunteerInfo({
     <Box>
       <Typography variant="h1">
         {volunteer.firstName} {volunteer.lastName}
-      </Typography>
+      </Typography> 
       <Box sx={{ display: 'flex' }}>
         <Typography variant="subtitle1" sx={{ fontWeight: 'bold', pr: 1 }}>
           Email:
