@@ -75,6 +75,7 @@ export async function getEvent(eventId: string): Promise<EventResponse> {
 
   // Get event from schema
   try {
+    await dbConnect();
     doc = await EventSchema.findById(eventId);
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
@@ -87,12 +88,26 @@ export async function getEvent(eventId: string): Promise<EventResponse> {
 
   // this should never happen
   if (doc.isRecurring) {
-    throw new CMError(CMErrorType.InternalError);
+    throw new CMError(
+      CMErrorType.InternalError,
+      'Attempted to retrieve recurring event',
+      true
+    );
   }
 
   // cast all this stuff to the same stuff
   const event: EventResponse = {
-    ...doc,
+    name: doc.name,
+    description: doc.description,
+    eventLocation: doc.eventLocation,
+    startAt: doc.startAt,
+    endAt: doc.endAt,
+    date: doc.date,
+    eventRoles: doc.eventRoles,
+    emailBodies: doc.emailBodies,
+    parentEvent: doc.parentEvent,
+    createdAt: doc.createdAt,
+    updatedAt: doc.updatedAt,
     _id: doc.id,
     isRecurring: false,
   };

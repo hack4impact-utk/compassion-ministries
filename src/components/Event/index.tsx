@@ -1,3 +1,4 @@
+'use client';
 import VolunteerList from '@/components/VolunteerList';
 import { EventResponse } from '@/types/dataModel/event';
 import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
