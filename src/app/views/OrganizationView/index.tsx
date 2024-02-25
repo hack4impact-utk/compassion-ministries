@@ -7,7 +7,8 @@ interface OrganizationViewProps {
 }
 
 export function OrganizationView({ organization }: OrganizationViewProps) {
-  return (
+  // TODO: add volunteers to this pavge
+    return (
     <div>
       <h1>Organization</h1>
       <p>Name: {organization.name}</p>
