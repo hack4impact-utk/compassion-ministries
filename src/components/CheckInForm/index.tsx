@@ -57,7 +57,6 @@ async function createNewOrganization(name: string) {
 }
 
 // TODO prevent input of role that the volunteer is not verified for
-// TODO populate role, organization, and other data based on current email
 // TODO on submit, display errors for bad fields
 export default function CheckInForm(props: Props) {
   const [volunteerOptions, setVolunteerOptions] = useState<VolunteerResponse[]>(
