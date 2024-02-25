@@ -60,6 +60,8 @@ export async function getEventsBetweenDates(
 ): Promise<EventResponse[] | null> {
   await dbConnect();
 
+  // TODO: cover edge case when a new event instance is created when a volunteer is checked in
+
   // look for events that are between the start and and date
   const events: EventResponse[] = await EventSchema.find({
     date: {
