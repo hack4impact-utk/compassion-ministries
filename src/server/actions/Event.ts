@@ -1,9 +1,11 @@
-import { CreateEventRequest } from '@/types/dataModel/event';
+import { CreateEventRequest, EventResponse } from '@/types/dataModel/event';
 import Event from '../models/Event';
 import { createRecurringEvent } from './RecurringEvent';
 import { CreateEventVolunteerRequest } from '@/types/dataModel/eventVolunteer';
 import EventVolunteer from '../models/EventVolunteer';
 import dbConnect from '@/utils/db-connect';
+import EventSchema from '@/server/models/Event';
+import CMError, { CMErrorType } from '@/utils/cmerror';
 
 export async function createEvent(
   createEventReq: CreateEventRequest
@@ -47,4 +49,43 @@ export async function checkInVolunteer(
   } catch (e) {
     throw e;
   }
+}
+
+export async function getEvent(eventId: string): Promise<EventResponse> {
+  let doc;
+
+  // Get event from schema
+  try {
+    doc = await EventSchema.findById(eventId);
+  } catch (error) {
+    throw new CMError(CMErrorType.InternalError);
+  }
+
+  // yo where's my event??
+  if (!doc) {
+    throw new CMError(CMErrorType.NoSuchKey, 'Event');
+  }
+
+  // this should never happen
+  if (doc.isRecurring) {
+    throw new CMError(CMErrorType.InternalError);
+  }
+
+  // cast all this shit to the same exact shit
+  const event: EventResponse = {
+    name: doc.name,
+    description: doc.description,
+    eventLocation: doc.eventLocation,
+    startAt: doc.startAt,
+    endAt: doc.endAt,
+    date: doc.date,
+    eventRoles: doc.eventRoles,
+    emailBodies: doc.emailBodies,
+    isRecurring: doc.isRecurring,
+    parentEvent: doc.parentEvent,
+    _id: doc.id,
+    createdAt: doc.createdAt,
+    updatedAt: doc.updatedAt,
+  };
+  return event;
 }
