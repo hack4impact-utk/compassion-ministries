@@ -20,9 +20,9 @@ function OrganizationForm({
   }, [currentOrganization?.name]);
 
   return (
-    <Box sx={{ minWidth: 120 }} pt={2}>
+    <Box sx={{ minWidth: 120 }}>
       {/* Update Organization Name */}
-      <TextField
+      <TextField fullWidth
         label="Organization Name"
         onChange={(e) =>
           onChange({ ...organizationData, name: e.target.value })
