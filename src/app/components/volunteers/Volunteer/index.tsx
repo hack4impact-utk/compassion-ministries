@@ -1,8 +1,8 @@
 'use client';
 import React from 'react';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
-//import { Typography, Box } from '@mui/material';
-//import AddIcon from '@mui/icons-material/Add';
+import { Typography, Box } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
 // Use VolunteerResponse Props
 interface VolunteerProps {
@@ -15,8 +15,6 @@ export default function VolunteerInfo({
 }: VolunteerProps): React.ReactElement{
   
   return (
-    <h1> {volunteer.firstName} {volunteer.lastName} </h1>
-    ) } /*}
     <Box>
       <Typography variant="h1">
         {volunteer.firstName} {volunteer.lastName}
@@ -77,6 +75,4 @@ export default function VolunteerInfo({
       ))}
     </Box>
   );
-  */
-// Remove the extra closing curly brace
-// }
+}
