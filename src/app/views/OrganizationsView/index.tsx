@@ -2,7 +2,6 @@
 import { OrganizationResponse } from '@/types/dataModel/organization';
 import React from 'react';
 import OrganizationList from '@/components/organizations/OrganizationList';
-import { Button } from '@mui/material';
 
 interface OrganizationsViewProps {
   organizations: OrganizationResponse[];
@@ -14,7 +13,6 @@ export function OrganizationsView({ organizations }: OrganizationsViewProps) {
     <div>
       <h1>Organizations</h1>
       <OrganizationList organizationResponses={organizations} />
-      <Button variant="contained">Edit</Button>
     </div>
   );
 }
