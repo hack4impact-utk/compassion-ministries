@@ -5,8 +5,9 @@ import { useConfirm } from 'material-ui-confirm';
 export default function useRoleConfirmation() {
   const confirm = useConfirm();
   const [verifier, setVerifier] = useState<string>('');
-  const verifierRef = useRef('');
+  const verifierRef = useRef(''); // we need a ref here since we want to access the state in a closure
 
+  // set the ref on each render
   verifierRef.current = verifier;
 
   const roleConfirm = async (role: string): Promise<string | null> => {
