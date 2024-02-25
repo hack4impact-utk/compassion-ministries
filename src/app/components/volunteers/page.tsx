@@ -3,7 +3,7 @@ import VolunteerInfo from './Volunteer';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 
 // define a volunteer of type VolunteerResponse
-const volunteer: VolunteerResponse = {
+const samplevolunteer: VolunteerResponse = {
   firstName: 'John',
   lastName: 'Doe',
   email: 'john.doe@example.com',
@@ -31,11 +31,10 @@ const volunteer: VolunteerResponse = {
 
 export default function Page() {
   return (
-    // call volunteerinfo component
     <div>
       <h1>Volunteers</h1>
       <p>
-        <VolunteerInfo volunteer={volunteer} />
+        <VolunteerInfo volunteer={samplevolunteer} />
       </p>
     </div>
   );
