@@ -106,6 +106,27 @@ export default function CheckInForm(props: Props) {
     }
   }
 
+  function onEmailChange(email: string) {
+    const volunteerMatches = props.volunteers.filter(
+      (vol) => vol.email === email
+    );
+    if (volunteerMatches.length === 1) {
+      const match = volunteerMatches[0];
+      let updatedFormData = {
+        firstName: match.firstName,
+        lastName: match.lastName,
+        email: match.email,
+        phoneNumber: match.phoneNumber,
+        address: match.address,
+        organization: match.previousOrganization,
+      } as CheckInFormData;
+      if (match.previousRole) {
+        updatedFormData = { ...updatedFormData, role: match.previousRole };
+      }
+      props.onChange(updatedFormData);
+    }
+  }
+
   return (
     <>
       <Box pt={2}>
@@ -211,7 +232,12 @@ export default function CheckInForm(props: Props) {
             />
           )}
           onInputChange={(_, value) => {
-            props.onChange({ ...props.checkInData, email: value });
+            if (value) {
+              props.onChange({ ...props.checkInData, email: value });
+              onEmailChange(value);
+              return;
+            }
+            props.onChange({} as CheckInFormData);
           }}
         />
 
