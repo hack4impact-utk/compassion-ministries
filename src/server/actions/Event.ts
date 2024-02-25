@@ -1,12 +1,16 @@
 import { CreateEventRequest, EventResponse } from '@/types/dataModel/event';
 import Event from '../models/Event';
 import { createRecurringEvent } from './RecurringEvent';
-import { CreateEventVolunteerRequest } from '@/types/dataModel/eventVolunteer';
+import {
+  CreateEventVolunteerRequest,
+  EventVolunteerResponse,
+} from '@/types/dataModel/eventVolunteer';
 import EventVolunteer from '../models/EventVolunteer';
 import dbConnect from '@/utils/db-connect';
 import EventSchema from '@/server/models/Event';
 import CMError, { CMErrorType } from '@/utils/cmerror';
 import { datesBetweenFromRrule } from '@/utils/dates';
+import EventVolunteerSchema from '@/server/models/EventVolunteer';
 import RecurringEventSchema from '@/server/models/RecurringEvent';
 import { RecurringEventResponse } from '@/types/dataModel/recurringEvent';
 
@@ -151,4 +155,19 @@ export async function getEvent(eventId: string): Promise<EventResponse> {
     isRecurring: false,
   };
   return event;
+}
+
+export async function getAllVolunteersForEvent(
+  eventId: string
+): Promise<EventVolunteerResponse[]> {
+  let eventVols: EventVolunteerResponse[];
+  try {
+    await dbConnect();
+    eventVols = await EventVolunteerSchema.find({ event: eventId }).populate(
+      'volunteer'
+    );
+  } catch (error) {
+    throw new CMError(CMErrorType.InternalError);
+  }
+  return eventVols;
 }
