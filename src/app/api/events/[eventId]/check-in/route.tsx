@@ -9,7 +9,7 @@ import { UpdateVolunteerRequest } from '@/types/dataModel/volunteer';
 import { mongo } from 'mongoose';
 import { NextRequest, NextResponse } from 'next/server';
 
-// @route POST /api/events/[eventId]/check-in - Create an EventVolunteer
+// @route POST /api/events/[eventId]/check-in - Create an EventVolunteer and create a new volunteer if needed
 export async function POST(
   request: NextRequest,
   { params }: { params: { eventId: string } }
