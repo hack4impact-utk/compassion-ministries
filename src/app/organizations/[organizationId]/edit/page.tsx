@@ -2,17 +2,20 @@ import React from 'react';
 import EditOrganizationView from '@/views/organizations/EditOrganizationView';
 import { getOrganization } from '@/server/actions/Organization';
 
+// Organization Props
 interface EditOrganizationPageProps {
   params: { organizationId: string };
 }
-const EditOrganizationPage: React.FC<EditOrganizationPageProps> = async (props) => {
-  const currentOrganization = await getOrganization(props.params.organizationId);
+// Take Exisiting Organization Name using Id
+const EditOrganizationPage: React.FC<EditOrganizationPageProps> = async (
+  props
+) => {
+  const currentOrganization = JSON.parse(
+    JSON.stringify(await getOrganization(props.params.organizationId))
+  );
   return (
     <div>
-      <h1>Edit Organization Page</h1>
-      <EditOrganizationView 
-        currentOrganization={currentOrganization!}
-      />
+      <EditOrganizationView currentOrganization={currentOrganization!} />
     </div>
   );
 };
