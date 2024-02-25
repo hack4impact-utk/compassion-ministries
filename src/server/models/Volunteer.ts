@@ -25,6 +25,10 @@ const VolunteerSchema = new Schema(
       required: true,
       unique: true,
     },
+    address: {
+      type: String,
+      required: true,
+    },
     previousRole: {
       type: String,
       required: false,
