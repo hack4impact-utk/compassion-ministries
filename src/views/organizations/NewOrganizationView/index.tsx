@@ -13,6 +13,7 @@ const NewOrganizationView: React.FC = () => {
   const [organizationData, setOrganizationData] =
     useState<UpsertOrganizationFormData>({} as UpsertOrganizationFormData);
 
+  // hits post organization endpoint to add to database
   const onClick = async () => {
     await fetch('/api/organizations', {
       method: 'POST',

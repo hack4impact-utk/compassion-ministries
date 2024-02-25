@@ -22,6 +22,7 @@ function EditOrganizationView({
     setOrganizationData(newOrgData);
   };
 
+  // hit put organization endpoint
   const onClick = async () => {
     await fetch(`/api/organizations/${currentOrganization._id}`, {
       method: 'PUT',
