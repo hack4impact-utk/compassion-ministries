@@ -25,7 +25,7 @@ function VolunteerForm({
         address: currentVolunteer.address || '',
       });
     }
-  }, [currentVolunteer]);
+  }, [currentVolunteer, onChange]);
 
   return (
     <Box pt={2}>
