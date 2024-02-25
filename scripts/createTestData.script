@@ -935,6 +935,54 @@ db.events.insertMany([
     "isRecurring": true,
   },
   {
+    "_id": eventId7,
+    "name": "Smiles Dental Campaign",
+    "description": "A campaign to offer dental services and promote oral hygiene.",
+    "eventLocation": "Pinecrest Event Arena",
+    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5),
+    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5 + 3600 * 3),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5 - 3600 * 24 * 14 * 1),
+    "eventRoles": ["Dental", "Medical"],
+    "emailBodies": [
+      "Dear Volunteer, thank you for your hard work during the Smiles Dental Campaign event on Wednesday, October 16, 2024 at Pinecrest Event Arena. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
+      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
+    ],
+    "isRecurring": true,
+    "parentEvent": eventId7
+  },
+  {
+    "_id": eventId7,
+    "name": "Smiles Dental Campaign",
+    "description": "A campaign to offer dental services and promote oral hygiene.",
+    "eventLocation": "Pinecrest Event Arena",
+    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5),
+    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5 + 3600 * 3),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5 - 3600 * 24 * 14 * 2),
+    "eventRoles": ["Dental", "Medical"],
+    "emailBodies": [
+      "Dear Volunteer, thank you for your hard work during the Smiles Dental Campaign event on Wednesday, October 16, 2024 at Pinecrest Event Arena. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
+      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
+    ],
+    "isRecurring": true,
+    "parentEvent": eventId7
+  },
+  {
+    "_id": eventId7,
+    "name": "Smiles Dental Campaign",
+    "description": "A campaign to offer dental services and promote oral hygiene.",
+    "eventLocation": "Pinecrest Event Arena",
+    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5),
+    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5 + 3600 * 3),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5 - 3600 * 24 * 14 * 2),
+    "eventRoles": ["Dental", "Medical"],
+    "emailBodies": [
+      "Dear Volunteer, thank you for your hard work during the Smiles Dental Campaign event on Wednesday, October 16, 2024 at Pinecrest Event Arena. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
+      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
+    ],
+    "isRecurring": true,
+    "parentEvent": eventId7
+  },
+  {
     "_id": eventId8,
     "name": "Harvest of Health Expo",
     "description": "An expo offering health screenings, wellness workshops, and more.",
