@@ -8,6 +8,7 @@ import EventVolunteer from '../models/EventVolunteer';
 import dbConnect from '@/utils/db-connect';
 import { EventResponse } from '@/types/dataModel/event';
 import EventSchema from '../models/Event';
+import RecurringEventSchema from '../models/RecurringEvent';
 
 export async function createEvent(
   createEventReq: CreateEventRequest
@@ -53,6 +54,7 @@ export async function checkInVolunteer(
   }
 }
 
+
 export async function getEventsBetweenDates(startDate: Date, endDate: Date): 
 Promise<EventResponse[] | null> {
   await dbConnect();
@@ -64,8 +66,11 @@ Promise<EventResponse[] | null> {
       $lte: endDate,
     },
   });
-  // print out the events
+
+  const recurringEvents = await RecurringEventSchema.find().populate('event');
+  console.log(recurringEvents);
   console.log(events);
 
+  
   return null; 
 }
