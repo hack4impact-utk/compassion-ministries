@@ -9,6 +9,7 @@ import dbConnect from '@/utils/db-connect';
 import { EventResponse } from '@/types/dataModel/event';
 import EventSchema from '../models/Event';
 import RecurringEventSchema from '../models/RecurringEvent';
+import DatesBetweenFromRrule from '@/utils/dates';
 
 export async function createEvent(
   createEventReq: CreateEventRequest
@@ -68,9 +69,18 @@ Promise<EventResponse[] | null> {
   });
 
   const recurringEvents = await RecurringEventSchema.find().populate('event');
-  console.log(recurringEvents);
-  console.log(events);
+  //console.log(recurringEvents);
+  // console.log(events);
 
-  
+  for (const recurringEvent of recurringEvents) {
+    const dates = DatesBetweenFromRrule(
+      recurringEvent.recurrence,
+      startDate,
+      endDate
+    );
+    console.log(dates);
+  }
+  const eventsbetween = 
+
   return null; 
 }
