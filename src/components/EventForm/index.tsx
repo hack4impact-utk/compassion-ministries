@@ -93,6 +93,7 @@ export default function EventForm({
       <DatePicker
         label="Date"
         value={eventData.date || null}
+        minDate={dayjs()}
         onChange={(date) => {
           if (!date) return; // TODO: error handle
           onChange({ ...eventData, date });
