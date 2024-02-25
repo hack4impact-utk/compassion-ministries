@@ -43,9 +43,7 @@ export interface EventVolunteerResponse
   extends z.infer<typeof zEventVolunteerResponse> {}
 export interface VolunteerEventResponse
   extends z.infer<typeof zVolunteerEventResponse> {}
-
-export type CreateEventVolunteerRequest = z.infer<
-  typeof zCreateEventVolunteerRequest
->;
+export interface CreateEventVolunteerRequest
+  extends z.infer<typeof zCreateEventVolunteerRequest> {}
 
 export default zEventVolunteer;

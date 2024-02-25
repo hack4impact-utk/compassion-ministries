@@ -6,7 +6,7 @@ import {
   zCreateEventVolunteerRequest,
 } from '@/types/dataModel/eventVolunteer';
 import { UpdateVolunteerRequest } from '@/types/dataModel/volunteer';
-import { mongo } from 'mongoose';
+import CMError, { CMErrorResponse, CMErrorType } from '@/utils/cmerror';
 import { NextRequest, NextResponse } from 'next/server';
 
 // @route POST /api/events/[eventId]/check-in - Create an EventVolunteer and create a new volunteer if needed
@@ -18,10 +18,7 @@ export async function POST(
     // Check Event ID
     const validationEvent = zObjectId.safeParse(params.eventId);
     if (!validationEvent.success) {
-      return NextResponse.json(
-        { message: 'Invalid Event Id' },
-        { status: 400 }
-      );
+      return new CMError(CMErrorType.BadValue, 'Event Id').toNextResponse();
     }
 
     // create full request body (vol and event id come through in query params)
@@ -34,10 +31,10 @@ export async function POST(
     const validationResult = zCreateEventVolunteerRequest.safeParse(req);
 
     if (!validationResult.success) {
-      return NextResponse.json(
-        { message: 'Invalid Request Body' },
-        { status: 400 }
-      );
+      return new CMError(
+        CMErrorType.BadValue,
+        'EventVolunteer'
+      ).toNextResponse();
     }
 
     const evReq = validationResult.data;
@@ -48,12 +45,12 @@ export async function POST(
       evReq.volunteer = newVolunteerId;
     }
 
-    const res = await checkInVolunteer(validationResult.data);
+    const res = await checkInVolunteer(evReq);
 
     if (res) {
       const updateRequest: UpdateVolunteerRequest = {
-        previousRole: validationResult.data.role,
-        previousOrganization: validationResult.data.organization,
+        previousRole: evReq.role,
+        previousOrganization: evReq.organization,
       };
 
       await updateVolunteer(evReq.volunteer, updateRequest);
@@ -61,12 +58,6 @@ export async function POST(
 
     return NextResponse.json({ id: res }, { status: 201 });
   } catch (error) {
-    if (error instanceof mongo.MongoServerError) {
-      return NextResponse.json({ message: error }, { status: 409 });
-    }
-    return NextResponse.json(
-      { message: 'Internal Server Error' },
-      { status: 500 }
-    );
+    return CMErrorResponse(error);
   }
 }
