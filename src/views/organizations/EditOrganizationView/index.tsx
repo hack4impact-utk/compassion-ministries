@@ -9,24 +9,27 @@ interface EditOrganizationViewProps {
     currentOrganization: OrganizationResponse;
 }
 
-const EditOrganizationView: React.FC<EditOrganizationViewProps> = ({ currentOrganization }) => {
-    const [organizationData, setOrganizationData] = useState<UpsertOrganizationFormData>(
-        {} as UpsertOrganizationFormData
-      );
-    
-    const placeholderOnChange = (organizationData: any) => {
+function EditOrganizationView({
+  currentOrganization
+}: EditOrganizationViewProps){
+  const [organizationData, setOrganizationData] = useState<UpsertOrganizationFormData>(
+    {} as UpsertOrganizationFormData
+  );
+
+  const placeholderOnChange = (organizationData: any) => {
     setOrganizationData(organizationData);
-    console.log(`From Edit Org Comp: ${organizationData}`);
+    console.log(`From Edit Org Comp: ${organizationData.name}`);
   };
 
+  // Use organizationData as the initial data for the OrganizationForm
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
         Edit Organization
       </Typography>
       <OrganizationForm
-        onChange={placeholderOnChange}
-        organizationData={{ name: currentOrganization.name }} // Pass initial data
+        onChange={placeholderOnChange} // Update organizationData state directly
+        organizationData={organizationData} // Pass updated organizationData state
         currentOrganization={currentOrganization}
       />
       <Box mt={2}>
@@ -36,6 +39,5 @@ const EditOrganizationView: React.FC<EditOrganizationViewProps> = ({ currentOrga
       </Box>
     </Container>
   );
-};
-
+}
 export default EditOrganizationView;

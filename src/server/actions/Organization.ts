@@ -20,9 +20,7 @@ export async function getOrganization(
   let organization: OrganizationResponse | null = null;
   try{
     await dbConnect();
-    organization = await OrganizationSchema.findById(organizationId).populate(
-      'previoudOrganization'
-    );
+    organization = await OrganizationSchema.findById(organizationId);
   } catch (error){
     throw new CMError (CMErrorType.InternalError);
   }
