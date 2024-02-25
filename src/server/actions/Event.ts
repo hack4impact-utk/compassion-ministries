@@ -61,7 +61,7 @@ export async function getEvent(eventId: string): Promise<EventResponse> {
     throw new CMError(CMErrorType.InternalError);
   }
 
-  // yo where's my event??
+  // No event has been located within the database.
   if (!doc) {
     throw new CMError(CMErrorType.NoSuchKey, 'Event');
   }
@@ -71,7 +71,7 @@ export async function getEvent(eventId: string): Promise<EventResponse> {
     throw new CMError(CMErrorType.InternalError);
   }
 
-  // cast all this shit to the same exact shit
+  // cast all this stuff to the same stuff
   const event: EventResponse = {
     name: doc.name,
     description: doc.description,
