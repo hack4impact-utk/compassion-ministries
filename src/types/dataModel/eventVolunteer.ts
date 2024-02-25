@@ -1,5 +1,8 @@
 import { z } from 'zod';
-import zVolunteer, { zVolunteerResponse } from './volunteer';
+import zVolunteer, {
+  zCreateVolunteerRequest,
+  zVolunteerResponse,
+} from './volunteer';
 import zOrganization from './organization';
 import zBase, { zObjectId } from './base';
 import { zRole } from './roles';
@@ -21,7 +24,7 @@ const zEventVolunteerEntity = zEventVolunteer.extend({
 
 export const zCreateEventVolunteerRequest = zEventVolunteer.extend({
   organization: zObjectId.optional(),
-  volunteer: zObjectId,
+  volunteer: z.union([zObjectId, zCreateVolunteerRequest]),
   event: zObjectId,
 });
 
@@ -40,7 +43,9 @@ export interface EventVolunteerResponse
   extends z.infer<typeof zEventVolunteerResponse> {}
 export interface VolunteerEventResponse
   extends z.infer<typeof zVolunteerEventResponse> {}
-export interface CreateEventVolunteerRequest
-  extends z.infer<typeof zCreateEventVolunteerRequest> {}
+
+export type CreateEventVolunteerRequest = z.infer<
+  typeof zCreateEventVolunteerRequest
+>;
 
 export default zEventVolunteer;
