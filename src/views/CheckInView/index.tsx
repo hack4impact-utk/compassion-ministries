@@ -3,7 +3,10 @@
 import CheckInForm from '@/components/CheckInForm';
 import type { EventResponse } from '@/types/dataModel/event';
 import type { OrganizationResponse } from '@/types/dataModel/organization';
-import type { VolunteerResponse } from '@/types/dataModel/volunteer';
+import type {
+  CreateVolunteerRequest,
+  VolunteerResponse,
+} from '@/types/dataModel/volunteer';
 import { CheckInFormData } from '@/types/forms/checkIn';
 import { transformCheckInFormDataToCreateEventVolunteerRequest } from '@/utils/transformers/check-in';
 import { Button, Typography } from '@mui/material';
@@ -22,14 +25,16 @@ export default function CheckInView(props: CheckInViewProps) {
   );
 
   const onCheckIn = async () => {
-    // find volunteer by email
-    const volunteer = props.volunteers.find((v) => v.email === formData.email);
-
-    // TODO: better error handling
-    if (!volunteer) {
-      console.error(`volunteer with email ${formData.email} not found`);
-      return;
-    }
+    // find volunteer by email or set volunteer to new volunteer req
+    const volunteer: string | CreateVolunteerRequest = props.volunteers.find(
+      (v) => v.email === formData.email
+    )?._id ?? {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      phoneNumber: formData.phoneNumber,
+      address: formData.address,
+    };
 
     const eventVolReq = transformCheckInFormDataToCreateEventVolunteerRequest(
       formData,
@@ -39,16 +44,13 @@ export default function CheckInView(props: CheckInViewProps) {
 
     // make post req
     try {
-      const res = await fetch(
-        `/api/events/${props.event._id}/volunteers/${volunteer._id}/check-in`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(eventVolReq),
-        }
-      );
+      const res = await fetch(`/api/events/${props.event._id}/check-in`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(eventVolReq),
+      });
 
       if (res.status === 201) {
         // TODO: validate response and show success message
