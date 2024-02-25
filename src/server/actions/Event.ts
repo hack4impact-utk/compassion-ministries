@@ -3,12 +3,11 @@ import Event from '../models/Event';
 import { createRecurringEvent } from './RecurringEvent';
 import {
   CreateEventVolunteerRequest,
-  EventVolunteerResponse,
 } from '@/types/dataModel/eventVolunteer';
 import EventVolunteer from '../models/EventVolunteer';
 import dbConnect from '@/utils/db-connect';
 import { EventResponse } from '@/types/dataModel/event';
-import EventSchema from '@server/models/Event';
+import EventSchema from '../models/Event';
 
 export async function createEvent(
   createEventReq: CreateEventRequest
@@ -54,10 +53,19 @@ export async function checkInVolunteer(
   }
 }
 
-export async function getEventsBetweenDates(startDate: Date, endDate: Date):
-Promise<EventResponse[]> {
+export async function getEventsBetweenDates(startDate: Date, endDate: Date): 
+Promise<EventResponse[] | null> {
   await dbConnect();
   
-  const events = await EventSchema.find( { startDate})
-  // find all events from the EventSchema where startDate <= Event.date <= EndDate
+  // look for events that are between the start and and date
+  const events =  await EventSchema.find({
+    date: {
+      $gte: startDate,
+      $lte: endDate,
+    },
+  });
+  // print out the events
+  console.log(events);
+
+  return null; 
 }
