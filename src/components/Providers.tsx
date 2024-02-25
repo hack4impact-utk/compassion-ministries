@@ -1,6 +1,7 @@
 'use client';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { ConfirmProvider } from 'material-ui-confirm';
 import { SessionProvider } from 'next-auth/react';
 import React, { ReactNode } from 'react';
 
@@ -13,7 +14,7 @@ const Providers = (props: Props) => {
   return (
     <SessionProvider>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        {props.children}
+        <ConfirmProvider>{props.children}</ConfirmProvider>
       </LocalizationProvider>
     </SessionProvider>
   );

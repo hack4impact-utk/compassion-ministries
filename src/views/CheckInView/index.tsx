@@ -1,6 +1,7 @@
 'use client';
 
 import CheckInForm from '@/components/CheckInForm';
+import useRoleConfirmation from '@/hooks/useRoleConfirmation';
 import type { EventResponse } from '@/types/dataModel/event';
 import type { OrganizationResponse } from '@/types/dataModel/organization';
 import type {
@@ -23,9 +24,13 @@ export default function CheckInView(props: CheckInViewProps) {
   const [formData, setFormData] = useState<CheckInFormData>(
     {} as CheckInFormData
   );
+  const confirm = useRoleConfirmation();
 
   const onCheckIn = async () => {
     // find volunteer by email or set volunteer to new volunteer req
+    const foundVolunteer = props.volunteers.find(
+      (v) => v.email === formData.email
+    );
     const volunteer: string | CreateVolunteerRequest = props.volunteers.find(
       (v) => v.email === formData.email
     )?._id ?? {
@@ -35,6 +40,40 @@ export default function CheckInView(props: CheckInViewProps) {
       phoneNumber: formData.phoneNumber,
       address: formData.address,
     };
+
+    // TODO: make this work when there is a new volunteer
+    if (
+      typeof volunteer === 'string' &&
+      formData.role !== 'Food' &&
+      !foundVolunteer?.roleVerifications?.find(
+        (rv) => rv.role === formData.role
+      )
+    ) {
+      const verifier = await confirm(formData.role);
+      if (!verifier) {
+        return;
+      }
+      try {
+        const res = await fetch(`/api/volunteers/${volunteer}/verifications`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            role: formData.role,
+            verifier,
+          }),
+        });
+
+        if (res.status !== 204) {
+          console.error('failed to verify volunteer');
+          return;
+        }
+      } catch (e) {
+        console.error('failed to verify volunteer', e);
+        return;
+      }
+    }
 
     const eventVolReq = transformCheckInFormDataToCreateEventVolunteerRequest(
       formData,
