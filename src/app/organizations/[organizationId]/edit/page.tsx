@@ -13,7 +13,12 @@ const EditOrganizationPage: React.FC<EditOrganizationPageProps> = async (
   const currentOrganization = JSON.parse(
     JSON.stringify(await getOrganization(props.params.organizationId))
   );
-  return <EditOrganizationView currentOrganization={currentOrganization!} />;
+
+  if (!currentOrganization) {
+    return <div>Failed to load organization</div>;
+  }
+
+  return <EditOrganizationView currentOrganization={currentOrganization} />;
 };
 
 export default EditOrganizationPage;

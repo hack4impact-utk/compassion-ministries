@@ -18,8 +18,8 @@ function EditOrganizationView({
     useState<UpsertOrganizationFormData>({} as UpsertOrganizationFormData);
 
   // Update the organization Name here
-  const onChange = () => {
-    setOrganizationData(organizationData);
+  const onChange = (newOrgData: UpsertOrganizationFormData) => {
+    setOrganizationData(newOrgData);
   };
 
   const onClick = async () => {
