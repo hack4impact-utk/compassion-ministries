@@ -1,3 +1,4 @@
+'use client';
 import Event from '@/components/Event';
 import { EventResponse } from '@/types/dataModel/event';
 import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';

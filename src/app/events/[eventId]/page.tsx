@@ -8,9 +8,11 @@ export default async function EventPage({
 }: {
   params: { eventId: string };
 }) {
-  const event: EventResponse = await getEvent(params.eventId);
-  const vols: EventVolunteerResponse[] = await getAllVolunteersForEvent(
-    params.eventId
+  const event: EventResponse = JSON.parse(
+    JSON.stringify(await getEvent(params.eventId))
+  );
+  const vols: EventVolunteerResponse[] = JSON.parse(
+    JSON.stringify(await getAllVolunteersForEvent(params.eventId))
   );
   return <EventView event={event} eventVolunteers={vols} />;
 }
