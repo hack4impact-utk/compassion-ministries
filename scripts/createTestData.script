@@ -812,6 +812,7 @@ db.events.insertMany([
 // RECURRING EVENT INSTANCES
 db.events.insertMany([
   {
+    _id: eventId6,
     "name": "Food for Thought Evening",
     "description": "An evening event focused on discussing and distributing nutritious food.",
     "eventLocation": "Liberty Community Hall",
@@ -824,8 +825,9 @@ db.events.insertMany([
     ],
     "isRecurring": true,
   },
+  /*
   {
-    "_id": eventId6,
+    "_id": eventId7,
     "name": "Food for Thought Evening",
     "description": "An evening event focused on discussing and distributing nutritious food.",
     "eventLocation": "Liberty Community Hall",
@@ -841,7 +843,7 @@ db.events.insertMany([
     "parentEvent": eventId6
   },
   {
-    "_id": eventId6,
+    "_id": eventId8,
     "name": "Food for Thought Evening",
     "description": "An evening event focused on discussing and distributing nutritious food.",
     "eventLocation": "Liberty Community Hall",
@@ -857,7 +859,7 @@ db.events.insertMany([
     "parentEvent": eventId6
   },
   {
-    "_id": eventId6,
+    "_id": eventId9,
     "name": "Food for Thought Evening",
     "description": "An evening event focused on discussing and distributing nutritious food.",
     "eventLocation": "Liberty Community Hall",
@@ -873,7 +875,7 @@ db.events.insertMany([
     "parentEvent": eventId6
   },
   {
-    "_id": eventId6,
+    "_id": eventId10,
     "name": "Food for Thought Evening",
     "description": "An evening event focused on discussing and distributing nutritious food.",
     "eventLocation": "Liberty Community Hall",
@@ -889,7 +891,7 @@ db.events.insertMany([
     "parentEvent": eventId6
   },
   {
-    "_id": eventId6,
+    "_id": eventId11,
     "name": "Food for Thought Evening",
     "description": "An evening event focused on discussing and distributing nutritious food.",
     "eventLocation": "Knoxville County Courthouse",
@@ -905,7 +907,7 @@ db.events.insertMany([
     "parentEvent": eventId6
   },
   {
-    "_id": eventId6,
+    "_id": eventId12,
     "name": "Food for Thought Evening",
     "description": "An evening event focused on discussing and distributing nutritious food.",
     "eventLocation": "Liberty Community Hall",
@@ -919,9 +921,9 @@ db.events.insertMany([
     ],
     "isRecurring": true,
     "parentEvent": eventId6
-  },
+  },*/
   {
-    "_id": eventId7,
+    "_id": eventId13,
     "name": "Smiles Dental Campaign",
     "description": "A campaign to offer dental services and promote oral hygiene.",
     "eventLocation": "Pinecrest Event Arena",
@@ -934,8 +936,9 @@ db.events.insertMany([
     ],
     "isRecurring": true,
   },
+  /*
   {
-    "_id": eventId7,
+    "_id": eventId14,
     "name": "Smiles Dental Campaign",
     "description": "A campaign to offer dental services and promote oral hygiene.",
     "eventLocation": "Pinecrest Event Arena",
@@ -948,10 +951,10 @@ db.events.insertMany([
       "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
     ],
     "isRecurring": true,
-    "parentEvent": eventId7
+    "parentEvent": eventId13
   },
   {
-    "_id": eventId7,
+    "_id": eventId15,
     "name": "Smiles Dental Campaign",
     "description": "A campaign to offer dental services and promote oral hygiene.",
     "eventLocation": "Pinecrest Event Arena",
@@ -964,10 +967,10 @@ db.events.insertMany([
       "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
     ],
     "isRecurring": true,
-    "parentEvent": eventId7
+    "parentEvent": eventId13
   },
   {
-    "_id": eventId7,
+    "_id": eventId16,
     "name": "Smiles Dental Campaign",
     "description": "A campaign to offer dental services and promote oral hygiene.",
     "eventLocation": "Pinecrest Event Arena",
@@ -980,10 +983,10 @@ db.events.insertMany([
       "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
     ],
     "isRecurring": true,
-    "parentEvent": eventId7
-  },
+    "parentEvent": eventId13
+  },*/
   {
-    "_id": eventId8,
+    "_id": eventId17,
     "name": "Harvest of Health Expo",
     "description": "An expo offering health screenings, wellness workshops, and more.",
     "eventLocation": "Oceanview Pavilion",
@@ -997,7 +1000,7 @@ db.events.insertMany([
     "isRecurring": true,
   },
   {
-    "_id": eventId9,
+    "_id": eventId18,
     "name": "Well-being and Care Fest",
     "description": "A festival celebrating health care workers and offering community health services.",
     "eventLocation": "Mountainview Conference Center",
@@ -1011,7 +1014,7 @@ db.events.insertMany([
     "isRecurring": true,
   },
   {
-    "_id": eventId10,
+    "_id": eventId19,
     "name": "Nourish to Flourish Initiative",
     "description": "An initiative to provide nourishing meals and nutrition education to those in need.",
     "eventLocation": "Lakeside Retreat",
@@ -1023,6 +1026,33 @@ db.events.insertMany([
       "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
     ],
     "isRecurring": true,
+  }
+])
+
+// creates recurringEventId variables
+for (let i = 1; i <= 10; i++) {
+  this[`recurringEventId${i}`] = ObjectId();
+}
+db.recurringEvents.insertMany([
+  {
+    "event": eventId6,
+    "recurrence": "you do this idk"
+  },
+  {
+    "event": eventId13,
+    "recurrence": "you do this idk"
+  },
+  {
+    "event": eventId17,
+    "recurrence": "you do this idk"
+  },
+  {
+    "event": eventId18,
+    "recurrence": "you do this idk"
+  },
+  {
+    "event": eventId19,
+    "recurrence": "you do this idk"
   }
 ])
 
