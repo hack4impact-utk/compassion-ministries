@@ -98,7 +98,9 @@ export default function EventForm({
         sx={{ mt: 2 }}
       />
       <FormControl component="fieldset" sx={{ m: 3 }} variant="standard">
-        <FormLabel component="legend">Which types of event is this?</FormLabel>
+        <FormLabel component="legend">
+          What services will be offered at this event?
+        </FormLabel>
         <FormGroup>
           {roles.map((role) => (
             <FormControlLabel
