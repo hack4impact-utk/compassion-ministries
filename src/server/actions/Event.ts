@@ -6,11 +6,9 @@ import {
   EventVolunteerResponse,
 } from '@/types/dataModel/eventVolunteer';
 import EventVolunteer from '../models/EventVolunteer';
+import EventVolunteerSchema from '@/server/models/EventVolunteer';
 import dbConnect from '@/utils/db-connect';
 import EventSchema from '@/server/models/Event';
-import EventVolunteerSchema from '@/server/models/EventVolunteer';
-import VolunteerSchema from '@/server/models/Volunteer';
-VolunteerSchema;
 import CMError, { CMErrorType } from '@/utils/cmerror';
 
 export async function createEvent(
@@ -57,6 +55,21 @@ export async function checkInVolunteer(
   }
 }
 
+export async function getAllVolunteersForEvent(
+  eventId: string
+): Promise<EventVolunteerResponse[]> {
+  let eventVols: EventVolunteerResponse[];
+  try {
+    await dbConnect();
+    eventVols = await EventVolunteerSchema.find({ event: eventId }).populate(
+      'volunteer'
+    );
+  } catch (error) {
+    throw new CMError(CMErrorType.InternalError);
+  }
+  return eventVols;
+}
+
 export async function getEvent(eventId: string): Promise<EventResponse> {
   let doc;
 
@@ -79,34 +92,9 @@ export async function getEvent(eventId: string): Promise<EventResponse> {
 
   // cast all this stuff to the same stuff
   const event: EventResponse = {
-    name: doc.name,
-    description: doc.description,
-    eventLocation: doc.eventLocation,
-    startAt: doc.startAt,
-    endAt: doc.endAt,
-    date: doc.date,
-    eventRoles: doc.eventRoles,
-    emailBodies: doc.emailBodies,
-    isRecurring: doc.isRecurring,
-    parentEvent: doc.parentEvent,
+    ...doc,
     _id: doc.id,
-    createdAt: doc.createdAt,
-    updatedAt: doc.updatedAt,
+    isRecurring: false,
   };
   return event;
-}
-
-export async function getAllVolunteersForEvent(
-  eventId: string
-): Promise<EventVolunteerResponse[]> {
-  let eventVols: EventVolunteerResponse[];
-  try {
-    await dbConnect();
-    eventVols = await EventVolunteerSchema.find({ event: eventId }).populate(
-      'volunteer'
-    );
-  } catch (error) {
-    throw new CMError(CMErrorType.InternalError);
-  }
-  return eventVols;
 }
