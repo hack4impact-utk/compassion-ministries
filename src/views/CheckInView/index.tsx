@@ -31,9 +31,7 @@ export default function CheckInView(props: CheckInViewProps) {
     const foundVolunteer = props.volunteers.find(
       (v) => v.email === formData.email
     );
-    const volunteer: string | CreateVolunteerRequest = props.volunteers.find(
-      (v) => v.email === formData.email
-    )?._id ?? {
+    const volunteer: string | CreateVolunteerRequest = foundVolunteer?._id ?? {
       firstName: formData.firstName,
       lastName: formData.lastName,
       email: formData.email,
