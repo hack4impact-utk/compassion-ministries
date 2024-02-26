@@ -4,9 +4,9 @@ import dbConnect from '@/utils/db-connect';
 import CMError, { CMErrorType } from '@/utils/cmerror';
 
 /**
- * Get all volunteers for a specific event
+ * Get all volunteers for a specific organization
  * @param eventId // Id of the event
- * @returns // All volunteers for the event
+ * @returns // All volunteers for the organization
  */
 export async function getEventVolunteersByOrganization(
   organizationId: string
