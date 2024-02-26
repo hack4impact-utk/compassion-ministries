@@ -1,17 +1,18 @@
 'use client';
 import { OrganizationResponse } from '@/types/dataModel/organization';
 import React from 'react';
-import  OrganizationList  from '@/components/organizations/OrganizationList';
+import OrganizationInfo from '@/components/Organization';
 
 interface OrganizationViewProps {
   organization: OrganizationResponse;
 }
 
 export function OrganizationView({ organization }: OrganizationViewProps) {
-    return (
+  // TODO: get volunteers from organization and pass them to the OrganizationList
+  return (
     <div>
       <h1>Organization</h1>
-      <OrganizationList organizationResponses={[organization]} />
+      <OrganizationInfo organization={[organization]} />
       <button>Edit</button>
     </div>
   );
