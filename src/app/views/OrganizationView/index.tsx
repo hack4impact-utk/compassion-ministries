@@ -1,17 +1,17 @@
 'use client';
 import { OrganizationResponse } from '@/types/dataModel/organization';
 import React from 'react';
+import  OrganizationList  from '@/components/organizations/OrganizationList';
 
 interface OrganizationViewProps {
   organization: OrganizationResponse;
 }
 
 export function OrganizationView({ organization }: OrganizationViewProps) {
-  // TODO: add volunteers to this pavge
     return (
     <div>
       <h1>Organization</h1>
-      <p>Name: {organization.name}</p>
+      <OrganizationList organizationResponses={[organization]} />
       <button>Edit</button>
     </div>
   );
