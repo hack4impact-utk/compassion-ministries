@@ -15,7 +15,7 @@ export async function getEventVolunteersByOrganization(
     await dbConnect();
     const volunteers: EventVolunteerResponse[] = await EventVolunteerShema.find(
       {
-        organization: organizationId
+        organization: organizationId,
       }
     );
     // console.log(volunteers);
