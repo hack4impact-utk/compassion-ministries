@@ -39,36 +39,23 @@ export default function CheckInView(props: CheckInViewProps) {
       address: formData.address,
     };
 
-    // TODO: make this work when there is a new volunteer
-    if (
-      typeof volunteer === 'string' &&
-      formData.role !== 'Food' &&
-      !foundVolunteer?.roleVerifications?.find(
-        (rv) => rv.role === formData.role
-      )
-    ) {
-      const verifier = await confirm(formData.role);
-      if (!verifier) {
-        return;
-      }
-      try {
-        const res = await fetch(`/api/volunteers/${volunteer}/verifications`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            role: formData.role,
-            verifier,
-          }),
-        });
+    let verifier: string | null = null;
 
-        if (res.status !== 204) {
-          console.error('failed to verify volunteer');
-          return;
-        }
-      } catch (e) {
-        console.error('failed to verify volunteer', e);
+    // if:
+    // - role is not food
+    // - volunteer is an object (new volunteer)
+    // - or volunteer does not have a role verification for the role
+    // then confirm the role
+    if (
+      formData.role !== 'Food' &&
+      (typeof volunteer === 'object' ||
+        !foundVolunteer?.roleVerifications?.find(
+          (rv) => rv.role === formData.role
+        ))
+    ) {
+      verifier = await confirm(formData.role);
+      // return if not confirmed
+      if (!verifier) {
         return;
       }
     }
@@ -76,7 +63,8 @@ export default function CheckInView(props: CheckInViewProps) {
     const eventVolReq = transformCheckInFormDataToCreateEventVolunteerRequest(
       formData,
       volunteer,
-      props.event
+      props.event,
+      verifier || undefined
     );
 
     // make post req

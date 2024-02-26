@@ -13,6 +13,8 @@ import { datesBetweenFromRrule } from '@/utils/dates';
 import EventVolunteerSchema from '@/server/models/EventVolunteer';
 import RecurringEventSchema from '@/server/models/RecurringEvent';
 import { RecurringEventResponse } from '@/types/dataModel/recurringEvent';
+import { upsertVolunteerRoleVerification } from './Volunteer';
+import { VerifiedRole } from '@/types/dataModel/roles';
 
 export async function createEvent(
   createEventReq: CreateEventRequest
@@ -44,6 +46,20 @@ export async function checkInVolunteer(
 ): Promise<string> {
   try {
     await dbConnect();
+
+    // if there is a verifier, we need to create a role verification
+    if (createEventVolunteerRequest.verifier) {
+      await upsertVolunteerRoleVerification(
+        createEventVolunteerRequest.volunteer as string,
+        {
+          role: createEventVolunteerRequest.role as VerifiedRole,
+          verifier: createEventVolunteerRequest.verifier,
+        }
+      );
+
+      // remove the verifier from the request
+      delete createEventVolunteerRequest.verifier;
+    }
 
     const res = await EventVolunteer.create(createEventVolunteerRequest);
 
