@@ -13,11 +13,14 @@ export async function getEventVolunteersByOrganization(
 ): Promise<EventVolunteerResponse[]> {
   try {
     await dbConnect();
-    const events: EventVolunteerResponse[] = await EventVolunteerShema.find({
-      organization: organizationId,
-    });
+    const volunteers: EventVolunteerResponse[] = await EventVolunteerShema.find(
+      {
+        organization: organizationId
+      }
+    );
+    // console.log(volunteers);
 
-    return events;
+    return volunteers;
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }
