@@ -24,7 +24,7 @@ export default function CheckInView(props: CheckInViewProps) {
   const [formData, setFormData] = useState<CheckInFormData>(
     {} as CheckInFormData
   );
-  const confirm = useRoleConfirmation();
+  const confirmRole = useRoleConfirmation();
 
   const onCheckIn = async () => {
     // find volunteer by email or set volunteer to new volunteer req
@@ -53,7 +53,7 @@ export default function CheckInView(props: CheckInViewProps) {
           (rv) => rv.role === formData.role
         ))
     ) {
-      verifier = await confirm(formData.role);
+      verifier = await confirmRole(formData.role);
       // return if not confirmed
       if (!verifier) {
         return;
