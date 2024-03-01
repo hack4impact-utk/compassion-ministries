@@ -3,6 +3,7 @@ import {
   CreateVolunteerRequest,
   UpdateVolunteerRequest,
 } from '@/types/dataModel/volunteer';
+import EventVolunteerShema from '../models/EventVolunteer';
 import {
   EventVolunteerEntity,
   EventVolunteerResponse,
@@ -256,4 +257,28 @@ export async function getAllEventsForVolunteer(
     throw new CMError(CMErrorType.InternalError);
   }
   return events;
+}
+
+/**
+ * Get all volunteers for a specific organization
+ * @param organizationId // Id of the organization
+ * @returns // All volunteers for the organization */
+export async function getVolunteersByOrganization(
+  organizationId: string
+): Promise<VolunteerEntity[]> {
+  try {
+    await dbConnect();
+    const eventVolunteers: EventVolunteerResponse[] =
+      await EventVolunteerShema.find({
+        organization: organizationId,
+      }).distinct('volunteer');
+
+    const volunteers: VolunteerEntity[] = await VolunteerSchema.find({
+      _id: { $in: eventVolunteers },
+    });
+
+    return volunteers;
+  } catch (error) {
+    throw new CMError(CMErrorType.InternalError);
+  }
 }
