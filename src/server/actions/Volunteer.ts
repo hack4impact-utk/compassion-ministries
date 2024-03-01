@@ -271,11 +271,13 @@ export async function getVolunteersByOrganization(
     const eventVolunteers: EventVolunteerResponse[] =
       await EventVolunteerShema.find({
         organization: organizationId,
-      }).distinct('volunteer');
+      })
+        .distinct('volunteer')
+        .populate('volunteer');
 
-    const volunteers: VolunteerEntity[] = await VolunteerSchema.find({
-      _id: { $in: eventVolunteers },
-    });
+    const volunteers: VolunteerEntity[] = eventVolunteers.map(
+      (eventVolunteer) => eventVolunteer.volunteer
+    );
 
     return volunteers;
   } catch (error) {
