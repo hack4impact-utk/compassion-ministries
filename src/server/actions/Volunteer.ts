@@ -265,7 +265,7 @@ export async function getAllEventsForVolunteer(
  * @returns // All volunteers for the organization */
 export async function getVolunteersByOrganization(
   organizationId: string
-): Promise<VolunteerEntity[]> {
+): Promise<VolunteerResponse[]> {
   try {
     await dbConnect();
     const eventVolunteers: EventVolunteerResponse[] =
@@ -273,12 +273,15 @@ export async function getVolunteersByOrganization(
         organization: organizationId,
       })
         .distinct('volunteer')
-        .populate('volunteer');
-
-    const volunteers: VolunteerEntity[] = eventVolunteers.map(
+        .populate('volunteer')
+        .populate({
+          path: 'volunteer',
+          populate: { path: 'previousOrganization' },
+        });
+    const volunteers: VolunteerResponse[] = eventVolunteers.map(
       (eventVolunteer) => eventVolunteer.volunteer
     );
-
+    console.log(volunteers);
     return volunteers;
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
