@@ -4,7 +4,8 @@ import { TextField } from '@mui/material';
 import { useEffect, useState, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
-export const SearchField = () => {
+
+export default function SearchField() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const pathname = usePathname();
@@ -38,13 +39,11 @@ export const SearchField = () => {
     // Render the TextField component for search input
     <TextField
       label="Search"
-      value={searchQuery || searchParams.get('q')}
+      value={searchQuery || searchParams.get('q') || ''}
       onChange={handleSearchChange}
       variant="outlined"
       fullWidth
       InputLabelProps={{ shrink: Boolean(searchParams) }}
     />
   );
-};
-
-export default SearchField;
+}
