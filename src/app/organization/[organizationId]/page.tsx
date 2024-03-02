@@ -1,5 +1,5 @@
+import { OrganizationView } from '@/app/views/OrganizationView';
 import { getOrganization } from '@/server/actions/Organization';
-import OrganizationView from '../views/Organization/OrganizationView';
 
 export default async function Page({
   params,

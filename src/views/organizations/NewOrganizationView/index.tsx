@@ -13,6 +13,14 @@ const NewOrganizationView: React.FC = () => {
   const [organizationData, setOrganizationData] =
     useState<UpsertOrganizationFormData>({} as UpsertOrganizationFormData);
 
+  // hits post organization endpoint to add to database
+  const onClick = async () => {
+    await fetch('/api/organizations', {
+      method: 'POST',
+      body: JSON.stringify(organizationData),
+    });
+  };
+
   return (
     <Container>
       <Typography variant="h4" gutterBottom mt={2}>
@@ -23,7 +31,7 @@ const NewOrganizationView: React.FC = () => {
         onChange={placeholderOnChange}
       />
       <Box mt={2}>
-        <Button variant="contained" fullWidth>
+        <Button variant="contained" onClick={onClick} fullWidth>
           Submit
         </Button>
       </Box>

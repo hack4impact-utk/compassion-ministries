@@ -6,7 +6,7 @@ import {
 import EventVolunteerShema from '../models/EventVolunteer';
 import {
   EventVolunteerEntity,
-  EventVolunteerResponse,
+  VolunteerEventResponse,
 } from '@/types/dataModel/eventVolunteer';
 import VolunteerSchema from '@/server/models/Volunteer';
 import EventVolunteerSchema from '@/server/models/EventVolunteer';
@@ -223,7 +223,7 @@ export async function softDeleteVolunteer(
  */
 export async function getVolunteer(
   volunteerId: string
-): Promise<VolunteerResponse | null> {
+): Promise<VolunteerResponse> {
   let volunteer: VolunteerResponse | null = null;
   try {
     await dbConnect();
@@ -245,14 +245,13 @@ export async function getVolunteer(
  */
 export async function getAllEventsForVolunteer(
   volunteerId: string
-): Promise<EventVolunteerResponse[]> {
-  let events: EventVolunteerResponse[];
+): Promise<VolunteerEventResponse[]> {
+  let events: VolunteerEventResponse[];
   try {
     await dbConnect();
     events = await EventVolunteerSchema.find({ volunteer: volunteerId })
-      .populate('volunteer')
+      .populate('event')
       .populate('organization');
-    // TODO: populate events
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }
