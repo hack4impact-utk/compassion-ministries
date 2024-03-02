@@ -3,13 +3,12 @@ import {
   CreateVolunteerRequest,
   UpdateVolunteerRequest,
 } from '@/types/dataModel/volunteer';
-import EventVolunteerShema from '../models/EventVolunteer';
+import EventVolunteerSchema from '../models/EventVolunteer';
 import {
   EventVolunteerEntity,
   EventVolunteerResponse,
 } from '@/types/dataModel/eventVolunteer';
 import VolunteerSchema from '@/server/models/Volunteer';
-import EventVolunteerSchema from '@/server/models/EventVolunteer';
 import dbConnect from '@/utils/db-connect';
 import { VolunteerEntity } from '@/types/dataModel/volunteer';
 import { VerifiedRole } from '@/types/dataModel/roles';
@@ -269,19 +268,13 @@ export async function getVolunteersByOrganization(
   try {
     await dbConnect();
     const eventVolunteers: EventVolunteerResponse[] =
-      await EventVolunteerShema.find({
+      await EventVolunteerSchema.find({
         organization: organizationId,
-      })
-        .distinct('volunteer')
-        .populate('volunteer')
-        .populate({
-          path: 'volunteer',
-          populate: { path: 'previousOrganization' },
-        });
-    const volunteers: VolunteerResponse[] = eventVolunteers.map(
+      }).populate('volunteer');
+    
+      const volunteers: VolunteerResponse[] = eventVolunteers.map(
       (eventVolunteer) => eventVolunteer.volunteer
     );
-    console.log(volunteers);
     return volunteers;
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
