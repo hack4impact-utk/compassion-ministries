@@ -1,15 +1,20 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { TextField } from '@mui/material';
-import { useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
-
-export default function SearchField() {
+export const SearchField = () => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
+  useEffect(() => {
+    // Set initial value of searchQuery from URL query parameter if available
+    const q = router.refresh || {};
+    console.log(q);
+  }, [router.refresh]);
 
   // Handle changes in the search input
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,11 +38,13 @@ export default function SearchField() {
     // Render the TextField component for search input
     <TextField
       label="Search"
-      value={searchQuery || searchParams.get('q') || ''}
+      value={searchQuery || searchParams.get('q')}
       onChange={handleSearchChange}
       variant="outlined"
       fullWidth
       InputLabelProps={{ shrink: Boolean(searchParams) }}
     />
   );
-}
+};
+
+export default SearchField;
