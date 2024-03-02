@@ -7,6 +7,7 @@ import EventVolunteerSchema from '../models/EventVolunteer';
 import {
   EventVolunteerEntity,
   VolunteerEventResponse,
+  EventVolunteerResponse,
 } from '@/types/dataModel/eventVolunteer';
 import VolunteerSchema from '@/server/models/Volunteer';
 import dbConnect from '@/utils/db-connect';
