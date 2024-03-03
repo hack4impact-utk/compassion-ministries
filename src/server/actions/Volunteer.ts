@@ -279,7 +279,19 @@ export async function getVolunteersByOrganization(
     const volunteers: VolunteerResponse[] = eventVolunteers.map(
       (eventVolunteer) => eventVolunteer.volunteer
     );
-    return volunteers;
+
+    const uniqueVolunteers: VolunteerResponse[] = [];
+    volunteers.forEach((volunteer) => {
+      if (
+        !uniqueVolunteers.some(
+          (uniqueVolunteer) => uniqueVolunteer._id === volunteer._id
+        )
+      ) {
+        uniqueVolunteers.push(volunteer);
+      }
+    });
+
+    return uniqueVolunteers;
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }
