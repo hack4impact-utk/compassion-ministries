@@ -266,13 +266,17 @@ export async function getVolunteersByOrganization(
   organizationId: string
 ): Promise<VolunteerResponse[]> {
   try {
-    await dbConnect();
     const eventVolunteers: EventVolunteerResponse[] =
       await EventVolunteerSchema.find({
         organization: organizationId,
-      }).populate('volunteer');
-    
-      const volunteers: VolunteerResponse[] = eventVolunteers.map(
+      })
+        .populate('volunteer')
+        .populate({
+          path: 'volunteer',
+          populate: { path: 'previousOrganization' },
+        });
+
+    const volunteers: VolunteerResponse[] = eventVolunteers.map(
       (eventVolunteer) => eventVolunteer.volunteer
     );
     return volunteers;
