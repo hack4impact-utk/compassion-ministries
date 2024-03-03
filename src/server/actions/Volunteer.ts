@@ -3,12 +3,13 @@ import {
   CreateVolunteerRequest,
   UpdateVolunteerRequest,
 } from '@/types/dataModel/volunteer';
+import EventVolunteerSchema from '../models/EventVolunteer';
 import {
   EventVolunteerEntity,
+  VolunteerEventResponse,
   EventVolunteerResponse,
 } from '@/types/dataModel/eventVolunteer';
 import VolunteerSchema from '@/server/models/Volunteer';
-import EventVolunteerSchema from '@/server/models/EventVolunteer';
 import dbConnect from '@/utils/db-connect';
 import { VolunteerEntity } from '@/types/dataModel/volunteer';
 import { VerifiedRole } from '@/types/dataModel/roles';
@@ -222,7 +223,7 @@ export async function softDeleteVolunteer(
  */
 export async function getVolunteer(
   volunteerId: string
-): Promise<VolunteerResponse | null> {
+): Promise<VolunteerResponse> {
   let volunteer: VolunteerResponse | null = null;
   try {
     await dbConnect();
@@ -244,16 +245,54 @@ export async function getVolunteer(
  */
 export async function getAllEventsForVolunteer(
   volunteerId: string
-): Promise<EventVolunteerResponse[]> {
-  let events: EventVolunteerResponse[];
+): Promise<VolunteerEventResponse[]> {
+  let events: VolunteerEventResponse[];
   try {
     await dbConnect();
     events = await EventVolunteerSchema.find({ volunteer: volunteerId })
-      .populate('volunteer')
+      .populate('event')
       .populate('organization');
-    // TODO: populate events
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }
   return events;
+}
+
+/**
+ * Get all volunteers for a specific organization
+ * @param organizationId // Id of the organization
+ * @returns // All volunteers for the organization */
+export async function getVolunteersByOrganization(
+  organizationId: string
+): Promise<VolunteerResponse[]> {
+  try {
+    const eventVolunteers: EventVolunteerResponse[] =
+      await EventVolunteerSchema.find({
+        organization: organizationId,
+      })
+        .populate('volunteer')
+        .populate({
+          path: 'volunteer',
+          populate: { path: 'previousOrganization' },
+        });
+
+    const volunteers: VolunteerResponse[] = eventVolunteers.map(
+      (eventVolunteer) => eventVolunteer.volunteer
+    );
+
+    const uniqueVolunteers: VolunteerResponse[] = [];
+    volunteers.forEach((volunteer) => {
+      if (
+        !uniqueVolunteers.some(
+          (uniqueVolunteer) => uniqueVolunteer._id === volunteer._id
+        )
+      ) {
+        uniqueVolunteers.push(volunteer);
+      }
+    });
+
+    return uniqueVolunteers;
+  } catch (error) {
+    throw new CMError(CMErrorType.InternalError);
+  }
 }
