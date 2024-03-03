@@ -261,15 +261,14 @@ export async function getAllEventsForVolunteer(
 export async function getEventVolunteersByOrganization(
   organizationId: string
 ): Promise<EventVolunteerResponse[]> {
+  let eventVolunteers: EventVolunteerResponse[];
   try {
     await dbConnect();
-    const volunteers: EventVolunteerResponse[] =
-      await EventVolunteerSchema.find({
-        organization: organizationId,
-      }).populate('event');
-    console.log(volunteers);
-    return volunteers;
+    eventVolunteers = await EventVolunteerSchema.find({
+      organization: organizationId,
+    }).populate('volunteer');
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }
+  return eventVolunteers;
 }
