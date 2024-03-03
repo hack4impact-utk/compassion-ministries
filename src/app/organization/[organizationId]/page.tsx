@@ -4,8 +4,8 @@ import { getOrganization } from '@/server/actions/Organization';
 export default async function Page({
   params,
 }: {
-  params: { organization: string };
+  params: { organizationId: string };
 }) {
-  const orgs = await getOrganization(params.organization);
-  return <OrganizationView organization={orgs} />;
+  const org = await getOrganization(params.organizationId);
+  return org ? <OrganizationView organization={org} /> : null;
 }
