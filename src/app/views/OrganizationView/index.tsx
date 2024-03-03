@@ -1,4 +1,3 @@
-'use client';
 import { OrganizationResponse } from '@/types/dataModel/organization';
 import React from 'react';
 import OrganizationInfo from '@/components/Organization';
@@ -13,14 +12,18 @@ interface OrganizationViewProps {
 export async function OrganizationView({
   organization,
 }: OrganizationViewProps) {
-  // TODO: get volunteers from organization and pass them to the OrganizationList
-  const volunteers: VolunteerResponse[] = await getVolunteersByOrganization(
-    organization._id
-  );
+  const organizationId = organization._id.toString();
+
+  // Fetch volunteers for the organization
+  const volunteers: VolunteerResponse[] =
+    await getVolunteersByOrganization(organizationId);
+
   return (
     <div>
-      <h1>Organization</h1>
+      {/* Display organization information */}
       <OrganizationInfo organization={organization} volunteers={volunteers} />
+
+      {/* Button for editing organization */}
       <Button variant="contained">edit</Button>
     </div>
   );
