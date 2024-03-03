@@ -258,6 +258,11 @@ export async function getAllEventsForVolunteer(
   return events;
 }
 
+/**
+ * Retrieves all event volunteers associated with a specific organization.
+ * @param organizationId The ID of the organization.
+ * @returns Collection of EventVolunteerResponses for the organization, or null if there are none.
+ */
 export async function getEventVolunteersByOrganization(
   organizationId: string
 ): Promise<EventVolunteerResponse[]> {
