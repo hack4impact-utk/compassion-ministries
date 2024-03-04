@@ -14,10 +14,12 @@ import { VolunteerEntity } from '@/types/dataModel/volunteer';
 import { VerifiedRole } from '@/types/dataModel/roles';
 // Temporary code to load org schema until we are using it elsewhere
 import OrganizationSchema from '@/server/models/Organization';
+import EventSchema from '@/server/models/Event';
 import { RoleVerificationRequest } from '@/types/dataModel/roles';
 import CMError, { CMErrorType } from '@/utils/cmerror';
 import { mongo } from 'mongoose';
 OrganizationSchema;
+EventSchema;
 
 /**
  * Deletes a volunteer's roleverification object
@@ -258,23 +260,21 @@ export async function getAllEventsForVolunteer(
 }
 
 /**
- * Retrieves all event volunteers associated with a specific organization.
+ * Retrieves all volunteers associated with a specific organization.
  * @param organizationId The ID of the organization.
- * @returns Collection of EventVolunteerResponses for the organization, or null if there are none.
+ * @returns Collection of VolunteerEventResponses for the organization, or null if there are none.
  */
 export async function getEventVolunteersByOrganization(
   organizationId: string
 ): Promise<VolunteerEventResponse[]> {
-  let eventVolunteers: VolunteerEventResponse[] = [];
+  let volunteerEvent: VolunteerEventResponse[] = [];
   try {
     await dbConnect();
-    eventVolunteers = await EventVolunteerSchema.find({
+    volunteerEvent = await EventVolunteerSchema.find({
       organization: organizationId,
     }).populate('event');
-    console.log(eventVolunteers);
   } catch (error) {
-    console.log(error);
-    //throw new CMError(CMErrorType.InternalError);
+    throw new CMError(CMErrorType.InternalError);
   }
-  return eventVolunteers;
+  return volunteerEvent;
 }
