@@ -3,12 +3,13 @@ import {
   CreateVolunteerRequest,
   UpdateVolunteerRequest,
 } from '@/types/dataModel/volunteer';
+import EventVolunteerSchema from '../models/EventVolunteer';
 import {
   EventVolunteerEntity,
   VolunteerEventResponse,
+  EventVolunteerResponse,
 } from '@/types/dataModel/eventVolunteer';
 import VolunteerSchema from '@/server/models/Volunteer';
-import EventVolunteerSchema from '@/server/models/EventVolunteer';
 import dbConnect from '@/utils/db-connect';
 import { VolunteerEntity } from '@/types/dataModel/volunteer';
 import { VerifiedRole } from '@/types/dataModel/roles';
@@ -277,4 +278,45 @@ export async function getEventVolunteersByOrganization(
     throw new CMError(CMErrorType.InternalError);
   }
   return volunteerEvent;
+}
+
+/* Get all volunteers for a specific organization
+ * @param organizationId // Id of the organization
+ * @returns // All volunteers for the organization */
+export async function getVolunteersByOrganization(
+  organizationId: string
+): Promise<VolunteerResponse[]> {
+  try {
+    await dbConnect();
+
+    const eventVolunteers: EventVolunteerResponse[] =
+      await EventVolunteerSchema.find({
+        organization: organizationId,
+      })
+        .populate('volunteer')
+        .populate({
+          path: 'volunteer',
+          populate: { path: 'previousOrganization' },
+        });
+
+    const volunteers: VolunteerResponse[] = eventVolunteers.map(
+      (eventVolunteer) => eventVolunteer.volunteer
+    );
+
+    const uniqueVolunteers: VolunteerResponse[] = [];
+    volunteers.forEach((volunteer) => {
+      if (
+        !uniqueVolunteers.some(
+          (uniqueVolunteer) => uniqueVolunteer._id === volunteer._id
+        )
+      ) {
+        uniqueVolunteers.push(volunteer);
+      }
+    });
+
+    return uniqueVolunteers;
+  } catch (error) {
+    console.log(error);
+    throw new CMError(CMErrorType.InternalError);
+  }
 }
