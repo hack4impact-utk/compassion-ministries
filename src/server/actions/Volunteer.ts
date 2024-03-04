@@ -5,7 +5,6 @@ import {
 } from '@/types/dataModel/volunteer';
 import {
   EventVolunteerEntity,
-  EventVolunteerResponse,
   VolunteerEventResponse,
 } from '@/types/dataModel/eventVolunteer';
 import VolunteerSchema from '@/server/models/Volunteer';
@@ -265,13 +264,13 @@ export async function getAllEventsForVolunteer(
  */
 export async function getEventVolunteersByOrganization(
   organizationId: string
-): Promise<EventVolunteerResponse[]> {
-  let eventVolunteers: EventVolunteerResponse[];
+): Promise<VolunteerEventResponse[]> {
+  let eventVolunteers: VolunteerEventResponse[];
   try {
     await dbConnect();
     eventVolunteers = await EventVolunteerSchema.find({
       organization: organizationId,
-    }).populate('volunteer');
+    }).populate('event');
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }
