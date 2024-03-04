@@ -18,7 +18,6 @@ export async function getEventVolunteersByEventRole(
       match: { eventRoles: role }, // Condition to match the documents in the Event collection
     });
   } catch (error) {
-    console.log(error);
     throw new CMError(CMErrorType.InternalError);
   }
   return evs;
