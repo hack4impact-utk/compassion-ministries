@@ -14,6 +14,26 @@ export function OrganizationView({
   organization,
   volunteers,
 }: OrganizationViewProps) {
+  const organizationId = organization._id.toString();
+
+  // Fetch volunteers for the organization
+  const volunteers: VolunteerResponse[] =
+    await getVolunteersByOrganization(organizationId);
+
+  const handleDelete = async () => {
+    try {
+      // Call the DELETE API endpoint
+      await fetch(`/api/organization/${organizationId}`, {
+        method: 'DELETE',
+      });
+
+      // Refresh the page
+      window.location.reload();
+    } catch (error) {
+      console.error('Error deleting organization:', error);
+    }
+  };
+
   return (
     <div>
       {/* Display organization information */}
@@ -21,6 +41,11 @@ export function OrganizationView({
 
       {/* Button for editing organization */}
       <Button variant="contained">edit</Button>
+
+      {/* Button for deleting organization */}
+      <Button variant="contained" color="error" onClick={handleDelete}>
+        Delete
+      </Button>
     </div>
   );
 }
