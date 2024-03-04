@@ -872,6 +872,19 @@ db.events.insertMany([
     "emailBodies": [
     ],
     "isRecurring": false,
+  },
+  {
+    "_id": eventId11,
+    "name": "Food for Thought",
+    "description": "An insightful discussion of the question 'what is food?' No food provided.",
+    "eventLocation": "345 Sycamore Circle, Greenville, SC 29601",
+    "startAt": new Date('01 January 2024 17:00'),
+    "endAt": new Date('01 January 2024 23:59'),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * -4),
+    "eventRoles": ["Medical"],
+    "emailBodies": [
+    ],
+    "isRecurring": false,
   }
 ])
 
