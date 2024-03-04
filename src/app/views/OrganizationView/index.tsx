@@ -5,7 +5,7 @@ import OrganizationInfo from '@/components/Organization';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { Button } from '@mui/material';
 
-interface OrganizationViewProps {
+export interface OrganizationViewProps {
   organization: OrganizationResponse;
   volunteers: VolunteerResponse[];
 }
