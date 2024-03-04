@@ -736,29 +736,28 @@ db.events.insertMany([
     "_id": eventId1,
     "name": "Feast of Sharing",
     "description": "A day dedicated to sharing meals with the less fortunate.",
-    "eventLocation": "Central Community Center",
-    "startAt": new Date(ISODate().getTime() - 1000 * 3600 * 24 * 3 + 3600 * 3),
-    "endAt": new Date(ISODate().getTime() - 1000 * 3600 * 24 * 3 + 3600 * 4),
+    "eventLocation": "123 Oak Street, Chattanooga, TN 37402",
+    "startAt": new Date('01 January 2024 10:00'),
+    "endAt": new Date('01 January 2024 12:00'),
     "date": new Date(ISODate().getTime() - 1000 * 3600 * 24 * 3),
     "eventRoles": ["Dental", "Food"],
-    "emailBodies": [
-      "Dear Volunteer, thank you for your hard work during the Feast of Sharing event on Friday, March 15, 2024 at Central Community Center. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
-      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
+    "emailBodies": 
+    [ "I want to extend my heartfelt gratitude to each and every one of you for your dedication and hard work at the Feast of Sharing. Your efforts helped serve over 2,000 meals to members of our community in need, bringing warmth and joy during this festive season. Your kindness and generosity truly made a significant difference, and we are deeply thankful for your invaluable support.\nWarm regards,\nJimmy Shoelace",
+      "Dear Volunteer,\n\nWe hope this message finds you well. We're excited to announce that we will be hosting another heartwarming event, the 'Community Unity Dinner,' in just two weeks! The dinner will take place at the Sunshine Community Center located at 123 Main Street next Saturday, starting at 5:00 PM. We greatly appreciate your previous support and hope to see you there to make this event a success once again.\n\nBest regards,\nEmily Waterbottle"
     ],
     "isRecurring": false
   },
   {
     "_id": eventId2,
     "name": "Health for All Fair",
-    "description": "Providing free medical checkups and health education to the community.",
-    "eventLocation": "Downtown Health Clinic",
-    "startAt": new Date(ISODate().getTime() - 1000 * 3600 * 24 * 2 + 3600 * 7),
-    "endAt": new Date(ISODate().getTime() - 1000 * 3600 * 24 * 3 + 3600 * 8.5),
+    "description": "Providing free medical checkups and health education to the community. This is an overnight event!",
+    "eventLocation": "456 Maple Avenue, Nashville, TN 37201",
+    "startAt": new Date('01 January 2024 23:00'),
+    "endAt": new Date('01 January 2024 04:00'),
     "date": new Date(ISODate().getTime() - 1000 * 3600 * 24 * 2),
     "eventRoles": ["Medical", "Dental", "Food", "Save the Babies"],
     "emailBodies": [
-      "Dear Volunteer, thank you for your hard work during the Health for All Fair event on Thursday, May 02, 2024 at Downtown Health Clinic. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
-      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
+      "Dear Volunteers,\n\nI wanted to extend a heartfelt thank you for your invaluable contributions at the Health for All Fair. Your dedication and hard work helped provide vital healthcare services to over 500 community members in need. Your impact truly embodies the spirit of compassion and service. Thank you again for your commitment to making a difference in our community.\nWarm regards,\nHarry Pencil"
     ],
     "isRecurring": false
   },
@@ -766,14 +765,13 @@ db.events.insertMany([
     "_id": eventId3,
     "name": "Community Dental Day",
     "description": "Free dental checkups and oral health education for families.",
-    "eventLocation": "Riverdale Park",
-    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3 + 3600 * 15),
-    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3 + 3600 * 18),
+    "eventLocation": "678 Magnolia Boulevard, Columbia, SC 29201",
+    "startAt": new Date('01 January 2024 9:30'),
+    "endAt": new Date('01 January 2024 14:15'),
     "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3),
     "eventRoles": ["Save the Babies", "Medical", "Food"],
     "emailBodies": [
-      "Dear Volunteer, thank you for your hard work during the Community Dental Day event on Friday, June 07, 2024 at Riverdale Park. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
-      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
+      "Dear Volunteers,\n\nI hope this email finds you well. I wanted to take a moment to express my heartfelt gratitude for your invaluable support and dedication during our recent Community Dental Day. Your efforts truly made a significant impact on our community, and we couldn't have achieved such success without your generosity.\n\nThroughout the day, your unwavering commitment to providing dental care to those in need was truly inspiring. Your kindness and compassion shone brightly as you worked tirelessly to ensure that every individual received the attention and care they deserved.\n\nThanks to your hard work, we were able to provide dental services to over 200 individuals, many of whom would otherwise have struggled to access essential dental care. Your willingness to give your time and expertise not only improved the oral health of our community members but also left a lasting impression on everyone you interacted with.\n\nThe smiles and gratitude we witnessed from those who benefited from your services serve as a testament to the profound impact of your volunteer efforts. Your selflessness has undoubtedly made a difference in the lives of so many, and for that, we are incredibly grateful.\n\nOnce again, thank you for your unwavering dedication and commitment to serving our community. Your kindness and generosity have touched the hearts of many and have made Community Dental Day a resounding success.\n\nWarm regards,\n\nSally Horseshoe\nVolunteer Coordinator\nsally.horseshoe@horselovers.com",
     ],
     "isRecurring": false
   },
@@ -781,14 +779,14 @@ db.events.insertMany([
     "_id": eventId4,
     "name": "Nutrition and Wellness Drive",
     "description": "Promoting nutrition and wellness through free workshops and food distribution.",
-    "eventLocation": "Sunshine School Auditorium",
-    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 7 + 3600 * 20),
-    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * + 3600 * 20.5),
-    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 7),
+    "eventLocation": "789 Elm Drive, Atlanta, GA 30303",
+    "startAt": new Date('01 January 2024 18:00'),
+    "endAt": new Date('01 January 2024 22:30'),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 7),
     "eventRoles": ["Food"],
     "emailBodies": [
-      "Dear Volunteer, thank you for your hard work during the Nutrition and Wellness Drive event on Saturday, July 21, 2024 at Sunshine School Auditorium. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
-      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
+      "Dear Volunteers,\n\nThank you immensely for your dedication and hard work at the Nutrition and Wellness Drive. Your efforts have directly impacted over 500 families in our community, ensuring access to essential nutrition and wellness resources. Your kindness and commitment have truly made a significant difference.\n\nWarm regards,\nJoanne 'The animal' Lewis",
+      "Dear Volunteers,\n\nWe hope this email finds you well and filled with the same enthusiasm for community wellness as before!\n\nWe wanted to extend our heartfelt gratitude for your invaluable support during the recent Nutrition and Wellness Drive event. Your dedication and hard work truly made a significant impact on our community's health and well-being.\n\nWe are excited to inform you that we will be hosting another exciting event, the 'Healthy Living Fair,' in just two weeks' time! Details for the event are as follows:\n\nEvent Name: Healthy Living Fair\nDate: Saturday\nTime: 10:00 AM - 2:00 PM\nLocation: Greenfield Community Center, 123 Main Street, Greenfield, USA\n\nWe would be thrilled if you could join us once again to continue our mission of promoting nutrition and wellness within our community. Your passion and commitment are instrumental in making these events successful, and we truly appreciate your ongoing support.\n\nPlease let us know if you are available to volunteer for the Healthy Living Fair. Your participation will undoubtedly contribute to making a positive impact on the lives of many.\n\nLooking forward to hearing from you soon!\n\nBest regards,\nJackson Mississippi"
     ],
     "isRecurring": false
   },
@@ -796,236 +794,84 @@ db.events.insertMany([
     "_id": eventId5,
     "name": "Hope Medical Camp",
     "description": "A medical camp offering various health services to underserved communities.",
-    "eventLocation": "Green Valley Fairgrounds",
-    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.1 + 3600 * 18),
-    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.1 + 3600 * 21),
-    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.1),
+    "eventLocation": "321 Pine Lane, Asheville, NC 28801",
+    "startAt": new Date('01 January 2024 03:00'),
+    "endAt": new Date('01 January 2024 09:00'),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 123),
     "eventRoles": ["Medical", "Save the Babies"],
     "emailBodies": [
-      "Dear Volunteer, thank you for your hard work during the Hope Medical Camp event on Monday, August 12, 2024 at Green Valley Fairgrounds. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
-      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
+      "Dear Volunteer,\n\nI hope this message finds you well. On behalf of the entire Hope Medical Camp team, I want to express our deepest gratitude for your exceptional dedication and hard work during the recent medical camp.\n\nYour selfless contributions played a pivotal role in making the event a resounding success. Your unwavering commitment to providing quality healthcare services to the community truly made a significant impact. Together, we were able to serve [number] patients, offering them vital medical assistance and support.\n\nThe positive feedback from the attendees has been overwhelming, highlighting the genuine care and compassion you demonstrated in every interaction. Your willingness to go above and beyond has not only improved the health and well-being of those we served but has also left a lasting impression on the community.\n\nThe success of the Hope Medical Camp is a testament to the collective effort of individuals like you, who understand the importance of giving back and making a difference in the lives of others. Your time and skills have made a real impact on the health of our community, and we are truly grateful for your invaluable contribution.\n\nOnce again, thank you for your hard work, dedication, and the positive energy you brought to the Hope Medical Camp. We look forward to continuing our mission together and creating a healthier, happier community.\n\nWarm regards,\n\nAshley Ashlingtonsbergerton\nChief Medicine Holder\nHope Medical Camp Team",
     ],
     "isRecurring": false
-  }
-])
-
-// RECURRING EVENT INSTANCES
-db.events.insertMany([
+  },
   {
     _id: eventId6,
     "name": "Food for Thought Evening",
     "description": "An evening event focused on discussing and distributing nutritious food.",
-    "eventLocation": "Liberty Community Hall",
-    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3),
-    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 + 3600 * 3),
+    "eventLocation": "567 Cedar Court, Lexington, KY 40502",
+    "startAt": new Date('01 January 2024 15:00'),
+    "endAt": new Date('01 January 2024 17:30'),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 95),
     "eventRoles": ["Food", "Dental"],
     "emailBodies": [
-      "Dear Volunteer, thank you for your hard work during the Food for Thought Evening event on Thursday, September 05, 2024 at Liberty Community Hall. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
-      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
+      "Dear Volunteer,\n\nI want to express my sincere gratitude for your invaluable contribution at the Food for Thought Evening. Your dedication and hard work significantly enhanced the event, ensuring its success. Thanks to your efforts, we were able to serve over 500 meals, raising $10,000 for local food banks. Your commitment truly made a difference in the lives of those in need.\n\nWarm regards,\nDr. E. Mail",
     ],
-    "isRecurring": true,
+    "isRecurring": false,
   },
-  /*
   {
     "_id": eventId7,
-    "name": "Food for Thought Evening",
-    "description": "An evening event focused on discussing and distributing nutritious food.",
-    "eventLocation": "Liberty Community Hall",
-    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3),
-    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 + 3600 * 3),
-    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 - 3600 * 24 * 7 * 1),
-    "eventRoles": ["Food", "Dental"],
+    "name": "Smiles Dental Campaign",
+    "description": "A campaign to offer dental services and promote oral hygiene.",
+    "eventLocation": "890 Birch Road, Louisville, KY 40202",
+    "startAt": new Date('01 January 2024 10:19'),
+    "endAt": new Date('01 January 2024 12:34'),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * -12),
+    "eventRoles": ["Dental", "Medical"],
     "emailBodies": [
-      "Dear Volunteer, thank you for your hard work during the Food for Thought Evening event on Thursday, September 05, 2024 at Liberty Community Hall. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
-      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
+      "Dear Volunteers,\n\nI wanted to extend my heartfelt gratitude to each and every one of you for your invaluable dedication and hard work during the Smiles Dental Campaign. Your tireless efforts have truly made a monumental impact, providing essential dental care to over 500 underserved individuals in our community. Your compassion and commitment to improving oral health have touched the lives of so many, and we are immensely grateful for your selflessness. Thank you for being the driving force behind this transformative initiative!\n\nWarm regards,\nKaylin OvalOffice",
     ],
-    "isRecurring": true,
-    "parentEvent": eventId6
+    "isRecurring": false,
   },
   {
     "_id": eventId8,
-    "name": "Food for Thought Evening",
-    "description": "An evening event focused on discussing and distributing nutritious food.",
-    "eventLocation": "Liberty Community Hall",
-    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3),
-    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 + 3600 * 3),
-    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 - 3600 * 24 * 7 * 2),
-    "eventRoles": ["Food", "Dental"],
+    "name": "Harvest of Health Expo",
+    "description": "An expo offering health screenings, wellness workshops, and more.",
+    "eventLocation": "234 Walnut Way, Huntsville, AL 35801",
+    "startAt": new Date('01 January 2024 0:00'),
+    "endAt": new Date('01 January 2024 04:22'),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 12),
+    "eventRoles": ["Dental"],
     "emailBodies": [
-      "Dear Volunteer, thank you for your hard work during the Food for Thought Evening event on Thursday, September 05, 2024 at Liberty Community Hall. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
-      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
+      "Dear Volunteers,\n\nI wanted to extend my sincere gratitude to each of you for your unwavering dedication and hard work at the Harvest of Health Expo. Your passion and commitment were palpable, especially when you went the extra mile to assist Mrs. Johnson, who arrived with limited mobility, ensuring she could fully participate in the event. Thanks to your kindness and attentiveness, moments like these made the expo truly impactful, leaving a lasting impression on our community. Your selflessness and dedication embody the spirit of giving back. Thank you immensely for your invaluable contributions!\n\nWarm regards,\nBarack Obama II",
     ],
-    "isRecurring": true,
-    "parentEvent": eventId6
+    "isRecurring": false,
   },
   {
     "_id": eventId9,
-    "name": "Food for Thought Evening",
-    "description": "An evening event focused on discussing and distributing nutritious food.",
-    "eventLocation": "Liberty Community Hall",
-    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3),
-    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 + 3600 * 3),
-    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 - 3600 * 24 * 7 * 3),
-    "eventRoles": ["Food", "Dental"],
+    "name": "Well-being and Care Fest",
+    "description": "A festival celebrating health care workers and offering community health services. This is an overnight telethon starting at midnight!",
+    "eventLocation": "901 Spruce Street, Birmingham, AL 35203",
+    "startAt": new Date('01 January 2024 23:59'),
+    "endAt": new Date('01 January 2024 08:00'),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 33),
+    "eventRoles": ["Medical", "Save the Babies"],
     "emailBodies": [
-      "Dear Volunteer, thank you for your hard work during the Food for Thought Evening event on Thursday, September 05, 2024 at Liberty Community Hall. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
-      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
+      "Dear Volunteer,\n\nI hope this email finds you well. I wanted to extend my deepest gratitude to each and every one of you for your invaluable contributions to the success of the Well-being and Care Fest last weekend. Your dedication and enthusiasm truly made a difference in the lives of many attendees.\n\nOne heartwarming moment that stands out is when a group of elderly participants joined our yoga session led by Jane, our volunteer instructor. Witnessing their smiles and sense of tranquility reminded us of the profound impact of our collective efforts.\n\nYour commitment to spreading joy and wellness resonated with everyone present, and we couldn't have achieved such positive outcomes without your unwavering support. Thank you once again for being the driving force behind this meaningful event.\n\nWarm regards,\nRobert Painting",
     ],
-    "isRecurring": true,
-    "parentEvent": eventId6
+    "isRecurring": false,
   },
   {
     "_id": eventId10,
-    "name": "Food for Thought Evening",
-    "description": "An evening event focused on discussing and distributing nutritious food.",
-    "eventLocation": "Liberty Community Hall",
-    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3),
-    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 + 3600 * 3),
-    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 + 3600 * 24 * 7 * 0),
-    "eventRoles": ["Food", "Dental"],
-    "emailBodies": [
-      "Dear Volunteer, thank you for your hard work during the Food for Thought Evening event on Thursday, September 05, 2024 at Liberty Community Hall. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
-      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
-    ],
-    "isRecurring": true,
-    "parentEvent": eventId6
-  },
-  {
-    "_id": eventId11,
-    "name": "Food for Thought Evening",
-    "description": "An evening event focused on discussing and distributing nutritious food.",
-    "eventLocation": "Knoxville County Courthouse",
-    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3),
-    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 + 3600 * 3),
-    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 + 3600 * 24 * 7 * 1),
-    "eventRoles": ["Food", "Dental"],
-    "emailBodies": [
-      "Dear Volunteer, thank you for your hard work during the Food for Thought Evening event on Thursday, September 05, 2024 at Liberty Community Hall. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
-      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
-    ],
-    "isRecurring": true,
-    "parentEvent": eventId6
-  },
-  {
-    "_id": eventId12,
-    "name": "Food for Thought Evening",
-    "description": "An evening event focused on discussing and distributing nutritious food.",
-    "eventLocation": "Liberty Community Hall",
-    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3),
-    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 + 3600 * 3),
-    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.3 + 3600 * 24 * 7 * 2),
-    "eventRoles": ["Food", "Dental"],
-    "emailBodies": [
-      "Dear Volunteer, thank you for your hard work during the Food for Thought Evening event on Thursday, September 05, 2024 at Liberty Community Hall. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
-      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
-    ],
-    "isRecurring": true,
-    "parentEvent": eventId6
-  },*/
-  {
-    "_id": eventId13,
-    "name": "Smiles Dental Campaign",
-    "description": "A campaign to offer dental services and promote oral hygiene.",
-    "eventLocation": "Pinecrest Event Arena",
-    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5),
-    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5 + 3600 * 3),
-    "eventRoles": ["Dental", "Medical"],
-    "emailBodies": [
-      "Dear Volunteer, thank you for your hard work during the Smiles Dental Campaign event on Wednesday, October 16, 2024 at Pinecrest Event Arena. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
-      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
-    ],
-    "isRecurring": true,
-  },
-  /*
-  {
-    "_id": eventId14,
-    "name": "Smiles Dental Campaign",
-    "description": "A campaign to offer dental services and promote oral hygiene.",
-    "eventLocation": "Pinecrest Event Arena",
-    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5),
-    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5 + 3600 * 3),
-    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5 - 3600 * 24 * 14 * 1),
-    "eventRoles": ["Dental", "Medical"],
-    "emailBodies": [
-      "Dear Volunteer, thank you for your hard work during the Smiles Dental Campaign event on Wednesday, October 16, 2024 at Pinecrest Event Arena. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
-      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
-    ],
-    "isRecurring": true,
-    "parentEvent": eventId13
-  },
-  {
-    "_id": eventId15,
-    "name": "Smiles Dental Campaign",
-    "description": "A campaign to offer dental services and promote oral hygiene.",
-    "eventLocation": "Pinecrest Event Arena",
-    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5),
-    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5 + 3600 * 3),
-    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5 - 3600 * 24 * 14 * 2),
-    "eventRoles": ["Dental", "Medical"],
-    "emailBodies": [
-      "Dear Volunteer, thank you for your hard work during the Smiles Dental Campaign event on Wednesday, October 16, 2024 at Pinecrest Event Arena. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
-      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
-    ],
-    "isRecurring": true,
-    "parentEvent": eventId13
-  },
-  {
-    "_id": eventId16,
-    "name": "Smiles Dental Campaign",
-    "description": "A campaign to offer dental services and promote oral hygiene.",
-    "eventLocation": "Pinecrest Event Arena",
-    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5),
-    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5 + 3600 * 3),
-    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5 - 3600 * 24 * 14 * 2),
-    "eventRoles": ["Dental", "Medical"],
-    "emailBodies": [
-      "Dear Volunteer, thank you for your hard work during the Smiles Dental Campaign event on Wednesday, October 16, 2024 at Pinecrest Event Arena. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
-      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
-    ],
-    "isRecurring": true,
-    "parentEvent": eventId13
-  },*/
-  {
-    "_id": eventId17,
-    "name": "Harvest of Health Expo",
-    "description": "An expo offering health screenings, wellness workshops, and more.",
-    "eventLocation": "Oceanview Pavilion",
-    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5),
-    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.5 + 3600 * 3),
-    "eventRoles": ["Dental"],
-    "emailBodies": [
-      "Dear Volunteer, thank you for your hard work during the Harvest of Health Expo event on Friday, June 28, 2024 at Oceanview Pavilion. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
-      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
-    ],
-    "isRecurring": true,
-  },
-  {
-    "_id": eventId18,
-    "name": "Well-being and Care Fest",
-    "description": "A festival celebrating health care workers and offering community health services.",
-    "eventLocation": "Mountainview Conference Center",
-    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.7),
-    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.7 + 3600 * 3),
-    "eventRoles": ["Medical", "Save the Babies"],
-    "emailBodies": [
-      "Dear Volunteer, thank you for your hard work during the Well-being and Care Fest event on Sunday, November 10, 2024 at Mountainview Conference Center. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
-      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
-    ],
-    "isRecurring": true,
-  },
-  {
-    "_id": eventId19,
     "name": "Nourish to Flourish Initiative",
     "description": "An initiative to provide nourishing meals and nutrition education to those in need.",
-    "eventLocation": "Lakeside Retreat",
-    "startAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.9),
-    "endAt": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3.9 + 3600 * 3),
+    "eventLocation": "345 Sycamore Circle, Greenville, SC 29601",
+    "startAt": new Date('01 January 2024 17:00'),
+    "endAt": new Date('01 January 2024 23:59'),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 180),
     "eventRoles": ["Medical"],
     "emailBodies": [
-      "Dear Volunteer, thank you for your hard work during the Nourish to Flourish Initiative event on Sunday, September 29, 2024 at Lakeside Retreat. Your efforts made a significant difference. We hope to see you again soon at our upcoming events.",
-      "Stay tuned for more opportunities to make a difference in your community with our future volunteering events. Your support is invaluable to us."
     ],
-    "isRecurring": true,
+    "isRecurring": false,
   }
 ])
 
