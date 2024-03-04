@@ -266,6 +266,8 @@ export async function getVolunteersByOrganization(
   organizationId: string
 ): Promise<VolunteerResponse[]> {
   try {
+    await dbConnect();
+
     const eventVolunteers: EventVolunteerResponse[] =
       await EventVolunteerSchema.find({
         organization: organizationId,
@@ -293,6 +295,7 @@ export async function getVolunteersByOrganization(
 
     return uniqueVolunteers;
   } catch (error) {
+    console.log(error);
     throw new CMError(CMErrorType.InternalError);
   }
 }
