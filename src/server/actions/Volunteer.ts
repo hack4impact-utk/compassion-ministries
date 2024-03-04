@@ -280,9 +280,11 @@ export async function getEventVolunteersByOrganization(
   return volunteerEvent;
 }
 
-/* Get all volunteers for a specific organization
+/**
+ * Get all volunteers for a specific organization
  * @param organizationId // Id of the organization
- * @returns // All volunteers for the organization */
+ * @returns // All volunteers for the organization
+ * */
 export async function getVolunteersByOrganization(
   organizationId: string
 ): Promise<VolunteerResponse[]> {
