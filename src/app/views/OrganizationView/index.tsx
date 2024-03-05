@@ -23,8 +23,7 @@ export function OrganizationView({
         method: 'DELETE',
       });
 
-      // Refresh the page
-      window.location.reload();
+      window.location.href = '/organizations';
     } catch (error) {
       // maybe change this to soomething else at some point idk
       console.error('Error deleting organization:', error);
