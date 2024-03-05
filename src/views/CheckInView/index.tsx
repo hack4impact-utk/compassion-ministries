@@ -1,6 +1,7 @@
 'use client';
 
 import CheckInForm from '@/components/CheckInForm';
+import useRoleConfirmation from '@/hooks/useRoleConfirmation';
 import type { EventResponse } from '@/types/dataModel/event';
 import type { OrganizationResponse } from '@/types/dataModel/organization';
 import type {
@@ -23,12 +24,14 @@ export default function CheckInView(props: CheckInViewProps) {
   const [formData, setFormData] = useState<CheckInFormData>(
     {} as CheckInFormData
   );
+  const confirmRole = useRoleConfirmation();
 
   const onCheckIn = async () => {
     // find volunteer by email or set volunteer to new volunteer req
-    const volunteer: string | CreateVolunteerRequest = props.volunteers.find(
+    const foundVolunteer = props.volunteers.find(
       (v) => v.email === formData.email
-    )?._id ?? {
+    );
+    const volunteer: string | CreateVolunteerRequest = foundVolunteer?._id ?? {
       firstName: formData.firstName,
       lastName: formData.lastName,
       email: formData.email,
@@ -36,10 +39,32 @@ export default function CheckInView(props: CheckInViewProps) {
       address: formData.address,
     };
 
+    let verifier: string | null = null;
+
+    // if:
+    // - role is not food
+    // - volunteer is an object (new volunteer)
+    // - or volunteer does not have a role verification for the role
+    // then confirm the role
+    if (
+      formData.role !== 'Food' &&
+      (typeof volunteer === 'object' ||
+        !foundVolunteer?.roleVerifications?.find(
+          (rv) => rv.role === formData.role
+        ))
+    ) {
+      verifier = await confirmRole(formData.role);
+      // return if not confirmed
+      if (!verifier) {
+        return;
+      }
+    }
+
     const eventVolReq = transformCheckInFormDataToCreateEventVolunteerRequest(
       formData,
       volunteer,
-      props.event
+      props.event,
+      verifier || undefined
     );
 
     // make post req
