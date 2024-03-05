@@ -8,7 +8,7 @@ interface ConfirmContentProps {
 export default function ConfirmContent({ setVerifier }: ConfirmContentProps) {
   return (
     <>
-      <DialogContentText>Confirm them now, or cancel.</DialogContentText>
+      <DialogContentText>Verify them now, or cancel.</DialogContentText>
       <TextField
         id="name"
         label="Verifier"
