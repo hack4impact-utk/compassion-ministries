@@ -16,14 +16,10 @@ export function OrganizationView({
 }: OrganizationViewProps) {
   const organizationId = organization._id.toString();
 
-  // Fetch volunteers for the organization
-  const volunteers: VolunteerResponse[] =
-    await getVolunteersByOrganization(organizationId);
-
   const handleDelete = async () => {
     try {
       // Call the DELETE API endpoint
-      await fetch(`/api/organization/${organizationId}`, {
+      await fetch(`/api/organizations/${organizationId}`, {
         method: 'DELETE',
       });
 
