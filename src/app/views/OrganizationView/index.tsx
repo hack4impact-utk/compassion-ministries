@@ -26,6 +26,7 @@ export function OrganizationView({
       // Refresh the page
       window.location.reload();
     } catch (error) {
+      // maybe change this to soomething else at some point idk
       console.error('Error deleting organization:', error);
     }
   };
