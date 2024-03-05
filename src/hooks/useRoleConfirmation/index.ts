@@ -10,7 +10,7 @@ export default function useRoleConfirmation() {
   // set the ref on each render
   verifierRef.current = verifier;
 
-  const roleConfirm = async (role: string): Promise<string | null> => {
+  const confirmRole = async (role: string): Promise<string | null> => {
     try {
       await confirm({
         title: `This volunteer is not a verified for the ${role} role.`,
@@ -27,5 +27,5 @@ export default function useRoleConfirmation() {
     }
   };
 
-  return roleConfirm;
+  return confirmRole;
 }
