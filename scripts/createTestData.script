@@ -887,7 +887,7 @@ db.events.insertMany([
     "isRecurring": false,
   },
   {
-    "_id": "eventId12",
+    "_id": eventId12,
     "name": "Healthy Smiles Initiative",
     "description": "A dental care event offering free check-ups, cleanings, and oral health education.",
     "eventLocation": "123 Oak Street, Anytown, USA",
@@ -899,7 +899,7 @@ db.events.insertMany([
     "isRecurring": false
   },
   {
-    "_id": "eventId13",
+    "_id": eventId13,
     "name": "Nutrition Workshop and Grocery Distribution",
     "description": "An interactive workshop on nutrition followed by free groceries distribution to attendees.",
     "eventLocation": "789 Maple Avenue, Smalltown, USA",
@@ -912,7 +912,7 @@ db.events.insertMany([
     "isRecurring": false
   },
   {
-    "_id": "eventId14",
+    "_id": eventId14,
     "name": "Mobile Medical Clinic",
     "description": "A traveling medical clinic offering free consultations, check-ups, and basic medical services.",
     "eventLocation": "456 Pine Street, Hometown, USA",
@@ -924,7 +924,7 @@ db.events.insertMany([
     "isRecurring": false
   },
   {
-    "_id": "eventId15",
+    "_id": eventId15,
     "name": "Healthy Kids, Happy Lives",
     "description": "A campaign to provide car seats and safety education to families with young children.",
     "eventLocation": "567 Elm Street, Villagetown, USA",
@@ -936,7 +936,7 @@ db.events.insertMany([
     "isRecurring": false
   },
   {
-    "_id": "eventId16",
+    "_id": eventId16,
     "name": "Health Fair and Immunization Drive",
     "description": "A community health fair offering immunizations and health screenings.",
     "eventLocation": "890 Walnut Street, Metropolis, USA",
@@ -948,7 +948,7 @@ db.events.insertMany([
     "isRecurring": false
   },
   {
-    "_id": "eventId17",
+    "_id": eventId17,
     "name": "Feeding Families, Nourishing Communities",
     "description": "A food distribution event providing groceries to families in need.",
     "eventLocation": "234 Cedar Street, Countytown, USA",
@@ -960,7 +960,7 @@ db.events.insertMany([
     "isRecurring": false
   },
   {
-    "_id": "eventId18",
+    "_id": eventId18,
     "name": "Dental Health Day",
     "description": "A day dedicated to promoting oral hygiene with free dental check-ups and fluoride treatments.",
     "eventLocation": "345 Pineapple Lane, Suburbia, USA",
@@ -972,7 +972,7 @@ db.events.insertMany([
     "isRecurring": false
   },
   {
-    "_id": "eventId19",
+    "_id": eventId19,
     "name": "Carseat Safety Seminar",
     "description": "An educational seminar on car seat safety and installation for parents and caregivers.",
     "eventLocation": "678 Maplewood Drive, Suburbville, USA",
@@ -984,7 +984,7 @@ db.events.insertMany([
     "isRecurring": false
   },
   {
-    "_id": "eventId20",
+    "_id": eventId20,
     "name": "Medical Outreach Program",
     "description": "A program offering medical consultations and basic healthcare services to underserved communities.",
     "eventLocation": "123 Cherry Blossom Lane, Countryside, USA",
@@ -996,7 +996,7 @@ db.events.insertMany([
     "isRecurring": false
   },
   {
-    "_id": "eventId21",
+    "_id": eventId21,
     "name": "Holiday Food Drive",
     "description": "A seasonal food drive to collect non-perishable food items for families in need during the holidays.",
     "eventLocation": "456 Oakwood Avenue, Townsville, USA",
@@ -1006,33 +1006,6 @@ db.events.insertMany([
     "eventRoles": ["Food"],
     "emailBodies": [],
     "isRecurring": false
-  }
-])
-
-// creates recurringEventId variables
-for (let i = 1; i <= 10; i++) {
-  this[`recurringEventId${i}`] = ObjectId();
-}
-db.recurringEvents.insertMany([
-  {
-    "event": eventId6,
-    "recurrence": "you do this idk"
-  },
-  {
-    "event": eventId3,
-    "recurrence": "you do this idk"
-  },
-  {
-    "event": eventId7,
-    "recurrence": "you do this idk"
-  },
-  {
-    "event": eventId8,
-    "recurrence": "you do this idk"
-  },
-  {
-    "event": eventId9,
-    "recurrence": "you do this idk"
   }
 ])
 
