@@ -5,6 +5,7 @@ if (true) {
    db.volunteers.deleteMany({})
    db.organizations.deleteMany({})
    db.eventVolunteers.deleteMany({})
+   db.events.deleteMany({})
 }
 
 // create 10 organizationId variables
@@ -724,6 +725,317 @@ db.volunteers.insertMany([
   }
 ])
 
+// creates 30 eventId variables
+for (let i = 1; i <= 150; i++) {
+  this[`eventId${i}`] = ObjectId();
+}
+
+// STANDALONE EVENTS
+db.events.insertMany([
+  {
+    "_id": eventId1,
+    "name": "Feast of Sharing",
+    "description": "A day dedicated to sharing meals with the less fortunate.",
+    "eventLocation": "123 Oak Street, Chattanooga, TN 37402",
+    "startAt": new Date('01 January 2024 10:00'),
+    "endAt": new Date('01 January 2024 12:00'),
+    "date": new Date(ISODate().getTime() - 1000 * 3600 * 24 * -70),
+    "eventRoles": ["Dental", "Food"],
+    "emailBodies": 
+    [ "I want to extend my heartfelt gratitude to each and every one of you for your dedication and hard work at the Feast of Sharing. Your efforts helped serve over 2,000 meals to members of our community in need, bringing warmth and joy during this festive season. Your kindness and generosity truly made a significant difference, and we are deeply thankful for your invaluable support.\nWarm regards,\nJimmy Shoelace",
+      "Dear Volunteer,\n\nWe hope this message finds you well. We're excited to announce that we will be hosting another heartwarming event, the 'Community Unity Dinner,' in just two weeks! The dinner will take place at the Sunshine Community Center located at 123 Main Street next Saturday, starting at 5:00 PM. We greatly appreciate your previous support and hope to see you there to make this event a success once again.\n\nBest regards,\nEmily Waterbottle"
+    ],
+    "isRecurring": false
+  },
+  {
+    "_id": eventId2,
+    "name": "Health for All Fair",
+    "description": "Providing free medical checkups and health education to the community. This is an overnight event!",
+    "eventLocation": "456 Maple Avenue, Nashville, TN 37201",
+    "startAt": new Date('01 January 2024 23:00'),
+    "endAt": new Date('01 January 2024 04:00'),
+    "date": new Date(ISODate().getTime() - 1000 * 3600 * 24 * -2),
+    "eventRoles": ["Medical", "Dental", "Food", "Save the Babies"],
+    "emailBodies": [
+      "Dear Volunteers,\n\nI wanted to extend a heartfelt thank you for your invaluable contributions at the Health for All Fair. Your dedication and hard work helped provide vital healthcare services to over 500 community members in need. Your impact truly embodies the spirit of compassion and service. Thank you again for your commitment to making a difference in our community.\nWarm regards,\nHarry Pencil"
+    ],
+    "isRecurring": false
+  },
+  {
+    "_id": eventId3,
+    "name": "Community Dental Day",
+    "description": "Free dental checkups and oral health education for families.",
+    "eventLocation": "678 Magnolia Boulevard, Columbia, SC 29201",
+    "startAt": new Date('01 January 2024 9:30'),
+    "endAt": new Date('01 January 2024 14:15'),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * -50),
+    "eventRoles": ["Save the Babies", "Medical", "Food"],
+    "emailBodies": [
+      "Dear Volunteers,\n\nI hope this email finds you well. I wanted to take a moment to express my heartfelt gratitude for your invaluable support and dedication during our recent Community Dental Day. Your efforts truly made a significant impact on our community, and we couldn't have achieved such success without your generosity.\n\nThroughout the day, your unwavering commitment to providing dental care to those in need was truly inspiring. Your kindness and compassion shone brightly as you worked tirelessly to ensure that every individual received the attention and care they deserved.\n\nThanks to your hard work, we were able to provide dental services to over 200 individuals, many of whom would otherwise have struggled to access essential dental care. Your willingness to give your time and expertise not only improved the oral health of our community members but also left a lasting impression on everyone you interacted with.\n\nThe smiles and gratitude we witnessed from those who benefited from your services serve as a testament to the profound impact of your volunteer efforts. Your selflessness has undoubtedly made a difference in the lives of so many, and for that, we are incredibly grateful.\n\nOnce again, thank you for your unwavering dedication and commitment to serving our community. Your kindness and generosity have touched the hearts of many and have made Community Dental Day a resounding success.\n\nWarm regards,\n\nSally Horseshoe\nVolunteer Coordinator\nsally.horseshoe@horselovers.com",
+    ],
+    "isRecurring": false
+  },
+  {
+    "_id": eventId4,
+    "name": "Nutrition and Wellness Drive",
+    "description": "Promoting nutrition and wellness through free workshops and food distribution.",
+    "eventLocation": "789 Elm Drive, Atlanta, GA 30303",
+    "startAt": new Date('01 January 2024 18:00'),
+    "endAt": new Date('01 January 2024 22:30'),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * -7),
+    "eventRoles": ["Food"],
+    "emailBodies": [
+      "Dear Volunteers,\n\nThank you immensely for your dedication and hard work at the Nutrition and Wellness Drive. Your efforts have directly impacted over 500 families in our community, ensuring access to essential nutrition and wellness resources. Your kindness and commitment have truly made a significant difference.\n\nWarm regards,\nJoanne 'The animal' Lewis",
+      "Dear Volunteers,\n\nWe hope this email finds you well and filled with the same enthusiasm for community wellness as before!\n\nWe wanted to extend our heartfelt gratitude for your invaluable support during the recent Nutrition and Wellness Drive event. Your dedication and hard work truly made a significant impact on our community's health and well-being.\n\nWe are excited to inform you that we will be hosting another exciting event, the 'Healthy Living Fair,' in just two weeks' time! Details for the event are as follows:\n\nEvent Name: Healthy Living Fair\nDate: Saturday\nTime: 10:00 AM - 2:00 PM\nLocation: Greenfield Community Center, 123 Main Street, Greenfield, USA\n\nWe would be thrilled if you could join us once again to continue our mission of promoting nutrition and wellness within our community. Your passion and commitment are instrumental in making these events successful, and we truly appreciate your ongoing support.\n\nPlease let us know if you are available to volunteer for the Healthy Living Fair. Your participation will undoubtedly contribute to making a positive impact on the lives of many.\n\nLooking forward to hearing from you soon!\n\nBest regards,\nJackson Mississippi"
+    ],
+    "isRecurring": false
+  },
+  {
+    "_id": eventId5,
+    "name": "Hope Medical Camp",
+    "description": "A medical camp offering various health services to underserved communities.",
+    "eventLocation": "321 Pine Lane, Asheville, NC 28801",
+    "startAt": new Date('01 January 2024 03:00'),
+    "endAt": new Date('01 January 2024 09:00'),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * -123),
+    "eventRoles": ["Medical", "Save the Babies"],
+    "emailBodies": [
+      "Dear Volunteer,\n\nI hope this message finds you well. On behalf of the entire Hope Medical Camp team, I want to express our deepest gratitude for your exceptional dedication and hard work during the recent medical camp.\n\nYour selfless contributions played a pivotal role in making the event a resounding success. Your unwavering commitment to providing quality healthcare services to the community truly made a significant impact. Together, we were able to serve [number] patients, offering them vital medical assistance and support.\n\nThe positive feedback from the attendees has been overwhelming, highlighting the genuine care and compassion you demonstrated in every interaction. Your willingness to go above and beyond has not only improved the health and well-being of those we served but has also left a lasting impression on the community.\n\nThe success of the Hope Medical Camp is a testament to the collective effort of individuals like you, who understand the importance of giving back and making a difference in the lives of others. Your time and skills have made a real impact on the health of our community, and we are truly grateful for your invaluable contribution.\n\nOnce again, thank you for your hard work, dedication, and the positive energy you brought to the Hope Medical Camp. We look forward to continuing our mission together and creating a healthier, happier community.\n\nWarm regards,\n\nAshley Ashlingtonsbergerton\nChief Medicine Holder\nHope Medical Camp Team",
+    ],
+    "isRecurring": false
+  },
+  {
+    _id: eventId6,
+    "name": "Food for Thought Evening",
+    "description": "An evening event focused on discussing and distributing nutritious food.",
+    "eventLocation": "567 Cedar Court, Lexington, KY 40502",
+    "startAt": new Date('01 January 2024 15:00'),
+    "endAt": new Date('01 January 2024 17:30'),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * -95),
+    "eventRoles": ["Food", "Dental"],
+    "emailBodies": [
+      "Dear Volunteer,\n\nI want to express my sincere gratitude for your invaluable contribution at the Food for Thought Evening. Your dedication and hard work significantly enhanced the event, ensuring its success. Thanks to your efforts, we were able to serve over 500 meals, raising $10,000 for local food banks. Your commitment truly made a difference in the lives of those in need.\n\nWarm regards,\nDr. E. Mail",
+    ],
+    "isRecurring": false,
+  },
+  {
+    "_id": eventId7,
+    "name": "Smiles Dental Campaign",
+    "description": "A campaign to offer dental services and promote oral hygiene.",
+    "eventLocation": "890 Birch Road, Louisville, KY 40202",
+    "startAt": new Date('01 January 2024 10:19'),
+    "endAt": new Date('01 January 2024 12:34'),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * -12),
+    "eventRoles": ["Dental", "Medical"],
+    "emailBodies": [
+      "Dear Volunteers,\n\nI wanted to extend my heartfelt gratitude to each and every one of you for your invaluable dedication and hard work during the Smiles Dental Campaign. Your tireless efforts have truly made a monumental impact, providing essential dental care to over 500 underserved individuals in our community. Your compassion and commitment to improving oral health have touched the lives of so many, and we are immensely grateful for your selflessness. Thank you for being the driving force behind this transformative initiative!\n\nWarm regards,\nKaylin OvalOffice",
+    ],
+    "isRecurring": false,
+  },
+  {
+    "_id": eventId8,
+    "name": "Harvest of Health Expo",
+    "description": "An expo offering health screenings, wellness workshops, and more.",
+    "eventLocation": "234 Walnut Way, Huntsville, AL 35801",
+    "startAt": new Date('01 January 2024 0:00'),
+    "endAt": new Date('01 January 2024 04:22'),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * -12),
+    "eventRoles": ["Dental"],
+    "emailBodies": [
+      "Dear Volunteers,\n\nI wanted to extend my sincere gratitude to each of you for your unwavering dedication and hard work at the Harvest of Health Expo. Your passion and commitment were palpable, especially when you went the extra mile to assist Mrs. Johnson, who arrived with limited mobility, ensuring she could fully participate in the event. Thanks to your kindness and attentiveness, moments like these made the expo truly impactful, leaving a lasting impression on our community. Your selflessness and dedication embody the spirit of giving back. Thank you immensely for your invaluable contributions!\n\nWarm regards,\nBarack Obama II",
+    ],
+    "isRecurring": false,
+  },
+  {
+    "_id": eventId9,
+    "name": "Well-being and Care Fest",
+    "description": "A festival celebrating health care workers and offering community health services. This is an overnight telethon starting at midnight!",
+    "eventLocation": "901 Spruce Street, Birmingham, AL 35203",
+    "startAt": new Date('01 January 2024 23:59'),
+    "endAt": new Date('01 January 2024 08:00'),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * -33),
+    "eventRoles": ["Medical", "Save the Babies"],
+    "emailBodies": [
+      "Dear Volunteer,\n\nI hope this email finds you well. I wanted to extend my deepest gratitude to each and every one of you for your invaluable contributions to the success of the Well-being and Care Fest last weekend. Your dedication and enthusiasm truly made a difference in the lives of many attendees.\n\nOne heartwarming moment that stands out is when a group of elderly participants joined our yoga session led by Jane, our volunteer instructor. Witnessing their smiles and sense of tranquility reminded us of the profound impact of our collective efforts.\n\nYour commitment to spreading joy and wellness resonated with everyone present, and we couldn't have achieved such positive outcomes without your unwavering support. Thank you once again for being the driving force behind this meaningful event.\n\nWarm regards,\nRobert Painting",
+    ],
+    "isRecurring": false,
+  },
+  {
+    "_id": eventId10,
+    "name": "Nourish to Flourish Initiative",
+    "description": "An initiative to provide nourishing meals and nutrition education to those in need.",
+    "eventLocation": "345 Sycamore Circle, Greenville, SC 29601",
+    "startAt": new Date('01 January 2024 17:00'),
+    "endAt": new Date('01 January 2024 23:59'),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * -480),
+    "eventRoles": ["Medical"],
+    "emailBodies": [
+    ],
+    "isRecurring": false,
+  },
+  {
+    "_id": eventId11,
+    "name": "Food for Thought",
+    "description": "An insightful discussion of the question 'what is food?' No food provided.",
+    "eventLocation": "345 Sycamore Circle, Greenville, SC 29601",
+    "startAt": new Date('01 January 2024 17:00'),
+    "endAt": new Date('01 January 2024 23:59'),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * -4),
+    "eventRoles": ["Medical"],
+    "emailBodies": [
+    ],
+    "isRecurring": false,
+  },
+  {
+    "_id": "eventId12",
+    "name": "Healthy Smiles Initiative",
+    "description": "A dental care event offering free check-ups, cleanings, and oral health education.",
+    "eventLocation": "123 Oak Street, Anytown, USA",
+    "startAt": new Date('01 January 2024 10:00'),
+    "endAt": new Date('01 January 2024 12:00'),
+    "date": new Date(ISODate().getTime() - 1000 * 3600 * 24 * 3),
+    "eventRoles": ["Dental"],
+    "emailBodies": [],
+    "isRecurring": false
+  },
+  {
+    "_id": "eventId13",
+    "name": "Nutrition Workshop and Grocery Distribution",
+    "description": "An interactive workshop on nutrition followed by free groceries distribution to attendees.",
+    "eventLocation": "789 Maple Avenue, Smalltown, USA",
+    "eventLocation": "456 Maple Avenue, Nashville, TN 37201",
+    "startAt": new Date('01 January 2024 23:00'),
+    "endAt": new Date('01 January 2024 04:00'),
+    "date": new Date(ISODate().getTime() - 1000 * 3600 * 24 * 2),
+    "eventRoles": ["Food"],
+    "emailBodies": [],
+    "isRecurring": false
+  },
+  {
+    "_id": "eventId14",
+    "name": "Mobile Medical Clinic",
+    "description": "A traveling medical clinic offering free consultations, check-ups, and basic medical services.",
+    "eventLocation": "456 Pine Street, Hometown, USA",
+    "startAt": new Date('01 January 2024 9:30'),
+    "endAt": new Date('01 January 2024 14:15'),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3),
+    "eventRoles": ["Medical"],
+    "emailBodies": [],
+    "isRecurring": false
+  },
+  {
+    "_id": "eventId15",
+    "name": "Healthy Kids, Happy Lives",
+    "description": "A campaign to provide car seats and safety education to families with young children.",
+    "eventLocation": "567 Elm Street, Villagetown, USA",
+    "startAt": new Date('01 January 2024 18:00'),
+    "endAt": new Date('01 January 2024 22:30'),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 7),
+    "eventRoles": ["Save the Babies"],
+    "emailBodies": [],
+    "isRecurring": false
+  },
+  {
+    "_id": "eventId16",
+    "name": "Health Fair and Immunization Drive",
+    "description": "A community health fair offering immunizations and health screenings.",
+    "eventLocation": "890 Walnut Street, Metropolis, USA",
+    "startAt": new Date('01 January 2024 03:00'),
+    "endAt": new Date('01 January 2024 09:00'),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 123),
+    "eventRoles": ["Medical"],
+    "emailBodies": [],
+    "isRecurring": false
+  },
+  {
+    "_id": "eventId17",
+    "name": "Feeding Families, Nourishing Communities",
+    "description": "A food distribution event providing groceries to families in need.",
+    "eventLocation": "234 Cedar Street, Countytown, USA",
+    "startAt": new Date('01 January 2024 15:00'),
+    "endAt": new Date('01 January 2024 17:30'),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 95),
+    "eventRoles": ["Food"],
+    "emailBodies": [],
+    "isRecurring": false
+  },
+  {
+    "_id": "eventId18",
+    "name": "Dental Health Day",
+    "description": "A day dedicated to promoting oral hygiene with free dental check-ups and fluoride treatments.",
+    "eventLocation": "345 Pineapple Lane, Suburbia, USA",
+    "startAt": new Date('01 January 2024 0:00'),
+    "endAt": new Date('01 January 2024 04:22'),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 12),
+    "eventRoles": ["Dental"],
+    "emailBodies": [],
+    "isRecurring": false
+  },
+  {
+    "_id": "eventId19",
+    "name": "Carseat Safety Seminar",
+    "description": "An educational seminar on car seat safety and installation for parents and caregivers.",
+    "eventLocation": "678 Maplewood Drive, Suburbville, USA",
+    "startAt": new Date('01 January 2024 23:59'),
+    "endAt": new Date('01 January 2024 08:00'),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 33),
+    "eventRoles": ["Save the Babies"],
+    "emailBodies": [],
+    "isRecurring": false
+  },
+  {
+    "_id": "eventId20",
+    "name": "Medical Outreach Program",
+    "description": "A program offering medical consultations and basic healthcare services to underserved communities.",
+    "eventLocation": "123 Cherry Blossom Lane, Countryside, USA",
+    "startAt": new Date('01 January 2024 17:00'),
+    "endAt": new Date('01 January 2024 23:59'),
+    "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 480),
+    "eventRoles": ["Medical"],
+    "emailBodies": [],
+    "isRecurring": false
+  },
+  {
+    "_id": "eventId21",
+    "name": "Holiday Food Drive",
+    "description": "A seasonal food drive to collect non-perishable food items for families in need during the holidays.",
+    "eventLocation": "456 Oakwood Avenue, Townsville, USA",
+    "startAt": new Date('01 January 2024 10:00'),
+    "endAt": new Date('01 January 2024 12:00'),
+    "date": new Date(ISODate().getTime() - 1000 * 3600 * 24 * 3),
+    "eventRoles": ["Food"],
+    "emailBodies": [],
+    "isRecurring": false
+  }
+])
+
+// creates recurringEventId variables
+for (let i = 1; i <= 10; i++) {
+  this[`recurringEventId${i}`] = ObjectId();
+}
+db.recurringEvents.insertMany([
+  {
+    "event": eventId6,
+    "recurrence": "you do this idk"
+  },
+  {
+    "event": eventId3,
+    "recurrence": "you do this idk"
+  },
+  {
+    "event": eventId7,
+    "recurrence": "you do this idk"
+  },
+  {
+    "event": eventId8,
+    "recurrence": "you do this idk"
+  },
+  {
+    "event": eventId9,
+    "recurrence": "you do this idk"
+  }
+])
+
 // creates 150 eventVolunteerId variables
 for (let i = 1; i <= 150; i++) {
   this[`eventVolunteerId${i}`] = ObjectId();
@@ -735,7 +1047,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId1,
         "volunteer": volunteerId7,
-        "event": ObjectId(),
+        "event": eventId1,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -744,7 +1056,7 @@ db.eventVolunteers.insertMany([
         "role": "Medical",
         "organization": organizationId4,
         "volunteer": volunteerId5,
-        "event": ObjectId(),
+        "event": eventId5,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -753,7 +1065,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId10,
         "volunteer": volunteerId14,
-        "event": ObjectId(),
+        "event": eventId2,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -761,7 +1073,7 @@ db.eventVolunteers.insertMany([
         "_id": eventVolunteerId4,
         "role": "Food",
         "volunteer": volunteerId2,
-        "event": ObjectId(),
+        "event": eventId3,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -770,7 +1082,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId3,
         "volunteer": volunteerId8,
-        "event": ObjectId(),
+        "event": eventId4,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -779,7 +1091,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId2,
         "volunteer": volunteerId31,
-        "event": ObjectId(),
+        "event": eventId6,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -788,7 +1100,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId6,
         "volunteer": volunteerId3,
-        "event": ObjectId(),
+        "event": eventId1,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -797,7 +1109,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId1,
         "volunteer": volunteerId16,
-        "event": ObjectId(),
+        "event": eventId1,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -806,7 +1118,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId8,
         "volunteer": volunteerId6,
-        "event": ObjectId(),
+        "event": eventId3,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -815,7 +1127,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId1,
         "volunteer": volunteerId10,
-        "event": ObjectId(),
+        "event": eventId1,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -824,7 +1136,7 @@ db.eventVolunteers.insertMany([
         "role": "Dental",
         "organization": organizationId2,
         "volunteer": volunteerId23,
-        "event": ObjectId(),
+        "event": eventId6,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -833,7 +1145,7 @@ db.eventVolunteers.insertMany([
         "role": "Dental",
         "organization": organizationId8,
         "volunteer": volunteerId23,
-        "event": ObjectId(),
+        "event": eventId1,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -842,7 +1154,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId2,
         "volunteer": volunteerId12,
-        "event": ObjectId(),
+        "event": eventId2,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -851,7 +1163,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId4,
         "volunteer": volunteerId11,
-        "event": ObjectId(),
+        "event": eventId3,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -860,7 +1172,7 @@ db.eventVolunteers.insertMany([
         "role": "Dental",
         "organization": organizationId2,
         "volunteer": volunteerId19,
-        "event": ObjectId(),
+        "event": eventId1,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -869,7 +1181,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId6,
         "volunteer": volunteerId27,
-        "event": ObjectId(),
+        "event": eventId6,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -878,7 +1190,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId7,
         "volunteer": volunteerId21,
-        "event": ObjectId(),
+        "event": eventId1,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -887,7 +1199,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId2,
         "volunteer": volunteerId7,
-        "event": ObjectId(),
+        "event": eventId2,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -896,7 +1208,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId1,
         "volunteer": volunteerId3,
-        "event": ObjectId(),
+        "event": eventId3,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -905,7 +1217,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId7,
         "volunteer": volunteerId2,
-        "event": ObjectId(),
+        "event": eventId4,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -914,7 +1226,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId3,
         "volunteer": volunteerId16,
-        "event": ObjectId(),
+        "event": eventId2,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -923,7 +1235,7 @@ db.eventVolunteers.insertMany([
         "role": "Medical",
         "organization": organizationId2,
         "volunteer": volunteerId1,
-        "event": ObjectId(),
+        "event": eventId2,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -932,7 +1244,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId4,
         "volunteer": volunteerId13,
-        "event": ObjectId(),
+        "event": eventId2,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -941,7 +1253,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId10,
         "volunteer": volunteerId28,
-        "event": ObjectId(),
+        "event": eventId3,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -950,7 +1262,7 @@ db.eventVolunteers.insertMany([
         "role": "Medical",
         "organization": organizationId1,
         "volunteer": volunteerId4,
-        "event": ObjectId(),
+        "event": eventId7,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -959,7 +1271,7 @@ db.eventVolunteers.insertMany([
         "role": "Save the Babies",
         "organization": organizationId6,
         "volunteer": volunteerId15,
-        "event": ObjectId(),
+        "event": eventId5,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -968,7 +1280,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId6,
         "volunteer": volunteerId7,
-        "event": ObjectId(),
+        "event": eventId3,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -976,7 +1288,7 @@ db.eventVolunteers.insertMany([
         "_id": eventVolunteerId28,
         "role": "Food",
         "volunteer": volunteerId22,
-        "event": ObjectId(),
+        "event": eventId3,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -985,7 +1297,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId8,
         "volunteer": volunteerId15,
-        "event": ObjectId(),
+        "event": eventId1,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -994,7 +1306,7 @@ db.eventVolunteers.insertMany([
         "role": "Save the Babies",
         "organization": organizationId3,
         "volunteer": volunteerId4,
-        "event": ObjectId(),
+        "event": eventId9,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1003,7 +1315,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId7,
         "volunteer": volunteerId28,
-        "event": ObjectId(),
+        "event": eventId4,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1012,7 +1324,7 @@ db.eventVolunteers.insertMany([
         "role": "Save the Babies",
         "organization": organizationId6,
         "volunteer": volunteerId8,
-        "event": ObjectId(),
+        "event": eventId5,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1021,7 +1333,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId3,
         "volunteer": volunteerId23,
-        "event": ObjectId(),
+        "event": eventId4,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1030,7 +1342,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId4,
         "volunteer": volunteerId16,
-        "event": ObjectId(),
+        "event": eventId3,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1039,7 +1351,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId4,
         "volunteer": volunteerId11,
-        "event": ObjectId(),
+        "event": eventId2,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1048,7 +1360,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId10,
         "volunteer": volunteerId21,
-        "event": ObjectId(),
+        "event": eventId4,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1057,7 +1369,7 @@ db.eventVolunteers.insertMany([
         "role": "Dental",
         "organization": organizationId6,
         "volunteer": volunteerId21,
-        "event": ObjectId(),
+        "event": eventId8,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1066,7 +1378,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId10,
         "volunteer": volunteerId14,
-        "event": ObjectId(),
+        "event": eventId1,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1075,7 +1387,7 @@ db.eventVolunteers.insertMany([
         "role": "Save the Babies",
         "organization": organizationId7,
         "volunteer": volunteerId8,
-        "event": ObjectId(),
+        "event": eventId9,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1084,7 +1396,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId8,
         "volunteer": volunteerId12,
-        "event": ObjectId(),
+        "event": eventId3,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1093,7 +1405,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId6,
         "volunteer": volunteerId2,
-        "event": ObjectId(),
+        "event": eventId6,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1102,7 +1414,7 @@ db.eventVolunteers.insertMany([
         "role": "Save the Babies",
         "organization": organizationId7,
         "volunteer": volunteerId17,
-        "event": ObjectId(),
+        "event": eventId5,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1111,7 +1423,7 @@ db.eventVolunteers.insertMany([
         "role": "Medical",
         "organization": organizationId8,
         "volunteer": volunteerId12,
-        "event": ObjectId(),
+        "event": eventId10,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1120,16 +1432,15 @@ db.eventVolunteers.insertMany([
         "role": "Dental",
         "organization": organizationId4,
         "volunteer": volunteerId6,
-        "event": ObjectId(),
+        "event": eventId8,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
     {
         "_id": eventVolunteerId45,
         "role": "Food",
-        "organization": organizationId4,
         "volunteer": volunteerId16,
-        "event": ObjectId(),
+        "event": eventId4,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1138,7 +1449,7 @@ db.eventVolunteers.insertMany([
         "role": "Dental",
         "organization": organizationId1,
         "volunteer": volunteerId21,
-        "event": ObjectId(),
+        "event": eventId7,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1147,7 +1458,7 @@ db.eventVolunteers.insertMany([
         "role": "Dental",
         "organization": organizationId5,
         "volunteer": volunteerId6,
-        "event": ObjectId(),
+        "event": eventId7,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1156,7 +1467,7 @@ db.eventVolunteers.insertMany([
         "role": "Medical",
         "organization": organizationId5,
         "volunteer": volunteerId5,
-        "event": ObjectId(),
+        "event": eventId10,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1165,7 +1476,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId2,
         "volunteer": volunteerId24,
-        "event": ObjectId(),
+        "event": eventId1,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1174,7 +1485,7 @@ db.eventVolunteers.insertMany([
         "role": "Medical",
         "organization": organizationId6,
         "volunteer": volunteerId16,
-        "event": ObjectId(),
+        "event": eventId10,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1182,8 +1493,8 @@ db.eventVolunteers.insertMany([
         "_id": eventVolunteerId51,
         "role": "Save the Babies",
         "organization": organizationId1,
-        "volunteer": volunteerId4,
-        "event": ObjectId(),
+        "volunteer": volunteerId5,
+        "event": eventId2,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1192,7 +1503,7 @@ db.eventVolunteers.insertMany([
         "role": "Dental",
         "organization": organizationId4,
         "volunteer": volunteerId23,
-        "event": ObjectId(),
+        "event": eventId8,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1201,7 +1512,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId2,
         "volunteer": volunteerId4,
-        "event": ObjectId(),
+        "event": eventId6,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1210,7 +1521,7 @@ db.eventVolunteers.insertMany([
         "role": "Save the Babies",
         "organization": organizationId1,
         "volunteer": volunteerId19,
-        "event": ObjectId(),
+        "event": eventId2,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1219,16 +1530,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId6,
         "volunteer": volunteerId16,
-        "event": ObjectId(),
-        "createdAt": new Date(),
-        "updatedAt": new Date()
-    },
-    {
-        "_id": eventVolunteerId56,
-        "role": "Food",
-        "organization": organizationId7,
-        "volunteer": volunteerId21,
-        "event": ObjectId(),
+        "event": eventId6,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1237,7 +1539,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId1,
         "volunteer": volunteerId1,
-        "event": ObjectId(),
+        "event": eventId4,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1246,7 +1548,7 @@ db.eventVolunteers.insertMany([
         "role": "Medical",
         "organization": organizationId3,
         "volunteer": volunteerId16,
-        "event": ObjectId(),
+        "event": eventId9,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1255,7 +1557,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId5,
         "volunteer": volunteerId22,
-        "event": ObjectId(),
+        "event": eventId1,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1264,7 +1566,7 @@ db.eventVolunteers.insertMany([
         "role": "Medical",
         "organization": organizationId10,
         "volunteer": volunteerId9,
-        "event": ObjectId(),
+        "event": eventId10,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1273,7 +1575,7 @@ db.eventVolunteers.insertMany([
         "role": "Save the Babies",
         "organization": organizationId10,
         "volunteer": volunteerId4,
-        "event": ObjectId(),
+        "event": eventId3,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1282,7 +1584,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId5,
         "volunteer": volunteerId9,
-        "event": ObjectId(),
+        "event": eventId1,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1291,7 +1593,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId7,
         "volunteer": volunteerId14,
-        "event": ObjectId(),
+        "event": eventId6,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1299,7 +1601,7 @@ db.eventVolunteers.insertMany([
         "_id": eventVolunteerId64,
         "role": "Food",
         "volunteer": volunteerId8,
-        "event": ObjectId(),
+        "event": eventId1,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1308,7 +1610,7 @@ db.eventVolunteers.insertMany([
         "role": "Save the Babies",
         "organization": organizationId5,
         "volunteer": volunteerId15,
-        "event": ObjectId(),
+        "event": eventId9,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1317,7 +1619,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId5,
         "volunteer": volunteerId7,
-        "event": ObjectId(),
+        "event": eventId4,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1326,7 +1628,7 @@ db.eventVolunteers.insertMany([
         "role": "Save the Babies",
         "organization": organizationId2,
         "volunteer": volunteerId14,
-        "event": ObjectId(),
+        "event": eventId5,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1335,7 +1637,7 @@ db.eventVolunteers.insertMany([
         "role": "Medical",
         "organization": organizationId8,
         "volunteer": volunteerId4,
-        "event": ObjectId(),
+        "event": eventId10,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1344,7 +1646,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId7,
         "volunteer": volunteerId4,
-        "event": ObjectId(),
+        "event": eventId1,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1353,7 +1655,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId3,
         "volunteer": volunteerId24,
-        "event": ObjectId(),
+        "event": eventId2,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1362,7 +1664,7 @@ db.eventVolunteers.insertMany([
         "role": "Save the Babies",
         "organization": organizationId7,
         "volunteer": volunteerId17,
-        "event": ObjectId(),
+        "event": eventId9,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1371,7 +1673,7 @@ db.eventVolunteers.insertMany([
         "role": "Save the Babies",
         "organization": organizationId7,
         "volunteer": volunteerId15,
-        "event": ObjectId(),
+        "event": eventId3,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1379,16 +1681,7 @@ db.eventVolunteers.insertMany([
         "_id": eventVolunteerId73,
         "role": "Dental",
         "volunteer": volunteerId6,
-        "event": ObjectId(),
-        "createdAt": new Date(),
-        "updatedAt": new Date()
-    },
-    {
-        "_id": eventVolunteerId74,
-        "role": "Food",
-        "organization": organizationId8,
-        "volunteer": volunteerId16,
-        "event": ObjectId(),
+        "event": eventId6,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1396,7 +1689,7 @@ db.eventVolunteers.insertMany([
         "_id": eventVolunteerId75,
         "role": "Food",
         "volunteer": volunteerId6,
-        "event": ObjectId(),
+        "event": eventId4,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1405,7 +1698,7 @@ db.eventVolunteers.insertMany([
         "role": "Medical",
         "organization": organizationId7,
         "volunteer": volunteerId12,
-        "event": ObjectId(),
+        "event": eventId7,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1414,7 +1707,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId6,
         "volunteer": volunteerId12,
-        "event": ObjectId(),
+        "event": eventId4,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1423,7 +1716,7 @@ db.eventVolunteers.insertMany([
         "role": "Save the Babies",
         "organization": organizationId1,
         "volunteer": volunteerId15,
-        "event": ObjectId(),
+        "event": eventId2,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1432,7 +1725,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId10,
         "volunteer": volunteerId25,
-        "event": ObjectId(),
+        "event": eventId1,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1441,16 +1734,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId5,
         "volunteer": volunteerId31,
-        "event": ObjectId(),
-        "createdAt": new Date(),
-        "updatedAt": new Date()
-    },
-    {
-        "_id": eventVolunteerId81,
-        "role": "Food",
-        "organization": organizationId6,
-        "volunteer": volunteerId16,
-        "event": ObjectId(),
+        "event": eventId2,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1459,7 +1743,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId10,
         "volunteer": volunteerId18,
-        "event": ObjectId(),
+        "event": eventId4,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1468,7 +1752,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId7,
         "volunteer": volunteerId6,
-        "event": ObjectId(),
+        "event": eventId2,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1477,16 +1761,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId8,
         "volunteer": volunteerId4,
-        "event": ObjectId(),
-        "createdAt": new Date(),
-        "updatedAt": new Date()
-    },
-    {
-        "_id": eventVolunteerId85,
-        "role": "Dental",
-        "organization": organizationId10,
-        "volunteer": volunteerId6,
-        "event": ObjectId(),
+        "event": eventId2,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1495,7 +1770,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId1,
         "volunteer": volunteerId24,
-        "event": ObjectId(),
+        "event": eventId3,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1504,16 +1779,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId6,
         "volunteer": volunteerId1,
-        "event": ObjectId(),
-        "createdAt": new Date(),
-        "updatedAt": new Date()
-    },
-    {
-        "_id": eventVolunteerId88,
-        "role": "Food",
-        "organization": organizationId8,
-        "volunteer": volunteerId16,
-        "event": ObjectId(),
+        "event": eventId6,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1522,7 +1788,7 @@ db.eventVolunteers.insertMany([
         "role": "Medical",
         "organization": organizationId4,
         "volunteer": volunteerId4,
-        "event": ObjectId(),
+        "event": eventId5,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1531,7 +1797,7 @@ db.eventVolunteers.insertMany([
         "role": "Medical",
         "organization": organizationId2,
         "volunteer": volunteerId16,
-        "event": ObjectId(),
+        "event": eventId7,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1540,7 +1806,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId4,
         "volunteer": volunteerId28,
-        "event": ObjectId(),
+        "event": eventId2,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1548,7 +1814,7 @@ db.eventVolunteers.insertMany([
         "_id": eventVolunteerId92,
         "role": "Dental",
         "volunteer": volunteerId17,
-        "event": ObjectId(),
+        "event": eventId8,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1557,7 +1823,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId1,
         "volunteer": volunteerId15,
-        "event": ObjectId(),
+        "event": eventId4,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1566,7 +1832,7 @@ db.eventVolunteers.insertMany([
         "role": "Medical",
         "organization": organizationId4,
         "volunteer": volunteerId1,
-        "event": ObjectId(),
+        "event": eventId7,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1575,7 +1841,7 @@ db.eventVolunteers.insertMany([
         "role": "Dental",
         "organization": organizationId3,
         "volunteer": volunteerId23,
-        "event": ObjectId(),
+        "event": eventId7,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1584,7 +1850,7 @@ db.eventVolunteers.insertMany([
         "role": "Dental",
         "organization": organizationId3,
         "volunteer": volunteerId6,
-        "event": ObjectId(),
+        "event": eventId1,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1593,7 +1859,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId1,
         "volunteer": volunteerId22,
-        "event": ObjectId(),
+        "event": eventId4,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1602,16 +1868,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId2,
         "volunteer": volunteerId2,
-        "event": ObjectId(),
-        "createdAt": new Date(),
-        "updatedAt": new Date()
-    },
-    {
-        "_id": eventVolunteerId99,
-        "role": "Dental",
-        "organization": organizationId4,
-        "volunteer": volunteerId6,
-        "event": ObjectId(),
+        "event": eventId1,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1620,7 +1877,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId4,
         "volunteer": volunteerId5,
-        "event": ObjectId(),
+        "event": eventId4,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1629,7 +1886,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId6,
         "volunteer": volunteerId7,
-        "event": ObjectId(),
+        "event": eventId6,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1637,7 +1894,7 @@ db.eventVolunteers.insertMany([
         "_id": eventVolunteerId102,
         "role": "Food",
         "volunteer": volunteerId5,
-        "event": ObjectId(),
+        "event": eventId6,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1646,15 +1903,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId6,
         "volunteer": volunteerId9,
-        "event": ObjectId(),
-        "createdAt": new Date(),
-        "updatedAt": new Date()
-    },
-    {
-        "_id": eventVolunteerId104,
-        "role": "Food",
-        "volunteer": volunteerId16,
-        "event": ObjectId(),
+        "event": eventId2,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1663,7 +1912,7 @@ db.eventVolunteers.insertMany([
         "role": "Dental",
         "organization": organizationId4,
         "volunteer": volunteerId21,
-        "event": ObjectId(),
+        "event": eventId2,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1672,7 +1921,7 @@ db.eventVolunteers.insertMany([
         "role": "Save the Babies",
         "organization": organizationId10,
         "volunteer": volunteerId8,
-        "event": ObjectId(),
+        "event": eventId2,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1681,7 +1930,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId2,
         "volunteer": volunteerId5,
-        "event": ObjectId(),
+        "event": eventId1,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1690,16 +1939,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId5,
         "volunteer": volunteerId27,
-        "event": ObjectId(),
-        "createdAt": new Date(),
-        "updatedAt": new Date()
-    },
-    {
-        "_id": eventVolunteerId109,
-        "role": "Food",
-        "organization": organizationId6,
-        "volunteer": volunteerId16,
-        "event": ObjectId(),
+        "event": eventId1,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1708,7 +1948,7 @@ db.eventVolunteers.insertMany([
         "role": "Save the Babies",
         "organization": organizationId6,
         "volunteer": volunteerId8,
-        "event": ObjectId(),
+        "event": eventId3,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1717,7 +1957,7 @@ db.eventVolunteers.insertMany([
         "role": "Medical",
         "organization": organizationId2,
         "volunteer": volunteerId1,
-        "event": ObjectId(),
+        "event": eventId10,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1726,7 +1966,7 @@ db.eventVolunteers.insertMany([
         "role": "Medical",
         "organization": organizationId3,
         "volunteer": volunteerId9,
-        "event": ObjectId(),
+        "event": eventId9,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1735,7 +1975,7 @@ db.eventVolunteers.insertMany([
         "role": "Save the Babies",
         "organization": organizationId6,
         "volunteer": volunteerId17,
-        "event": ObjectId(),
+        "event": eventId3,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1744,7 +1984,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId8,
         "volunteer": volunteerId21,
-        "event": ObjectId(),
+        "event": eventId3,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1753,7 +1993,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId6,
         "volunteer": volunteerId8,
-        "event": ObjectId(),
+        "event": eventId6,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1762,7 +2002,7 @@ db.eventVolunteers.insertMany([
         "role": "Medical",
         "organization": organizationId10,
         "volunteer": volunteerId5,
-        "event": ObjectId(),
+        "event": eventId7,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1771,7 +2011,7 @@ db.eventVolunteers.insertMany([
         "role": "Dental",
         "organization": organizationId10,
         "volunteer": volunteerId21,
-        "event": ObjectId(),
+        "event": eventId6,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1779,16 +2019,7 @@ db.eventVolunteers.insertMany([
         "_id": eventVolunteerId118,
         "role": "Food",
         "volunteer": volunteerId10,
-        "event": ObjectId(),
-        "createdAt": new Date(),
-        "updatedAt": new Date()
-    },
-    {
-        "_id": eventVolunteerId119,
-        "role": "Save the Babies",
-        "organization": organizationId3,
-        "volunteer": volunteerId4,
-        "event": ObjectId(),
+        "event": eventId6,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1797,16 +2028,7 @@ db.eventVolunteers.insertMany([
         "role": "Save the Babies",
         "organization": organizationId3,
         "volunteer": volunteerId17,
-        "event": ObjectId(),
-        "createdAt": new Date(),
-        "updatedAt": new Date()
-    },
-    {
-        "_id": eventVolunteerId121,
-        "role": "Food",
-        "organization": organizationId6,
-        "volunteer": volunteerId21,
-        "event": ObjectId(),
+        "event": eventId2,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1815,7 +2037,7 @@ db.eventVolunteers.insertMany([
         "role": "Medical",
         "organization": organizationId1,
         "volunteer": volunteerId9,
-        "event": ObjectId(),
+        "event": eventId5,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1824,15 +2046,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId8,
         "volunteer": volunteerId18,
-        "event": ObjectId(),
-        "createdAt": new Date(),
-        "updatedAt": new Date()
-    },
-    {
-        "_id": eventVolunteerId124,
-        "role": "Food",
-        "volunteer": volunteerId16,
-        "event": ObjectId(),
+        "event": eventId6,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1841,16 +2055,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId2,
         "volunteer": volunteerId15,
-        "event": ObjectId(),
-        "createdAt": new Date(),
-        "updatedAt": new Date()
-    },
-    {
-        "_id": eventVolunteerId126,
-        "role": "Save the Babies",
-        "organization": organizationId8,
-        "volunteer": volunteerId4,
-        "event": ObjectId(),
+        "event": eventId6,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1859,7 +2064,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId1,
         "volunteer": volunteerId26,
-        "event": ObjectId(),
+        "event": eventId4,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1867,7 +2072,7 @@ db.eventVolunteers.insertMany([
         "_id": eventVolunteerId128,
         "role": "Medical",
         "volunteer": volunteerId12,
-        "event": ObjectId(),
+        "event": eventId9,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1875,7 +2080,7 @@ db.eventVolunteers.insertMany([
         "_id": eventVolunteerId129,
         "role": "Food",
         "volunteer": volunteerId14,
-        "event": ObjectId(),
+        "event": eventId3,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1884,16 +2089,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId6,
         "volunteer": volunteerId24,
-        "event": ObjectId(),
-        "createdAt": new Date(),
-        "updatedAt": new Date()
-    },
-    {
-        "_id": eventVolunteerId131,
-        "role": "Dental",
-        "organization": organizationId3,
-        "volunteer": volunteerId21,
-        "event": ObjectId(),
+        "event": eventId4,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1902,7 +2098,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId3,
         "volunteer": volunteerId13,
-        "event": ObjectId(),
+        "event": eventId4,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1911,7 +2107,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId1,
         "volunteer": volunteerId13,
-        "event": ObjectId(),
+        "event": eventId6,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1920,7 +2116,7 @@ db.eventVolunteers.insertMany([
         "role": "Dental",
         "organization": organizationId1,
         "volunteer": volunteerId17,
-        "event": ObjectId(),
+        "event": eventId6,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1929,16 +2125,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId6,
         "volunteer": volunteerId25,
-        "event": ObjectId(),
-        "createdAt": new Date(),
-        "updatedAt": new Date()
-    },
-    {
-        "_id": eventVolunteerId136,
-        "role": "Food",
-        "organization": organizationId1,
-        "volunteer": volunteerId5,
-        "event": ObjectId(),
+        "event": eventId2,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1947,16 +2134,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId2,
         "volunteer": volunteerId20,
-        "event": ObjectId(),
-        "createdAt": new Date(),
-        "updatedAt": new Date()
-    },
-    {
-        "_id": eventVolunteerId138,
-        "role": "Food",
-        "organization": organizationId8,
-        "volunteer": volunteerId7,
-        "event": ObjectId(),
+        "event": eventId4,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1965,16 +2143,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId3,
         "volunteer": volunteerId17,
-        "event": ObjectId(),
-        "createdAt": new Date(),
-        "updatedAt": new Date()
-    },
-    {
-        "_id": eventVolunteerId140,
-        "role": "Food",
-        "organization": organizationId2,
-        "volunteer": volunteerId15,
-        "event": ObjectId(),
+        "event": eventId1,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1983,7 +2152,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId1,
         "volunteer": volunteerId30,
-        "event": ObjectId(),
+        "event": eventId3,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -1992,7 +2161,7 @@ db.eventVolunteers.insertMany([
         "role": "Save the Babies",
         "organization": organizationId5,
         "volunteer": volunteerId19,
-        "event": ObjectId(),
+        "event": eventId9,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -2001,7 +2170,7 @@ db.eventVolunteers.insertMany([
         "role": "Dental",
         "organization": organizationId6,
         "volunteer": volunteerId17,
-        "event": ObjectId(),
+        "event": eventId7,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -2010,7 +2179,7 @@ db.eventVolunteers.insertMany([
         "role": "Medical",
         "organization": organizationId5,
         "volunteer": volunteerId1,
-        "event": ObjectId(),
+        "event": eventId5,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -2018,16 +2187,7 @@ db.eventVolunteers.insertMany([
         "_id": eventVolunteerId145,
         "role": "Medical",
         "volunteer": volunteerId12,
-        "event": ObjectId(),
-        "createdAt": new Date(),
-        "updatedAt": new Date()
-    },
-    {
-        "_id": eventVolunteerId146,
-        "role": "Medical",
-        "organization": organizationId1,
-        "volunteer": volunteerId12,
-        "event": ObjectId(),
+        "event": eventId5,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -2036,7 +2196,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId6,
         "volunteer": volunteerId14,
-        "event": ObjectId(),
+        "event": eventId4,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -2044,7 +2204,7 @@ db.eventVolunteers.insertMany([
         "_id": eventVolunteerId148,
         "role": "Food",
         "volunteer": volunteerId11,
-        "event": ObjectId(),
+        "event": eventId6,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -2053,7 +2213,7 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId6,
         "volunteer": volunteerId24,
-        "event": ObjectId(),
+        "event": eventId6,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
@@ -2062,8 +2222,9 @@ db.eventVolunteers.insertMany([
         "role": "Food",
         "organization": organizationId2,
         "volunteer": volunteerId10,
-        "event": ObjectId(),
+        "event": eventId2,
         "createdAt": new Date(),
         "updatedAt": new Date()
     },
 ])
+
