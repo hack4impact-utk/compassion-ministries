@@ -31,7 +31,7 @@ export default function VolunteersView({ volunteers }: VolunteersViewProps) {
           New Volunteer
         </Button>
       </Link>
-      <VolunteerList volunteers={volunteers} />;
+      <VolunteerList volunteers={volunteers} />
     </>
   );
 }
