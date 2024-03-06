@@ -12,7 +12,7 @@ export function OrganizationsView({ organizations }: OrganizationsViewProps) {
   return (
     <div>
       <h1>Organizations</h1>
-      <OrganizationList organizationResponses={organizations} />
+      <OrganizationList organizations={organizations} />
     </div>
   );
 }
