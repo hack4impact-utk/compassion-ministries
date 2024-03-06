@@ -5,41 +5,35 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import { getRoleIcons } from '@/utils/role';
-
-// Object with name, role, and organization
-interface EventVolunteerResponse {
-  volunteer: {
-    name: string;
-    role: string;
-    organization: string;
-  };
-}
+import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
+import Box from '@mui/material/Box';
+import { ForkLeft } from '@mui/icons-material';
 
 // Prop Array with Objects
 interface EventVolunteerListProps {
   volunteerResponses: EventVolunteerResponse[];
 }
 
-const EventVolunteerList: React.FC<EventVolunteerListProps> = ({
+export default function EventVolunteerList({
   volunteerResponses,
-}) => {
+}: EventVolunteerListProps): React.ReactElement {
   return (
     <List>
       {volunteerResponses.map((eventVolunteer, index) => (
         <ListItem key={index}>
-          {/* Display Icons of the Volunteer's Role */}
-          <ListItemAvatar>
-            <Avatar>{getRoleIcons([eventVolunteer.volunteer.role])}</Avatar>
-          </ListItemAvatar>
           {/* Show Volunteer information */}
           <ListItemText
-            primary={eventVolunteer.volunteer.name}
-            secondary={`${eventVolunteer.volunteer.role} at ${eventVolunteer.volunteer.organization}`}
+            primary={`${eventVolunteer.volunteer.firstName} ${eventVolunteer.volunteer.lastName}`}
+            secondary={`With ${eventVolunteer.volunteer.previousOrganization}`}
           />
+          {/* Display Icons of the Volunteer's Role */}
+          <Box sx={{ display: 'flex' }} pt={1} key={index}>
+            {/* Render valid React elements here */}
+            {getRoleIcons([eventVolunteer.role])}
+            {eventVolunteer.role}
+          </Box>
         </ListItem>
       ))}
     </List>
   );
-};
-
-export default EventVolunteerList;
+}
