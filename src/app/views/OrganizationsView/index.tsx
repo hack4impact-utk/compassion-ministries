@@ -21,7 +21,7 @@ export function OrganizationsView({ organizations }: OrganizationsViewProps) {
           New organization
         </Button>
       </Link>
-      <OrganizationList organizationResponses={organizations} />
+      <OrganizationList organizations={organizations} />
     </div>
   );
 }

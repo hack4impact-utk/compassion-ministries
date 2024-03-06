@@ -3,7 +3,16 @@ import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import MasksIcon from '@mui/icons-material/Masks';
 import ChildFriendlyIcon from '@mui/icons-material/ChildFriendly';
 import { ReactNode } from 'react';
-import { Role, roles } from '@/types/dataModel/roles';
+import { Role } from '@/types/dataModel/roles';
+import { sortRoles } from '@/utils/role';
+
+interface IconListProps {
+  roles: Role[];
+}
+
+export default function IconList({ roles }: IconListProps) {
+  return getRoleIcons(sortRoles(roles));
+}
 
 // SVG icons for each event role
 export const roleIcons: { [id: string]: ReactNode } = {
@@ -15,17 +24,12 @@ export const roleIcons: { [id: string]: ReactNode } = {
   ),
 };
 
-// Gets a list containing the same roles but in the order as defined by the data model
-export function sortRoles(roleList: Role[]): Role[] {
-  return [...roleList].sort((a, b) => roles.indexOf(a) - roles.indexOf(b));
-}
-
 // Gets a role icon for the given role
-export function getRoleIcon(role: string | Role): ReactNode {
+function getRoleIcon(role: string | Role): ReactNode {
   return roleIcons[role];
 }
 
 // Gets a list of role icons for all roles in roleList, preserving order
-export function getRoleIcons(roleList: string[] | Role[]): ReactNode[] {
+function getRoleIcons(roleList: string[] | Role[]): ReactNode[] {
   return roleList.map((role) => getRoleIcon(role));
 }

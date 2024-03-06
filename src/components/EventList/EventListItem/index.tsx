@@ -1,7 +1,8 @@
 'use client';
+import IconList from '@/components/IconList';
+import { Stack, Typography } from '@mui/material';
 import { EventResponse } from '@/types/dataModel/event';
-import { getRoleIcons, sortRoles } from '@/utils/role';
-import { ListItemButton, Stack, Typography } from '@mui/material';
+import { ListItemButton } from '@mui/material';
 import { useRouter } from 'next/navigation';
 
 /*
@@ -30,7 +31,7 @@ export default function EventListItem({
           Description: {eventResponse.description}
         </Typography>
         <Stack direction="row" justifyContent="flex-end">
-          {getRoleIcons(sortRoles(eventResponse.eventRoles))}
+          <IconList roles={eventResponse.eventRoles}></IconList>
         </Stack>
       </Stack>
     </ListItemButton>
