@@ -1,7 +1,7 @@
 'use client';
 import { OrganizationResponse } from '@/types/dataModel/organization';
 import React from 'react';
-import OrganizationInfo from '@/components/Organization';
+import Organization from '@/components/Organization';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { Button } from '@mui/material';
 
@@ -33,7 +33,7 @@ export function OrganizationView({
   return (
     <div>
       {/* Display organization information */}
-      <OrganizationInfo organization={organization} volunteers={volunteers} />
+      <Organization organization={organization} volunteers={volunteers} />
 
       {/* Button for editing organization */}
       <Button variant="contained">edit</Button>
