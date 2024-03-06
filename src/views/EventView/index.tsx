@@ -14,12 +14,14 @@ export default function EventView({
 }) {
   return (
     <Box>
-      <Event event={event} eventVolunteers={eventVolunteers} />
       {/* TODO: Add back in after demo/implementation */}
       {/* <Button variant="contained">Edit</Button> */}
       <Link href={`/events/${event._id}/check-in`}>
-        <Button variant="contained">Check-in</Button>
+        <Button variant="contained" fullWidth sx={{ mb: 2 }}>
+          Check-in
+        </Button>
       </Link>
+      <Event event={event} eventVolunteers={eventVolunteers} />
     </Box>
   );
 }
