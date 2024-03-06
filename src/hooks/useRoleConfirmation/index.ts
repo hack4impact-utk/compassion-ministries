@@ -13,7 +13,7 @@ export default function useRoleConfirmation() {
   const confirmRole = async (role: string): Promise<string | null> => {
     try {
       await confirm({
-        title: `This volunteer is not a verified for the '${role}' role.`,
+        title: `This volunteer is not verified for the '${role}' role.`,
         content: createElement(ConfirmContent, {
           setVerifier,
         }),

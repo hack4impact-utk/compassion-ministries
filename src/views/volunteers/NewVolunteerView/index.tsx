@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import VolunteerForm from '@/components/VolunteerForm';
 import { UpsertVolunteerFormData } from '@/types/forms/volunteer';
-import { Button, Box } from '@mui/material';
+import { Button, Box, Typography } from '@mui/material';
 
 export default function NewVolunteerView() {
   const [volunteer, setVolunteerData] = useState<UpsertVolunteerFormData>(
@@ -39,6 +39,7 @@ export default function NewVolunteerView() {
 
   return (
     <Box>
+      <Typography variant="h4">New Volunteer</Typography>
       <VolunteerForm onChange={setVolunteerData} volunteerData={volunteer} />
       <Button variant="contained" fullWidth type="submit" onClick={submitData}>
         Submit
