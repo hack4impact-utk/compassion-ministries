@@ -2,7 +2,8 @@
 import Volunteer from '@/components/volunteers/Volunteer';
 import { VolunteerEventResponse } from '@/types/dataModel/eventVolunteer';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
-import { Box, Button, Link } from '@mui/material';
+import { Box, Button } from '@mui/material';
+import Link from 'next/link';
 
 export default function VolunteerView({
   volunteer,
@@ -18,15 +19,11 @@ export default function VolunteerView({
     <>
       <Volunteer volunteer={volunteer} events={events} />
       <Box sx={{ display: 'flex', pt: 2 }}>
-        <Button variant="contained" sx={{ mr: 1 }}>
-          <Link
-            href={`/volunteers/${volunteer._id}/edit`}
-            color="inherit"
-            sx={{ textDecoration: 'none' }}
-          >
+        <Link href={`/volunteers/${volunteer._id}/edit`}>
+          <Button variant="contained" sx={{ mr: 1 }}>
             Edit
-          </Link>
-        </Button>
+          </Button>
+        </Link>
         <Button onClick={onDelete} variant="contained" color="error">
           Delete
         </Button>

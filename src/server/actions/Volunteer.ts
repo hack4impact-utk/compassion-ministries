@@ -3,21 +3,24 @@ import {
   CreateVolunteerRequest,
   UpdateVolunteerRequest,
 } from '@/types/dataModel/volunteer';
+import EventVolunteerSchema from '../models/EventVolunteer';
 import {
   EventVolunteerEntity,
   VolunteerEventResponse,
+  EventVolunteerResponse,
 } from '@/types/dataModel/eventVolunteer';
 import VolunteerSchema from '@/server/models/Volunteer';
-import EventVolunteerSchema from '@/server/models/EventVolunteer';
 import dbConnect from '@/utils/db-connect';
 import { VolunteerEntity } from '@/types/dataModel/volunteer';
 import { VerifiedRole } from '@/types/dataModel/roles';
 // Temporary code to load org schema until we are using it elsewhere
 import OrganizationSchema from '@/server/models/Organization';
+import EventSchema from '@/server/models/Event';
 import { RoleVerificationRequest } from '@/types/dataModel/roles';
 import CMError, { CMErrorType } from '@/utils/cmerror';
 import { mongo } from 'mongoose';
 OrganizationSchema;
+EventSchema;
 
 /**
  * Deletes a volunteer's roleverification object
@@ -255,4 +258,67 @@ export async function getAllEventsForVolunteer(
     throw new CMError(CMErrorType.InternalError);
   }
   return events;
+}
+
+/**
+ * Retrieves all volunteers associated with a specific organization.
+ * @param organizationId The ID of the organization.
+ * @returns Collection of VolunteerEventResponses for the organization, or null if there are none.
+ */
+export async function getVolunteerEventByOrganization(
+  organizationId: string
+): Promise<VolunteerEventResponse[]> {
+  let volunteerEvents: VolunteerEventResponse[] = [];
+  try {
+    await dbConnect();
+    volunteerEvents = await EventVolunteerSchema.find({
+      organization: organizationId,
+    }).populate('event');
+  } catch (error) {
+    throw new CMError(CMErrorType.InternalError);
+  }
+  return volunteerEvents;
+}
+
+/**
+ * Get all volunteers for a specific organization
+ * @param organizationId // Id of the organization
+ * @returns // All volunteers for the organization
+ * */
+export async function getVolunteersByOrganization(
+  organizationId: string
+): Promise<VolunteerResponse[]> {
+  try {
+    await dbConnect();
+
+    const eventVolunteers: EventVolunteerResponse[] =
+      await EventVolunteerSchema.find({
+        organization: organizationId,
+      })
+        .populate('volunteer')
+        .populate({
+          path: 'volunteer',
+          populate: { path: 'previousOrganization' },
+        });
+
+    const volunteers: VolunteerResponse[] = eventVolunteers.map(
+      (eventVolunteer) => eventVolunteer.volunteer
+    );
+
+    const uniqueVolunteers: VolunteerResponse[] = [];
+    volunteers.forEach((volunteer) => {
+      if (
+        !uniqueVolunteers.some(
+          (uniqueVolunteer) => uniqueVolunteer._id === volunteer._id
+        )
+      ) {
+        uniqueVolunteers.push(volunteer);
+      }
+    });
+
+    return uniqueVolunteers;
+  } catch (error) {
+    console.log(error);
+    throw new CMError(CMErrorType.InternalError);
+  }
 }

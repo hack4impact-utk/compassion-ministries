@@ -1,5 +1,6 @@
 import Providers from '../components/Providers';
 import Navbar from '../components/Navbar';
+import { Box } from '@mui/material';
 
 export const metadata = {
   title: 'Next.js',
@@ -14,10 +15,12 @@ export default function RootLayout({
   //Render HTML body with Providers and Navbar components, including children.
   return (
     <html lang="en">
-      <body>
+      <body style={{ margin: 0 }}>
         <Providers>
           <Navbar />
-          {children}
+          <Box component="main" sx={{ p: 2 }}>
+            {children}
+          </Box>
         </Providers>
       </body>
     </html>

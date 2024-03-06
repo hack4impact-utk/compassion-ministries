@@ -6,7 +6,9 @@ import { UpsertOrganizationFormData } from '@/types/forms/organizations';
 
 const NewOrganizationView: React.FC = () => {
   //Take new Organization update
-  const placeholderOnChange = (organizationData: any) => {
+  const placeholderOnChange = (
+    organizationData: UpsertOrganizationFormData
+  ) => {
     setOrganizationData(organizationData);
   };
 
@@ -15,10 +17,23 @@ const NewOrganizationView: React.FC = () => {
 
   // hits post organization endpoint to add to database
   const onClick = async () => {
-    await fetch('/api/organizations', {
-      method: 'POST',
-      body: JSON.stringify(organizationData),
-    });
+    try {
+      const res = await fetch('/api/organizations', {
+        method: 'POST',
+        body: JSON.stringify(organizationData),
+      });
+
+      if (res.status !== 201) {
+        console.error('failed to create org:', res);
+        return;
+      }
+
+      const data = await res.json();
+
+      window.location.href = `/organizations/${data.id}`;
+    } catch (e) {
+      console.error('failed to create org:', e);
+    }
   };
 
   return (

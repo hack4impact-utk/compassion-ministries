@@ -24,10 +24,21 @@ function EditOrganizationView({
 
   // hit put organization endpoint
   const onClick = async () => {
-    await fetch(`/api/organizations/${currentOrganization._id}`, {
-      method: 'PUT',
-      body: JSON.stringify(organizationData),
-    });
+    try {
+      const res = await fetch(`/api/organizations/${currentOrganization._id}`, {
+        method: 'PUT',
+        body: JSON.stringify(organizationData),
+      });
+
+      if (res.status !== 204) {
+        console.error('failed to update org:', res);
+        return;
+      }
+
+      window.location.href = `/organizations/${currentOrganization._id}`;
+    } catch (e) {
+      console.error('failed to update org:', e);
+    }
   };
 
   return (

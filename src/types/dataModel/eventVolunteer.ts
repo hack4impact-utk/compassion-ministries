@@ -26,6 +26,7 @@ export const zCreateEventVolunteerRequest = zEventVolunteer.extend({
   organization: zObjectId.optional(),
   volunteer: z.union([zObjectId, zCreateVolunteerRequest]),
   event: zObjectId,
+  verifier: z.string().optional(),
 });
 
 const zEventVolunteerResponse = zEventVolunteerEntity.extend({

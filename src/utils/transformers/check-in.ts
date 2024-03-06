@@ -6,12 +6,14 @@ import { CheckInFormData } from '@/types/forms/checkIn';
 export function transformCheckInFormDataToCreateEventVolunteerRequest(
   formData: CheckInFormData,
   volunteer: string | CreateVolunteerRequest,
-  event: EventResponse
+  event: EventResponse,
+  verifier: string | undefined
 ): CreateEventVolunteerRequest {
   return {
     volunteer,
     event: event._id,
     role: formData.role,
     organization: formData.organization?._id,
+    verifier: verifier,
   };
 }
