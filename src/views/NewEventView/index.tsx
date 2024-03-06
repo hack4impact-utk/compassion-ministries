@@ -19,10 +19,23 @@ export default function NewEventView() {
       eventRoles: formData.eventRoles,
       isRecurring: false,
     };
-    await fetch('/api/events', {
-      method: 'POST',
-      body: JSON.stringify(reqBody),
-    });
+    try {
+      const res = await fetch('/api/events', {
+        method: 'POST',
+        body: JSON.stringify(reqBody),
+      });
+
+      if (res.status !== 201) {
+        console.error('failed to create event:', res);
+        return;
+      }
+
+      const data = await res.json();
+
+      window.location.href = `/events/${data.id}`;
+    } catch (e) {
+      console.error('failed to create event:', e);
+    }
   };
   return (
     <Grid2 container spacing={2} sx={{ mt: 2 }}>

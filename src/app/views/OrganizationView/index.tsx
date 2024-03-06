@@ -4,6 +4,7 @@ import React from 'react';
 import Organization from '@/components/Organization';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { Button } from '@mui/material';
+import Link from 'next/link';
 
 export interface OrganizationViewProps {
   organization: OrganizationResponse;
@@ -36,7 +37,9 @@ export function OrganizationView({
       <Organization organization={organization} volunteers={volunteers} />
 
       {/* Button for editing organization */}
-      <Button variant="contained">edit</Button>
+      <Link href={`/organizations/${organizationId}/edit`}>
+        <Button variant="contained">Edit</Button>
+      </Link>
 
       {/* Button for deleting organization */}
       <Button variant="contained" color="error" onClick={handleDelete}>
