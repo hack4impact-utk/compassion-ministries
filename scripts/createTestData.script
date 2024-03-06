@@ -579,11 +579,6 @@ db.volunteers.insertMany([
       "lastUpdated": "2023-04-03T10:35:00Z"
     },
     "roleVerifications": [
-      {
-        "verifier": "Amelia Jackson",
-        "lastUpdated": "2023-03-30T16:05:00Z",
-        "role": "Food"
-      }
     ],
     "softDelete": false,
     "createdAt": new Date(),
