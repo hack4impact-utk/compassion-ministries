@@ -15,6 +15,10 @@ export default function SearchField() {
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchQuery = event.target.value;
     setSearchQuery(newSearchQuery);
+    if (newSearchQuery === '') {
+      router.push(pathname);
+      return;
+    }
     router.push(pathname + '?' + createQueryString('q', newSearchQuery));
   };
 
@@ -37,7 +41,6 @@ export default function SearchField() {
       onChange={handleSearchChange}
       variant="outlined"
       fullWidth
-      InputLabelProps={{ shrink: Boolean(searchParams) }}
     />
   );
 }
