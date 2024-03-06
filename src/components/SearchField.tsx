@@ -15,6 +15,9 @@ export default function SearchField() {
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchQuery = event.target.value;
     setSearchQuery(newSearchQuery);
+    if (newSearchQuery === '') {
+      router.push(pathname);
+    }
     router.push(pathname + '?' + createQueryString('q', newSearchQuery));
   };
 
