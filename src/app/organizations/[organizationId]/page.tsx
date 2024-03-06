@@ -1,7 +1,30 @@
-export default function Page({
+import {
+  OrganizationView,
+  OrganizationViewProps,
+} from '@/app/views/OrganizationView';
+import { getOrganization } from '@/server/actions/Organization';
+import { getVolunteersByOrganization } from '@/server/actions/Volunteer';
+import { OrganizationResponse } from '@/types/dataModel/organization';
+
+export default async function Page({
   params,
 }: {
   params: { organizationId: string };
 }) {
-  return <h1> Organizations Page {params.organizationId}</h1>;
+  let org: OrganizationResponse;
+  try {
+    org = JSON.parse(
+      JSON.stringify(await getOrganization(params.organizationId))
+    );
+  } catch (e) {
+    return <h1>Organization not found</h1>;
+  }
+  const vols = JSON.parse(
+    JSON.stringify(await getVolunteersByOrganization(params.organizationId))
+  );
+  const organizationProps: OrganizationViewProps = {
+    organization: org,
+    volunteers: vols,
+  };
+  return <OrganizationView {...organizationProps} />;
 }

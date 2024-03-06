@@ -36,6 +36,7 @@ function VolunteerForm({
           onChange({ ...volunteerData, firstName: e.target.value })
         }
         InputLabelProps={{ shrink: !!volunteerData.firstName }}
+        sx={{ mb: 2 }}
       />
       <TextField
         label="Last Name"
@@ -44,6 +45,7 @@ function VolunteerForm({
           onChange({ ...volunteerData, lastName: e.target.value })
         }
         InputLabelProps={{ shrink: !!volunteerData.lastName }}
+        sx={{ mb: 2 }}
       />
       <TextField
         label="Email"
@@ -51,6 +53,7 @@ function VolunteerForm({
         value={volunteerData.email || ''}
         onChange={(e) => onChange({ ...volunteerData, email: e.target.value })}
         InputLabelProps={{ shrink: !!volunteerData.email }}
+        sx={{ mb: 2 }}
       />
       <TextField
         label="Phone Number"
@@ -59,6 +62,7 @@ function VolunteerForm({
           onChange({ ...volunteerData, phoneNumber: e.target.value })
         }
         InputLabelProps={{ shrink: !!volunteerData.phoneNumber }}
+        sx={{ mb: 2 }}
       />
       <TextField
         label="Address"
@@ -67,6 +71,7 @@ function VolunteerForm({
           onChange({ ...volunteerData, address: e.target.value })
         }
         InputLabelProps={{ shrink: !!volunteerData.address }}
+        sx={{ mb: 2 }}
       />
     </Box>
   );

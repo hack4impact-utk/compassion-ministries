@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(
       {
-        _id: eventId,
+        id: eventId,
       },
       { status: 201 }
     );

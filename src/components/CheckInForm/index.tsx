@@ -57,7 +57,6 @@ async function createNewOrganization(name: string) {
 }
 
 // TODO prevent input of role that the volunteer is not verified for
-// TODO populate role, organization, and other data based on current email
 // TODO on submit, display errors for bad fields
 export default function CheckInForm(props: Props) {
   const [volunteerOptions, setVolunteerOptions] = useState<VolunteerResponse[]>(
@@ -103,6 +102,27 @@ export default function CheckInForm(props: Props) {
             lastNameRegex.test(vol.lastName)
         )
       );
+    }
+  }
+
+  function onEmailChange(email: string) {
+    const volunteerMatches = props.volunteers.filter(
+      (vol) => vol.email === email
+    );
+    if (volunteerMatches.length === 1) {
+      const match = volunteerMatches[0];
+      const updatedFormData = {
+        firstName: match.firstName,
+        lastName: match.lastName,
+        email: match.email,
+        phoneNumber: match.phoneNumber,
+        address: match.address,
+        organization: match.previousOrganization,
+      } as CheckInFormData;
+      if (match.previousRole) {
+        updatedFormData.role = match.previousRole;
+      }
+      props.onChange(updatedFormData);
     }
   }
 
@@ -211,7 +231,12 @@ export default function CheckInForm(props: Props) {
             />
           )}
           onInputChange={(_, value) => {
-            props.onChange({ ...props.checkInData, email: value });
+            if (value) {
+              props.onChange({ ...props.checkInData, email: value });
+              onEmailChange(value);
+              return;
+            }
+            props.onChange({} as CheckInFormData);
           }}
         />
 

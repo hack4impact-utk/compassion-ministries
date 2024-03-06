@@ -20,7 +20,12 @@ export function sortRoles(roleList: Role[]): Role[] {
   return [...roleList].sort((a, b) => roles.indexOf(a) - roles.indexOf(b));
 }
 
+// Gets a role icon for the given role
+export function getRoleIcon(role: string | Role): ReactNode {
+  return roleIcons[role];
+}
+
 // Gets a list of role icons for all roles in roleList, preserving order
 export function getRoleIcons(roleList: string[] | Role[]): ReactNode[] {
-  return roleList.map((role) => roleIcons[role]);
+  return roleList.map((role) => getRoleIcon(role));
 }

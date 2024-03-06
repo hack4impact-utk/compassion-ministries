@@ -13,10 +13,21 @@ export default function EditVolunteerView({
   const [volunteerData, setVolunteerData] = useState<UpsertVolunteerFormData>(
     {} as UpsertVolunteerFormData
   );
-  const submitData = () => {
-    // Placeholder submit function
-    // TODO: replace with actual implementation
-    console.log('Volunteer data submitted:', volunteerData);
+  const submitData = async () => {
+    const res = await fetch(`/api/volunteers/${volunteer._id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(volunteerData),
+    });
+
+    if (res.status !== 204) {
+      console.error('failed to create volunteer. volunteer: ', volunteerData);
+      return;
+    }
+
+    window.location.href = `/volunteers/${volunteer._id}`;
   };
 
   return (

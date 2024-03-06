@@ -18,8 +18,27 @@ function EditOrganizationView({
     useState<UpsertOrganizationFormData>({} as UpsertOrganizationFormData);
 
   // Update the organization Name here
-  const placeholderOnChange = (organizationData: any) => {
-    setOrganizationData(organizationData);
+  const onChange = (newOrgData: UpsertOrganizationFormData) => {
+    setOrganizationData(newOrgData);
+  };
+
+  // hit put organization endpoint
+  const onClick = async () => {
+    try {
+      const res = await fetch(`/api/organizations/${currentOrganization._id}`, {
+        method: 'PUT',
+        body: JSON.stringify(organizationData),
+      });
+
+      if (res.status !== 204) {
+        console.error('failed to update org:', res);
+        return;
+      }
+
+      window.location.href = `/organizations/${currentOrganization._id}`;
+    } catch (e) {
+      console.error('failed to update org:', e);
+    }
   };
 
   return (
@@ -28,12 +47,12 @@ function EditOrganizationView({
         Edit Organization
       </Typography>
       <OrganizationForm
-        onChange={placeholderOnChange}
+        onChange={onChange}
         organizationData={organizationData}
         currentOrganization={currentOrganization}
       />
       <Box mt={2}>
-        <Button variant="contained" fullWidth>
+        <Button variant="contained" onClick={onClick} fullWidth>
           Submit
         </Button>
       </Box>
