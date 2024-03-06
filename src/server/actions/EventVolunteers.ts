@@ -7,16 +7,13 @@ import dbConnect from '@/utils/db-connect';
 EventVolunteerSchema;
 EventSchema;
 
-export async function getEventVolunteersByEventRole(
+export async function getEventVolunteersByRole(
   role: Role
 ): Promise<EventVolunteerResponse[]> {
   let evs: EventVolunteerResponse[];
   try {
     await dbConnect();
-    evs = await EventVolunteerSchema.find().populate({
-      path: 'event', // Path to the field that holds the reference to Event
-      match: { eventRoles: role }, // Condition to match the documents in the Event collection
-    });
+    evs = await EventVolunteerSchema.find({ role }).populate('event');
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }
