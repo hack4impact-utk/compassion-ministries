@@ -26,7 +26,7 @@ export default function VolunteersView({ volunteers }: VolunteersViewProps) {
       <Typography variant="h4" pt={2}>
         Volunteers
       </Typography>
-      <VolunteerList volunteers={volunteers} />;
+      <VolunteerList volunteers={volunteers} />
     </>
   );
 }
