@@ -1,9 +1,10 @@
 'use client';
-import VolunteerList from '@/components/VolunteerList';
 import { EventResponse } from '@/types/dataModel/event';
 import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
-import { Box, Typography } from '@mui/material';
+import { Box, ListItemButton, ListItemText, Typography } from '@mui/material';
 import React from 'react';
+import IconList from '../IconList';
+import { useRouter } from 'next/navigation';
 
 interface EventProps {
   event: EventResponse;
@@ -14,6 +15,7 @@ export default function Event({
   event,
   eventVolunteers,
 }: EventProps): React.ReactElement {
+  const router = useRouter();
   // Format the date to a localized string
   const formatDate = (date: Date): string => {
     const option: Intl.DateTimeFormatOptions = {
@@ -54,7 +56,22 @@ export default function Event({
           : event.eventRoles}
       </Typography>
       <h4 style={{ textDecoration: 'underline' }}>Volunteers</h4>
-      <VolunteerList volunteers={eventVolunteers.map((ev) => ev.volunteer)} />
+      {/* TODO remove the below and replace with EventVolounteerList component */}
+
+      {eventVolunteers.map((ev) => (
+        <ListItemButton
+          key={ev._id}
+          onClick={() => router.push(`/volunteers/${ev._id}`)}
+        >
+          <ListItemText
+            primary={`${ev.volunteer.firstName} ${ev.volunteer.lastName}`}
+            secondary={ev.volunteer.email}
+          />
+          <Box>
+            <IconList roles={[ev.role]}></IconList>
+          </Box>
+        </ListItemButton>
+      ))}
     </Box>
   );
 }
