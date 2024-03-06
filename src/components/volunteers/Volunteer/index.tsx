@@ -18,7 +18,7 @@ export default function Volunteer({
   return (
     <Box>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        <Typography variant="h3">
+        <Typography variant="h3" pt={2}>
           {volunteer.firstName} {volunteer.lastName}
         </Typography>
         <Box sx={{ display: 'flex' }}>

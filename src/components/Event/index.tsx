@@ -54,9 +54,7 @@ export default function Event({
           : event.eventRoles}
       </Typography>
       <h4 style={{ textDecoration: 'underline' }}>Volunteers</h4>
-      <VolunteerList
-        volunteerResponses={eventVolunteers.map((ev) => ev.volunteer)}
-      />
+      <VolunteerList volunteers={eventVolunteers.map((ev) => ev.volunteer)} />
     </Box>
   );
 }

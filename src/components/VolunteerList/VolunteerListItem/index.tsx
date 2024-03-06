@@ -1,8 +1,10 @@
-import { ListItem, ListItemText } from '@mui/material';
+'use client';
+import { ListItemButton, ListItemText } from '@mui/material';
 import React from 'react';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import Box from '@mui/material/Box';
 import { getRoleIcons, sortRoles } from '@/utils/role';
+import { useRouter } from 'next/navigation';
 
 interface VolunteerListItemProps {
   volunteer: VolunteerResponse;
@@ -12,8 +14,13 @@ interface VolunteerListItemProps {
 export default function VolunteerListItem({
   volunteer,
 }: VolunteerListItemProps) {
+  const router = useRouter();
+
   return (
-    <ListItem>
+    <ListItemButton
+      key={volunteer._id}
+      onClick={() => router.push(`/volunteers/${volunteer._id}`)}
+    >
       <ListItemText
         primary={`${volunteer.firstName} ${volunteer.lastName}`}
         secondary={volunteer.email}
@@ -23,6 +30,6 @@ export default function VolunteerListItem({
           sortRoles(volunteer.roleVerifications!.map((verif) => verif.role))
         )}
       </Box>
-    </ListItem>
+    </ListItemButton>
   );
 }
