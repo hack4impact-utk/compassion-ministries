@@ -17,6 +17,7 @@ export default function SearchField() {
     setSearchQuery(newSearchQuery);
     if (newSearchQuery === '') {
       router.push(pathname);
+      return;
     }
     router.push(pathname + '?' + createQueryString('q', newSearchQuery));
   };
