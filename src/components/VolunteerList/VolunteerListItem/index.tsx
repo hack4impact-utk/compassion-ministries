@@ -3,8 +3,8 @@ import { ListItemButton, ListItemText } from '@mui/material';
 import React from 'react';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import Box from '@mui/material/Box';
-import { getRoleIcons, sortRoles } from '@/utils/role';
 import { useRouter } from 'next/navigation';
+import IconList from '@/components/IconList';
 
 interface VolunteerListItemProps {
   volunteer: VolunteerResponse;
@@ -26,9 +26,9 @@ export default function VolunteerListItem({
         secondary={volunteer.email}
       />
       <Box>
-        {getRoleIcons(
-          sortRoles(volunteer.roleVerifications!.map((verif) => verif.role))
-        )}
+        <IconList
+          roles={volunteer.roleVerifications!.map((verif) => verif.role)}
+        ></IconList>
       </Box>
     </ListItemButton>
   );

@@ -1,5 +1,5 @@
+import IconList from '@/components/IconList';
 import { EventResponse } from '@/types/dataModel/event';
-import { getRoleIcons, sortRoles } from '@/utils/role';
 import { ListItem, Stack, Typography } from '@mui/material';
 
 /*
@@ -25,7 +25,7 @@ export default function EventListItem({
           Description: {eventResponse.description}
         </Typography>
         <Stack direction="row" justifyContent="flex-end">
-          {getRoleIcons(sortRoles(eventResponse.eventRoles))}
+          <IconList roles={eventResponse.eventRoles}></IconList>
         </Stack>
       </Stack>
     </ListItem>
