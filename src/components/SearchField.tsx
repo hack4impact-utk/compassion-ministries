@@ -40,7 +40,6 @@ export default function SearchField() {
       onChange={handleSearchChange}
       variant="outlined"
       fullWidth
-      InputLabelProps={{ shrink: Boolean(searchParams) }}
     />
   );
 }
