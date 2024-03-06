@@ -1,41 +1,17 @@
 import React from 'react';
 import VolunteerInfo from './Volunteer';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
+import { Box } from '@mui/material';
+import { getVolunteer } from '@/server/actions/Volunteer';
 
-// define a volunteer of type VolunteerResponse
-const samplevolunteer: VolunteerResponse = {
-  firstName: 'John',
-  lastName: 'Doe',
-  email: 'john.doe@example.com',
-  phoneNumber: '123-456-7890',
-  address: '123 Main St, Anytown, USA',
-  softDelete: false,
-  previousOrganization: {
-    name: 'Previous Organization',
-    softDelete: false,
-    _id: 'organization_id',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  _id: 'volunteer_id_1',
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  roleVerifications: [
-    {
-      role: 'Medical',
-      verifier: 'Verifier 1',
-      lastUpdated: new Date(),
-    },
-  ],
-};
+export default async function Page() {
+  const res: VolunteerResponse = JSON.parse(
+    JSON.stringify(await getVolunteer('65e896f17185c34ee75dddd5'))
+  );
 
-export default function Page() {
   return (
-    <div>
-      <h1>Volunteers</h1>
-      <p>
-        <VolunteerInfo volunteer={samplevolunteer} />
-      </p>
-    </div>
+    <Box>
+      <VolunteerInfo volunteer={res} />
+    </Box>
   );
 }
