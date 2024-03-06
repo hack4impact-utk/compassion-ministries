@@ -61,7 +61,7 @@ export default function Event({
       {eventVolunteers.map((ev) => (
         <ListItemButton
           key={ev._id}
-          onClick={() => router.push(`/volunteers/${ev._id}`)}
+          onClick={() => router.push(`/volunteers/${ev.volunteer._id}`)}
         >
           <ListItemText
             primary={`${ev.volunteer.firstName} ${ev.volunteer.lastName}`}
