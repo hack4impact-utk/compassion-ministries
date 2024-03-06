@@ -10,23 +10,30 @@ export default function NewVolunteerView() {
   );
 
   const submitData = async () => {
-    const res = await fetch('/api/volunteers', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(volunteer),
-    });
+    try {
+      const res = await fetch('/api/volunteers', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(volunteer),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (res.status !== 201) {
-      console.error(
-        'failed to create volunteer. volunteer: ',
-        volunteer,
-        'response: ',
-        data
-      );
+      if (res.status !== 201) {
+        console.error(
+          'failed to create volunteer. volunteer: ',
+          volunteer,
+          'response: ',
+          data
+        );
+        return;
+      }
+
+      window.location.href = `/volunteers/${data.id}`;
+    } catch (e) {
+      console.error('failed to create volunteer:', e);
     }
   };
 

@@ -24,7 +24,10 @@ export default function EditVolunteerView({
 
     if (res.status !== 204) {
       console.error('failed to create volunteer. volunteer: ', volunteerData);
+      return;
     }
+
+    window.location.href = `/volunteers/${volunteer._id}`;
   };
 
   return (

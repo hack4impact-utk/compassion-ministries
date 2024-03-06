@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     }
 
     const res = await createVolunteer(validationResult.data);
-    return NextResponse.json({ _id: res }, { status: 201 });
+    return NextResponse.json({ id: res }, { status: 201 });
   } catch (error) {
     return CMErrorResponse(error);
   }

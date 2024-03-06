@@ -1,30 +1,38 @@
 import Link from 'next/link';
 import React from 'react';
-import SigninButton from './SigninButton';
-import { AppBar, Typography } from '@mui/material';
+import { AppBar, Toolbar, Typography } from '@mui/material';
 
-// Navigation bar with 3 links and Signin Button
-const Navbar = () => {
+const links = [
+  {
+    text: 'Home',
+    href: '/',
+  },
+  {
+    text: 'Events',
+    href: '/events',
+  },
+  {
+    text: 'Volunteers',
+    href: '/volunteers',
+  },
+  {
+    text: 'Organizations',
+    href: '/organizations',
+  },
+];
+
+export default function Navbar() {
   return (
-    <AppBar position="static">
-      <Typography>
-        <Link href={'/'} color="inherit">
-          Home
-        </Link>
-      </Typography>
-      <Typography>
-        <Link href={'/events'} color="inherit">
-          Events
-        </Link>
-      </Typography>
-      <Typography>
-        <Link href={'/volunteers'} color="inherit">
-          Volunteers
-        </Link>
-      </Typography>
-      <SigninButton />
+    <AppBar component="nav" position="static">
+      <Toolbar>
+        {links.map((link, index) => (
+          <Typography key={index} sx={{ mx: 1 }}>
+            <Link href={link.href} color="inherit">
+              {link.text}
+            </Link>
+          </Typography>
+        ))}
+      </Toolbar>
     </AppBar>
   );
-};
-
-export default Navbar;
+}

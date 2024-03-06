@@ -16,7 +16,7 @@ export default function OrganizationInfo({
 }: OrganizationProps): React.ReactElement {
   return (
     <Box>
-      <Typography variant="h1">{organization.name}</Typography>
+      <Typography variant="h4">{organization.name}</Typography>
       <Typography variant="h5" sx={{ textDecoration: 'underline' }}>
         {' '}
         Volunteers{' '}
