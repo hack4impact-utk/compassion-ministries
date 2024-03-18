@@ -3,7 +3,6 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
-import Box from '@mui/material/Box';
 import IconList from '../IconList';
 
 // Prop Array with Objects
@@ -31,10 +30,7 @@ export default function EventVolunteerList({
             secondary={`With ${eventVolunteer.organization}`}
           />
           {/* Display Icons of the Volunteer's Role */}
-          <Box sx={{ display: 'flex' }}>
-            <IconList roles={[eventVolunteer.role]} />
-            <span>{eventVolunteer.role}</span>
-          </Box>
+          <IconList roles={[eventVolunteer.role]} />
         </ListItem>
       ))}
     </List>
