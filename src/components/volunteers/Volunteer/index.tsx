@@ -2,7 +2,7 @@
 import React from 'react';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { VolunteerEventResponse } from '@/types/dataModel/eventVolunteer';
-import { Typography, Box, Modal, Button, ListItemButton } from '@mui/material';
+import { Typography, Box, Button, ListItemButton, Dialog } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RoleVerificationForm from '@/components/RoleVerificationForm';
 import { VerifiedRole } from '@/types/dataModel/roles';
@@ -88,7 +88,7 @@ export default function Volunteer({
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography variant="h5">Role Verifications</Typography>
           <AddIcon sx={{ ml: 1 }} onClick={handleOpen} />
-          <Modal open={open} onClose={handleClose}>
+          <Dialog open={open} onClose={handleClose}>
             <Box sx={{ bgcolor: 'background.paper' }}>
               <RoleVerificationForm
                 roleVerificationData={formData}
@@ -100,7 +100,7 @@ export default function Volunteer({
                 Submit
               </Button>
             </Box>
-          </Modal>
+          </Dialog>
         </Box>
         {volunteer.roleVerifications?.map((verification, index) => (
           <Box key={index}>
