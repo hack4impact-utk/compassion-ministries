@@ -118,11 +118,9 @@ export default function LicensePage() {
         // load OCR model and image, then extract text
         try {
           const ocrClient = new OCRClient();
-          console.log('AD');
           await ocrClient.loadModel(
             'https://raw.githubusercontent.com/tesseract-ocr/tessdata_fast/main/eng.traineddata'
           );
-          console.log('BD');
           await ocrClient.loadImage(imageBitmap);
           const text = await ocrClient.getText();
           const data = extractLicenseData(text);
