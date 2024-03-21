@@ -164,10 +164,7 @@ export default function CheckInForm(props: Props) {
           )}
           onInputChange={(_, value) => {
             onNameChange(value, 'last');
-            props.onChange({
-              ...props.checkInData,
-              lastName: value,
-            });
+            props.onChange({ ...props.checkInData, lastName: value });
           }}
         />
 
@@ -205,10 +202,7 @@ export default function CheckInForm(props: Props) {
           )}
           onInputChange={(_, value) => {
             onNameChange(value, 'first');
-            props.onChange({
-              ...props.checkInData,
-              firstName: value,
-            });
+            props.onChange({ ...props.checkInData, firstName: value });
           }}
         />
 
