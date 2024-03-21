@@ -155,14 +155,19 @@ export default function CheckInForm(props: Props) {
                 onNameChange(e.target.value, 'last');
                 props.onChange({
                   ...props.checkInData,
-                  lastName: e.target.value,
+                  lastName:
+                    e.target.value.charAt(0).toUpperCase() +
+                    e.target.value.slice(1),
                 });
               }}
             />
           )}
           onInputChange={(_, value) => {
             onNameChange(value, 'last');
-            props.onChange({ ...props.checkInData, lastName: value });
+            props.onChange({
+              ...props.checkInData,
+              lastName: value.charAt(0).toUpperCase() + value.slice(1),
+            });
           }}
         />
 
@@ -191,14 +196,19 @@ export default function CheckInForm(props: Props) {
                 onNameChange(e.target.value, 'first');
                 props.onChange({
                   ...props.checkInData,
-                  firstName: e.target.value,
+                  firstName:
+                    e.target.value.charAt(0).toUpperCase() +
+                    e.target.value.slice(1),
                 });
               }}
             />
           )}
           onInputChange={(_, value) => {
             onNameChange(value, 'first');
-            props.onChange({ ...props.checkInData, firstName: value });
+            props.onChange({
+              ...props.checkInData,
+              firstName: value.charAt(0).toUpperCase() + value.slice(1),
+            });
           }}
         />
 
