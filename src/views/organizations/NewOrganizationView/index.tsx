@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { Box, Button, Container, Typography } from '@mui/material';
-import OrganizationForm from '@/app/components/organizations';
+import OrganizationForm from '@/components/OrganizationForm';
 import { UpsertOrganizationFormData } from '@/types/forms/organizations';
 
 const NewOrganizationView: React.FC = () => {
