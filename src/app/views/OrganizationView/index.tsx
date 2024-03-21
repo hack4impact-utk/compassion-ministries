@@ -5,6 +5,8 @@ import Organization from '@/components/Organization';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { Button } from '@mui/material';
 import Link from 'next/link';
+import useSnackbar from '@/hooks/useSnackbar';
+import { useRouter } from 'next/navigation';
 
 export interface OrganizationViewProps {
   organization: OrganizationResponse;
@@ -15,19 +17,30 @@ export function OrganizationView({
   organization,
   volunteers,
 }: OrganizationViewProps) {
+  const { showSnackbar } = useSnackbar();
+  const router = useRouter();
+
   const organizationId = organization._id.toString();
 
   const handleDelete = async () => {
     try {
       // Call the DELETE API endpoint
-      await fetch(`/api/organizations/${organizationId}`, {
+      const res = await fetch(`/api/organizations/${organizationId}`, {
         method: 'DELETE',
       });
 
-      window.location.href = '/organizations';
-    } catch (error) {
-      // maybe change this to soomething else at some point idk
-      console.error('Error deleting organization:', error);
+      if (res.status !== 204) {
+        const data = await res.json();
+        showSnackbar(data.message, 'error');
+        return;
+      }
+
+      router.push('/organizations');
+      router.refresh();
+      showSnackbar('Organization deleted successfully', 'success');
+    } catch (e) {
+      showSnackbar('Failed to delete organization', 'error');
+      console.error(e);
     }
   };
 

@@ -3,11 +3,15 @@ import React, { useState } from 'react';
 import VolunteerForm from '@/components/VolunteerForm';
 import { UpsertVolunteerFormData } from '@/types/forms/volunteer';
 import { Button, Box, Typography } from '@mui/material';
+import useSnackbar from '@/hooks/useSnackbar';
+import { useRouter } from 'next/navigation';
 
 export default function NewVolunteerView() {
   const [volunteer, setVolunteerData] = useState<UpsertVolunteerFormData>(
     {} as UpsertVolunteerFormData
   );
+  const { showSnackbar } = useSnackbar();
+  const router = useRouter();
 
   const submitData = async () => {
     try {
@@ -22,18 +26,16 @@ export default function NewVolunteerView() {
       const data = await res.json();
 
       if (res.status !== 201) {
-        console.error(
-          'failed to create volunteer. volunteer: ',
-          volunteer,
-          'response: ',
-          data
-        );
+        showSnackbar(data.message, 'error');
         return;
       }
 
-      window.location.href = `/volunteers/${data.id}`;
+      router.push(`/volunteers/${data.id}`);
+      router.refresh();
+      showSnackbar('Volunteer created successfully', 'success');
     } catch (e) {
-      console.error('failed to create volunteer:', e);
+      showSnackbar('Failed to create volunteer', 'error');
+      console.error(e);
     }
   };
 

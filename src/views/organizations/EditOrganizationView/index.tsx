@@ -4,6 +4,8 @@ import { Box, Button, Container, Typography } from '@mui/material';
 import OrganizationForm from '@/app/components/organizations';
 import { OrganizationResponse } from '@/types/dataModel/organization';
 import { UpsertOrganizationFormData } from '@/types/forms/organizations';
+import useSnackbar from '@/hooks/useSnackbar';
+import { useRouter } from 'next/navigation';
 
 // Organization props
 interface EditOrganizationViewProps {
@@ -16,6 +18,8 @@ function EditOrganizationView({
 }: EditOrganizationViewProps) {
   const [organizationData, setOrganizationData] =
     useState<UpsertOrganizationFormData>({} as UpsertOrganizationFormData);
+  const { showSnackbar } = useSnackbar();
+  const router = useRouter();
 
   // Update the organization Name here
   const onChange = (newOrgData: UpsertOrganizationFormData) => {
@@ -31,13 +35,17 @@ function EditOrganizationView({
       });
 
       if (res.status !== 204) {
-        console.error('failed to update org:', res);
+        const data = await res.json();
+        showSnackbar(`${data.message}`, 'error');
         return;
       }
 
-      window.location.href = `/organizations/${currentOrganization._id}`;
+      router.push(`/organizations/${currentOrganization._id}`);
+      router.refresh();
+      showSnackbar('Organization updated successfully', 'success');
     } catch (e) {
-      console.error('failed to update org:', e);
+      showSnackbar('Failed to update organization', 'error');
+      console.error(e);
     }
   };
 
