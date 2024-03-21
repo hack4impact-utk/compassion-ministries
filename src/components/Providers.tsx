@@ -1,4 +1,5 @@
 'use client';
+import { SnackbarProvider } from '@/hooks/useSnackbar';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ConfirmProvider } from 'material-ui-confirm';
@@ -14,7 +15,9 @@ const Providers = (props: Props) => {
   return (
     <SessionProvider>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <ConfirmProvider>{props.children}</ConfirmProvider>
+        <ConfirmProvider>
+          <SnackbarProvider>{props.children}</SnackbarProvider>
+        </ConfirmProvider>
       </LocalizationProvider>
     </SessionProvider>
   );
