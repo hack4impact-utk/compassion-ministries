@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { Box, Button, Container, Typography } from '@mui/material';
-import OrganizationForm from '@/app/components/organizations';
+import OrganizationForm from '@/components/OrganizationForm';
 import { UpsertOrganizationFormData } from '@/types/forms/organizations';
 import useSnackbar from '@/hooks/useSnackbar';
 import { useRouter } from 'next/navigation';
