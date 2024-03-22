@@ -126,7 +126,7 @@ export async function getAllOrganizations(): Promise<OrganizationResponse[]> {
   try {
     await dbConnect();
 
-    organizations = await OrganizationSchema.find();
+    organizations = await OrganizationSchema.find().lean();
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }

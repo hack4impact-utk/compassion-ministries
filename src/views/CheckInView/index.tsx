@@ -1,16 +1,17 @@
 'use client';
-
 import CheckInForm from '@/components/CheckInForm';
 import useRoleConfirmation from '@/hooks/useRoleConfirmation';
 import useSnackbar from '@/hooks/useSnackbar';
+import useValidation from '@/hooks/useValidation';
 import type { EventResponse } from '@/types/dataModel/event';
 import type { OrganizationResponse } from '@/types/dataModel/organization';
 import type {
   CreateVolunteerRequest,
   VolunteerResponse,
 } from '@/types/dataModel/volunteer';
-import { CheckInFormData } from '@/types/forms/checkIn';
+import { CheckInFormData, zCheckInFormData } from '@/types/forms/checkIn';
 import { transformCheckInFormDataToCreateEventVolunteerRequest } from '@/utils/transformers/check-in';
+import { ValidationErrors } from '@/utils/validation';
 import { Button, Typography } from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import { useState } from 'react';
@@ -25,10 +26,24 @@ export default function CheckInView(props: CheckInViewProps) {
   const [formData, setFormData] = useState<CheckInFormData>(
     {} as CheckInFormData
   );
+  const [validationErrors, setValidationErrors] = useState<
+    ValidationErrors<CheckInFormData> | undefined
+  >(undefined);
   const confirmRole = useRoleConfirmation();
   const { showSnackbar } = useSnackbar();
+  const validate = useValidation(zCheckInFormData);
 
   const onCheckIn = async () => {
+    // Validate the form
+    const validationResult = validate(formData);
+    if (validationResult) {
+      setValidationErrors(validationResult);
+      return;
+    }
+
+    // Clear validation errors
+    setValidationErrors(undefined);
+
     // find volunteer by email or set volunteer to new volunteer req
     const foundVolunteer = props.volunteers.find(
       (v) => v.email === formData.email
@@ -112,6 +127,7 @@ export default function CheckInView(props: CheckInViewProps) {
           event={props.event}
           volunteers={props.volunteers}
           organizations={props.organizations}
+          errors={validationErrors}
         />
       </Grid2>
       <Grid2 xs={12}>

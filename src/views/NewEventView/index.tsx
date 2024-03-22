@@ -1,8 +1,10 @@
 'use client';
 import EventForm from '@/components/EventForm';
 import useSnackbar from '@/hooks/useSnackbar';
+import useValidation from '@/hooks/useValidation';
 import { CreateEventRequest } from '@/types/dataModel/event';
-import { EventFormData } from '@/types/forms/events';
+import { EventFormData, zEventFormData } from '@/types/forms/events';
+import { ValidationErrors } from '@/utils/validation';
 import { Typography, Button } from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2';
 import { useRouter } from 'next/navigation';
@@ -10,10 +12,24 @@ import { useState } from 'react';
 
 export default function NewEventView() {
   const [formData, setFormData] = useState<EventFormData>({} as EventFormData);
+  const [validationErrors, setValidationErrors] = useState<
+    ValidationErrors<EventFormData> | undefined
+  >(undefined);
   const { showSnackbar } = useSnackbar();
   const router = useRouter();
+  const validate = useValidation(zEventFormData);
 
   const submitHandler = async () => {
+    // Validate the form
+    const validationResult = validate(formData);
+    if (validationResult) {
+      setValidationErrors(validationResult);
+      return;
+    }
+
+    // Clear validation errors
+    setValidationErrors(undefined);
+
     const reqBody: CreateEventRequest = {
       name: formData.name,
       description: formData.description,
@@ -50,7 +66,11 @@ export default function NewEventView() {
         <Typography variant="h4">New event</Typography>
       </Grid2>
       <Grid2 xs={12}>
-        <EventForm eventData={formData} onChange={setFormData} />
+        <EventForm
+          eventData={formData}
+          onChange={setFormData}
+          errors={validationErrors}
+        />
       </Grid2>
       <Grid2 xs={12}>
         <Button

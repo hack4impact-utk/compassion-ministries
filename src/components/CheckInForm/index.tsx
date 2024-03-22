@@ -1,3 +1,4 @@
+'use client';
 import { EventResponse } from '@/types/dataModel/event';
 import {
   CreateOrganizationRequest,
@@ -6,14 +7,17 @@ import {
 import { Role } from '@/types/dataModel/roles';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { CheckInFormData } from '@/types/forms/checkIn';
+import { ValidationErrors } from '@/utils/validation';
 import {
   Autocomplete,
   Box,
+  FormControl,
   FormControlLabel,
+  FormHelperText,
+  FormLabel,
   Radio,
   RadioGroup,
   TextField,
-  Typography,
   createFilterOptions,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -24,6 +28,7 @@ interface Props {
   organizations: OrganizationResponse[];
   checkInData: CheckInFormData;
   onChange: (checkInData: CheckInFormData) => void;
+  errors?: ValidationErrors<CheckInFormData>;
 }
 
 type OrganizationOption = OrganizationResponse & { display?: string };
@@ -57,7 +62,6 @@ async function createNewOrganization(name: string) {
 }
 
 // TODO prevent input of role that the volunteer is not verified for
-// TODO on submit, display errors for bad fields
 export default function CheckInForm(props: Props) {
   const [volunteerOptions, setVolunteerOptions] = useState<VolunteerResponse[]>(
     props.volunteers
@@ -119,7 +123,12 @@ export default function CheckInForm(props: Props) {
         address: match.address,
         organization: match.previousOrganization,
       } as CheckInFormData;
-      if (match.previousRole) {
+
+      // ensure we only set the role if the event has it
+      if (
+        match.previousRole &&
+        props?.event?.eventRoles.includes(match.previousRole)
+      ) {
         updatedFormData.role = match.previousRole;
       }
       props.onChange(updatedFormData);
@@ -160,6 +169,8 @@ export default function CheckInForm(props: Props) {
                     e.target.value.slice(1),
                 });
               }}
+              error={!!props.errors?.lastName}
+              helperText={props.errors?.lastName}
             />
           )}
           onInputChange={(_, value) => {
@@ -198,6 +209,8 @@ export default function CheckInForm(props: Props) {
                     e.target.value.slice(1),
                 });
               }}
+              error={!!props.errors?.firstName}
+              helperText={props.errors?.firstName}
             />
           )}
           onInputChange={(_, value) => {
@@ -232,6 +245,8 @@ export default function CheckInForm(props: Props) {
                   email: e.target.value,
                 });
               }}
+              error={!!props.errors?.email}
+              helperText={props.errors?.email}
             />
           )}
           onInputChange={(_, value) => {
@@ -255,6 +270,8 @@ export default function CheckInForm(props: Props) {
               phoneNumber: e.target.value,
             });
           }}
+          error={!!props.errors?.phoneNumber}
+          helperText={props.errors?.phoneNumber}
         />
 
         {/* Address */}
@@ -265,29 +282,41 @@ export default function CheckInForm(props: Props) {
           onChange={(e) => {
             props.onChange({ ...props.checkInData, address: e.target.value });
           }}
+          error={!!props.errors?.address}
+          helperText={props.errors?.address}
         />
       </Box>
 
       {/* Role */}
-      <Typography sx={{ fontWeight: 'bold' }} variant="h6" pt={2}>
-        Volunteer Role:
-      </Typography>
-      <RadioGroup
-        sx={{ pb: 2 }}
-        value={props.checkInData.role || null}
-        onChange={(e) =>
-          props.onChange({ ...props.checkInData, role: e.target.value as Role })
-        }
+      <FormControl
+        error={!!props.errors?.role}
+        variant="standard"
+        sx={{ py: 2 }}
       >
-        {props.event.eventRoles.map((role, i) => (
-          <FormControlLabel
-            key={i}
-            value={role}
-            control={<Radio />}
-            label={role}
-          />
-        ))}
-      </RadioGroup>
+        <FormLabel id="role-label">Volunteer Role:</FormLabel>
+        <RadioGroup
+          value={props.checkInData.role || null}
+          onChange={(e) =>
+            props.onChange({
+              ...props.checkInData,
+              role: e.target.value as Role,
+            })
+          }
+          aria-labelledby="role-label"
+        >
+          {props.event.eventRoles.map((role, i) => (
+            <FormControlLabel
+              key={i}
+              value={role}
+              control={<Radio />}
+              label={role}
+            />
+          ))}
+        </RadioGroup>
+        {props.errors?.role && (
+          <FormHelperText>{props.errors?.role}</FormHelperText>
+        )}
+      </FormControl>
 
       {/* Organization */}
       <Autocomplete

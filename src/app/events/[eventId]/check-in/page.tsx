@@ -1,7 +1,6 @@
 import { getAllOrganizations } from '@/server/actions/Organization';
 import { getAllVolunteers } from '@/server/actions/Volunteer';
 import { getEvent } from '@/server/actions/Event';
-import { EventResponse } from '@/types/dataModel/event';
 import CheckInView from '@/views/CheckInView';
 
 export default async function CheckInPage({
@@ -11,10 +10,9 @@ export default async function CheckInPage({
 }) {
   // TODO: figure out a better way to ensure _id is always a string
   const volunteers = JSON.parse(JSON.stringify(await getAllVolunteers()));
-  const organizations = JSON.parse(JSON.stringify(await getAllOrganizations()));
-  const event = JSON.parse(
-    JSON.stringify(await getEvent(params.eventId))
-  ) as EventResponse;
+  const event = await getEvent(params.eventId);
+  // tsx-ignore
+  const organizations = await getAllOrganizations();
 
   return (
     <CheckInView

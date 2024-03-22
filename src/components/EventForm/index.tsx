@@ -7,6 +7,7 @@ import {
   FormControl,
   FormControlLabel,
   FormGroup,
+  FormHelperText,
   FormLabel,
   TextField,
 } from '@mui/material';
@@ -16,17 +17,20 @@ import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import { TimePicker } from '@mui/x-date-pickers';
 import { roles } from '@/types/dataModel/roles';
 import dayjs from 'dayjs';
+import { ValidationErrors } from '@/utils/validation';
 
 interface EventFormProps {
   onChange: (eventData: EventFormData) => void;
   eventData: EventFormData;
   currentEvent?: EventResponse;
+  errors?: ValidationErrors<EventFormData>;
 }
 
 export default function EventForm({
   onChange,
   eventData,
   currentEvent,
+  errors,
 }: EventFormProps) {
   useEffect(() => {
     if (currentEvent) {
@@ -49,6 +53,8 @@ export default function EventForm({
         value={eventData.name || ''}
         onChange={(e) => onChange({ ...eventData, name: e.target.value })}
         fullWidth
+        error={!!errors?.name}
+        helperText={errors?.name}
       />
       <TextField
         label="Description"
@@ -58,6 +64,8 @@ export default function EventForm({
         }
         fullWidth
         sx={{ mt: 2 }}
+        error={!!errors?.description}
+        helperText={errors?.description}
       />
       <TextField
         label="Location"
@@ -67,6 +75,8 @@ export default function EventForm({
         }
         fullWidth
         sx={{ mt: 2 }}
+        error={!!errors?.eventLocation}
+        helperText={errors?.eventLocation}
       />
       <Grid2 container>
         <TimePicker
@@ -77,6 +87,13 @@ export default function EventForm({
             if (!date) return; // TODO: error handle
             onChange({ ...eventData, startAt: date });
           }}
+          slotProps={{
+            textField: {
+              fullWidth: true,
+              error: !!errors?.startAt,
+              helperText: errors?.startAt,
+            },
+          }}
           sx={{ mt: 2 }}
         />
         <TimePicker
@@ -86,6 +103,13 @@ export default function EventForm({
           onChange={(date) => {
             if (!date) return; // TODO: error handle
             onChange({ ...eventData, endAt: date });
+          }}
+          slotProps={{
+            textField: {
+              fullWidth: true,
+              error: !!errors?.startAt,
+              helperText: errors?.startAt,
+            },
           }}
           sx={{ mt: 2 }}
         />
@@ -98,9 +122,21 @@ export default function EventForm({
           if (!date) return; // TODO: error handle
           onChange({ ...eventData, date });
         }}
+        slotProps={{
+          textField: {
+            fullWidth: true,
+            error: !!errors?.startAt,
+            helperText: errors?.startAt,
+          },
+        }}
         sx={{ mt: 2 }}
       />
-      <FormControl component="fieldset" sx={{ m: 3 }} variant="standard">
+      <FormControl
+        component="fieldset"
+        sx={{ m: 3 }}
+        variant="standard"
+        error={!!errors?.eventRoles}
+      >
         <FormLabel component="legend">
           What services will be offered at this event?
         </FormLabel>
@@ -135,6 +171,9 @@ export default function EventForm({
               }
             />
           ))}
+          {errors?.eventRoles && (
+            <FormHelperText>{errors?.eventRoles}</FormHelperText>
+          )}
         </FormGroup>
       </FormControl>
     </Box>

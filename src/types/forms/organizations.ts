@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-const zUpsertOrganizationFormData = z.object({
-  name: z.string(),
+export const zUpsertOrganizationFormData = z.object({
+  name: z.string().nonempty('Required'),
 });
 
 export interface UpsertOrganizationFormData
