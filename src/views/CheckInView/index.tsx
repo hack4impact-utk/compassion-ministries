@@ -2,6 +2,7 @@
 
 import CheckInForm from '@/components/CheckInForm';
 import useRoleConfirmation from '@/hooks/useRoleConfirmation';
+import useSnackbar from '@/hooks/useSnackbar';
 import type { EventResponse } from '@/types/dataModel/event';
 import type { OrganizationResponse } from '@/types/dataModel/organization';
 import type {
@@ -25,6 +26,7 @@ export default function CheckInView(props: CheckInViewProps) {
     {} as CheckInFormData
   );
   const confirmRole = useRoleConfirmation();
+  const { showSnackbar } = useSnackbar();
 
   const onCheckIn = async () => {
     // find volunteer by email or set volunteer to new volunteer req
@@ -77,17 +79,24 @@ export default function CheckInView(props: CheckInViewProps) {
         body: JSON.stringify(eventVolReq),
       });
 
-      if (res.status === 201) {
-        // TODO: validate response and show success message
-
-        // reset form
-        setFormData({} as CheckInFormData);
-      } else {
+      if (res.status !== 201) {
+        // handle duplicate entry, we don't want to display duplicate message
+        // to the user
+        if (res.status === 409) {
+          setFormData({} as CheckInFormData);
+          showSnackbar('Volunteer already checked in', 'error');
+          return;
+        }
         const data = await res.json();
-        console.error('failed to check in', data);
+        showSnackbar(data.message, 'error');
+        return;
       }
+      // reset form
+      setFormData({} as CheckInFormData);
+      showSnackbar('Checked in successfully', 'success');
     } catch (e) {
-      console.error('failed to check in', e);
+      showSnackbar('Failed to check in', 'error');
+      console.error(e);
     }
   };
 
