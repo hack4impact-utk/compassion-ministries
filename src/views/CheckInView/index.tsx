@@ -37,7 +37,6 @@ export default function CheckInView(props: CheckInViewProps) {
     // Validate the form
     const validationResult = validate(formData);
     if (validationResult) {
-      console.log(validationResult);
       setValidationErrors(validationResult);
       return;
     }
