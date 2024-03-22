@@ -12,7 +12,6 @@ export default function EmailEditor({
   onChange,
   formData,
 }: EmailEditorProps): React.ReactElement {
-  // textField for the suject
   return (
     <div>
       <TextField
