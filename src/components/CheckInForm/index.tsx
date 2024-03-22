@@ -288,6 +288,7 @@ export default function CheckInForm(props: Props) {
           }}
           error={!!props.errors?.phoneNumber}
           helperText={props.errors?.phoneNumber}
+          inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
         />
 
         {/* Address */}
