@@ -1,7 +1,12 @@
+'use client';
 import React from 'react';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
-import { Typography, Box, ListItemButton } from '@mui/material';
 import { VolunteerEventResponse } from '@/types/dataModel/eventVolunteer';
+import { Typography, Box, Button, ListItemButton, Dialog } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import RoleVerificationForm from '@/components/RoleVerificationForm';
+import { VerifiedRole } from '@/types/dataModel/roles';
+import { UpsertRoleVerificationFormData } from '@/types/forms/role-verifications';
 import IconList from '@/components/IconList';
 import { useRouter } from 'next/navigation';
 
@@ -11,11 +16,42 @@ interface VolunteerProps {
   events: VolunteerEventResponse[];
 }
 
+const roleVerificationData: UpsertRoleVerificationFormData = {
+  role: 'Medical' as VerifiedRole,
+  verifier: '',
+};
+
 // VolunteerInfo displays volunteer information
 export default function Volunteer({
   volunteer,
   events,
 }: VolunteerProps): React.ReactElement {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const [formData, setFormData] = React.useState(roleVerificationData);
+
+  const onSubmit = async () => {
+    try {
+      const res = await fetch(
+        `/api/volunteers/${volunteer._id}/verifications`,
+        {
+          method: 'PATCH',
+          body: JSON.stringify(formData),
+        }
+      );
+      if (res.status == 204) {
+        handleClose();
+      } else {
+        const data = await res.json();
+        console.error('Failed to add verification', data);
+      }
+    } catch (error) {
+      console.error('Failed to add verification', error);
+    }
+  };
+
   const router = useRouter();
   return (
     <Box>
@@ -49,9 +85,23 @@ export default function Volunteer({
             {volunteer.previousOrganization?.name}
           </Typography>
         </Box>
-        <Typography variant="h5" mt={4}>
-          Role Verifications
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Typography variant="h5">Role Verifications</Typography>
+          <AddIcon sx={{ ml: 1 }} onClick={handleOpen} />
+          <Dialog open={open} onClose={handleClose}>
+            <Box sx={{ bgcolor: 'background.paper' }}>
+              <RoleVerificationForm
+                roleVerificationData={formData}
+                onChange={(e) => {
+                  setFormData(e);
+                }}
+              />
+              <Button variant="contained" onClick={onSubmit}>
+                Submit
+              </Button>
+            </Box>
+          </Dialog>
+        </Box>
         {volunteer.roleVerifications?.map((verification, index) => (
           <Box key={index}>
             <Box sx={{ display: 'flex' }}>

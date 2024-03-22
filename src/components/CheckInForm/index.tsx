@@ -129,42 +129,6 @@ export default function CheckInForm(props: Props) {
   return (
     <>
       <Box pt={2}>
-        {/* First name */}
-        <Autocomplete
-          sx={{ mt: 2 }}
-          freeSolo
-          value={props.checkInData.firstName || ''}
-          options={volunteerOptions}
-          isOptionEqualToValue={(option, value) => option._id === value._id}
-          getOptionLabel={(vol) =>
-            typeof vol === 'string' ? vol : vol.firstName
-          }
-          renderOption={(props, option) => {
-            return (
-              <li {...props} key={option._id}>
-                {option.firstName}
-              </li>
-            );
-          }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="First Name"
-              onChange={(e) => {
-                onNameChange(e.target.value, 'first');
-                props.onChange({
-                  ...props.checkInData,
-                  firstName: e.target.value,
-                });
-              }}
-            />
-          )}
-          onInputChange={(_, value) => {
-            onNameChange(value, 'first');
-            props.onChange({ ...props.checkInData, firstName: value });
-          }}
-        />
-
         {/* Last name */}
         <Autocomplete
           sx={{ mt: 2 }}
@@ -191,7 +155,9 @@ export default function CheckInForm(props: Props) {
                 onNameChange(e.target.value, 'last');
                 props.onChange({
                   ...props.checkInData,
-                  lastName: e.target.value,
+                  lastName:
+                    e.target.value.charAt(0).toUpperCase() +
+                    e.target.value.slice(1),
                 });
               }}
             />
@@ -199,6 +165,44 @@ export default function CheckInForm(props: Props) {
           onInputChange={(_, value) => {
             onNameChange(value, 'last');
             props.onChange({ ...props.checkInData, lastName: value });
+          }}
+        />
+
+        {/* First name */}
+        <Autocomplete
+          sx={{ mt: 2 }}
+          freeSolo
+          value={props.checkInData.firstName || ''}
+          options={volunteerOptions}
+          isOptionEqualToValue={(option, value) => option._id === value._id}
+          getOptionLabel={(vol) =>
+            typeof vol === 'string' ? vol : vol.firstName
+          }
+          renderOption={(props, option) => {
+            return (
+              <li {...props} key={option._id}>
+                {option.firstName}
+              </li>
+            );
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="First Name"
+              onChange={(e) => {
+                onNameChange(e.target.value, 'first');
+                props.onChange({
+                  ...props.checkInData,
+                  firstName:
+                    e.target.value.charAt(0).toUpperCase() +
+                    e.target.value.slice(1),
+                });
+              }}
+            />
+          )}
+          onInputChange={(_, value) => {
+            onNameChange(value, 'first');
+            props.onChange({ ...props.checkInData, firstName: value });
           }}
         />
 
