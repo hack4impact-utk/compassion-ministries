@@ -3,16 +3,19 @@ import { Box, TextField } from '@mui/material';
 import { UpsertVolunteerFormData } from '@/types/forms/volunteer';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { useEffect } from 'react';
+import { ValidationErrors } from '@/utils/validation';
 interface VolunteerFormProps {
   onChange: (volunteer: UpsertVolunteerFormData) => void;
   currentVolunteer?: VolunteerResponse;
   volunteerData: UpsertVolunteerFormData;
+  errors?: ValidationErrors<UpsertVolunteerFormData>;
 }
 
 function VolunteerForm({
   onChange,
   currentVolunteer,
   volunteerData,
+  errors,
 }: VolunteerFormProps) {
   useEffect(() => {
     if (currentVolunteer) {
@@ -37,6 +40,8 @@ function VolunteerForm({
         }
         InputLabelProps={{ shrink: !!volunteerData.firstName }}
         sx={{ mb: 2 }}
+        error={!!errors?.firstName}
+        helperText={errors?.firstName}
       />
       <TextField
         label="Last Name"
@@ -46,6 +51,8 @@ function VolunteerForm({
         }
         InputLabelProps={{ shrink: !!volunteerData.lastName }}
         sx={{ mb: 2 }}
+        error={!!errors?.lastName}
+        helperText={errors?.lastName}
       />
       <TextField
         label="Email"
@@ -54,6 +61,8 @@ function VolunteerForm({
         onChange={(e) => onChange({ ...volunteerData, email: e.target.value })}
         InputLabelProps={{ shrink: !!volunteerData.email }}
         sx={{ mb: 2 }}
+        error={!!errors?.email}
+        helperText={errors?.email}
       />
       <TextField
         label="Phone Number"
@@ -63,6 +72,8 @@ function VolunteerForm({
         }
         InputLabelProps={{ shrink: !!volunteerData.phoneNumber }}
         sx={{ mb: 2 }}
+        error={!!errors?.phoneNumber}
+        helperText={errors?.phoneNumber}
       />
       <TextField
         label="Address"
@@ -72,6 +83,8 @@ function VolunteerForm({
         }
         InputLabelProps={{ shrink: !!volunteerData.address }}
         sx={{ mb: 2 }}
+        error={!!errors?.address}
+        helperText={errors?.address}
       />
     </Box>
   );
