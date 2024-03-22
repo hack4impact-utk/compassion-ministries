@@ -164,7 +164,9 @@ export default function CheckInForm(props: Props) {
                 onNameChange(e.target.value, 'last');
                 props.onChange({
                   ...props.checkInData,
-                  lastName: e.target.value,
+                  lastName:
+                    e.target.value.charAt(0).toUpperCase() +
+                    e.target.value.slice(1),
                 });
               }}
               error={!!props.errors?.lastName}
@@ -202,7 +204,9 @@ export default function CheckInForm(props: Props) {
                 onNameChange(e.target.value, 'first');
                 props.onChange({
                   ...props.checkInData,
-                  firstName: e.target.value,
+                  firstName:
+                    e.target.value.charAt(0).toUpperCase() +
+                    e.target.value.slice(1),
                 });
               }}
               error={!!props.errors?.firstName}
