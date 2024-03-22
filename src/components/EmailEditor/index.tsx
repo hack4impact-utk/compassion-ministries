@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { EmailFormData } from '@/types/forms/email';
 import ReactQuill from 'react-quill';
