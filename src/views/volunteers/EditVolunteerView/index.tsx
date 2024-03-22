@@ -2,10 +2,15 @@
 import React, { useState } from 'react';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import VolunteerForm from '@/components/VolunteerForm';
-import { UpsertVolunteerFormData } from '@/types/forms/volunteer';
+import {
+  UpsertVolunteerFormData,
+  zUpsertVolunteerFormData,
+} from '@/types/forms/volunteer';
 import { Button, Box } from '@mui/material';
 import useSnackbar from '@/hooks/useSnackbar';
 import { useRouter } from 'next/navigation';
+import useValidation from '@/hooks/useValidation';
+import { ValidationErrors } from '@/utils/validation';
 
 export default function EditVolunteerView({
   volunteer,
@@ -15,10 +20,24 @@ export default function EditVolunteerView({
   const [volunteerData, setVolunteerData] = useState<UpsertVolunteerFormData>(
     {} as UpsertVolunteerFormData
   );
+  const [validationErrors, setValidationErrors] = useState<
+    ValidationErrors<UpsertVolunteerFormData> | undefined
+  >(undefined);
   const { showSnackbar } = useSnackbar();
   const router = useRouter();
+  const validate = useValidation(zUpsertVolunteerFormData);
 
   const submitData = async () => {
+    // Validate the data
+    const validationResult = validate(volunteerData);
+    if (validationResult) {
+      setValidationErrors(validationResult);
+      return;
+    }
+
+    // Clear the validation errors
+    setValidationErrors(undefined);
+
     try {
       const res = await fetch(`/api/volunteers/${volunteer._id}`, {
         method: 'PUT',
@@ -49,6 +68,7 @@ export default function EditVolunteerView({
         onChange={setVolunteerData}
         volunteerData={volunteerData}
         currentVolunteer={volunteer}
+        errors={validationErrors}
       />
       <Button variant="contained" fullWidth type="submit" onClick={submitData}>
         Submit
