@@ -270,6 +270,7 @@ export default function CheckInForm(props: Props) {
               phoneNumber: e.target.value,
             });
           }}
+          fullWidth
           error={!!props.errors?.phoneNumber}
           helperText={props.errors?.phoneNumber}
         />
@@ -284,6 +285,7 @@ export default function CheckInForm(props: Props) {
           }}
           error={!!props.errors?.address}
           helperText={props.errors?.address}
+          fullWidth
         />
       </Box>
 
