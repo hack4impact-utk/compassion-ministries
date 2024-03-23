@@ -141,7 +141,9 @@ export default function Volunteer({
               >
                 <Box sx={{ display: 'flex', alignItems: 'center' }} pt={1}>
                   <IconList roles={[volunteerEvent.role]}></IconList>
-                  <Typography pl={2}>{volunteerEvent.event.name}</Typography>
+                  <Typography pl={2} variant="h5">
+                    {volunteerEvent.event.name}
+                  </Typography>
                 </Box>
               </ListItemButton>
             ))}

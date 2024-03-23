@@ -74,6 +74,7 @@ export default function Event({
             <ListItemText
               primary={`${ev.volunteer.firstName} ${ev.volunteer.lastName}`}
               secondary={ev.volunteer.email}
+              primaryTypographyProps={{ variant: 'h5' }}
             />
             <Box>
               <IconList roles={[ev.role]}></IconList>
@@ -81,7 +82,7 @@ export default function Event({
           </ListItemButton>
         ))
       ) : (
-        <Typography variant="body1" pt={2}>
+        <Typography variant="h5" pt={2}>
           No volunteers yet!
         </Typography>
       )}
