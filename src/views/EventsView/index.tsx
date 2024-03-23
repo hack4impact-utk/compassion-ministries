@@ -10,7 +10,7 @@ interface EventsViewProps {
 export default function EventsView({ events }: EventsViewProps) {
   return (
     <Box>
-      <Typography variant="h4" sx={{ mb: 2 }}>
+      <Typography variant="h3" sx={{ mb: 2 }}>
         Events
       </Typography>
       <Link href="/events/new">

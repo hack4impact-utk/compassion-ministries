@@ -6,8 +6,8 @@ import { EventResponse } from '@/types/dataModel/event';
 export default function EventList({ events }: { events: EventResponse[] }) {
   return (
     <List>
-      {events.map((eventResponse) => (
-        <EventListItem eventResponse={eventResponse} key={eventResponse._id} />
+      {events.map((event) => (
+        <EventListItem event={event} key={event._id} />
       ))}
     </List>
   );

@@ -19,17 +19,22 @@ export default function Organization({
   const router = useRouter();
   return (
     <Box>
-      <Typography variant="h4">{organization.name}</Typography>
-      <Typography variant="h5" sx={{ textDecoration: 'underline' }}>
-        {' '}
-        Volunteers{' '}
+      <Typography variant="h3">{organization.name}</Typography>
+
+      <Typography
+        sx={{ textDecoration: 'underline', fontWeight: 'bold' }}
+        variant="h6"
+        mt={4}
+      >
+        Volunteers
       </Typography>
       {volunteers.map((volunteer, index) => (
         <ListItemButton
           key={index}
           onClick={() => router.push(`/volunteers/${volunteer._id}`)}
+          sx={{ pl: 0 }}
         >
-          <Typography>
+          <Typography variant="h5">
             {volunteer.firstName} {volunteer.lastName}
           </Typography>
         </ListItemButton>
