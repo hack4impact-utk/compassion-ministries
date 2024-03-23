@@ -42,36 +42,49 @@ export default function Event({
       {event.description && (
         <Typography variant="body1">{event.description}</Typography>
       )}
-      <Typography variant="h5">{event.eventLocation}</Typography>
+      <Typography variant="body1" pt={2}>
+        {event.eventLocation}
+      </Typography>
       {event.date && (
-        <Typography variant="h5">{formatDate(new Date(event.date))}</Typography>
+        <Typography variant="body1" pt={2}>
+          {formatDate(new Date(event.date))}
+        </Typography>
       )}
-      <Typography variant="h5">
+      <Typography variant="body1" pb={2}>
         {formatTime(new Date(event.startAt))} -{' '}
         {formatTime(new Date(event.endAt))}
       </Typography>
-      <Typography variant="h5">
-        {Array.isArray(event.eventRoles)
-          ? event.eventRoles.join(', ')
-          : event.eventRoles}
+      <IconList roles={event.eventRoles} />
+      <Typography
+        sx={{ textDecoration: 'underline', fontWeight: 'bold' }}
+        variant="h6"
+        pt={2}
+      >
+        Volunteers
       </Typography>
-      <h4 style={{ textDecoration: 'underline' }}>Volunteers</h4>
       {/* TODO remove the below and replace with EventVolounteerList component */}
 
-      {eventVolunteers.map((ev) => (
-        <ListItemButton
-          key={ev._id}
-          onClick={() => router.push(`/volunteers/${ev.volunteer._id}`)}
-        >
-          <ListItemText
-            primary={`${ev.volunteer.firstName} ${ev.volunteer.lastName}`}
-            secondary={ev.volunteer.email}
-          />
-          <Box>
-            <IconList roles={[ev.role]}></IconList>
-          </Box>
-        </ListItemButton>
-      ))}
+      {eventVolunteers.length ? (
+        eventVolunteers.map((ev) => (
+          <ListItemButton
+            key={ev._id}
+            onClick={() => router.push(`/volunteers/${ev.volunteer._id}`)}
+            sx={{ pl: 0 }}
+          >
+            <ListItemText
+              primary={`${ev.volunteer.firstName} ${ev.volunteer.lastName}`}
+              secondary={ev.volunteer.email}
+            />
+            <Box>
+              <IconList roles={[ev.role]}></IconList>
+            </Box>
+          </ListItemButton>
+        ))
+      ) : (
+        <Typography variant="body1" pt={2}>
+          No volunteers yet!
+        </Typography>
+      )}
     </Box>
   );
 }
