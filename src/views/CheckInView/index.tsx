@@ -56,7 +56,7 @@ export default function CheckInView(props: CheckInViewProps) {
       firstName: formData.firstName,
       lastName: formData.lastName,
       email: formData.email,
-      phoneNumber: formData.phoneNumber,
+      phoneNumber: formData.phoneNumber.replace(/\D/g, ''),
       address: formData.address,
     };
 
