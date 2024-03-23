@@ -286,6 +286,7 @@ export default function CheckInForm(props: Props) {
               phoneNumber: formattedNumber,
             });
           }}
+          fullWidth
           error={!!props.errors?.phoneNumber}
           helperText={props.errors?.phoneNumber}
           inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
@@ -301,6 +302,7 @@ export default function CheckInForm(props: Props) {
           }}
           error={!!props.errors?.address}
           helperText={props.errors?.address}
+          fullWidth
         />
       </Box>
 
