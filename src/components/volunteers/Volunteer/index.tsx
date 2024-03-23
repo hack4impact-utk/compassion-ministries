@@ -53,7 +53,7 @@ export default function Volunteer({
     <>
       <Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <Typography variant="h3" pt={2}>
+          <Typography variant="h3" pt={2} pb={2}>
             {volunteer.firstName} {volunteer.lastName}
           </Typography>
           <Box sx={{ display: 'flex' }}>
@@ -82,13 +82,13 @@ export default function Volunteer({
               {volunteer.previousOrganization?.name}
             </Typography>
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }} pt={4}>
             <Typography variant="h5">Role Verifications</Typography>
-            <AddIcon sx={{ ml: 1 }} onClick={handleOpen} />
+            <AddIcon sx={{ ml: 1, color: '#808080' }} onClick={handleOpen} />
           </Box>
           {volunteer.roleVerifications?.map((verification, index) => (
             <Box key={index}>
-              <Box sx={{ display: 'flex' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Typography
                   variant="subtitle1"
                   sx={{ fontWeight: 'bold', pr: 1 }}
@@ -97,7 +97,7 @@ export default function Volunteer({
                 </Typography>
                 <Typography display="inline">{verification.role}</Typography>
               </Box>
-              <Box sx={{ display: 'flex' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Typography
                   variant="subtitle1"
                   sx={{ fontWeight: 'bold', pr: 1 }}
@@ -108,7 +108,7 @@ export default function Volunteer({
                   {verification.verifier}
                 </Typography>
               </Box>
-              <Box sx={{ display: 'flex' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Typography
                   variant="subtitle1"
                   sx={{ fontWeight: 'bold', pr: 1 }}
@@ -125,7 +125,11 @@ export default function Volunteer({
 
         {events.length > 0 && (
           <Box>
-            <Typography variant="h5" mt={4}>
+            <Typography
+              sx={{ textDecoration: 'underline', fontWeight: 'bold' }}
+              variant="h6"
+              mt={4}
+            >
               Attended Events
             </Typography>
             {events.map((volunteerEvent, i) => (
@@ -135,7 +139,7 @@ export default function Volunteer({
                   router.push(`/events/${volunteerEvent.event._id}`)
                 }
               >
-                <Box sx={{ display: 'flex' }} pt={1}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }} pt={1}>
                   <IconList roles={[volunteerEvent.role]}></IconList>
                   <Typography pl={2}>{volunteerEvent.event.name}</Typography>
                 </Box>
