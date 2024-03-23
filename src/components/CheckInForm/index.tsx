@@ -29,37 +29,12 @@ interface Props {
   checkInData: CheckInFormData;
   onChange: (checkInData: CheckInFormData) => void;
   errors?: ValidationErrors<CheckInFormData>;
+  setSubmitDisabled?: (disabled: boolean) => void;
 }
 
 type OrganizationOption = OrganizationResponse & { display?: string };
 
 const filter = createFilterOptions<OrganizationOption>();
-
-async function createNewOrganization(name: string) {
-  const orgReq: CreateOrganizationRequest = {
-    name,
-  };
-
-  // make post req
-  try {
-    const res = await fetch('/api/organizations', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(orgReq),
-    });
-
-    if (res.status === 201) {
-      const data = await res.json();
-
-      // TODO validate response
-      return data.id;
-    }
-  } catch (e) {
-    console.error('failed to create new organization: ', e);
-  }
-}
 
 // TODO prevent input of role that the volunteer is not verified for
 export default function CheckInForm(props: Props) {
@@ -70,6 +45,35 @@ export default function CheckInForm(props: Props) {
   // when the parent updates the volunteers it's passing in, update our state
   // TODO this can be removed once SSR provides props
   useEffect(() => setVolunteerOptions(props.volunteers), [props.volunteers]);
+
+  async function createNewOrganization(name: string) {
+    props.setSubmitDisabled?.(true);
+    const orgReq: CreateOrganizationRequest = {
+      name,
+    };
+
+    // make post req
+    try {
+      const res = await fetch('/api/organizations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orgReq),
+      });
+
+      props.setSubmitDisabled?.(false);
+      if (res.status === 201) {
+        const data = await res.json();
+
+        // TODO validate response
+        return data.id;
+      }
+    } catch (e) {
+      console.error('failed to create new organization: ', e);
+      props.setSubmitDisabled?.(false);
+    }
+  }
 
   // when the user enters in a first/last name, filter the options of the first/last/email fields to match possible values
   function onNameChange(value: string, type: 'first' | 'last') {

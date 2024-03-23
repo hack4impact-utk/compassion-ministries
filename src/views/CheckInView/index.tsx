@@ -15,6 +15,7 @@ import { transformCheckInFormDataToCreateEventVolunteerRequest } from '@/utils/t
 import { ValidationErrors } from '@/utils/validation';
 import { Typography } from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 interface CheckInViewProps {
@@ -31,9 +32,11 @@ export default function CheckInView(props: CheckInViewProps) {
     ValidationErrors<CheckInFormData> | undefined
   >(undefined);
   const [loading, setLoading] = useState(false);
+  const [submitDisabled, setSubmitDisabled] = useState(false);
   // const confirmRole = useRoleConfirmation(); UNCOMMENT AFTER FIELD TEST
   const { showSnackbar } = useSnackbar();
   const validate = useValidation(zCheckInFormData);
+  const router = useRouter();
 
   const onCheckIn = async () => {
     setLoading(true);
@@ -118,6 +121,7 @@ export default function CheckInView(props: CheckInViewProps) {
       // reset form
       setFormData({} as CheckInFormData);
       showSnackbar('Checked in successfully', 'success');
+      router.refresh();
       setLoading(false);
     } catch (e) {
       showSnackbar('Failed to check in', 'error');
@@ -139,6 +143,7 @@ export default function CheckInView(props: CheckInViewProps) {
           volunteers={props.volunteers}
           organizations={props.organizations}
           errors={validationErrors}
+          setSubmitDisabled={setSubmitDisabled}
         />
       </Grid2>
       <Grid2 xs={12}>
@@ -147,6 +152,7 @@ export default function CheckInView(props: CheckInViewProps) {
             variant: 'contained',
             fullWidth: true,
             onClick: onCheckIn,
+            disabled: submitDisabled,
           }}
           loading={loading}
           loadingSize={24}
