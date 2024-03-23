@@ -23,7 +23,7 @@ export default function VolunteersView({ volunteers }: VolunteersViewProps) {
   return (
     <>
       <SearchField />
-      <Typography variant="h4" pt={2}>
+      <Typography variant="h3" pt={2}>
         Volunteers
       </Typography>
       <Link href={'/volunteers/new'}>

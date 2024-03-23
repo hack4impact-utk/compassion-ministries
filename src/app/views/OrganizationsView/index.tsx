@@ -13,7 +13,7 @@ interface OrganizationsViewProps {
 export function OrganizationsView({ organizations }: OrganizationsViewProps) {
   return (
     <div>
-      <Typography variant="h4" sx={{ mb: 2 }}>
+      <Typography variant="h3" sx={{ mb: 2 }}>
         Organizations
       </Typography>
       <Link href="/organizations/new">
