@@ -20,10 +20,13 @@ export default function VolunteerListItem({
     <ListItemButton
       key={volunteer._id}
       onClick={() => router.push(`/volunteers/${volunteer._id}`)}
+      sx={{ pl: 0, pr: 0 }}
     >
       <ListItemText
         primary={`${volunteer.firstName} ${volunteer.lastName}`}
         secondary={volunteer.email}
+        primaryTypographyProps={{ variant: 'h5' }}
+        secondaryTypographyProps={{ variant: 'body1' }}
       />
       <Box>
         <IconList

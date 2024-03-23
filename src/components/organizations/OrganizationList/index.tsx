@@ -17,7 +17,10 @@ export default function OrganizationList({
           key={organization._id}
           onClick={() => router.push(`/organizations/${organization._id}`)}
         >
-          <ListItemText primary={organization.name} />
+          <ListItemText
+            primary={organization.name}
+            primaryTypographyProps={{ variant: 'h5' }}
+          />
         </ListItemButton>
       ))}
     </List>
