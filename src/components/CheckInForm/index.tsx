@@ -98,7 +98,7 @@ export default function CheckInForm(props: Props) {
       }
 
       const lastNameRegex = new RegExp(value, 'i');
-      const firstNameRegex = new RegExp(props.checkInData.lastName, 'i');
+      const firstNameRegex = new RegExp(props.checkInData.firstName, 'i');
       setVolunteerOptions(
         volunteerOptions.filter(
           (vol) =>
