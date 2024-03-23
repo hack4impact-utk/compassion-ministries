@@ -134,7 +134,7 @@ export default function CheckInForm(props: Props) {
         firstName: match.firstName,
         lastName: match.lastName,
         email: match.email,
-        phoneNumber: match.phoneNumber,
+        phoneNumber: formatPhoneNumber(match.phoneNumber),
         address: match.address,
         organization: match.previousOrganization,
       } as CheckInFormData;
