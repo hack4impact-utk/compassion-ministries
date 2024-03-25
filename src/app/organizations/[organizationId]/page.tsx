@@ -1,7 +1,7 @@
 import {
   OrganizationView,
   OrganizationViewProps,
-} from '@/app/views/OrganizationView';
+} from '@/views/OrganizationView';
 import { getOrganization } from '@/server/actions/Organization';
 import { getVolunteersByOrganization } from '@/server/actions/Volunteer';
 import { OrganizationResponse } from '@/types/dataModel/organization';
