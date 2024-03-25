@@ -13,9 +13,7 @@ export default async function VolunteerPage({
   if (!validationResult.success) {
     return new CMError(CMErrorType.BadValue, 'Volunteer Id').toNextResponse();
   }
-  const res = JSON.parse(
-    JSON.stringify(await getVolunteer(params.volunteerId))
-  );
+  const res = await getVolunteer(params.volunteerId);
 
   if (!res) {
     return <div>Volunteer not found</div>;
