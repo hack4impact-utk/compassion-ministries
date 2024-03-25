@@ -10,8 +10,8 @@ interface EditOrganizationPageProps {
 const EditOrganizationPage: React.FC<EditOrganizationPageProps> = async (
   props
 ) => {
-  const currentOrganization = JSON.parse(
-    JSON.stringify(await getOrganization(props.params.organizationId))
+  const currentOrganization = await getOrganization(
+    props.params.organizationId
   );
 
   if (!currentOrganization) {

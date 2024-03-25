@@ -87,6 +87,24 @@ const VolunteerSchema = new Schema(
   }
 );
 
+VolunteerSchema.post('find', function (docs: VolunteerEntity[]) {
+  docs.forEach((doc) => {
+    doc._id = doc._id.toString();
+  });
+});
+
+VolunteerSchema.post('findOne', function (doc: VolunteerEntity) {
+  if (doc) {
+    doc._id = doc._id.toString();
+  }
+});
+
+VolunteerSchema.post(/findById/, function (doc: VolunteerEntity) {
+  if (doc) {
+    doc._id = doc._id.toString();
+  }
+});
+
 export interface VolunteerDocument
   extends Omit<VolunteerEntity, '_id'>,
     Document {}

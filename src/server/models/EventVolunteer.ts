@@ -33,6 +33,24 @@ const EventVolunteerSchema = new Schema(
 
 EventVolunteerSchema.index({ event: 1, volunteer: 1 }, { unique: true });
 
+EventVolunteerSchema.post('find', function (docs: EventVolunteerEntity[]) {
+  docs.forEach((doc) => {
+    doc._id = doc._id.toString();
+  });
+});
+
+EventVolunteerSchema.post('findOne', function (doc: EventVolunteerEntity) {
+  if (doc) {
+    doc._id = doc._id.toString();
+  }
+});
+
+EventVolunteerSchema.post(/findById/, function (doc: EventVolunteerEntity) {
+  if (doc) {
+    doc._id = doc._id.toString();
+  }
+});
+
 export interface EventVolunteerDocument
   extends Omit<EventVolunteerEntity, '_id'>,
     Document {}
