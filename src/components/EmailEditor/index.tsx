@@ -28,6 +28,7 @@ export default function EmailEditor({
 
   return (
     <div>
+      {/* Text field for subject */}
       <TextField
         label="Subject"
         value={subject}
@@ -35,6 +36,7 @@ export default function EmailEditor({
         fullWidth
       />
 
+      {/* Rich text editor for email body */}
       <ReactQuill
         theme="snow"
         value={value}
