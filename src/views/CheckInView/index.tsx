@@ -1,6 +1,7 @@
 'use client';
 import CheckInForm from '@/components/CheckInForm';
-import useRoleConfirmation from '@/hooks/useRoleConfirmation';
+import LoadingButton from '@/components/LoadingButton';
+// import useRoleConfirmation from '@/hooks/useRoleConfirmation'; UNCOMMENT AFTER FIELD TEST
 import useSnackbar from '@/hooks/useSnackbar';
 import useValidation from '@/hooks/useValidation';
 import type { EventResponse } from '@/types/dataModel/event';
@@ -12,8 +13,9 @@ import type {
 import { CheckInFormData, zCheckInFormData } from '@/types/forms/checkIn';
 import { transformCheckInFormDataToCreateEventVolunteerRequest } from '@/utils/transformers/check-in';
 import { ValidationErrors } from '@/utils/validation';
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 interface CheckInViewProps {
@@ -29,15 +31,20 @@ export default function CheckInView(props: CheckInViewProps) {
   const [validationErrors, setValidationErrors] = useState<
     ValidationErrors<CheckInFormData> | undefined
   >(undefined);
-  const confirmRole = useRoleConfirmation();
+  const [loading, setLoading] = useState(false);
+  const [submitDisabled, setSubmitDisabled] = useState(false);
+  // const confirmRole = useRoleConfirmation(); UNCOMMENT AFTER FIELD TEST
   const { showSnackbar } = useSnackbar();
   const validate = useValidation(zCheckInFormData);
+  const router = useRouter();
 
   const onCheckIn = async () => {
+    setLoading(true);
     // Validate the form
     const validationResult = validate(formData);
     if (validationResult) {
       setValidationErrors(validationResult);
+      setLoading(false);
       return;
     }
 
@@ -52,10 +59,11 @@ export default function CheckInView(props: CheckInViewProps) {
       firstName: formData.firstName,
       lastName: formData.lastName,
       email: formData.email,
-      phoneNumber: formData.phoneNumber,
+      phoneNumber: formData.phoneNumber.replace(/\D/g, ''),
       address: formData.address,
     };
 
+    /* UNCOMMENT AFTER FIELD TEST
     let verifier: string | null = null;
 
     // if:
@@ -73,15 +81,17 @@ export default function CheckInView(props: CheckInViewProps) {
       verifier = await confirmRole(formData.role);
       // return if not confirmed
       if (!verifier) {
+        setLoading(false);
         return;
       }
     }
+    */
 
     const eventVolReq = transformCheckInFormDataToCreateEventVolunteerRequest(
       formData,
       volunteer,
       props.event,
-      verifier || undefined
+      undefined // change to `verifier || undefined`
     );
 
     // make post req
@@ -100,18 +110,23 @@ export default function CheckInView(props: CheckInViewProps) {
         if (res.status === 409) {
           setFormData({} as CheckInFormData);
           showSnackbar('Volunteer already checked in', 'error');
+          setLoading(false);
           return;
         }
         const data = await res.json();
         showSnackbar(data.message, 'error');
+        setLoading(false);
         return;
       }
       // reset form
       setFormData({} as CheckInFormData);
       showSnackbar('Checked in successfully', 'success');
+      router.refresh();
+      setLoading(false);
     } catch (e) {
       showSnackbar('Failed to check in', 'error');
       console.error(e);
+      setLoading(false);
     }
   };
 
@@ -128,17 +143,22 @@ export default function CheckInView(props: CheckInViewProps) {
           volunteers={props.volunteers}
           organizations={props.organizations}
           errors={validationErrors}
+          setSubmitDisabled={setSubmitDisabled}
         />
       </Grid2>
       <Grid2 xs={12}>
-        <Button
-          variant="contained"
-          color="primary"
-          fullWidth
-          onClick={onCheckIn}
+        <LoadingButton
+          buttonProps={{
+            variant: 'contained',
+            fullWidth: true,
+            onClick: onCheckIn,
+            disabled: submitDisabled,
+          }}
+          loading={loading}
+          loadingSize={24}
         >
           Check in
-        </Button>
+        </LoadingButton>
       </Grid2>
     </Grid2>
   );

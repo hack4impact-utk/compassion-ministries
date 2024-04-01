@@ -29,37 +29,12 @@ interface Props {
   checkInData: CheckInFormData;
   onChange: (checkInData: CheckInFormData) => void;
   errors?: ValidationErrors<CheckInFormData>;
+  setSubmitDisabled?: (disabled: boolean) => void;
 }
 
 type OrganizationOption = OrganizationResponse & { display?: string };
 
 const filter = createFilterOptions<OrganizationOption>();
-
-async function createNewOrganization(name: string) {
-  const orgReq: CreateOrganizationRequest = {
-    name,
-  };
-
-  // make post req
-  try {
-    const res = await fetch('/api/organizations', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(orgReq),
-    });
-
-    if (res.status === 201) {
-      const data = await res.json();
-
-      // TODO validate response
-      return data.id;
-    }
-  } catch (e) {
-    console.error('failed to create new organization: ', e);
-  }
-}
 
 // TODO prevent input of role that the volunteer is not verified for
 export default function CheckInForm(props: Props) {
@@ -70,6 +45,35 @@ export default function CheckInForm(props: Props) {
   // when the parent updates the volunteers it's passing in, update our state
   // TODO this can be removed once SSR provides props
   useEffect(() => setVolunteerOptions(props.volunteers), [props.volunteers]);
+
+  async function createNewOrganization(name: string) {
+    props.setSubmitDisabled?.(true);
+    const orgReq: CreateOrganizationRequest = {
+      name,
+    };
+
+    // make post req
+    try {
+      const res = await fetch('/api/organizations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orgReq),
+      });
+
+      props.setSubmitDisabled?.(false);
+      if (res.status === 201) {
+        const data = await res.json();
+
+        // TODO validate response
+        return data.id;
+      }
+    } catch (e) {
+      console.error('failed to create new organization: ', e);
+      props.setSubmitDisabled?.(false);
+    }
+  }
 
   // when the user enters in a first/last name, filter the options of the first/last/email fields to match possible values
   function onNameChange(value: string, type: 'first' | 'last') {
@@ -98,7 +102,7 @@ export default function CheckInForm(props: Props) {
       }
 
       const lastNameRegex = new RegExp(value, 'i');
-      const firstNameRegex = new RegExp(props.checkInData.lastName, 'i');
+      const firstNameRegex = new RegExp(props.checkInData.firstName, 'i');
       setVolunteerOptions(
         volunteerOptions.filter(
           (vol) =>
@@ -107,6 +111,21 @@ export default function CheckInForm(props: Props) {
         )
       );
     }
+  }
+
+  function formatPhoneNumber(input: string) {
+    input = input.replace(/\D/g, '');
+    const size = input.length;
+    if (size > 0) {
+      input = '(' + input;
+    }
+    if (size > 3) {
+      input = input.slice(0, 4) + ') ' + input.slice(4, 11);
+    }
+    if (size > 6) {
+      input = input.slice(0, 9) + '-' + input.slice(9);
+    }
+    return input;
   }
 
   function onEmailChange(email: string) {
@@ -119,7 +138,7 @@ export default function CheckInForm(props: Props) {
         firstName: match.firstName,
         lastName: match.lastName,
         email: match.email,
-        phoneNumber: match.phoneNumber,
+        phoneNumber: formatPhoneNumber(match.phoneNumber),
         address: match.address,
         organization: match.previousOrganization,
       } as CheckInFormData;
@@ -265,13 +284,16 @@ export default function CheckInForm(props: Props) {
           label="Phone Number"
           value={props.checkInData.phoneNumber || ''}
           onChange={(e) => {
+            const formattedNumber = formatPhoneNumber(e.target.value);
             props.onChange({
               ...props.checkInData,
-              phoneNumber: e.target.value,
+              phoneNumber: formattedNumber,
             });
           }}
+          fullWidth
           error={!!props.errors?.phoneNumber}
           helperText={props.errors?.phoneNumber}
+          inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
         />
 
         {/* Address */}
@@ -284,6 +306,7 @@ export default function CheckInForm(props: Props) {
           }}
           error={!!props.errors?.address}
           helperText={props.errors?.address}
+          fullWidth
         />
       </Box>
 

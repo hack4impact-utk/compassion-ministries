@@ -14,13 +14,33 @@ export default function IconList({ roles }: IconListProps) {
   return getRoleIcons(sortRoles(roles));
 }
 
+const iconSize: string = '30px';
+
 // SVG icons for each event role
 export const roleIcons: { [id: string]: ReactNode } = {
-  Food: <LocalDiningIcon sx={{ color: '#F5A81C' }} key="Food Icon" />,
-  Medical: <LocalHospitalIcon sx={{ color: 'red' }} key="Medical Icon" />,
-  Dental: <MasksIcon sx={{ color: 'skyblue' }} key="Dental Icon" />,
+  Food: (
+    <LocalDiningIcon
+      sx={{ color: '#F5A81C', fontSize: iconSize }}
+      key="Food Icon"
+    />
+  ),
+  Medical: (
+    <LocalHospitalIcon
+      sx={{ color: 'red', fontSize: iconSize }}
+      key="Medical Icon"
+    />
+  ),
+  Dental: (
+    <MasksIcon
+      sx={{ color: 'skyblue', fontSize: iconSize }}
+      key="Dental Icon"
+    />
+  ),
   'Save the Babies': (
-    <ChildFriendlyIcon sx={{ color: 'lightgray' }} key="Save the Babies Icon" />
+    <ChildFriendlyIcon
+      sx={{ color: 'darkgray', fontSize: iconSize }}
+      key="Save the Babies Icon"
+    />
   ),
 };
 

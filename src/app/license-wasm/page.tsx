@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { OCRClient } from 'tesseract-wasm';
 
 function capitalizeFirstLetterOfEachWord(str: string) {
@@ -9,11 +9,13 @@ function capitalizeFirstLetterOfEachWord(str: string) {
     .join(' ');
 }
 
+/*
 // create an ImageBitmap from the uploaded image
 async function createImageBitmapFromFile(file: File): Promise<ImageBitmap> {
   const bitmap = await createImageBitmap(file);
   return bitmap;
 }
+*/
 
 function extractLicenseData(text: string) {
   const lines = text.split('\n').filter((line) => line.length > 0);
@@ -66,56 +68,108 @@ function extractLicenseData(text: string) {
   };
 }
 
-const ocr = new OCRClient();
-
 interface LicenseData {
   name: string;
   address: string;
 }
 
 export default function LicensePage() {
-  const [processing, setProcessing] = React.useState(false);
-  const [licenseData, setLicenseData] = React.useState<LicenseData | null>(
-    null
-  );
+  // video and canvas elements, and state for storing license data and any errors
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [licenseData, setLicenseData] = useState<LicenseData | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleFileUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setProcessing(true);
-    const files = event.target.files;
-    if (!files || files.length !== 1) {
-      return;
-    }
-    const file = files[0];
-    const imageBitmap = await createImageBitmapFromFile(file);
+  // camera constraints
+  useEffect(() => {
+    const constraints = {
+      audio: false,
+      video: { facingMode: 'environment' },
+    };
 
-    try {
-      await ocr.loadModel(
-        'https://raw.githubusercontent.com/tesseract-ocr/tessdata_fast/main/eng.traineddata'
-      );
-
-      await ocr.loadImage(imageBitmap);
-
-      const text = await ocr.getText();
-
-      const ld = extractLicenseData(text);
-      if (ld) {
-        setLicenseData(ld);
-      } else {
-        console.error('could not extract license data');
+    // initialize camera stream
+    async function initializeCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        if (videoRef.current) videoRef.current.srcObject = stream;
+      } catch (err) {
+        setError('Unable to access camera');
+        console.error('Error accessing camera:', err);
       }
-    } finally {
-      ocr.destroy();
-      setProcessing(false);
     }
-  };
+
+    // process video frame and extract license data
+    async function processFrame() {
+      if (!videoRef.current || !canvasRef.current) return;
+      const context = canvasRef.current.getContext('2d');
+      if (context) {
+        // video frame to the canvas
+        context.drawImage(
+          videoRef.current,
+          0,
+          0,
+          canvasRef.current.width,
+          canvasRef.current.height
+        );
+
+        // create an ImageBitmap from the canvas
+        const imageBitmap = await createImageBitmap(canvasRef.current);
+
+        // load OCR model and image, then extract text
+        try {
+          const ocrClient = new OCRClient();
+          await ocrClient.loadModel(
+            'https://raw.githubusercontent.com/tesseract-ocr/tessdata_fast/main/eng.traineddata'
+          );
+          await ocrClient.loadImage(imageBitmap);
+          const text = await ocrClient.getText();
+          const data = extractLicenseData(text);
+          console.log(data);
+          if (data) {
+            setLicenseData(data);
+          } else {
+            ocrClient.destroy();
+            console.error('could not extract license data');
+          }
+        } catch (err) {
+          console.error('OCR processing error:', err);
+        }
+      }
+    }
+    // Initialize camera and set interval for processing frames
+    initializeCamera();
+    const interval = setInterval(processFrame, 2000); // Process every X seconds
+
+    // Copy videoRef.current to a variable inside the effect
+    const currentVideoElement = videoRef.current;
+
+    return () => {
+      clearInterval(interval);
+      if (currentVideoElement && currentVideoElement.srcObject) {
+        (currentVideoElement.srcObject as MediaStream)
+          .getTracks()
+          .forEach((track) => track.stop());
+      }
+    };
+  }, []);
 
   return (
     <div>
-      <h1>License Page</h1>
-      <input type="file" onChange={handleFileUpload} />
-      {processing && <p>Processing...</p>}
+      {error && <p>Error: {error}</p>}
+      <canvas
+        ref={canvasRef}
+        width="640"
+        height="480"
+        style={{ display: 'block' }}
+      ></canvas>
+      <video
+        ref={videoRef}
+        autoPlay
+        playsInline
+        width="640"
+        height="480"
+        style={{ display: 'block' }}
+      ></video>
       {licenseData && (
         <div>
           <p>Name: {licenseData.name}</p>

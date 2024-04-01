@@ -1,4 +1,4 @@
-import { OrganizationsView } from '../views/OrganizationsView';
+import { OrganizationsView } from '../../views/OrganizationsView';
 import { getAllOrganizations } from '@/server/actions/Organization';
 
 // Just a list of all Organizations in the database
