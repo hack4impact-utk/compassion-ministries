@@ -3,7 +3,7 @@ import zBackgroundCheckWebhookPayload from '@/types/dataModel/BackgroundCheckWeb
 import { handleBackgroundCheckWebhook } from '@/server/actions/handleBackgroundCheckWebhook ';
 import CMError, { CMErrorType, CMErrorResponse } from '@/utils/cmerror';
 
-// @route POST /api/volunteers - Creates a volunteer
+// @route POST /api/bc-webhook - Updates a volunteer's background check status
 export async function POST(request: NextRequest) {
   try {
     const req = await request.json();
