@@ -1,9 +1,9 @@
 import { z } from 'zod';
 import { zVerifiedRole } from '../dataModel/roles';
 
-const zUpsertRoleVerificationFormData = z.object({
+export const zUpsertRoleVerificationFormData = z.object({
   role: zVerifiedRole,
-  verifier: z.string(),
+  verifier: z.string().nonempty('Required'),
 });
 
 export interface UpsertRoleVerificationFormData

@@ -129,6 +129,7 @@ db.volunteers.insertMany([
       "status": "In Progress",
       "lastUpdated": "2023-04-29T09:30:00Z"
     },
+    "roleVerifications": [],
     "softDelete": true,
     "createdAt": new Date(),
     "updatedAt": new Date()
@@ -299,6 +300,7 @@ db.volunteers.insertMany([
       "status": "Passed",
       "lastUpdated": "2023-04-11T22:30:00Z"
     },
+    "roleVerifications": [],
     "softDelete": true,
     "createdAt": new Date(),
     "updatedAt": new Date()
@@ -332,6 +334,7 @@ db.volunteers.insertMany([
       "status": "Passed",
       "lastUpdated": "2023-03-30T14:15:22Z"
     },
+    "roleVerifications": [],
     "softDelete": false,
     "createdAt": new Date(),
     "updatedAt": new Date()
@@ -368,6 +371,7 @@ db.volunteers.insertMany([
     "phoneNumber": "1787654321",
     "address": "1111 Pine St, Seaside, USA",
     "previousRole": "Food",
+    "roleVerifications": [],
     "softDelete": false,
     "createdAt": new Date(),
     "updatedAt": new Date()
@@ -457,6 +461,7 @@ db.volunteers.insertMany([
       "status": "Passed",
       "lastUpdated": "2023-03-08T21:10:40Z"
     },
+    "roleVerifications": [],
     "softDelete": false,
     "createdAt": new Date(),
     "updatedAt": new Date()
@@ -497,6 +502,7 @@ db.volunteers.insertMany([
       "status": "Passed",
       "lastUpdated": "2023-03-14T23:59:59Z"
     },
+    "roleVerifications": [],
     "softDelete": false,
     "createdAt": new Date(),
     "updatedAt": new Date()
@@ -537,6 +543,7 @@ db.volunteers.insertMany([
       "status": "Passed",
       "lastUpdated": "2023-04-01T08:30:00Z"
     },
+    "roleVerifications": [],
     "softDelete": false,
     "createdAt": new Date(),
     "updatedAt": new Date()
@@ -640,6 +647,7 @@ db.volunteers.insertMany([
       "status": "Failed",
       "lastUpdated": "2023-04-06T14:10:00Z"
     },
+    "roleVerifications": [],
     "softDelete": false,
     "createdAt": new Date(),
     "updatedAt": new Date()
@@ -657,6 +665,7 @@ db.volunteers.insertMany([
       "status": "Passed",
       "lastUpdated": "2023-04-07T15:20:00Z"
     },
+    "roleVerifications": [],
     "softDelete": false,
     "createdAt": new Date(),
     "updatedAt": new Date()
@@ -697,6 +706,7 @@ db.volunteers.insertMany([
       "status": "Failed",
       "lastUpdated": "2023-04-09T17:45:00Z"
     },
+    "roleVerifications": [],
     "softDelete": false,
     "createdAt": new Date(),
     "updatedAt": new Date()
@@ -714,6 +724,7 @@ db.volunteers.insertMany([
       "status": "Passed",
       "lastUpdated": "2023-04-10T18:50:00Z"
     },
+    "roleVerifications": [],
     "softDelete": true,
     "createdAt": new Date(),
     "updatedAt": new Date()

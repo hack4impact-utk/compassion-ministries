@@ -1,3 +1,4 @@
+'use client';
 import { EventResponse } from '@/types/dataModel/event';
 import {
   CreateOrganizationRequest,
@@ -6,14 +7,17 @@ import {
 import { Role } from '@/types/dataModel/roles';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { CheckInFormData } from '@/types/forms/checkIn';
+import { ValidationErrors } from '@/utils/validation';
 import {
   Autocomplete,
   Box,
+  FormControl,
   FormControlLabel,
+  FormHelperText,
+  FormLabel,
   Radio,
   RadioGroup,
   TextField,
-  Typography,
   createFilterOptions,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -24,40 +28,15 @@ interface Props {
   organizations: OrganizationResponse[];
   checkInData: CheckInFormData;
   onChange: (checkInData: CheckInFormData) => void;
+  errors?: ValidationErrors<CheckInFormData>;
+  setSubmitDisabled?: (disabled: boolean) => void;
 }
 
 type OrganizationOption = OrganizationResponse & { display?: string };
 
 const filter = createFilterOptions<OrganizationOption>();
 
-async function createNewOrganization(name: string) {
-  const orgReq: CreateOrganizationRequest = {
-    name,
-  };
-
-  // make post req
-  try {
-    const res = await fetch('/api/organizations', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(orgReq),
-    });
-
-    if (res.status === 201) {
-      const data = await res.json();
-
-      // TODO validate response
-      return data.id;
-    }
-  } catch (e) {
-    console.error('failed to create new organization: ', e);
-  }
-}
-
 // TODO prevent input of role that the volunteer is not verified for
-// TODO on submit, display errors for bad fields
 export default function CheckInForm(props: Props) {
   const [volunteerOptions, setVolunteerOptions] = useState<VolunteerResponse[]>(
     props.volunteers
@@ -66,6 +45,35 @@ export default function CheckInForm(props: Props) {
   // when the parent updates the volunteers it's passing in, update our state
   // TODO this can be removed once SSR provides props
   useEffect(() => setVolunteerOptions(props.volunteers), [props.volunteers]);
+
+  async function createNewOrganization(name: string) {
+    props.setSubmitDisabled?.(true);
+    const orgReq: CreateOrganizationRequest = {
+      name,
+    };
+
+    // make post req
+    try {
+      const res = await fetch('/api/organizations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orgReq),
+      });
+
+      props.setSubmitDisabled?.(false);
+      if (res.status === 201) {
+        const data = await res.json();
+
+        // TODO validate response
+        return data.id;
+      }
+    } catch (e) {
+      console.error('failed to create new organization: ', e);
+      props.setSubmitDisabled?.(false);
+    }
+  }
 
   // when the user enters in a first/last name, filter the options of the first/last/email fields to match possible values
   function onNameChange(value: string, type: 'first' | 'last') {
@@ -94,7 +102,7 @@ export default function CheckInForm(props: Props) {
       }
 
       const lastNameRegex = new RegExp(value, 'i');
-      const firstNameRegex = new RegExp(props.checkInData.lastName, 'i');
+      const firstNameRegex = new RegExp(props.checkInData.firstName, 'i');
       setVolunteerOptions(
         volunteerOptions.filter(
           (vol) =>
@@ -103,6 +111,21 @@ export default function CheckInForm(props: Props) {
         )
       );
     }
+  }
+
+  function formatPhoneNumber(input: string) {
+    input = input.replace(/\D/g, '');
+    const size = input.length;
+    if (size > 0) {
+      input = '(' + input;
+    }
+    if (size > 3) {
+      input = input.slice(0, 4) + ') ' + input.slice(4, 11);
+    }
+    if (size > 6) {
+      input = input.slice(0, 9) + '-' + input.slice(9);
+    }
+    return input;
   }
 
   function onEmailChange(email: string) {
@@ -115,11 +138,16 @@ export default function CheckInForm(props: Props) {
         firstName: match.firstName,
         lastName: match.lastName,
         email: match.email,
-        phoneNumber: match.phoneNumber,
+        phoneNumber: formatPhoneNumber(match.phoneNumber),
         address: match.address,
         organization: match.previousOrganization,
       } as CheckInFormData;
-      if (match.previousRole) {
+
+      // ensure we only set the role if the event has it
+      if (
+        match.previousRole &&
+        props?.event?.eventRoles.includes(match.previousRole)
+      ) {
         updatedFormData.role = match.previousRole;
       }
       props.onChange(updatedFormData);
@@ -129,42 +157,6 @@ export default function CheckInForm(props: Props) {
   return (
     <>
       <Box pt={2}>
-        {/* First name */}
-        <Autocomplete
-          sx={{ mt: 2 }}
-          freeSolo
-          value={props.checkInData.firstName || ''}
-          options={volunteerOptions}
-          isOptionEqualToValue={(option, value) => option._id === value._id}
-          getOptionLabel={(vol) =>
-            typeof vol === 'string' ? vol : vol.firstName
-          }
-          renderOption={(props, option) => {
-            return (
-              <li {...props} key={option._id}>
-                {option.firstName}
-              </li>
-            );
-          }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="First Name"
-              onChange={(e) => {
-                onNameChange(e.target.value, 'first');
-                props.onChange({
-                  ...props.checkInData,
-                  firstName: e.target.value,
-                });
-              }}
-            />
-          )}
-          onInputChange={(_, value) => {
-            onNameChange(value, 'first');
-            props.onChange({ ...props.checkInData, firstName: value });
-          }}
-        />
-
         {/* Last name */}
         <Autocomplete
           sx={{ mt: 2 }}
@@ -191,14 +183,58 @@ export default function CheckInForm(props: Props) {
                 onNameChange(e.target.value, 'last');
                 props.onChange({
                   ...props.checkInData,
-                  lastName: e.target.value,
+                  lastName:
+                    e.target.value.charAt(0).toUpperCase() +
+                    e.target.value.slice(1),
                 });
               }}
+              error={!!props.errors?.lastName}
+              helperText={props.errors?.lastName}
             />
           )}
           onInputChange={(_, value) => {
             onNameChange(value, 'last');
             props.onChange({ ...props.checkInData, lastName: value });
+          }}
+        />
+
+        {/* First name */}
+        <Autocomplete
+          sx={{ mt: 2 }}
+          freeSolo
+          value={props.checkInData.firstName || ''}
+          options={volunteerOptions}
+          isOptionEqualToValue={(option, value) => option._id === value._id}
+          getOptionLabel={(vol) =>
+            typeof vol === 'string' ? vol : vol.firstName
+          }
+          renderOption={(props, option) => {
+            return (
+              <li {...props} key={option._id}>
+                {option.firstName}
+              </li>
+            );
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="First Name"
+              onChange={(e) => {
+                onNameChange(e.target.value, 'first');
+                props.onChange({
+                  ...props.checkInData,
+                  firstName:
+                    e.target.value.charAt(0).toUpperCase() +
+                    e.target.value.slice(1),
+                });
+              }}
+              error={!!props.errors?.firstName}
+              helperText={props.errors?.firstName}
+            />
+          )}
+          onInputChange={(_, value) => {
+            onNameChange(value, 'first');
+            props.onChange({ ...props.checkInData, firstName: value });
           }}
         />
 
@@ -228,6 +264,8 @@ export default function CheckInForm(props: Props) {
                   email: e.target.value,
                 });
               }}
+              error={!!props.errors?.email}
+              helperText={props.errors?.email}
             />
           )}
           onInputChange={(_, value) => {
@@ -246,11 +284,16 @@ export default function CheckInForm(props: Props) {
           label="Phone Number"
           value={props.checkInData.phoneNumber || ''}
           onChange={(e) => {
+            const formattedNumber = formatPhoneNumber(e.target.value);
             props.onChange({
               ...props.checkInData,
-              phoneNumber: e.target.value,
+              phoneNumber: formattedNumber,
             });
           }}
+          fullWidth
+          error={!!props.errors?.phoneNumber}
+          helperText={props.errors?.phoneNumber}
+          inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
         />
 
         {/* Address */}
@@ -261,29 +304,42 @@ export default function CheckInForm(props: Props) {
           onChange={(e) => {
             props.onChange({ ...props.checkInData, address: e.target.value });
           }}
+          error={!!props.errors?.address}
+          helperText={props.errors?.address}
+          fullWidth
         />
       </Box>
 
       {/* Role */}
-      <Typography sx={{ fontWeight: 'bold' }} variant="h6" pt={2}>
-        Volunteer Role:
-      </Typography>
-      <RadioGroup
-        sx={{ pb: 2 }}
-        value={props.checkInData.role || null}
-        onChange={(e) =>
-          props.onChange({ ...props.checkInData, role: e.target.value as Role })
-        }
+      <FormControl
+        error={!!props.errors?.role}
+        variant="standard"
+        sx={{ py: 2 }}
       >
-        {props.event.eventRoles.map((role, i) => (
-          <FormControlLabel
-            key={i}
-            value={role}
-            control={<Radio />}
-            label={role}
-          />
-        ))}
-      </RadioGroup>
+        <FormLabel id="role-label">Volunteer Role:</FormLabel>
+        <RadioGroup
+          value={props.checkInData.role || null}
+          onChange={(e) =>
+            props.onChange({
+              ...props.checkInData,
+              role: e.target.value as Role,
+            })
+          }
+          aria-labelledby="role-label"
+        >
+          {props.event.eventRoles.map((role, i) => (
+            <FormControlLabel
+              key={i}
+              value={role}
+              control={<Radio />}
+              label={role}
+            />
+          ))}
+        </RadioGroup>
+        {props.errors?.role && (
+          <FormHelperText>{props.errors?.role}</FormHelperText>
+        )}
+      </FormControl>
 
       {/* Organization */}
       <Autocomplete

@@ -15,6 +15,7 @@ import RecurringEventSchema from '@/server/models/RecurringEvent';
 import { RecurringEventResponse } from '@/types/dataModel/recurringEvent';
 import { upsertVolunteerRoleVerification } from './Volunteer';
 import { VerifiedRole } from '@/types/dataModel/roles';
+import { mongo } from 'mongoose';
 
 export async function createEvent(
   createEventReq: CreateEventRequest
@@ -69,8 +70,16 @@ export async function checkInVolunteer(
     }
 
     return res._id.toString();
-  } catch (e) {
-    throw e;
+  } catch (error) {
+    if (
+      error instanceof mongo.MongoError ||
+      error instanceof mongo.MongoServerError
+    ) {
+      if (error.code === 11000) {
+        throw new CMError(CMErrorType.DuplicateKey, 'EventVolunteer');
+      }
+    }
+    throw new CMError(CMErrorType.InternalError);
   }
 }
 

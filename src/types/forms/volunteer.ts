@@ -1,11 +1,11 @@
 import { z } from 'zod';
 // Data Form for create/update Volunteer
-const zUpsertVolunteerFormData = z.object({
-  firstName: z.string(),
-  lastName: z.string(),
-  email: z.string().email(),
-  phoneNumber: z.string(),
-  address: z.string(),
+export const zUpsertVolunteerFormData = z.object({
+  firstName: z.string().nonempty('Required'),
+  lastName: z.string().nonempty('Required'),
+  email: z.string().email().nonempty('Required'),
+  phoneNumber: z.string().nonempty('Required'),
+  address: z.string().nonempty('Required'),
 });
 
 export interface UpsertVolunteerFormData
