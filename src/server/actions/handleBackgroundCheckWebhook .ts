@@ -1,32 +1,32 @@
 import dbConnect from '@/utils/db-connect';
-import OrganizationSchema from '../models/Organization';
 import CMError, { CMErrorType } from '@/utils/cmerror';
 import { BackgroundCheckWebhookPayload } from '@/types/dataModel/BackgroundCheckWebhookPayload';
 import VolunteerSchema from '@/server/models/Volunteer';
 /**
  * Get a specific volunteer and update background check
  * @param payload // BackgroundCheckWebhookPayload
- * @returns // payload or null
+ * @returns // volunteerschema or null
  */
-export async function handleBackgroundCheckWebhook(): Promise<BackgroundCheckWebhookPayload> {
-  let payload: BackgroundCheckWebhookPayload | null = null;
+export async function handleBackgroundCheckWebhook(
+  payload: BackgroundCheckWebhookPayload
+): Promise<void> {
+  let res;
   try {
     await dbConnect();
-    payload = await OrganizationSchema.findById(payload);
-
-    await VolunteerSchema.findByIdAndUpdate(payload?.data.employee_email, {
-      $pull: {
-        roleVerifications: {
-          verifier: payload?.data.employee_email,
-          lastUpdated: new Date(),
+    res = await VolunteerSchema.findOneAndUpdate(
+      { email: payload?.data.employee_email },
+      {
+        $set: {
+          'backgroundCheck.status': payload.data.overall_status,
+          'backgroundCheck.lastUpdated': new Date(),
         },
       },
-    });
+      { new: true }
+    );
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }
-  if (!payload) {
-    throw new CMError(CMErrorType.NoSuchKey, 'BackgroundCheck');
+  if (!res) {
+    throw new CMError(CMErrorType.NoSuchKey, 'BackgroundCheckWebhook');
   }
-  return payload;
 }
