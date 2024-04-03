@@ -25,7 +25,7 @@ function VolunteerForm({
         firstName: currentVolunteer.firstName || '',
         lastName: currentVolunteer.lastName || '',
         email: currentVolunteer.email || '',
-        phoneNumber: currentVolunteer.phoneNumber || '',
+        phoneNumber: formatPhoneNumber(currentVolunteer.phoneNumber) || '',
         address: currentVolunteer.address || '',
       });
     }
