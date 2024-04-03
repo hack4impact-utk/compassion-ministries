@@ -4,6 +4,7 @@ import { UpsertVolunteerFormData } from '@/types/forms/volunteer';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { useEffect } from 'react';
 import { ValidationErrors } from '@/utils/validation';
+import { formatPhoneNumber } from '@/utils/phone-number';
 interface VolunteerFormProps {
   onChange: (volunteer: UpsertVolunteerFormData) => void;
   currentVolunteer?: VolunteerResponse;
@@ -68,7 +69,10 @@ function VolunteerForm({
         label="Phone Number"
         value={volunteerData.phoneNumber || ''}
         onChange={(e) =>
-          onChange({ ...volunteerData, phoneNumber: e.target.value })
+          onChange({
+            ...volunteerData,
+            phoneNumber: formatPhoneNumber(e.target.value),
+          })
         }
         InputLabelProps={{ shrink: !!volunteerData.phoneNumber }}
         sx={{ mb: 2 }}
