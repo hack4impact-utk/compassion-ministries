@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import zBackgroundCheckWebhookPayload from '@/types/dataModel/BackgroundCheckWebhookPayload';
-import { handleBackgroundCheckWebhook } from '@/server/actions/handleBackgroundCheckWebhook ';
+import zBackgroundCheckWebhookPayload from '@/types/dataModel/backgroundCheckWebhookPayload';
+import { handleBackgroundCheckWebhook } from '@/server/actions/webhooks';
 import CMError, { CMErrorType, CMErrorResponse } from '@/utils/cmerror';
 
 // @route POST /api/bc-webhook - Updates a volunteer's background check status
