@@ -12,4 +12,3 @@ export interface BackgroundCheckWebhookPayload
   extends z.infer<typeof zBackgroundCheckWebhookPayload> {}
 
 export default zBackgroundCheckWebhookPayload;
-f;
