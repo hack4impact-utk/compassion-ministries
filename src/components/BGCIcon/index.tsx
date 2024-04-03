@@ -6,12 +6,12 @@ import { BackgroundCheckStatus } from '@/types/dataModel/volunteer';
 
 const iconSize: string = '30px';
 
-interface BGIconProps {
+interface BGCIconProps {
   backgroundCheckStatuses: BackgroundCheckStatus[];
 }
 
-export default function IconList({ backgroundCheckStatuses }: BGIconProps) {
-  return getBGIcons(backgroundCheckStatuses);
+export default function BGCIcon({ backgroundCheckStatuses }: BGCIconProps) {
+  return getBGCIcons(backgroundCheckStatuses);
 }
 
 // SVG icons for each event Background Check Status
@@ -36,12 +36,12 @@ export const BGCIcons: { [id: string]: ReactNode } = {
   ),
 };
 
-function getRoleIcon(status: string | BackgroundCheckStatus): ReactNode {
+function getBGCIcon(status: string | BackgroundCheckStatus): ReactNode {
   return BGCIcons[status];
 }
 
-function getBGIcons(
+function getBGCIcons(
   statusList: string[] | BackgroundCheckStatus[]
 ): ReactNode[] {
-  return statusList.map((status) => getRoleIcon(status));
+  return statusList.map((status) => getBGCIcon(status));
 }
