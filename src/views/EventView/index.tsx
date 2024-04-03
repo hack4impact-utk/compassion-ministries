@@ -21,6 +21,10 @@ export default function EventView({
           Check-in
         </Button>
       </Link>
+
+      <Button variant="contained" fullWidth sx={{ mb: 2 }}>
+        New email
+      </Button>
       <Event event={event} eventVolunteers={eventVolunteers} />
     </Box>
   );
