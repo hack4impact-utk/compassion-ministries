@@ -1,4 +1,8 @@
-import { CreateEventRequest, EventResponse } from '@/types/dataModel/event';
+import {
+  CreateEmailRequest,
+  CreateEventRequest,
+  EventResponse,
+} from '@/types/dataModel/event';
 import Event from '../models/Event';
 import { createRecurringEvent } from './RecurringEvent';
 import {
@@ -195,4 +199,18 @@ export async function getAllVolunteersForEvent(
     throw new CMError(CMErrorType.InternalError);
   }
   return eventVols;
+}
+
+// unfinished
+// will send email to all volunteers at event
+export async function sendEventEmail(
+  eventId: string,
+  createEmailRequest: CreateEmailRequest
+) {
+  console.log(createEmailRequest);
+  const evs: EventVolunteerResponse[] = await getAllVolunteersForEvent(eventId);
+  const emails: string[] = evs.map((ev) => {
+    return ev.volunteer.email;
+  });
+  console.log(emails);
 }
