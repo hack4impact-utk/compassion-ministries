@@ -19,3 +19,18 @@ export async function getEventVolunteersByRole(
   }
   return evs;
 }
+
+export async function getEventVolunteersByOrganization(
+  organizationId: string
+): Promise<EventVolunteerResponse[]> {
+  let evs: EventVolunteerResponse[];
+  try {
+    await dbConnect();
+    evs = await EventVolunteerSchema.find({
+      organization: organizationId,
+    }).populate('volunteer');
+  } catch (error) {
+    throw new CMError(CMErrorType.InternalError);
+  }
+  return evs;
+}
