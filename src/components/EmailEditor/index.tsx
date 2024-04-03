@@ -41,7 +41,7 @@ export default function EmailEditor({
         theme="snow"
         value={value}
         onChange={handleBodyChange}
-        style={{ height: '400px' }} // Increase the height here
+        style={{ height: '200px' }} // Increase the height here
       />
     </div>
   );
