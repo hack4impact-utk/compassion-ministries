@@ -78,6 +78,7 @@ function VolunteerForm({
         sx={{ mb: 2 }}
         error={!!errors?.phoneNumber}
         helperText={errors?.phoneNumber}
+        inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
       />
       <TextField
         label="Address"
