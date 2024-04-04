@@ -11,6 +11,7 @@ export async function POST(
   request: NextRequest,
   { params }: { params: { eventId: string } }
 ) {
+  console.log('a');
   try {
     // Check Event ID
     const validationEvent = zObjectId.safeParse(params.eventId);

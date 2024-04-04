@@ -208,9 +208,14 @@ export async function sendEventEmail(
   createEmailRequest: CreateEmailRequest
 ) {
   console.log(createEmailRequest);
-  const evs: EventVolunteerResponse[] = await getAllVolunteersForEvent(eventId);
-  const emails: string[] = evs.map((ev) => {
-    return ev.volunteer.email;
-  });
-  console.log(emails);
+  try {
+    const evs: EventVolunteerResponse[] =
+      await getAllVolunteersForEvent(eventId);
+    const emails: string[] = evs.map((ev) => {
+      return ev.volunteer.email;
+    });
+    console.log(emails);
+  } catch (error) {
+    throw new CMError(CMErrorType.InternalError);
+  }
 }
