@@ -3,7 +3,6 @@ import { getEvent } from './Event';
 import { EventResponse } from '@/types/dataModel/event';
 import { getEventVolunteersByOrganization } from './EventVolunteers';
 import { getRangesOverlap } from '@/utils/math';
-import { ObjectId } from 'mongodb';
 
 /**
  * Gets statistics for volunteering efforts for an organization, optionally bounded to events within a search range
@@ -17,13 +16,13 @@ export async function getOrganizationReport(
   startDate?: Date,
   endDate?: Date
 ): Promise<{
-  organization: ObjectId;
+  organization: string;
   num_volunteers: number;
   num_hours: number;
 }> {
   // Return object
   const report = {
-    organization: new ObjectId(organizationId),
+    organization: organizationId,
     num_volunteers: 0,
     num_hours: 0,
   };
