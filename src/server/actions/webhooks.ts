@@ -2,15 +2,17 @@ import dbConnect from '@/utils/db-connect';
 import CMError, { CMErrorType } from '@/utils/cmerror';
 import { BackgroundCheckWebhookPayload } from '@/types/dataModel/backgroundCheckWebhookPayload';
 import VolunteerSchema from '@/server/models/Volunteer';
+import { VolunteerResponse } from '@/types/dataModel/volunteer';
 /**
  * Get a specific volunteer and update background check
  * @param payload // BackgroundCheckWebhookPayload
- * @returns // volunteerschema or null
+ * @returns // volunteer or null
  */
 export async function handleBackgroundCheckWebhook(
   payload: BackgroundCheckWebhookPayload
-): Promise<void> {
-  let res;
+): Promise<VolunteerResponse> {
+  let res: VolunteerResponse | null = null;
+
   try {
     await dbConnect();
     res = await VolunteerSchema.findOneAndUpdate(
@@ -20,7 +22,9 @@ export async function handleBackgroundCheckWebhook(
       },
       {
         $set: {
-          'backgroundCheck.status': payload.data.overall_status,
+          'backgroundCheck.status':
+            payload.data.overall_status.charAt(0).toUpperCase() +
+            payload.data.overall_status.slice(1).toLowerCase(),
         },
       }
     );
@@ -30,4 +34,5 @@ export async function handleBackgroundCheckWebhook(
   if (!res) {
     throw new CMError(CMErrorType.NoSuchKey, 'BackgroundCheckWebhook');
   }
+  return res;
 }

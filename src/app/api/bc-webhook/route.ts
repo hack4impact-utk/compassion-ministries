@@ -13,6 +13,9 @@ export async function POST(request: NextRequest) {
     }
 
     const res = await handleBackgroundCheckWebhook(validationResult.data);
+    if (res == null) {
+      return NextResponse.json({ id: 'Not Found' }, { status: 404 });
+    }
     return NextResponse.json({ id: res }, { status: 201 });
   } catch (error) {
     return CMErrorResponse(error);
