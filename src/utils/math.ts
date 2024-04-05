@@ -15,11 +15,11 @@ export function getRangesOverlap(
     .map((range) => {
       return range[0];
     })
-    .sort()[0];
+    .sort()[-1];
   const max: number = ranges
     .map((range) => {
       return range[1];
     })
-    .sort()[-1];
+    .sort()[0];
   return min > max ? undefined : [min, max];
 }
