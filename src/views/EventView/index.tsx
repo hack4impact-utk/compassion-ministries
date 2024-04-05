@@ -22,9 +22,11 @@ export default function EventView({
         </Button>
       </Link>
 
-      <Button variant="contained" fullWidth sx={{ mb: 2 }}>
-        New email
-      </Button>
+      <Link href={`/email-editor`}>
+        <Button variant="contained" fullWidth sx={{ mb: 2 }}>
+          New email
+        </Button>
+      </Link>
       <Event event={event} eventVolunteers={eventVolunteers} />
     </Box>
   );
