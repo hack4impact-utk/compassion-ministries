@@ -25,9 +25,10 @@ interface CheckInViewProps {
 }
 
 export default function CheckInView(props: CheckInViewProps) {
-  const [formData, setFormData] = useState<CheckInFormData>(
-    {} as CheckInFormData
-  );
+  const [formData, setFormData] = useState<CheckInFormData>({
+    role:
+      props.event.eventRoles.length === 1 ? props.event.eventRoles[0] : null,
+  } as CheckInFormData);
   const [validationErrors, setValidationErrors] = useState<
     ValidationErrors<CheckInFormData> | undefined
   >(undefined);

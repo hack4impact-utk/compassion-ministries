@@ -121,6 +121,7 @@ export default function CheckInForm(props: Props) {
     if (volunteerMatches.length === 1) {
       const match = volunteerMatches[0];
       const updatedFormData = {
+        ...props.checkInData,
         firstName: match.firstName,
         lastName: match.lastName,
         email: match.email,
