@@ -109,7 +109,12 @@ export default function CheckInView(props: CheckInViewProps) {
         // handle duplicate entry, we don't want to display duplicate message
         // to the user
         if (res.status === 409) {
-          setFormData({} as CheckInFormData);
+          setFormData({
+            role:
+              props.event.eventRoles.length === 1
+                ? props.event.eventRoles[0]
+                : null,
+          } as CheckInFormData);
           showSnackbar('Volunteer already checked in', 'error');
           setLoading(false);
           return;
@@ -120,7 +125,12 @@ export default function CheckInView(props: CheckInViewProps) {
         return;
       }
       // reset form
-      setFormData({} as CheckInFormData);
+      setFormData({
+        role:
+          props.event.eventRoles.length === 1
+            ? props.event.eventRoles[0]
+            : null,
+      } as CheckInFormData);
       showSnackbar('Checked in successfully', 'success');
       router.refresh();
       setLoading(false);

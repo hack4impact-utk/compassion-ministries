@@ -261,7 +261,12 @@ export default function CheckInForm(props: Props) {
               onEmailChange(value);
               return;
             }
-            props.onChange({} as CheckInFormData);
+            props.onChange({
+              role:
+                props.event.eventRoles.length === 1
+                  ? props.event.eventRoles[0]
+                  : null,
+            } as CheckInFormData);
           }}
         />
 
