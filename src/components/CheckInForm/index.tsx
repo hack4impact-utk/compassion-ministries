@@ -21,6 +21,7 @@ import {
   createFilterOptions,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { formatPhoneNumber } from '@/utils/phone-number';
 
 interface Props {
   volunteers: VolunteerResponse[];
@@ -113,21 +114,6 @@ export default function CheckInForm(props: Props) {
     }
   }
 
-  function formatPhoneNumber(input: string) {
-    input = input.replace(/\D/g, '');
-    const size = input.length;
-    if (size > 0) {
-      input = '(' + input;
-    }
-    if (size > 3) {
-      input = input.slice(0, 4) + ') ' + input.slice(4, 11);
-    }
-    if (size > 6) {
-      input = input.slice(0, 9) + '-' + input.slice(9);
-    }
-    return input;
-  }
-
   function onEmailChange(email: string) {
     const volunteerMatches = props.volunteers.filter(
       (vol) => vol.email === email
@@ -135,6 +121,7 @@ export default function CheckInForm(props: Props) {
     if (volunteerMatches.length === 1) {
       const match = volunteerMatches[0];
       const updatedFormData = {
+        ...props.checkInData,
         firstName: match.firstName,
         lastName: match.lastName,
         email: match.email,
@@ -274,7 +261,12 @@ export default function CheckInForm(props: Props) {
               onEmailChange(value);
               return;
             }
-            props.onChange({} as CheckInFormData);
+            props.onChange({
+              role:
+                props.event.eventRoles.length === 1
+                  ? props.event.eventRoles[0]
+                  : null,
+            } as CheckInFormData);
           }}
         />
 
