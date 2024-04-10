@@ -20,6 +20,7 @@ import { RecurringEventResponse } from '@/types/dataModel/recurringEvent';
 import { upsertVolunteerRoleVerification } from './Volunteer';
 import { VerifiedRole } from '@/types/dataModel/roles';
 import { mongo } from 'mongoose';
+import { createTransport } from 'nodemailer';
 
 export async function createEvent(
   createEventReq: CreateEventRequest
@@ -207,15 +208,34 @@ export async function sendEventEmail(
   eventId: string,
   createEmailRequest: CreateEmailRequest
 ): Promise<string[]> {
-  console.log(createEmailRequest);
   try {
     const evs: EventVolunteerResponse[] =
       await getAllVolunteersForEvent(eventId);
     const emails: string[] = evs.map((ev) => {
       return ev.volunteer.email;
     });
+
+    const transporter = createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EVENTS_EMAIL_ADDR,
+        pass: process.env.EVENTS_EMAIL_PASS,
+      }
+    })
+
+    const emailOptions = {
+      from: process.env.EVENTS_EMAIL_PASS,
+      to: emails.join(','),
+      subject: createEmailRequest.subject,
+      text: createEmailRequest.emailbody,
+    };
+
+    await transporter.sendMail(emailOptions);
+
     return emails;
+
   } catch (error) {
+    console.log(error);
     throw new CMError(CMErrorType.InternalError);
   }
 }
