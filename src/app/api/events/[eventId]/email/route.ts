@@ -5,13 +5,12 @@ import {
   zCreateEmailRequest,
 } from '@/types/dataModel/event';
 import CMError, { CMErrorResponse, CMErrorType } from '@/utils/cmerror';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 
 export async function POST(
   request: NextRequest,
   { params }: { params: { eventId: string } }
 ) {
-  console.log('a');
   try {
     // Check Event ID
     const validationEvent = zObjectId.safeParse(params.eventId);
@@ -34,7 +33,7 @@ export async function POST(
     // send email to all volunteers at event
     await sendEventEmail(params.eventId, req);
 
-    return NextResponse.json(undefined, { status: 204 });
+    return new Response(null, { status: 204 });
   } catch (error) {
     return CMErrorResponse(error);
   }
