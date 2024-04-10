@@ -43,14 +43,19 @@ export async function getOrganizationReport(
     for (const eventVolunteer of eventVolunteers) {
       const event: EventResponse = await getEvent(eventVolunteer.event);
 
+      // Get event time range
+      let timeRange: [number, number] | undefined = [
+        event.startAt.valueOf(),
+        event.endAt.valueOf(),
+      ];
+
       // Bound start and end time within search range
-      const timeRange: [number, number] | undefined = getRangesOverlap([
-        [event.startAt.valueOf(), event.endAt.valueOf()],
-        [
-          fromTime != undefined ? fromTime : event.startAt.valueOf(),
-          toTime != undefined ? toTime : event.endAt.valueOf(),
-        ],
-      ]);
+      if (fromTime != undefined || toTime != undefined) {
+        timeRange = getRangesOverlap([
+          timeRange,
+          [fromTime ?? timeRange[0], toTime ?? timeRange[1]],
+        ]);
+      }
 
       // If event intersects search range, record info
       if (timeRange != undefined) {
