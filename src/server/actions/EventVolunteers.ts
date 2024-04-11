@@ -28,7 +28,9 @@ export async function getEventVolunteersByOrganization(
     await dbConnect();
     evs = await EventVolunteerSchema.find({
       organization: organizationId,
-    }).populate('volunteer');
+    })
+      .populate('volunteer')
+      .populate('event');
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }

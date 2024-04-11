@@ -1,6 +1,4 @@
 import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
-import { getEvent } from './Event';
-import { EventResponse } from '@/types/dataModel/event';
 import { getEventVolunteersByOrganization } from './EventVolunteers';
 import { getRangesOverlap } from '@/utils/math';
 
@@ -41,12 +39,10 @@ export async function getOrganizationReport(
     const volunteerIds: Set<string> = new Set<string>();
     let volunteerTime: number = 0;
     for (const eventVolunteer of eventVolunteers) {
-      const event: EventResponse = await getEvent(eventVolunteer.event);
-
       // Get event time range
       let timeRange: [number, number] | undefined = [
-        event.startAt.valueOf(),
-        event.endAt.valueOf(),
+        eventVolunteer.event.startAt.valueOf(),
+        eventVolunteer.event.endAt.valueOf(),
       ];
 
       // Bound start and end time within search range
