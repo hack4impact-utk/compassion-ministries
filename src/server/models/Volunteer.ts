@@ -18,7 +18,6 @@ const VolunteerSchema = new Schema(
     email: {
       type: String,
       required: true,
-      unique: true,
     },
     phoneNumber: {
       type: String,
@@ -105,6 +104,10 @@ VolunteerSchema.post(/findById/, function (doc: VolunteerEntity) {
   }
 });
 
+VolunteerSchema.index(
+  { firstName: 1, lastName: 1, email: 1 },
+  { unique: true }
+);
 export interface VolunteerDocument
   extends Omit<VolunteerEntity, '_id'>,
     Document {}
