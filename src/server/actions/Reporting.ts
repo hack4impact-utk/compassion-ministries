@@ -1,6 +1,6 @@
-import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
-import { getEventVolunteersByOrganization } from './EventVolunteers';
+import { VolunteerEventResponse } from '@/types/dataModel/eventVolunteer';
 import { getRangesOverlap } from '@/utils/math';
+import { getVolunteerEventsByOrganization } from './Volunteer';
 
 /**
  * Gets statistics for volunteering efforts for an organization, optionally bounded to events within a search range
@@ -32,17 +32,17 @@ export async function getOrganizationReport(
   // If valid search range, calculate num volunteers and hours
   if (fromTime == undefined || toTime == undefined || toTime > fromTime) {
     // Get all event volunteers under organization
-    const eventVolunteers: EventVolunteerResponse[] =
-      await getEventVolunteersByOrganization(organizationId);
+    const volunteerEvents: VolunteerEventResponse[] =
+      await getVolunteerEventsByOrganization(organizationId);
 
     // Iterate over eventVolunteers to get unique volunteer ids and total time for all records within search range
     const volunteerIds: Set<string> = new Set<string>();
     let volunteerTime: number = 0;
-    for (const eventVolunteer of eventVolunteers) {
+    for (const volunteerEvent of volunteerEvents) {
       // Get event time range
       let timeRange: [number, number] | undefined = [
-        eventVolunteer.event.startAt.valueOf(),
-        eventVolunteer.event.endAt.valueOf(),
+        volunteerEvent.event.startAt.valueOf(),
+        volunteerEvent.event.endAt.valueOf(),
       ];
 
       // Bound start and end time within search range
@@ -56,7 +56,7 @@ export async function getOrganizationReport(
       // If event intersects search range, record info
       if (timeRange != undefined) {
         // Add volunteer id to set of unique volunteer ids
-        volunteerIds.add(eventVolunteer.volunteer._id);
+        volunteerIds.add(volunteerEvent.volunteer);
         // Add event time within search range to total time volunteered
         volunteerTime += timeRange[1] - timeRange[0];
       }
