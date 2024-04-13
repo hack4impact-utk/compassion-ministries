@@ -58,7 +58,7 @@ export default function Volunteer({
           <Typography variant="h3" pt={2} pb={2}>
             {volunteer.firstName} {volunteer.lastName}
           </Typography>
-          <Box sx={{ display: 'flex' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
               Email:
             </Typography>
@@ -66,7 +66,7 @@ export default function Volunteer({
               {volunteer.email}
             </Typography>
           </Box>
-          <Box sx={{ display: 'flex' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
               Phone number:
             </Typography>
@@ -74,15 +74,15 @@ export default function Volunteer({
               {formattedPhoneNumber}
             </Typography>
           </Box>
-          <Box sx={{ display: 'flex' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
-              Previous role:
+              Adress:
             </Typography>
             <Typography display="inline" variant="h6">
-              {volunteer.previousRole}
+              {volunteer.address}
             </Typography>
           </Box>
-          <Box sx={{ display: 'flex' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
               Previous organization:
             </Typography>
