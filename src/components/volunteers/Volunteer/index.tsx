@@ -59,28 +59,34 @@ export default function Volunteer({
             {volunteer.firstName} {volunteer.lastName}
           </Typography>
           <Box sx={{ display: 'flex' }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', pr: 1 }}>
+            <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
               Email:
             </Typography>
-            <Typography display="inline">{volunteer.email}</Typography>
+            <Typography display="inline" variant="h6">
+              {volunteer.email}
+            </Typography>
           </Box>
           <Box sx={{ display: 'flex' }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', pr: 1 }}>
+            <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
               Phone number:
             </Typography>
-            <Typography display="inline">{formattedPhoneNumber}</Typography>
+            <Typography display="inline" variant="h6">
+              {formattedPhoneNumber}
+            </Typography>
           </Box>
           <Box sx={{ display: 'flex' }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', pr: 1 }}>
+            <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
               Previous role:
             </Typography>
-            <Typography display="inline">{volunteer.previousRole}</Typography>
+            <Typography display="inline" variant="h6">
+              {volunteer.previousRole}
+            </Typography>
           </Box>
           <Box sx={{ display: 'flex' }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', pr: 1 }}>
+            <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
               Previous organization:
             </Typography>
-            <Typography display="inline">
+            <Typography display="inline" variant="h6">
               {volunteer.previousOrganization?.name}
             </Typography>
           </Box>
@@ -91,33 +97,26 @@ export default function Volunteer({
           {volunteer.roleVerifications?.map((verification, index) => (
             <Box key={index}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Typography
-                  variant="subtitle1"
-                  sx={{ fontWeight: 'bold', pr: 1 }}
-                >
+                <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
                   Role:
                 </Typography>
-                <Typography display="inline">{verification.role}</Typography>
+                <Typography display="inline" variant="h6">
+                  {verification.role}
+                </Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Typography
-                  variant="subtitle1"
-                  sx={{ fontWeight: 'bold', pr: 1 }}
-                >
+                <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
                   Verified by:
                 </Typography>
-                <Typography display="inline">
+                <Typography display="inline" variant="h6">
                   {verification.verifier}
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Typography
-                  variant="subtitle1"
-                  sx={{ fontWeight: 'bold', pr: 1 }}
-                >
+                <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
                   Verification date:
                 </Typography>
-                <Typography display="inline">
+                <Typography display="inline" variant="h6">
                   {new Date(verification.lastUpdated).toLocaleDateString()}
                 </Typography>
               </Box>
