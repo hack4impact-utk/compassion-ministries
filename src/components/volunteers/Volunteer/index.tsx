@@ -2,7 +2,7 @@
 import React from 'react';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { VolunteerEventResponse } from '@/types/dataModel/eventVolunteer';
-import { Typography, Box, ListItemButton } from '@mui/material';
+import { Typography, Box, ListItemButton, ListItemText } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { UpsertRoleVerificationFormData } from '@/types/forms/role-verifications';
 import IconList from '@/components/IconList';
@@ -87,7 +87,19 @@ export default function Volunteer({
               Previous organization:
             </Typography>
             <Typography display="inline" variant="h6">
-              {volunteer.previousOrganization?.name}
+              <ListItemButton
+                key={volunteer.previousOrganization?._id}
+                onClick={() =>
+                  router.push(
+                    `/organizations/${volunteer.previousOrganization?._id}`
+                  )
+                }
+              >
+                <ListItemText
+                  primary={volunteer.previousOrganization?.name}
+                  primaryTypographyProps={{ variant: 'h6' }}
+                />
+              </ListItemButton>
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }} pt={4}>
@@ -140,7 +152,13 @@ export default function Volunteer({
                   router.push(`/events/${volunteerEvent.event._id}`)
                 }
               >
-                <Box sx={{ display: 'flex', alignItems: 'center' }} pt={1}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    pt: 1,
+                  }}
+                >
                   <IconList roles={[volunteerEvent.role]}></IconList>
                   <Typography pl={2} variant="h5">
                     {volunteerEvent.event.name}
