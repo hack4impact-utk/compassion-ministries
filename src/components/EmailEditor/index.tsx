@@ -7,11 +7,14 @@ import { Button, TextField } from '@mui/material';
 
 interface EmailEditorProps {
   formData: EmailFormData;
+  eventId: string;
 }
 
 export default function EmailEditor({
   formData,
+  eventId,
 }: EmailEditorProps): React.ReactElement {
+  eventId;
   const onChange: (formData: EmailFormData) => void = () => {};
 
   const [value, setValue] = useState(formData.emailbody);
@@ -27,6 +30,21 @@ export default function EmailEditor({
   const handleBodyChange = (value: string) => {
     setValue(value);
     onChange({ ...formData, emailbody: value });
+  };
+
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const handleSendEmail = () => {
+    setShowConfirmation(true);
+  };
+
+  const handleConfirmation = (confirmed: boolean) => {
+    if (confirmed) {
+      // Logic to send the email
+    } else {
+      // Logic if user cancels sending the email
+    }
+    setShowConfirmation(false);
   };
 
   return (
@@ -46,9 +64,22 @@ export default function EmailEditor({
         onChange={handleBodyChange}
         style={{ height: '200px' }} // Increase the height here
       />
-      <Button variant="contained" fullWidth sx={{ mb: 2 }}>
+      <Button
+        variant="contained"
+        fullWidth
+        sx={{ mb: 2 }}
+        onClick={handleSendEmail}
+      >
         Send Email
       </Button>
+
+      {showConfirmation && (
+        <div>
+          Are you sure you want to send this email?
+          <Button onClick={() => handleConfirmation(true)}>Yes</Button>
+          <Button onClick={() => handleConfirmation(false)}>No</Button>
+        </div>
+      )}
     </div>
   );
 }
