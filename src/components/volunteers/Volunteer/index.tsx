@@ -9,7 +9,6 @@ import IconList from '@/components/IconList';
 import { useRouter } from 'next/navigation';
 import AddRoleVerificationDialog from '@/components/AddRoleVerificationDialog';
 import { formatPhoneNumber } from '@/utils/phone-number';
-
 // Use VolunteerResponse Props
 interface VolunteerProps {
   volunteer: VolunteerResponse;
@@ -151,19 +150,20 @@ export default function Volunteer({
                 onClick={() =>
                   router.push(`/events/${volunteerEvent.event._id}`)
                 }
+                sx={{ pl: 0 }}
               >
-                <Box
-                  sx={{
+                <Box>
+                  <IconList roles={[volunteerEvent.role]}></IconList>
+                </Box>
+                <ListItemText
+                  sx={{ pl: 1 }}
+                  primary={`${volunteerEvent.event.name}`}
+                  primaryTypographyProps={{
+                    variant: 'h5',
                     display: 'flex',
                     alignItems: 'center',
-                    pt: 1,
                   }}
-                >
-                  <IconList roles={[volunteerEvent.role]}></IconList>
-                  <Typography pl={2} variant="h5">
-                    {volunteerEvent.event.name}
-                  </Typography>
-                </Box>
+                />
               </ListItemButton>
             ))}
           </Box>
