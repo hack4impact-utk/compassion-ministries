@@ -115,9 +115,11 @@ export default function CheckInForm(props: Props) {
   }
 
   function onEmailChange(email: string) {
-    const volunteerMatches = props.volunteers.filter(
-      (vol) => vol.email === email
+    const volunteerRegex = new RegExp(email, 'i');
+    const volunteerMatches = props.volunteers.filter((vol) =>
+      volunteerRegex.test(vol.email)
     );
+
     if (volunteerMatches.length === 1) {
       const match = volunteerMatches[0];
       const updatedFormData = {
@@ -356,10 +358,10 @@ export default function CheckInForm(props: Props) {
 
           // what is typed in the field
           const { inputValue } = params;
+          const OrganizationRegex = new RegExp(params.inputValue, 'i');
 
-          // Checks if the inputValue match an existing organization
-          const isExisting = options.some(
-            (option) => inputValue === option.name
+          const isExisting = options.some((option) =>
+            OrganizationRegex.test(option.name)
           );
 
           // If the inputValue does not match an existing organization, display it as `Add "[inputValue]"`
