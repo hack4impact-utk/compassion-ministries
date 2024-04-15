@@ -7,6 +7,8 @@ import {
 import { useState } from 'react';
 import { ValidationErrors } from '@/utils/validation';
 import useValidation from '@/hooks/useValidation';
+import useSnackbar from '@/hooks/useSnackbar';
+import { Verified } from '@mui/icons-material';
 
 interface AddRoleVerificationDialogProps {
   open: boolean;
@@ -25,13 +27,14 @@ export default function AddRoleVerificationDialog({
   const [validationErrors, setValidationErrors] = useState<
     ValidationErrors<UpsertRoleVerificationFormData> | undefined
   >(undefined);
+  const { showSnackbar } = useSnackbar();
   const validate = useValidation(zUpsertRoleVerificationFormData);
-
   const handleSubmit = async () => {
     // Validate the data
     const validationErrors = validate(formData);
     if (validationErrors) {
       setValidationErrors(validationErrors);
+      showSnackbar("Role verification failed. Check in again to verify volunteer");
       return;
     }
 
