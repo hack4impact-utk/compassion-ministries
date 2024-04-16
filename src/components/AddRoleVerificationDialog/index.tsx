@@ -8,7 +8,6 @@ import { useState } from 'react';
 import { ValidationErrors } from '@/utils/validation';
 import useValidation from '@/hooks/useValidation';
 import useSnackbar from '@/hooks/useSnackbar';
-import { Verified } from '@mui/icons-material';
 
 interface AddRoleVerificationDialogProps {
   open: boolean;
