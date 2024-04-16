@@ -97,11 +97,12 @@ export async function getEventsBetweenDates(
       $gte: startDate,
       $lte: endDate,
     },
+    softDelete: { $ne: true },
   }).lean();
 
-  const recurringEvents = (await RecurringEventSchema.find().populate(
-    'event'
-  )) as RecurringEventResponse[];
+  const recurringEvents = (await RecurringEventSchema.find({
+    softDelete: false,
+  }).populate('event')) as RecurringEventResponse[];
 
   for (const recurringEvent of recurringEvents) {
     const dates = datesBetweenFromRrule(
