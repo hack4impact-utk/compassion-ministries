@@ -61,7 +61,7 @@ export default function Volunteer({
             <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
               Email:
             </Typography>
-            <Typography display="inline" variant="h6">
+            <Typography display="inline" fontWeight="normal" variant="h6">
               {volunteer.email}
             </Typography>
           </Box>
@@ -69,15 +69,15 @@ export default function Volunteer({
             <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
               Phone number:
             </Typography>
-            <Typography display="inline" variant="h6">
+            <Typography display="inline" fontWeight="normal" variant="h6">
               {formattedPhoneNumber}
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
-              Adress:
+              Address:
             </Typography>
-            <Typography display="inline" variant="h6">
+            <Typography display="inline" fontWeight="normal" variant="h6">
               {volunteer.address}
             </Typography>
           </Box>
@@ -96,7 +96,10 @@ export default function Volunteer({
               >
                 <ListItemText
                   primary={volunteer.previousOrganization?.name}
-                  primaryTypographyProps={{ variant: 'h6' }}
+                  primaryTypographyProps={{
+                    variant: 'h6',
+                    fontWeight: 'normal',
+                  }}
                 />
               </ListItemButton>
             </Typography>
@@ -111,7 +114,7 @@ export default function Volunteer({
                 <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
                   Role:
                 </Typography>
-                <Typography display="inline" variant="h6">
+                <Typography display="inline" variant="h6" fontWeight="normal">
                   {verification.role}
                 </Typography>
               </Box>
@@ -119,7 +122,7 @@ export default function Volunteer({
                 <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
                   Verified by:
                 </Typography>
-                <Typography display="inline" variant="h6">
+                <Typography display="inline" variant="h6" fontWeight="normal">
                   {verification.verifier}
                 </Typography>
               </Box>
@@ -127,7 +130,7 @@ export default function Volunteer({
                 <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
                   Verification date:
                 </Typography>
-                <Typography display="inline" variant="h6">
+                <Typography display="inline" variant="h6" fontWeight="normal">
                   {new Date(verification.lastUpdated).toLocaleDateString()}
                 </Typography>
               </Box>
