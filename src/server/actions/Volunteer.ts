@@ -273,7 +273,7 @@ export async function getAllEventsForVolunteer(
  * @param organizationId The ID of the organization.
  * @returns Collection of VolunteerEventResponses for the organization, or null if there are none.
  */
-export async function getVolunteerEventByOrganization(
+export async function getVolunteerEventsByOrganization(
   organizationId: string
 ): Promise<VolunteerEventResponse[]> {
   let volunteerEvents: VolunteerEventResponse[] = [];
@@ -281,7 +281,13 @@ export async function getVolunteerEventByOrganization(
     await dbConnect();
     volunteerEvents = await EventVolunteerSchema.find({
       organization: organizationId,
-    }).populate('event');
+    }).populate('event').lean();
+
+    volunteerEvents.map((volunteerEvent) => {
+      volunteerEvent.volunteer = volunteerEvent.volunteer.toString();
+      return volunteerEvent;
+    });
+
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }
