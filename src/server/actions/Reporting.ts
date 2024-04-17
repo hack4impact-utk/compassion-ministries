@@ -75,7 +75,7 @@ export async function getOrganizationReport(
  * @param volunteerId Id of volunteer to generate statistics for
  * @param startDate Lower bound on search range for event volunteer records
  * @param endDate Upper bound on search range for event volunteer records
- * @returns Total volunteer hours and number of unique volunteers associated with the organization within the search range
+ * @returns Total volunteer hours and number of unique volunteers associated with the volunteer within the search range
  */
 export async function getVolunteerReport(
   volunteerId: string,
@@ -97,13 +97,13 @@ export async function getVolunteerReport(
   const fromTime = startDate?.valueOf();
   const toTime = endDate?.valueOf();
 
-  // If valid search range, calculate num volunteers and hours
+  // If valid search range, calculate num events and hours
   if (fromTime == undefined || toTime == undefined || toTime > fromTime) {
     // Get all event volunteers under organization
     const volunteerEvents: VolunteerEventResponse[] =
       await getAllEventsForVolunteer(volunteerId);
 
-    // Iterate over eventVolunteers to get unique volunteer ids and total time for all records within search range
+    // Iterate over eventVolunteers to get unique event ids and total time for all records within search range
     const eventsId: Set<string> = new Set<string>();
     let volunteerTime: number = 0;
     for (const volunteerEvent of volunteerEvents) {
@@ -123,7 +123,7 @@ export async function getVolunteerReport(
 
       // If event intersects search range, record info
       if (timeRange != undefined) {
-        // Add volunteer id to set of unique volunteer ids
+        // Add event id to set of unique event ids
         eventsId.add(volunteerEvent.event._id);
         // Add event time within search range to total time volunteered
         volunteerTime += timeRange[1] - timeRange[0];
