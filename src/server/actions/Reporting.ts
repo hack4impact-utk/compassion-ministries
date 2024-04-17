@@ -1,6 +1,6 @@
 import { VolunteerEventResponse } from '@/types/dataModel/eventVolunteer';
 import { getRangesOverlap } from '@/utils/math';
-import { getVolunteerEventsByOrganization } from './Volunteer';
+import { getAllEventsForVolunteer, getVolunteerEventsByOrganization } from './Volunteer';
 
 /**
  * Gets statistics for volunteering efforts for an organization, optionally bounded to events within a search range
@@ -64,6 +64,74 @@ export async function getOrganizationReport(
 
     // Update return object
     report.num_volunteers = volunteerIds.size;
+    report.num_hours = volunteerTime / 3600000; // convert milliseconds to hours
+  }
+
+  return report;
+}
+
+/**
+ * Gets statistics for volunteering efforts by a particular volunteer, optionally bounded to events within a search range
+ * @param volunteerId Id of volunteer to generate statistics for
+ * @param startDate Lower bound on search range for event volunteer records
+ * @param endDate Upper bound on search range for event volunteer records
+ * @returns Total volunteer hours and number of unique volunteers associated with the organization within the search range
+ */
+export async function getVolunteerReport(
+  volunteerId: string,
+  startDate?: Date,
+  endDate?: Date
+): Promise<{
+  volunteer: string;
+  num_events: number;
+  num_hours: number;
+}> {
+  // Return object
+  const report = {
+    volunteer: volunteerId,
+    num_events: 0,
+    num_hours: 0,
+  };
+
+  // Get search range
+  const fromTime = startDate?.valueOf();
+  const toTime = endDate?.valueOf();
+
+  // If valid search range, calculate num volunteers and hours
+  if (fromTime == undefined || toTime == undefined || toTime > fromTime) {
+    // Get all event volunteers under organization
+    const volunteerEvents: VolunteerEventResponse[] =
+      await getAllEventsForVolunteer(volunteerId);
+
+    // Iterate over eventVolunteers to get unique volunteer ids and total time for all records within search range
+    const eventsId: Set<string> = new Set<string>();
+    let volunteerTime: number = 0;
+    for (const volunteerEvent of volunteerEvents) {
+      // Get event time range
+      let timeRange: [number, number] | undefined = [
+        volunteerEvent.event.startAt.valueOf(),
+        volunteerEvent.event.endAt.valueOf(),
+      ];
+
+      // Bound start and end time within search range
+      if (fromTime != undefined || toTime != undefined) {
+        timeRange = getRangesOverlap([
+          timeRange,
+          [fromTime ?? timeRange[0], toTime ?? timeRange[1]],
+        ]);
+      }
+
+      // If event intersects search range, record info
+      if (timeRange != undefined) {
+        // Add volunteer id to set of unique volunteer ids
+        eventsId.add(volunteerEvent.event._id);
+        // Add event time within search range to total time volunteered
+        volunteerTime += timeRange[1] - timeRange[0];
+      }
+    }
+
+    // Update return object
+    report.num_events = eventsId.size;
     report.num_hours = volunteerTime / 3600000; // convert milliseconds to hours
   }
 
