@@ -20,7 +20,7 @@ import { RecurringEventResponse } from '@/types/dataModel/recurringEvent';
 import { upsertVolunteerRoleVerification } from './Volunteer';
 import { VerifiedRole } from '@/types/dataModel/roles';
 import { mongo } from 'mongoose';
-import { createTransport } from 'nodemailer';
+import nodemailer from 'nodemailer';
 
 export async function createEvent(
   createEventReq: CreateEventRequest
@@ -215,13 +215,16 @@ export async function sendEventEmail(
       return ev.volunteer.email;
     });
 
-    const transporter = createTransport({
+    const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
+        type: 'OAuth2',
         user: process.env.EVENTS_EMAIL_ADDR,
-        pass: process.env.EVENTS_EMAIL_PASS,
+        clientId: process.env.EVENTS_EMAIL_CLIENT_ID,
+        clientSecret: process.env.EVENTS_EMAIL_CLIENT_SECRET,
+        refreshToken: process.env.EVENTS_EMAIL_REFRESH_TOKEN,
       }
-    })
+    });
 
     const emailOptions = {
       from: process.env.EVENTS_EMAIL_PASS,
