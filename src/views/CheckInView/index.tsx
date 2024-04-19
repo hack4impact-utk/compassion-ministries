@@ -1,6 +1,7 @@
 'use client';
 import CheckInForm from '@/components/CheckInForm';
 import LoadingButton from '@/components/LoadingButton';
+import useRoleConfirmation from '@/hooks/useRoleConfirmation';
 // import useRoleConfirmation from '@/hooks/useRoleConfirmation'; UNCOMMENT AFTER FIELD TEST
 import useSnackbar from '@/hooks/useSnackbar';
 import useValidation from '@/hooks/useValidation';
@@ -34,7 +35,7 @@ export default function CheckInView(props: CheckInViewProps) {
   >(undefined);
   const [loading, setLoading] = useState(false);
   const [submitDisabled, setSubmitDisabled] = useState(false);
-  // const confirmRole = useRoleConfirmation(); UNCOMMENT AFTER FIELD TEST
+  const confirmRole = useRoleConfirmation();
   const { showSnackbar } = useSnackbar();
   const validate = useValidation(zCheckInFormData);
   const router = useRouter();
@@ -64,7 +65,6 @@ export default function CheckInView(props: CheckInViewProps) {
       address: formData.address,
     };
 
-    /* UNCOMMENT AFTER FIELD TEST
     let verifier: string | null = null;
 
     // if:
@@ -86,7 +86,6 @@ export default function CheckInView(props: CheckInViewProps) {
         return;
       }
     }
-    */
 
     const eventVolReq = transformCheckInFormDataToCreateEventVolunteerRequest(
       formData,
