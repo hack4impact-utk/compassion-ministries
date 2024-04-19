@@ -7,7 +7,7 @@ import EventVolunteerSchema from '../models/EventVolunteer';
 import {
   EventVolunteerEntity,
   VolunteerEventResponse,
-  EventVolunteerResponse,
+  PopulatedEventVolunteerResponse,
 } from '@/types/dataModel/eventVolunteer';
 import VolunteerSchema from '@/server/models/Volunteer';
 import dbConnect from '@/utils/db-connect';
@@ -56,7 +56,9 @@ export async function getAllVolunteers(): Promise<VolunteerResponse[]> {
   let volunteers: VolunteerResponse[];
   try {
     await dbConnect();
-    volunteers = await VolunteerSchema.find().populate('previousOrganization');
+    volunteers = await VolunteerSchema.find()
+      .populate('previousOrganization')
+      .lean();
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }
@@ -229,9 +231,9 @@ export async function getVolunteer(
   let volunteer: VolunteerResponse | null = null;
   try {
     await dbConnect();
-    volunteer = await VolunteerSchema.findById(volunteerId).populate(
-      'previousOrganization'
-    );
+    volunteer = await VolunteerSchema.findById(volunteerId)
+      .populate('previousOrganization')
+      .lean();
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }
@@ -253,7 +255,13 @@ export async function getAllEventsForVolunteer(
     await dbConnect();
     events = await EventVolunteerSchema.find({ volunteer: volunteerId })
       .populate('event')
-      .populate('organization');
+      .populate('organization')
+      .lean();
+
+    // convert ObjectId's to strings
+    events.forEach((ev) => {
+      ev.volunteer = ev.volunteer.toString();
+    });
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }
@@ -265,7 +273,7 @@ export async function getAllEventsForVolunteer(
  * @param organizationId The ID of the organization.
  * @returns Collection of VolunteerEventResponses for the organization, or null if there are none.
  */
-export async function getVolunteerEventByOrganization(
+export async function getVolunteerEventsByOrganization(
   organizationId: string
 ): Promise<VolunteerEventResponse[]> {
   let volunteerEvents: VolunteerEventResponse[] = [];
@@ -273,7 +281,13 @@ export async function getVolunteerEventByOrganization(
     await dbConnect();
     volunteerEvents = await EventVolunteerSchema.find({
       organization: organizationId,
-    }).populate('event');
+    }).populate('event').lean();
+
+    volunteerEvents.map((volunteerEvent) => {
+      volunteerEvent.volunteer = volunteerEvent.volunteer.toString();
+      return volunteerEvent;
+    });
+
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }
@@ -291,7 +305,7 @@ export async function getVolunteersByOrganization(
   try {
     await dbConnect();
 
-    const eventVolunteers: EventVolunteerResponse[] =
+    const eventVolunteers: PopulatedEventVolunteerResponse[] =
       await EventVolunteerSchema.find({
         organization: organizationId,
       })
@@ -299,10 +313,11 @@ export async function getVolunteersByOrganization(
         .populate({
           path: 'volunteer',
           populate: { path: 'previousOrganization' },
-        });
+        })
+        .lean();
 
     const volunteers: VolunteerResponse[] = eventVolunteers.map(
-      (eventVolunteer) => eventVolunteer.volunteer
+      (eventVolunteer) => eventVolunteer.volunteer as VolunteerResponse
     );
 
     const uniqueVolunteers: VolunteerResponse[] = [];

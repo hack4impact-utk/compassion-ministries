@@ -14,14 +14,10 @@ export default async function VolunteerPage({
 }) {
   let volunteer: VolunteerResponse;
   try {
-    volunteer = JSON.parse(
-      JSON.stringify(await getVolunteer(params.volunteerId))
-    );
+    volunteer = await getVolunteer(params.volunteerId);
   } catch (e) {
     return <h1>Volunteer not found</h1>;
   }
-  const volunteeredEvents = JSON.parse(
-    JSON.stringify(await getAllEventsForVolunteer(params.volunteerId))
-  );
+  const volunteeredEvents = await getAllEventsForVolunteer(params.volunteerId);
   return <VolunteerView volunteer={volunteer} events={volunteeredEvents} />;
 }

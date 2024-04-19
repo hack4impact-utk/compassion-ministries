@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import zVolunteer, {
   zCreateVolunteerRequest,
+  zUnpopulatedVolunteerResponse,
   zVolunteerResponse,
 } from './volunteer';
 import zOrganization from './organization';
@@ -17,7 +18,7 @@ const zEventVolunteer = z.object({
 
 const zEventVolunteerEntity = zEventVolunteer.extend({
   ...zBase.shape,
-  organization: zObjectId,
+  organization: zObjectId.optional(),
   volunteer: zObjectId,
   event: zObjectId,
 });
@@ -30,11 +31,16 @@ export const zCreateEventVolunteerRequest = zEventVolunteer.extend({
 });
 
 const zEventVolunteerResponse = zEventVolunteerEntity.extend({
-  volunteer: zVolunteerResponse,
+  volunteer: zUnpopulatedVolunteerResponse,
 });
 
 const zVolunteerEventResponse = zEventVolunteerEntity.extend({
   event: zEventResponse,
+  organization: zOrganization.optional(),
+});
+
+export const zPopulatedEventVolunteerResponse = zEventVolunteerEntity.extend({
+  volunteer: zVolunteerResponse,
 });
 
 export interface EventVolunteer extends z.infer<typeof zEventVolunteer> {}
@@ -44,6 +50,8 @@ export interface EventVolunteerResponse
   extends z.infer<typeof zEventVolunteerResponse> {}
 export interface VolunteerEventResponse
   extends z.infer<typeof zVolunteerEventResponse> {}
+export interface PopulatedEventVolunteerResponse
+  extends z.infer<typeof zPopulatedEventVolunteerResponse> {}
 export interface CreateEventVolunteerRequest
   extends z.infer<typeof zCreateEventVolunteerRequest> {}
 

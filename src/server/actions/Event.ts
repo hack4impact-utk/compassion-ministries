@@ -102,7 +102,7 @@ export async function getEventsBetweenDates(
       $gte: startDate,
       $lte: endDate,
     },
-  });
+  }).lean();
 
   const recurringEvents = (await RecurringEventSchema.find().populate(
     'event'
@@ -129,8 +129,8 @@ export async function getEventsBetweenDates(
           isRecurring: true,
           parentEvent: recurringEvent.event.parentEvent,
           recurrence: recurringEvent.recurrence,
-          recurringEventId: recurringEvent._id,
-          _id: recurringEvent.event._id,
+          recurringEventId: recurringEvent._id.toString(),
+          _id: recurringEvent.event._id.toString(),
           createdAt: recurringEvent.event.createdAt,
           updatedAt: recurringEvent.event.updatedAt,
         };
@@ -149,7 +149,7 @@ export async function getEvent(eventId: string): Promise<EventResponse> {
   // Get event from schema
   try {
     await dbConnect();
-    doc = await EventSchema.findById(eventId);
+    doc = await EventSchema.findById(eventId).lean();
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }
@@ -181,7 +181,7 @@ export async function getEvent(eventId: string): Promise<EventResponse> {
     parentEvent: doc.parentEvent,
     createdAt: doc.createdAt,
     updatedAt: doc.updatedAt,
-    _id: doc.id,
+    _id: doc._id.toString(),
     isRecurring: false,
   };
   return event;
@@ -193,10 +193,19 @@ export async function getAllVolunteersForEvent(
   let eventVols: EventVolunteerResponse[];
   try {
     await dbConnect();
-    eventVols = await EventVolunteerSchema.find({ event: eventId }).populate(
-      'volunteer'
-    );
+    eventVols = await EventVolunteerSchema.find({ event: eventId })
+      .populate('volunteer')
+      .lean();
+
+    // convert ObjectId's to strings
+    eventVols.forEach((ev) => {
+      ev.volunteer.previousOrganization =
+        ev.volunteer.previousOrganization?.toString();
+      ev.event = ev.event.toString();
+      ev.organization = ev.organization?.toString();
+    });
   } catch (error) {
+    console.error(error);
     throw new CMError(CMErrorType.InternalError);
   }
   return eventVols;

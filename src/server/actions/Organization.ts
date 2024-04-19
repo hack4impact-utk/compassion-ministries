@@ -20,7 +20,7 @@ export async function getOrganization(
   let organization: OrganizationResponse | null = null;
   try {
     await dbConnect();
-    organization = await OrganizationSchema.findById(organizationId);
+    organization = await OrganizationSchema.findById(organizationId).lean();
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }
