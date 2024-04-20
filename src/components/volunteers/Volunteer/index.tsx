@@ -5,7 +5,7 @@ import { VolunteerEventResponse } from '@/types/dataModel/eventVolunteer';
 import { Typography, Box, ListItemButton, ListItemText } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { UpsertRoleVerificationFormData } from '@/types/forms/role-verifications';
-import IconList from '@/components/IconList';
+import RoleIconList from '@/components/RoleIconList';
 import { useRouter } from 'next/navigation';
 import AddRoleVerificationDialog from '@/components/AddRoleVerificationDialog';
 import { formatPhoneNumber } from '@/utils/phone-number';
@@ -156,7 +156,7 @@ export default function Volunteer({
                 sx={{ pl: 0 }}
               >
                 <Box>
-                  <IconList roles={[volunteerEvent.role]}></IconList>
+                  <RoleIconList roles={[volunteerEvent.role]}></RoleIconList>
                 </Box>
                 <ListItemText
                   sx={{ pl: 1 }}
