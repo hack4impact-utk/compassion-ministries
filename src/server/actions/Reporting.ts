@@ -2,6 +2,12 @@ import { VolunteerEventResponse } from '@/types/dataModel/eventVolunteer';
 import { getRangesOverlap } from '@/utils/math';
 import { getVolunteerEventsByOrganization } from './Volunteer';
 
+export interface OrganizationReportResponse {
+  organization: string;
+  numVolunteers: number;
+  numHours: number;
+}
+
 /**
  * Gets statistics for volunteering efforts for an organization, optionally bounded to events within a search range
  * @param organizationId Id of organization to generate statistics for
@@ -13,16 +19,12 @@ export async function getOrganizationReport(
   organizationId: string,
   startDate?: Date,
   endDate?: Date
-): Promise<{
-  organization: string;
-  num_volunteers: number;
-  num_hours: number;
-}> {
+): Promise<OrganizationReportResponse> {
   // Return object
   const report = {
     organization: organizationId,
-    num_volunteers: 0,
-    num_hours: 0,
+    numVolunteers: 0,
+    numHours: 0,
   };
 
   // Get search range
@@ -63,8 +65,8 @@ export async function getOrganizationReport(
     }
 
     // Update return object
-    report.num_volunteers = volunteerIds.size;
-    report.num_hours = volunteerTime / 3600000; // convert milliseconds to hours
+    report.numVolunteers = volunteerIds.size;
+    report.numHours = volunteerTime / 3600000; // convert milliseconds to hours
   }
 
   return report;
