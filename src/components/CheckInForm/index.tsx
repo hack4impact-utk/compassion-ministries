@@ -19,9 +19,12 @@ import {
   RadioGroup,
   TextField,
   createFilterOptions,
+  LinearProgress,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { formatPhoneNumber } from '@/utils/phone-number';
+import createBarcodeScanner from '@/utils/barcode/listener';
+import { capitalizeWords } from '@/utils/string';
 
 interface Props {
   volunteers: VolunteerResponse[];
@@ -42,6 +45,34 @@ export default function CheckInForm(props: Props) {
   const [volunteerOptions, setVolunteerOptions] = useState<VolunteerResponse[]>(
     props.volunteers
   );
+  const [licenseLoading, setLicenseLoading] = useState(false);
+
+  // add barcode listeners
+  useEffect(() => {
+    createBarcodeScanner(200);
+
+    // add listeners for barcode events
+    window.addEventListener('onbarcode', (e: any) => {
+      props.setSubmitDisabled?.(false);
+      setLicenseLoading(false);
+      const { data } = e.detail;
+
+      const first = capitalizeWords(data.firstName);
+      const last = capitalizeWords(data.lastName);
+      const street = capitalizeWords(data.addressStreet);
+      const city = capitalizeWords(data.addressCity);
+      const zip = data.addressPostalCode.substr(0, 5);
+      const state = data.addressState;
+      const address = `${street}, ${city}, ${state} ${zip}`;
+
+      autofillFromLicense(first, last, address);
+    });
+
+    window.addEventListener('onbarcodestart', () => {
+      setLicenseLoading(true);
+      props.setSubmitDisabled?.(true);
+    });
+  }, []);
 
   // when the parent updates the volunteers it's passing in, update our state
   // TODO this can be removed once SSR provides props
@@ -114,6 +145,42 @@ export default function CheckInForm(props: Props) {
     }
   }
 
+  function autofillFromLicense(
+    firstName: string,
+    lastName: string,
+    address: string
+  ) {
+    const volunteerMatches = props.volunteers.filter((vol) => {
+      return (
+        vol.firstName === firstName &&
+        vol.lastName === lastName &&
+        vol.address === address
+      );
+    });
+
+    if (volunteerMatches.length === 1) {
+      const vol = volunteerMatches[0];
+      const updatedFormData = {
+        ...props.checkInData,
+        firstName: vol.firstName,
+        lastName: vol.lastName,
+        email: vol.email,
+        phoneNumber: formatPhoneNumber(vol.phoneNumber),
+        address: vol.address,
+        organization: vol.previousOrganization,
+      };
+
+      // ensure we only set the role if the event has it
+      if (
+        vol.previousRole &&
+        props?.event?.eventRoles.includes(vol.previousRole)
+      ) {
+        updatedFormData.role = vol.previousRole;
+      }
+      props.onChange(updatedFormData);
+    }
+  }
+
   function onEmailChange(email: string) {
     const volunteerRegex = new RegExp(email, 'i');
     const volunteerMatches = props.volunteers.filter((vol) =>
@@ -145,6 +212,7 @@ export default function CheckInForm(props: Props) {
 
   return (
     <>
+      {licenseLoading && <LinearProgress />}
       <Box pt={2}>
         {/* Last name */}
         <Autocomplete
@@ -185,6 +253,7 @@ export default function CheckInForm(props: Props) {
             onNameChange(value, 'last');
             props.onChange({ ...props.checkInData, lastName: value });
           }}
+          disabled={licenseLoading}
         />
 
         {/* First name */}
@@ -225,6 +294,7 @@ export default function CheckInForm(props: Props) {
             onNameChange(value, 'first');
             props.onChange({ ...props.checkInData, firstName: value });
           }}
+          disabled={licenseLoading}
         />
 
         {/* Email */}
@@ -270,6 +340,7 @@ export default function CheckInForm(props: Props) {
                   : null,
             } as CheckInFormData);
           }}
+          disabled={licenseLoading}
         />
 
         {/* Phone Number */}
@@ -288,6 +359,7 @@ export default function CheckInForm(props: Props) {
           error={!!props.errors?.phoneNumber}
           helperText={props.errors?.phoneNumber}
           inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+          disabled={licenseLoading}
         />
 
         {/* Address */}
@@ -301,6 +373,7 @@ export default function CheckInForm(props: Props) {
           error={!!props.errors?.address}
           helperText={props.errors?.address}
           fullWidth
+          disabled={licenseLoading}
         />
       </Box>
 
@@ -309,6 +382,7 @@ export default function CheckInForm(props: Props) {
         error={!!props.errors?.role}
         variant="standard"
         sx={{ py: 2 }}
+        disabled={licenseLoading}
       >
         <FormLabel id="role-label">Volunteer Role:</FormLabel>
         <RadioGroup
@@ -406,6 +480,7 @@ export default function CheckInForm(props: Props) {
             });
           }
         }}
+        disabled={licenseLoading}
       />
     </>
   );
