@@ -21,7 +21,7 @@ import {
   createFilterOptions,
   LinearProgress,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { formatPhoneNumber } from '@/utils/phone-number';
 import createBarcodeScanner from '@/utils/barcode/listener';
 import { capitalizeWords } from '@/utils/string';
@@ -46,6 +46,7 @@ export default function CheckInForm(props: Props) {
     props.volunteers
   );
   const [licenseLoading, setLicenseLoading] = useState(false);
+  const emailRef = useRef<HTMLInputElement>(null);
 
   // add barcode listeners
   useEffect(() => {
@@ -178,6 +179,21 @@ export default function CheckInForm(props: Props) {
         updatedFormData.role = vol.previousRole;
       }
       props.onChange(updatedFormData);
+    } else if (volunteerMatches.length === 0) {
+      const updatedFormData = {
+        ...props.checkInData,
+        firstName,
+        lastName,
+        address,
+      };
+
+      props.onChange(updatedFormData);
+
+      // focus email input if there is no match
+      // this is a hacky way to do it, but necessary due to react internals
+      setTimeout(() => {
+        emailRef.current?.focus();
+      }, 50);
     }
   }
 
@@ -325,6 +341,7 @@ export default function CheckInForm(props: Props) {
               }}
               error={!!props.errors?.email}
               helperText={props.errors?.email}
+              inputRef={emailRef}
             />
           )}
           onInputChange={(_, value) => {
