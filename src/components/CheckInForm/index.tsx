@@ -153,9 +153,9 @@ export default function CheckInForm(props: Props) {
   ) {
     const volunteerMatches = props.volunteers.filter((vol) => {
       return (
-        vol.firstName === firstName &&
-        vol.lastName === lastName &&
-        vol.address === address
+        vol.firstName.toLowerCase() === firstName.toLowerCase() &&
+        vol.lastName.toLowerCase() === lastName.toLowerCase() &&
+        vol.address.toLowerCase() === address.toLowerCase()
       );
     });
 
