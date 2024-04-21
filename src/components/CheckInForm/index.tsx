@@ -179,7 +179,7 @@ export default function CheckInForm(props: Props) {
         updatedFormData.role = vol.previousRole;
       }
       props.onChange(updatedFormData);
-    } else if (volunteerMatches.length === 0) {
+    } else {
       const updatedFormData = {
         ...props.checkInData,
         firstName,
