@@ -18,7 +18,7 @@ export default function VolunteerView({
   const { showSnackbar } = useSnackbar();
   const router = useRouter();
   const confirmDelete = useDeleteConfirmation({
-    title: 'Are you sure you want to delete this volunteer?',
+    resourceName: 'volunteer',
     confirmationKeyword: `${volunteer.firstName} ${volunteer.lastName}`,
   });
 

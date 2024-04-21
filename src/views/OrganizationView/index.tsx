@@ -21,7 +21,7 @@ export function OrganizationView({
   const { showSnackbar } = useSnackbar();
   const router = useRouter();
   const confirmDelete = useDeleteConfirmation({
-    title: 'Are you sure you want to delete this organization?',
+    resourceName: 'organization',
     confirmationKeyword: organization.name,
   });
 
