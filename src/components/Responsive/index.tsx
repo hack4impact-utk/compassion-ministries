@@ -1,4 +1,4 @@
-import { useMediaQuery, useTheme } from '@mui/material';
+import useResponsive from '@/hooks/useResponsive';
 
 interface ResponsiveProps {
   mobile: React.ReactNode;
@@ -11,9 +11,7 @@ export default function Responsive({
   desktop,
   tablet,
 }: ResponsiveProps) {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
+  const { isMobile, isTablet } = useResponsive();
 
   if (isTablet && tablet) {
     return tablet;
