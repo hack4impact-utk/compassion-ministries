@@ -126,7 +126,9 @@ export async function getAllOrganizations(): Promise<OrganizationResponse[]> {
   try {
     await dbConnect();
 
-    organizations = await OrganizationSchema.find().lean();
+    organizations = await OrganizationSchema.find({
+      softDelete: { $ne: true },
+    }).lean();
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }

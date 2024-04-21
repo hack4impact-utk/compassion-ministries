@@ -56,7 +56,7 @@ export async function getAllVolunteers(): Promise<VolunteerResponse[]> {
   let volunteers: VolunteerResponse[];
   try {
     await dbConnect();
-    volunteers = await VolunteerSchema.find()
+    volunteers = await VolunteerSchema.find({ softDelete: { $ne: true } })
       .populate('previousOrganization')
       .lean();
   } catch (error) {
