@@ -12,12 +12,12 @@ import {
   TextField,
 } from '@mui/material';
 import { useEffect } from 'react';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DatePicker } from '@mui/x-date-pickers';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
-import { TimePicker } from '@mui/x-date-pickers';
 import { roles } from '@/types/dataModel/roles';
 import dayjs from 'dayjs';
 import { ValidationErrors } from '@/utils/validation';
+import { dateToTimeStr } from '@/utils/dates';
 
 interface EventFormProps {
   onChange: (eventData: EventFormData) => void;
@@ -38,8 +38,8 @@ export default function EventForm({
         name: currentEvent.name,
         description: currentEvent.description,
         eventLocation: currentEvent.eventLocation,
-        startAt: dayjs(currentEvent.startAt),
-        endAt: dayjs(currentEvent.endAt),
+        startAt: dateToTimeStr(currentEvent.startAt),
+        endAt: dateToTimeStr(currentEvent.endAt),
         date: dayjs(currentEvent.date),
         eventRoles: currentEvent.eventRoles,
       });
@@ -79,39 +79,39 @@ export default function EventForm({
         helperText={errors?.eventLocation}
       />
       <Grid2 container>
-        <TimePicker
+        <TextField
           label="Start at"
-          value={eventData.startAt || null}
-          maxTime={eventData.endAt || null}
-          onChange={(date) => {
-            if (!date) return; // TODO: error handle
-            onChange({ ...eventData, startAt: date });
-          }}
-          slotProps={{
-            textField: {
-              fullWidth: true,
-              error: !!errors?.startAt,
-              helperText: errors?.startAt,
-            },
-          }}
+          type="time"
+          value={eventData.startAt || ''}
+          inputProps={{ max: eventData.endAt || undefined }}
+          fullWidth
           sx={{ mt: 2 }}
+          onChange={(e) => {
+            if (!e.target.value) return;
+            onChange({
+              ...eventData,
+              startAt: e.target.value,
+            });
+          }}
+          error={!!errors?.startAt}
+          helperText={errors?.startAt}
         />
-        <TimePicker
+        <TextField
           label="End at"
-          value={eventData.endAt || null}
-          minTime={eventData.startAt || null}
-          onChange={(date) => {
-            if (!date) return; // TODO: error handle
-            onChange({ ...eventData, endAt: date });
-          }}
-          slotProps={{
-            textField: {
-              fullWidth: true,
-              error: !!errors?.startAt,
-              helperText: errors?.startAt,
-            },
-          }}
+          type="time"
+          value={eventData.endAt || ''}
+          inputProps={{ min: '12:00' }}
+          fullWidth
           sx={{ mt: 2 }}
+          onChange={(e) => {
+            if (!e.target.value) return;
+            onChange({
+              ...eventData,
+              endAt: e.target.value,
+            });
+          }}
+          error={!!errors?.endAt}
+          helperText={errors?.endAt}
         />
       </Grid2>
       <DatePicker
@@ -125,8 +125,8 @@ export default function EventForm({
         slotProps={{
           textField: {
             fullWidth: true,
-            error: !!errors?.startAt,
-            helperText: errors?.startAt,
+            error: !!errors?.date,
+            helperText: errors?.date,
           },
         }}
         sx={{ mt: 2 }}
