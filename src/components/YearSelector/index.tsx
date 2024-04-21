@@ -8,7 +8,7 @@ import {
   ListItemButton,
 } from '@mui/material';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 const MIN_YEAR = 2024;
 export default function YearSelector() {
@@ -18,24 +18,28 @@ export default function YearSelector() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const [selectedYear, setSelectedYear] = useState<number>(
-    parseInt(searchParams.get('year') || String(new Date().getFullYear()))
+  const selectedYear: number = parseInt(
+    searchParams.get('year') || String(MIN_YEAR)
+  );
+
+  // whenever the user updates the year, update the search params
+  const updateQueryParam = useCallback(
+    (newYear: number) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('year', newYear.toString());
+
+      params.toString();
+      router.push(pathname + '?' + params);
+    },
+    [pathname, router, searchParams]
   );
 
   // all years from now to 2024 (launch date) in descending order
   useEffect(() => {
-    setCurrYear(new Date().getFullYear());
-  }, []);
-
-  // whenever the user updates the year, update the search params
-  useEffect(() => {
-    setSelectedYear(selectedYear);
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('year', selectedYear.toString());
-
-    params.toString();
-    router.push(pathname + '?' + params);
-  }, [pathname, router, searchParams, selectedYear]);
+    const currYear = new Date().getFullYear();
+    setCurrYear(currYear);
+    updateQueryParam(currYear);
+  }, [updateQueryParam]);
 
   // sets initial year options. Includes all years from 2024 to current year
   const YEAR_OPTIONS = useMemo(() => {
@@ -51,7 +55,7 @@ export default function YearSelector() {
       <IconButton
         size="small"
         disabled={selectedYear <= MIN_YEAR}
-        onClick={() => setSelectedYear((currYear) => currYear - 1)}
+        onClick={() => updateQueryParam(selectedYear - 1)}
       >
         <ArrowBackIosNew sx={{ width: 15, height: 15 }} />
       </IconButton>
@@ -79,7 +83,7 @@ export default function YearSelector() {
             selected={option === selectedYear}
             autoFocus={option === selectedYear}
             onClick={() => {
-              setSelectedYear(option);
+              updateQueryParam(option);
               setAnchorEl(null);
             }}
           >
@@ -91,7 +95,7 @@ export default function YearSelector() {
       <IconButton
         size="small"
         disabled={selectedYear >= CURR_YEAR}
-        onClick={() => setSelectedYear((currYear) => currYear + 1)}
+        onClick={() => updateQueryParam(selectedYear + 1)}
       >
         <ArrowForwardIos sx={{ width: 15, height: 15 }} />
       </IconButton>
