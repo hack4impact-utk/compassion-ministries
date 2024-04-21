@@ -27,6 +27,7 @@ export default function YearSelector() {
     setCurrYear(new Date().getFullYear());
   }, []);
 
+  // whenever the user updates the year, update the search params
   useEffect(() => {
     setSelectedYear(selectedYear);
     const params = new URLSearchParams(searchParams.toString());
@@ -36,12 +37,13 @@ export default function YearSelector() {
     router.push(pathname + '?' + params);
   }, [pathname, router, searchParams, selectedYear]);
 
+  // sets initial year options. Includes all years from 2024 to current year
   const YEAR_OPTIONS = useMemo(() => {
-    const ops: number[] = [];
+    const options: number[] = [];
     for (let i = CURR_YEAR; i >= MIN_YEAR; i--) {
-      ops.push(i);
+      options.push(i);
     }
-    return ops;
+    return options;
   }, [CURR_YEAR]);
 
   return (
