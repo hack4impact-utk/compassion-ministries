@@ -2,6 +2,11 @@ import { CreateEventRequest } from '@/types/dataModel/event';
 import { EventFormData } from '@/types/forms/events';
 import { timeStrToDate } from '../dates';
 
+/**
+ * Converts the `EventFormData` to a `CreateEventRequest` object.
+ * @param formData The form data to convert
+ * @returns The `CreateEventRequest` object
+ */
 export function createEventTransformer(
   formData: EventFormData
 ): CreateEventRequest {

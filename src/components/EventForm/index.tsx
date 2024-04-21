@@ -100,7 +100,6 @@ export default function EventForm({
           label="End at"
           type="time"
           value={eventData.endAt || ''}
-          inputProps={{ min: '12:00' }}
           fullWidth
           sx={{ mt: 2 }}
           onChange={(e) => {
