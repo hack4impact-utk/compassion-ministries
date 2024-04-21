@@ -32,3 +32,19 @@ export function getEventDisplayDate(event: EventResponse) {
     minute: '2-digit',
   })}`;
 }
+
+export function timeStrToDate(time: string, date: Date = new Date()) {
+  const dateCpy = new Date(date);
+  const [hours, minutes] = time.split(':').map(Number);
+  dateCpy.setHours(hours);
+  dateCpy.setMinutes(minutes);
+  return dateCpy;
+}
+
+export function dateToTimeStr(date: Date) {
+  return date.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+}
