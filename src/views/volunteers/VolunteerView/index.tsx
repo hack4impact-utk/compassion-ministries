@@ -5,7 +5,6 @@ import useSnackbar from '@/hooks/useSnackbar';
 import { VolunteerEventResponse } from '@/types/dataModel/eventVolunteer';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { Box, Button } from '@mui/material';
-import { useConfirm } from 'material-ui-confirm';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
