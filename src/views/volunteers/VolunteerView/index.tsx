@@ -1,9 +1,11 @@
 'use client';
 import Volunteer from '@/components/volunteers/Volunteer';
+import useDeleteConfirmation from '@/hooks/useDeleteConfirmation';
 import useSnackbar from '@/hooks/useSnackbar';
 import { VolunteerEventResponse } from '@/types/dataModel/eventVolunteer';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { Box, Button } from '@mui/material';
+import { useConfirm } from 'material-ui-confirm';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -16,9 +18,17 @@ export default function VolunteerView({
 }) {
   const { showSnackbar } = useSnackbar();
   const router = useRouter();
+  const confirmDelete = useDeleteConfirmation({
+    title: 'Are you sure you want to delete this volunteer?',
+    confirmationKeyword: `${volunteer.firstName} ${volunteer.lastName}`,
+  });
 
   const onDelete = async () => {
     try {
+      if (!(await confirmDelete())) {
+        return;
+      }
+
       const res = await fetch(`/api/volunteers/${volunteer._id}`, {
         method: 'DELETE',
       });
