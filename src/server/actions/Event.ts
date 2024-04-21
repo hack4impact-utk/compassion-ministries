@@ -1,4 +1,8 @@
-import { CreateEventRequest, EventResponse } from '@/types/dataModel/event';
+import {
+  CreateEmailRequest,
+  CreateEventRequest,
+  EventResponse,
+} from '@/types/dataModel/event';
 import Event from '../models/Event';
 import { createRecurringEvent } from './RecurringEvent';
 import {
@@ -16,6 +20,7 @@ import { RecurringEventResponse } from '@/types/dataModel/recurringEvent';
 import { upsertVolunteerRoleVerification } from './Volunteer';
 import { VerifiedRole } from '@/types/dataModel/roles';
 import { mongo } from 'mongoose';
+import nodemailer from 'nodemailer';
 
 export async function createEvent(
   createEventReq: CreateEventRequest
@@ -204,4 +209,45 @@ export async function getAllVolunteersForEvent(
     throw new CMError(CMErrorType.InternalError);
   }
   return eventVols;
+}
+
+// unfinished
+// will send email to all volunteers at event
+export async function sendEventEmail(
+  eventId: string,
+  createEmailRequest: CreateEmailRequest
+): Promise<string[]> {
+  try {
+    const evs: EventVolunteerResponse[] =
+      await getAllVolunteersForEvent(eventId);
+    const emails: string[] = evs.map((ev) => {
+      return ev.volunteer.email;
+    });
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        type: 'OAuth2',
+        user: process.env.EVENTS_EMAIL_ADDR,
+        clientId: process.env.EVENTS_EMAIL_CLIENT_ID,
+        clientSecret: process.env.EVENTS_EMAIL_CLIENT_SECRET,
+        refreshToken: process.env.EVENTS_EMAIL_REFRESH_TOKEN,
+      }
+    });
+
+    const emailOptions = {
+      from: process.env.EVENTS_EMAIL_PASS,
+      to: emails.join(','),
+      subject: createEmailRequest.subject,
+      text: createEmailRequest.emailbody,
+    };
+
+    await transporter.sendMail(emailOptions);
+
+    return emails;
+
+  } catch (error) {
+    console.log(error);
+    throw new CMError(CMErrorType.InternalError);
+  }
 }
