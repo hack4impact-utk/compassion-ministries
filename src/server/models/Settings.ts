@@ -1,4 +1,3 @@
-import { EventEntity } from '@/types/dataModel/event';
 import { SettingsEntity } from '@/types/dataModel/settings';
 import { Model, Schema, model, models } from 'mongoose';
 
@@ -19,19 +18,19 @@ const SettingsSchema = new Schema(
   }
 );
 
-SettingsSchema.post('find', function (docs: EventEntity[]) {
+SettingsSchema.post('find', function (docs: SettingsEntity[]) {
   docs.forEach((doc) => {
     doc._id = doc._id.toString();
   });
 });
 
-SettingsSchema.post('findOne', function (doc: EventEntity) {
+SettingsSchema.post('findOne', function (doc: SettingsEntity) {
   if (doc) {
     doc._id = doc._id.toString();
   }
 });
 
-SettingsSchema.post(/findById/, function (doc: EventEntity) {
+SettingsSchema.post(/findById/, function (doc: SettingsEntity) {
   if (doc) {
     doc._id = doc._id.toString();
   }

@@ -5,7 +5,7 @@ const zSettings = z.object({
   allowedEmails: z.array(z.string().email()),
 });
 
-const zSettingsEntity = zSettings.extend({ ...zBase.shape });
+const zSettingsEntity = zSettings.extend(zBase.shape);
 const zSettingsResponse = zSettingsEntity;
 
 export interface SettingsEntity extends z.infer<typeof zSettingsEntity> {}
