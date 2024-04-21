@@ -7,20 +7,34 @@ import {
   Popover,
   ListItemButton,
 } from '@mui/material';
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
-
-interface YearSelectorProps {
-  selectedYear: number;
-  onChange: Dispatch<SetStateAction<number>>;
-}
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 
 const MIN_YEAR = 2024;
-export default function YearSelector(props: YearSelectorProps) {
+export default function YearSelector() {
+  // what the year dropdown is tied to. Only visible if !== null
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [CURR_YEAR, setCurrYear] = useState<number>(0);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const [selectedYear, setSelectedYear] = useState<number>(
+    parseInt(searchParams.get('year') || String(new Date().getFullYear()))
+  );
+
   // all years from now to 2024 (launch date) in descending order
   useEffect(() => {
     setCurrYear(new Date().getFullYear());
   }, []);
+
+  useEffect(() => {
+    setSelectedYear(selectedYear);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('year', selectedYear.toString());
+
+    params.toString();
+    router.push(pathname + '?' + params);
+  }, [pathname, router, searchParams, selectedYear]);
 
   const YEAR_OPTIONS = useMemo(() => {
     const ops: number[] = [];
@@ -30,15 +44,12 @@ export default function YearSelector(props: YearSelectorProps) {
     return ops;
   }, [CURR_YEAR]);
 
-  // what the year dropdown is tied to. Only visible if !== null
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-
   return (
     <>
       <IconButton
         size="small"
-        disabled={props.selectedYear === MIN_YEAR}
-        onClick={() => props.onChange((currYear) => currYear - 1)}
+        disabled={selectedYear <= MIN_YEAR}
+        onClick={() => setSelectedYear((currYear) => currYear - 1)}
       >
         <ArrowBackIosNew sx={{ width: 15, height: 15 }} />
       </IconButton>
@@ -48,7 +59,7 @@ export default function YearSelector(props: YearSelectorProps) {
         sx={{ width: '5rem', color: 'black' }}
         onClick={(e) => setAnchorEl(e.currentTarget)}
       >
-        <Typography variant="h6">{props.selectedYear}</Typography>
+        <Typography variant="h6">{selectedYear}</Typography>
       </Button>
 
       <Popover
@@ -63,10 +74,10 @@ export default function YearSelector(props: YearSelectorProps) {
         {YEAR_OPTIONS.map((option) => (
           <ListItemButton
             key={option}
-            selected={option === props.selectedYear}
-            autoFocus={option === props.selectedYear}
+            selected={option === selectedYear}
+            autoFocus={option === selectedYear}
             onClick={() => {
-              props.onChange(option);
+              setSelectedYear(option);
               setAnchorEl(null);
             }}
           >
@@ -77,8 +88,8 @@ export default function YearSelector(props: YearSelectorProps) {
 
       <IconButton
         size="small"
-        disabled={props.selectedYear === CURR_YEAR}
-        onClick={() => props.onChange((currYear) => currYear + 1)}
+        disabled={selectedYear >= CURR_YEAR}
+        onClick={() => setSelectedYear((currYear) => currYear + 1)}
       >
         <ArrowForwardIos sx={{ width: 15, height: 15 }} />
       </IconButton>
