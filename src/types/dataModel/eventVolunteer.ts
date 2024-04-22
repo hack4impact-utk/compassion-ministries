@@ -30,6 +30,17 @@ export const zCreateEventVolunteerRequest = zEventVolunteer.extend({
   verifier: z.string().optional(),
 });
 
+const zUpdateEventVolunteerRequestBase = z.object({
+  role: zRole,
+  organization: zObjectId,
+});
+
+export const zUpdateEventVolunteerRequest = z.union([
+  zUpdateEventVolunteerRequestBase,
+  zUpdateEventVolunteerRequestBase.omit({ organization: true }),
+  zUpdateEventVolunteerRequestBase.omit({ role: true }),
+]);
+
 const zEventVolunteerResponse = zEventVolunteerEntity.extend({
   volunteer: zUnpopulatedVolunteerResponse,
   organization: zOrganizationResponse,
@@ -55,5 +66,8 @@ export interface PopulatedEventVolunteerResponse
   extends z.infer<typeof zPopulatedEventVolunteerResponse> { }
 export interface CreateEventVolunteerRequest
   extends z.infer<typeof zCreateEventVolunteerRequest> { }
+export type UpdateEventVolunteerRequest = z.infer<
+  typeof zUpdateEventVolunteerRequest
+>;
 
 export default zEventVolunteer;
