@@ -5,6 +5,7 @@ const zUser = z.object({
     name: z.string(),
     email: z.string(),
     image: z.string(),
+    isAdmin: z.boolean(),
 })
 
 export const zUserEntity = zUser.extend(zBase.shape);
