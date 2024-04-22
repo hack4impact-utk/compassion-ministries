@@ -11,7 +11,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <Providers>
-      <Appbar setDrawerOpen={() => setDrawerOpen((open) => !open)} />
+      <Appbar setDrawerOpen={() => setDrawerOpen(true)} />
       <Box component="section" sx={{ display: 'flex' }}>
         <NavigationDrawer
           open={drawerOpen}
