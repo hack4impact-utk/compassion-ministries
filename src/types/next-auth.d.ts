@@ -23,6 +23,12 @@ declare module 'next-auth' {
       email: string;
       /** The user's image. */
       image: string;
+
+      isAdmin: boolean;
     };
+  }
+
+  interface User {
+    isAdmin: boolean;
   }
 }
