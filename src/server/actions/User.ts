@@ -27,3 +27,23 @@ export async function getAllUsers(): Promise<UserResponse[]> {
   }
   return users;
 }
+
+export async function addAdmins(userIds: string[]): Promise<void> {
+  try {
+    await dbConnect();
+
+    await UserSchema.updateMany({ _id: { $in: userIds } }, { isAdmin: true });
+  } catch (error) {
+    throw new CMError(CMErrorType.InternalError);
+  }
+}
+
+export async function removeAdmin(userId: string): Promise<void> {
+  try {
+    await dbConnect();
+
+    await UserSchema.updateOne({ _id: userId }, { isAdmin: false });
+  } catch (error) {
+    throw new CMError(CMErrorType.InternalError);
+  }
+}

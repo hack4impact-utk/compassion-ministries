@@ -1,6 +1,8 @@
 import { UserResponse } from '@/types/dataModel/user';
+import { Clear } from '@mui/icons-material';
 import {
   Avatar,
+  IconButton,
   List,
   ListItem,
   ListItemAvatar,
@@ -9,14 +11,26 @@ import {
 
 interface UserListProps {
   users: UserResponse[];
-  secondaryAction?: React.ReactNode;
+  onRemove: (userId: string) => void;
 }
 
-export default function UserList({ users, secondaryAction }: UserListProps) {
+export default function UserList({ users, onRemove }: UserListProps) {
   return (
     <List>
       {users.map((user) => (
-        <ListItem key={user._id} secondaryAction={secondaryAction}>
+        <ListItem
+          key={user._id}
+          secondaryAction={
+            <IconButton
+              edge="end"
+              aria-label="delete"
+              size="small"
+              onClick={() => onRemove(user._id)}
+            >
+              <Clear fontSize="small" />
+            </IconButton>
+          }
+        >
           <ListItemAvatar>
             <Avatar src={user.image || ''} />
           </ListItemAvatar>
