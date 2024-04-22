@@ -63,7 +63,7 @@ type OrganizationOption = OrganizationResponse & { display?: string };
 const filter = createFilterOptions<OrganizationOption>();
 
 // TODO prevent input of role that the volunteer is not verified for
-export default function CheckInForm({ ...props }: Props) {
+export default function CheckInForm(props: Props) {
   const [volunteerOptions, setVolunteerOptions] = useState<VolunteerResponse[]>(
     props.volunteers
   );
@@ -204,25 +204,38 @@ export default function CheckInForm({ ...props }: Props) {
     }
   }
 
+  function onEmailChange(email: string) {
+    // if the form is already filled, don't autofill
+    if (!hasVolunteer) {
+      autofill({ ...props.checkInData, email });
+    }
+  }
+
+  /**
+   * Autofills the form based on the passed in search fields
+   * @param search The fields to search for
+   * @returns True if a single match was found and autofilled, false otherwise
+   */
   function autofill(search: Partial<CheckInFormData>) {
+    // we only want to search on volunteer fields
     search.role = undefined;
     search.organization = undefined;
+
     // narrow down available options based on the passed in fields
     const volunteerMatches = props.volunteers.filter((vol) => {
       return Object.keys(search).every((key) => {
-        if (
-          search[key as keyof CheckInFormData] === '' ||
-          search[key as keyof CheckInFormData] === null
-        ) {
+        const searchVal = search[key as keyof CheckInFormData];
+        if (searchVal === '' || searchVal === null) {
           return true;
         }
         return (
-          search[key as keyof CheckInFormData]?.toString().toLowerCase() ===
+          searchVal?.toString().toLowerCase() ===
           vol[key as keyof VolunteerResponse]?.toString().toLowerCase()
         );
       });
     });
 
+    // if we have a single match, autofill the form
     if (volunteerMatches.length === 1) {
       const vol = volunteerMatches[0];
       const updatedFormData: CheckInFormData = {
@@ -246,18 +259,13 @@ export default function CheckInForm({ ...props }: Props) {
       props.onChange(updatedFormData);
       return true;
     } else {
+      // if we have multiple matches or no matches, just fill the search into the form
       props.onChange({
         ...props.checkInData,
         ...search,
       });
 
       return false;
-    }
-  }
-
-  function onEmailChange(email: string) {
-    if (!hasVolunteer) {
-      autofill({ ...props.checkInData, email });
     }
   }
 
@@ -293,6 +301,13 @@ export default function CheckInForm({ ...props }: Props) {
     );
   }
 
+  const computedVolunteerOptions = useMemo(() => {
+    if (!hasVolunteer) {
+      return volunteerOptions;
+    }
+    return [];
+  }, [volunteerOptions, hasVolunteer]);
+
   return (
     <>
       {licenseLoading && <LinearProgress />}
@@ -308,7 +323,7 @@ export default function CheckInForm({ ...props }: Props) {
           freeSolo
           autoComplete
           value={props.checkInData.lastName || ''}
-          options={volunteerOptions}
+          options={computedVolunteerOptions}
           isOptionEqualToValue={(option, value) => option._id === value._id}
           getOptionLabel={(vol) =>
             typeof vol === 'string' ? vol : vol.lastName
@@ -356,7 +371,7 @@ export default function CheckInForm({ ...props }: Props) {
           sx={{ mt: 2 }}
           freeSolo
           value={props.checkInData.firstName || ''}
-          options={volunteerOptions}
+          options={computedVolunteerOptions}
           isOptionEqualToValue={(option, value) => option._id === value._id}
           getOptionLabel={(vol) =>
             typeof vol === 'string' ? vol : vol.firstName
@@ -407,7 +422,7 @@ export default function CheckInForm({ ...props }: Props) {
           freeSolo
           autoComplete
           value={props.checkInData.email || ''}
-          options={volunteerOptions}
+          options={computedVolunteerOptions}
           isOptionEqualToValue={(option, value) => option._id === value._id}
           getOptionLabel={(vol) => (typeof vol === 'string' ? vol : vol.email)}
           renderOption={(props, option) => {
@@ -445,14 +460,6 @@ export default function CheckInForm({ ...props }: Props) {
               onEmailChange(value);
               return;
             }
-            // props.onChange({
-            //   role:
-            //     props.event.eventRoles.length === 1
-            //       ? props.event.eventRoles[0]
-            //       : null,
-            // } as CheckInFormData);
-            // // clear orig vol
-            // setOriginalVol(null);
           }}
           disabled={licenseLoading || (hasVolunteer && !editingFields.email)}
         />
