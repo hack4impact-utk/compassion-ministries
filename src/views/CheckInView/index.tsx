@@ -1,16 +1,19 @@
 'use client';
 import CheckInForm from '@/components/CheckInForm';
 import LoadingButton from '@/components/LoadingButton';
-// import useRoleConfirmation from '@/hooks/useRoleConfirmation'; UNCOMMENT AFTER FIELD TEST
+import useEditConfirmation from '@/hooks/useEditConfirmation';
+import useRoleConfirmation from '@/hooks/useRoleConfirmation';
 import useSnackbar from '@/hooks/useSnackbar';
 import useValidation from '@/hooks/useValidation';
 import type { EventResponse } from '@/types/dataModel/event';
 import type { OrganizationResponse } from '@/types/dataModel/organization';
 import type {
   CreateVolunteerRequest,
+  UpdateVolunteerRequest,
   VolunteerResponse,
 } from '@/types/dataModel/volunteer';
 import { CheckInFormData, zCheckInFormData } from '@/types/forms/checkIn';
+import { getChanges } from '@/utils/change';
 import { transformCheckInFormDataToCreateEventVolunteerRequest } from '@/utils/transformers/check-in';
 import { ValidationErrors } from '@/utils/validation';
 import { Typography } from '@mui/material';
@@ -32,9 +35,13 @@ export default function CheckInView(props: CheckInViewProps) {
   const [validationErrors, setValidationErrors] = useState<
     ValidationErrors<CheckInFormData> | undefined
   >(undefined);
+  const [originalVol, setOriginalVol] = useState<VolunteerResponse | null>(
+    null
+  );
   const [loading, setLoading] = useState(false);
   const [submitDisabled, setSubmitDisabled] = useState(false);
-  // const confirmRole = useRoleConfirmation(); UNCOMMENT AFTER FIELD TEST
+  const confirmRole = useRoleConfirmation();
+  const confirmEdit = useEditConfirmation();
   const { showSnackbar } = useSnackbar();
   const validate = useValidation(zCheckInFormData);
   const router = useRouter();
@@ -54,23 +61,44 @@ export default function CheckInView(props: CheckInViewProps) {
 
     // find volunteer by email or set volunteer to new volunteer req
     const foundVolunteer = props.volunteers.find(
-      (v) => v.email === formData.email
+      (v) => v._id === formData.volunteerId
     );
-    const volunteer: string | CreateVolunteerRequest = foundVolunteer?._id ?? {
+    const constructedVol = {
       firstName: formData.firstName,
       lastName: formData.lastName,
       email: formData.email,
       phoneNumber: formData.phoneNumber.replace(/\D/g, ''),
       address: formData.address,
     };
+    let volunteer: string | CreateVolunteerRequest = constructedVol;
+    let updatedVolunteer: UpdateVolunteerRequest | undefined = undefined;
 
-    /* UNCOMMENT AFTER FIELD TEST
+    let isEdited = false;
+
+    if (!foundVolunteer) {
+      // create a new volunteer to check in
+      volunteer = constructedVol;
+    } else {
+      volunteer = foundVolunteer._id;
+      // check if there are changes
+      const changes = getChanges(foundVolunteer, constructedVol);
+      isEdited = Object.keys(changes).length > 0;
+      if (isEdited) {
+        // there are changes, edit volunteer
+        const confirmed = await confirmEdit('volunteer', changes);
+        if (!confirmed) {
+          setLoading(false);
+          return;
+        }
+        updatedVolunteer = constructedVol;
+      }
+    }
+
     let verifier: string | null = null;
 
     // if:
     // - role is not food
-    // - volunteer is an object (new volunteer)
-    // - or volunteer does not have a role verification for the role
+    // - new volunteer or volunteer does not have a role verification for the role
     // then confirm the role
     if (
       formData.role !== 'Food' &&
@@ -86,13 +114,14 @@ export default function CheckInView(props: CheckInViewProps) {
         return;
       }
     }
-    */
 
     const eventVolReq = transformCheckInFormDataToCreateEventVolunteerRequest(
       formData,
       volunteer,
       props.event,
-      undefined // change to `verifier || undefined`
+      verifier || undefined,
+      isEdited,
+      updatedVolunteer
     );
 
     // make post req
@@ -116,6 +145,7 @@ export default function CheckInView(props: CheckInViewProps) {
                 : null,
           } as CheckInFormData);
           showSnackbar('Volunteer already checked in', 'error');
+          setOriginalVol(null);
           setLoading(false);
           return;
         }
@@ -132,6 +162,7 @@ export default function CheckInView(props: CheckInViewProps) {
             : null,
       } as CheckInFormData);
       showSnackbar('Checked in successfully', 'success');
+      setOriginalVol(null);
       router.refresh();
       setLoading(false);
     } catch (e) {
@@ -149,12 +180,16 @@ export default function CheckInView(props: CheckInViewProps) {
       <Grid2 xs={12}>
         <CheckInForm
           checkInData={formData}
-          onChange={setFormData}
+          onChange={(e) => {
+            setFormData(e);
+          }}
           event={props.event}
           volunteers={props.volunteers}
           organizations={props.organizations}
           errors={validationErrors}
           setSubmitDisabled={setSubmitDisabled}
+          originalVol={originalVol}
+          setOriginalVol={setOriginalVol}
         />
       </Grid2>
       <Grid2 xs={12}>

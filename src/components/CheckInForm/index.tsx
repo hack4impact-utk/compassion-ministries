@@ -20,11 +20,34 @@ import {
   TextField,
   createFilterOptions,
   LinearProgress,
+  IconButton,
+  Button,
 } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { formatPhoneNumber } from '@/utils/phone-number';
 import createBarcodeScanner from '@/utils/barcode/listener';
 import { capitalizeWords } from '@/utils/string';
+import { Check, Edit } from '@mui/icons-material';
+
+/*
+This component has a lot going on. It primarily does three things:
+1. Allows the user to scan a license and autofill the data from that
+2. Autofills data when the user types in an email, first name, and last name
+3. Allows the user to edit the fields relating to the volunteer itself.
+
+TODO: explain 1 and 2
+
+For 3, the component has a few key parts:
+- The `originalVol` state is the volunteer that the user is currently editing. This is set when the user autofills data
+- The `editingFields` state is a record of which fields the user is currently editing
+- The `editField` function is called when the user clicks the edit button for a field. This sets the corresponding field in `editingFields` to true
+- The `stopEditingField` function is called when the user clicks the check button for a field. This sets the corresponding field in `editingFields` to false
+- The `fieldEndAdornment` function is a helper function that returns the end adornment for a field. If the user is editing the field, it returns a check button. If the user is not editing the field, it returns an edit button
+
+When the user autofills data, the component sets the `originalVol` state to the volunteer that was autofilled. This allows the user to edit the fields that were autofilled.
+They can do this by clicking the edit button next to the field. When they do this, the field becomes editable and the check button appears. When they click the check button, the field becomes uneditable and the edit button reappears.
+These edits are tracked simply passed up through the `onChange` prop to the parent component, where the parent will determine how to handle editing
+*/
 
 interface Props {
   volunteers: VolunteerResponse[];
@@ -34,6 +57,8 @@ interface Props {
   onChange: (checkInData: CheckInFormData) => void;
   errors?: ValidationErrors<CheckInFormData>;
   setSubmitDisabled?: (disabled: boolean) => void;
+  originalVol: VolunteerResponse | null;
+  setOriginalVol: (vol: VolunteerResponse | null) => void;
 }
 
 type OrganizationOption = OrganizationResponse & { display?: string };
@@ -41,12 +66,22 @@ type OrganizationOption = OrganizationResponse & { display?: string };
 const filter = createFilterOptions<OrganizationOption>();
 
 // TODO prevent input of role that the volunteer is not verified for
-export default function CheckInForm(props: Props) {
+export default function CheckInForm({
+  originalVol,
+  setOriginalVol,
+  ...props
+}: Props) {
   const [volunteerOptions, setVolunteerOptions] = useState<VolunteerResponse[]>(
     props.volunteers
   );
+  const [editingFields, setEditingFields] = useState<
+    Record<keyof CheckInFormData, string>
+  >({} as Record<keyof CheckInFormData, string>);
+
   const [licenseLoading, setLicenseLoading] = useState(false);
   const emailRef = useRef<HTMLInputElement>(null);
+
+  console.log(originalVol);
 
   // add barcode listeners
   useEffect(() => {
@@ -66,7 +101,18 @@ export default function CheckInForm(props: Props) {
       const state = data.addressState;
       const address = `${street}, ${city}, ${state} ${zip}`;
 
-      autofillFromLicense(first, last, address);
+      const searchSuccess = autofill({
+        firstName: first,
+        lastName: last,
+        address,
+      });
+
+      // focus email input
+      if (!searchSuccess) {
+        setTimeout(() => {
+          emailRef.current?.focus();
+        }, 50);
+      }
     });
 
     window.addEventListener('onbarcodestart', () => {
@@ -78,6 +124,24 @@ export default function CheckInForm(props: Props) {
   // when the parent updates the volunteers it's passing in, update our state
   // TODO this can be removed once SSR provides props
   useEffect(() => setVolunteerOptions(props.volunteers), [props.volunteers]);
+
+  function editField(field: keyof CheckInFormData) {
+    props.setSubmitDisabled?.(true);
+    setEditingFields({ ...editingFields, [field]: true });
+  }
+
+  function stopEditingField(field: keyof CheckInFormData) {
+    const updatedEditingFields = { ...editingFields, [field]: false };
+
+    if (
+      Object.keys(updatedEditingFields).every(
+        (key) => !updatedEditingFields[key as keyof CheckInFormData]
+      )
+    ) {
+      props.setSubmitDisabled?.(false);
+    }
+    setEditingFields(updatedEditingFields);
+  }
 
   async function createNewOrganization(name: string) {
     props.setSubmitDisabled?.(true);
@@ -146,22 +210,28 @@ export default function CheckInForm(props: Props) {
     }
   }
 
-  function autofillFromLicense(
-    firstName: string,
-    lastName: string,
-    address: string
-  ) {
+  function autofill(search: Partial<CheckInFormData>) {
+    search.role = undefined;
+    search.organization = undefined;
+    // narrow down available options based on the passed in fields
     const volunteerMatches = props.volunteers.filter((vol) => {
-      return (
-        vol.firstName.toLowerCase() === firstName.toLowerCase() &&
-        vol.lastName.toLowerCase() === lastName.toLowerCase() &&
-        vol.address.toLowerCase() === address.toLowerCase()
-      );
+      return Object.keys(search).every((key) => {
+        if (
+          search[key as keyof CheckInFormData] === '' ||
+          search[key as keyof CheckInFormData] === null
+        ) {
+          return true;
+        }
+        return (
+          search[key as keyof CheckInFormData]?.toString().toLowerCase() ===
+          vol[key as keyof VolunteerResponse]?.toString().toLowerCase()
+        );
+      });
     });
 
     if (volunteerMatches.length === 1) {
       const vol = volunteerMatches[0];
-      const updatedFormData = {
+      const updatedFormData: CheckInFormData = {
         ...props.checkInData,
         firstName: vol.firstName,
         lastName: vol.lastName,
@@ -169,7 +239,11 @@ export default function CheckInForm(props: Props) {
         phoneNumber: formatPhoneNumber(vol.phoneNumber),
         address: vol.address,
         organization: vol.previousOrganization,
+        volunteerId: vol._id,
       };
+
+      // set the original volunteer
+      setOriginalVol(vol);
 
       // ensure we only set the role if the event has it
       if (
@@ -179,56 +253,65 @@ export default function CheckInForm(props: Props) {
         updatedFormData.role = vol.previousRole;
       }
       props.onChange(updatedFormData);
+      return true;
     } else {
-      const updatedFormData = {
+      props.onChange({
         ...props.checkInData,
-        firstName,
-        lastName,
-        address,
-      };
+        ...search,
+      });
 
-      props.onChange(updatedFormData);
-
-      // focus email input if there is no match
-      // this is a hacky way to do it, but necessary due to react internals
-      setTimeout(() => {
-        emailRef.current?.focus();
-      }, 50);
+      return false;
     }
   }
 
   function onEmailChange(email: string) {
-    const volunteerRegex = new RegExp(email, 'i');
-    const volunteerMatches = props.volunteers.filter((vol) =>
-      volunteerRegex.test(vol.email)
-    );
-
-    if (volunteerMatches.length === 1) {
-      const match = volunteerMatches[0];
-      const updatedFormData = {
-        ...props.checkInData,
-        firstName: match.firstName,
-        lastName: match.lastName,
-        email: match.email,
-        phoneNumber: formatPhoneNumber(match.phoneNumber),
-        address: match.address,
-        organization: match.previousOrganization,
-      } as CheckInFormData;
-
-      // ensure we only set the role if the event has it
-      if (
-        match.previousRole &&
-        props?.event?.eventRoles.includes(match.previousRole)
-      ) {
-        updatedFormData.role = match.previousRole;
-      }
-      props.onChange(updatedFormData);
+    if (originalVol === null) {
+      autofill({ ...props.checkInData, email });
     }
+  }
+
+  function clearForm() {
+    props.onChange({
+      role:
+        props.event.eventRoles.length === 1 ? props.event.eventRoles[0] : null,
+    } as CheckInFormData);
+    // clear orig vol
+    setOriginalVol(null);
+  }
+
+  function fieldEndAdornment(
+    field: keyof CheckInFormData,
+    endAdornment: React.ReactNode = null
+  ) {
+    return editingFields[field] ? (
+      <>
+        {endAdornment}
+        <IconButton
+          onClick={() => stopEditingField(field)}
+          disabled={
+            !props.checkInData[field] || props.checkInData[field] === ''
+          }
+        >
+          <Check />
+        </IconButton>
+      </>
+    ) : !!originalVol ? (
+      <IconButton onClick={() => editField(field)}>
+        <Edit />
+      </IconButton>
+    ) : (
+      endAdornment
+    );
   }
 
   return (
     <>
       {licenseLoading && <LinearProgress />}
+      {originalVol && (
+        <Button variant="outlined" onClick={clearForm}>
+          Clear volunteer
+        </Button>
+      )}
       <Box pt={2}>
         {/* Last name */}
         <Autocomplete
@@ -263,13 +346,22 @@ export default function CheckInForm(props: Props) {
               }}
               error={!!props.errors?.lastName}
               helperText={props.errors?.lastName}
+              InputProps={{
+                ...params.InputProps,
+                endAdornment: fieldEndAdornment(
+                  'lastName',
+                  params.InputProps.endAdornment
+                ),
+              }}
             />
           )}
           onInputChange={(_, value) => {
             onNameChange(value, 'last');
             props.onChange({ ...props.checkInData, lastName: value });
           }}
-          disabled={licenseLoading}
+          disabled={
+            licenseLoading || (!!originalVol && !editingFields.lastName)
+          }
         />
 
         {/* First name */}
@@ -304,13 +396,22 @@ export default function CheckInForm(props: Props) {
               }}
               error={!!props.errors?.firstName}
               helperText={props.errors?.firstName}
+              InputProps={{
+                ...params.InputProps,
+                endAdornment: fieldEndAdornment(
+                  'firstName',
+                  params.InputProps.endAdornment
+                ),
+              }}
             />
           )}
           onInputChange={(_, value) => {
             onNameChange(value, 'first');
             props.onChange({ ...props.checkInData, firstName: value });
           }}
-          disabled={licenseLoading}
+          disabled={
+            licenseLoading || (!!originalVol && !editingFields.firstName)
+          }
         />
 
         {/* Email */}
@@ -342,6 +443,13 @@ export default function CheckInForm(props: Props) {
               error={!!props.errors?.email}
               helperText={props.errors?.email}
               inputRef={emailRef}
+              InputProps={{
+                ...params.InputProps,
+                endAdornment: fieldEndAdornment(
+                  'email',
+                  params.InputProps.endAdornment
+                ),
+              }}
             />
           )}
           onInputChange={(_, value) => {
@@ -350,14 +458,16 @@ export default function CheckInForm(props: Props) {
               onEmailChange(value);
               return;
             }
-            props.onChange({
-              role:
-                props.event.eventRoles.length === 1
-                  ? props.event.eventRoles[0]
-                  : null,
-            } as CheckInFormData);
+            // props.onChange({
+            //   role:
+            //     props.event.eventRoles.length === 1
+            //       ? props.event.eventRoles[0]
+            //       : null,
+            // } as CheckInFormData);
+            // // clear orig vol
+            // setOriginalVol(null);
           }}
-          disabled={licenseLoading}
+          disabled={licenseLoading || (!!originalVol && !editingFields.email)}
         />
 
         {/* Phone Number */}
@@ -375,8 +485,17 @@ export default function CheckInForm(props: Props) {
           fullWidth
           error={!!props.errors?.phoneNumber}
           helperText={props.errors?.phoneNumber}
-          inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
-          disabled={licenseLoading}
+          inputProps={{
+            inputMode: 'numeric',
+            pattern: '[0-9]*',
+          }}
+          disabled={
+            licenseLoading || (!!originalVol && !editingFields.phoneNumber)
+          }
+          InputProps={{
+            endAdornment: fieldEndAdornment('phoneNumber'),
+            sx: { paddingRight: '9px' },
+          }}
         />
 
         {/* Address */}
@@ -390,7 +509,11 @@ export default function CheckInForm(props: Props) {
           error={!!props.errors?.address}
           helperText={props.errors?.address}
           fullWidth
-          disabled={licenseLoading}
+          disabled={licenseLoading || (!!originalVol && !editingFields.address)}
+          InputProps={{
+            endAdornment: fieldEndAdornment('address'),
+            sx: { paddingRight: '9px' },
+          }}
         />
       </Box>
 
