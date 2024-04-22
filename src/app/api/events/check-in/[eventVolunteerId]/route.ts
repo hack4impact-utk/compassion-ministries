@@ -1,6 +1,7 @@
 import { updateEventVolunteer } from '@/server/actions/EventVolunteers';
 import { zObjectId } from '@/types/dataModel/base';
 import { zUpdateEventVolunteerRequest } from '@/types/dataModel/eventVolunteer';
+import { userAuth } from '@/utils/auth';
 import CMError, { CMErrorResponse, CMErrorType } from '@/utils/cmerror';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -9,6 +10,8 @@ export async function PUT(
   { params }: { params: { eventVolunteerId: string } }
 ) {
   try {
+    await userAuth();
+
     const idValidationResult = zObjectId.safeParse(params.eventVolunteerId);
     if (!idValidationResult.success) {
       return new CMError(

@@ -5,11 +5,14 @@ import CMError, { CMErrorResponse, CMErrorType } from '@/utils/cmerror';
 import { NextRequest, NextResponse } from 'next/server';
 import { deleteVolunteerRoleVerification } from '@/server/actions/Volunteer';
 import { zVerifiedRole } from '@/types/dataModel/roles';
+import { userAuth } from '@/utils/auth';
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { volunteerId: string } }
 ) {
   try {
+    await userAuth();
+
     // Parse volunteerID
     const objectIdValidationResult = zObjectId.safeParse(params.volunteerId);
     if (!objectIdValidationResult.success) {
@@ -57,6 +60,8 @@ export async function PATCH(
   { params }: { params: { volunteerId: string } }
 ) {
   try {
+    await userAuth();
+
     const objectIdValidationResult = zObjectId.safeParse(params.volunteerId);
     if (!objectIdValidationResult.success) {
       return new CMError(CMErrorType.BadValue, 'Volunteer Id').toNextResponse();

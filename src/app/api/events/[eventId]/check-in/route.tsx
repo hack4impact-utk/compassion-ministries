@@ -6,6 +6,7 @@ import {
   zCreateEventVolunteerRequest,
 } from '@/types/dataModel/eventVolunteer';
 import { UpdateVolunteerRequest } from '@/types/dataModel/volunteer';
+import { userAuth } from '@/utils/auth';
 import CMError, { CMErrorResponse, CMErrorType } from '@/utils/cmerror';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -15,6 +16,8 @@ export async function POST(
   { params }: { params: { eventId: string } }
 ) {
   try {
+    await userAuth();
+
     // Check Event ID
     const validationEvent = zObjectId.safeParse(params.eventId);
     if (!validationEvent.success) {
