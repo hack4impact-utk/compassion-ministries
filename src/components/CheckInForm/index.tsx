@@ -23,7 +23,7 @@ import {
   IconButton,
   Button,
 } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { formatPhoneNumber } from '@/utils/phone-number';
 import createBarcodeScanner from '@/utils/barcode/listener';
 import { capitalizeWords } from '@/utils/string';
@@ -38,13 +38,12 @@ This component has a lot going on. It primarily does three things:
 TODO: explain 1 and 2
 
 For 3, the component has a few key parts:
-- The `originalVol` state is the volunteer that the user is currently editing. This is set when the user autofills data
 - The `editingFields` state is a record of which fields the user is currently editing
 - The `editField` function is called when the user clicks the edit button for a field. This sets the corresponding field in `editingFields` to true
 - The `stopEditingField` function is called when the user clicks the check button for a field. This sets the corresponding field in `editingFields` to false
 - The `fieldEndAdornment` function is a helper function that returns the end adornment for a field. If the user is editing the field, it returns a check button. If the user is not editing the field, it returns an edit button
 
-When the user autofills data, the component sets the `originalVol` state to the volunteer that was autofilled. This allows the user to edit the fields that were autofilled.
+When the user autofills data, the `hasVolunteer` field is updated to be `true`. This allows the form to know that we have autofilled, and the user to edit the fields that were autofilled.
 They can do this by clicking the edit button next to the field. When they do this, the field becomes editable and the check button appears. When they click the check button, the field becomes uneditable and the edit button reappears.
 These edits are tracked simply passed up through the `onChange` prop to the parent component, where the parent will determine how to handle editing
 */
@@ -57,8 +56,6 @@ interface Props {
   onChange: (checkInData: CheckInFormData) => void;
   errors?: ValidationErrors<CheckInFormData>;
   setSubmitDisabled?: (disabled: boolean) => void;
-  originalVol: VolunteerResponse | null;
-  setOriginalVol: (vol: VolunteerResponse | null) => void;
 }
 
 type OrganizationOption = OrganizationResponse & { display?: string };
@@ -66,11 +63,7 @@ type OrganizationOption = OrganizationResponse & { display?: string };
 const filter = createFilterOptions<OrganizationOption>();
 
 // TODO prevent input of role that the volunteer is not verified for
-export default function CheckInForm({
-  originalVol,
-  setOriginalVol,
-  ...props
-}: Props) {
+export default function CheckInForm({ ...props }: Props) {
   const [volunteerOptions, setVolunteerOptions] = useState<VolunteerResponse[]>(
     props.volunteers
   );
@@ -80,8 +73,9 @@ export default function CheckInForm({
 
   const [licenseLoading, setLicenseLoading] = useState(false);
   const emailRef = useRef<HTMLInputElement>(null);
-
-  console.log(originalVol);
+  const hasVolunteer = useMemo(() => {
+    return !!props.checkInData.volunteerId;
+  }, [props.checkInData.volunteerId]);
 
   // add barcode listeners
   useEffect(() => {
@@ -242,9 +236,6 @@ export default function CheckInForm({
         volunteerId: vol._id,
       };
 
-      // set the original volunteer
-      setOriginalVol(vol);
-
       // ensure we only set the role if the event has it
       if (
         vol.previousRole &&
@@ -265,7 +256,7 @@ export default function CheckInForm({
   }
 
   function onEmailChange(email: string) {
-    if (originalVol === null) {
+    if (!hasVolunteer) {
       autofill({ ...props.checkInData, email });
     }
   }
@@ -275,8 +266,6 @@ export default function CheckInForm({
       role:
         props.event.eventRoles.length === 1 ? props.event.eventRoles[0] : null,
     } as CheckInFormData);
-    // clear orig vol
-    setOriginalVol(null);
   }
 
   function fieldEndAdornment(
@@ -295,7 +284,7 @@ export default function CheckInForm({
           <Check />
         </IconButton>
       </>
-    ) : !!originalVol ? (
+    ) : hasVolunteer ? (
       <IconButton onClick={() => editField(field)}>
         <Edit />
       </IconButton>
@@ -307,7 +296,7 @@ export default function CheckInForm({
   return (
     <>
       {licenseLoading && <LinearProgress />}
-      {originalVol && (
+      {hasVolunteer && (
         <Button variant="outlined" onClick={clearForm}>
           Clear volunteer
         </Button>
@@ -359,9 +348,7 @@ export default function CheckInForm({
             onNameChange(value, 'last');
             props.onChange({ ...props.checkInData, lastName: value });
           }}
-          disabled={
-            licenseLoading || (!!originalVol && !editingFields.lastName)
-          }
+          disabled={licenseLoading || (hasVolunteer && !editingFields.lastName)}
         />
 
         {/* First name */}
@@ -410,7 +397,7 @@ export default function CheckInForm({
             props.onChange({ ...props.checkInData, firstName: value });
           }}
           disabled={
-            licenseLoading || (!!originalVol && !editingFields.firstName)
+            licenseLoading || (hasVolunteer && !editingFields.firstName)
           }
         />
 
@@ -467,7 +454,7 @@ export default function CheckInForm({
             // // clear orig vol
             // setOriginalVol(null);
           }}
-          disabled={licenseLoading || (!!originalVol && !editingFields.email)}
+          disabled={licenseLoading || (hasVolunteer && !editingFields.email)}
         />
 
         {/* Phone Number */}
@@ -490,7 +477,7 @@ export default function CheckInForm({
             pattern: '[0-9]*',
           }}
           disabled={
-            licenseLoading || (!!originalVol && !editingFields.phoneNumber)
+            licenseLoading || (hasVolunteer && !editingFields.phoneNumber)
           }
           InputProps={{
             endAdornment: fieldEndAdornment('phoneNumber'),
@@ -509,7 +496,7 @@ export default function CheckInForm({
           error={!!props.errors?.address}
           helperText={props.errors?.address}
           fullWidth
-          disabled={licenseLoading || (!!originalVol && !editingFields.address)}
+          disabled={licenseLoading || (hasVolunteer && !editingFields.address)}
           InputProps={{
             endAdornment: fieldEndAdornment('address'),
             sx: { paddingRight: '9px' },

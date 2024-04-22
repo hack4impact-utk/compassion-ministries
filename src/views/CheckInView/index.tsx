@@ -35,9 +35,6 @@ export default function CheckInView(props: CheckInViewProps) {
   const [validationErrors, setValidationErrors] = useState<
     ValidationErrors<CheckInFormData> | undefined
   >(undefined);
-  const [originalVol, setOriginalVol] = useState<VolunteerResponse | null>(
-    null
-  );
   const [loading, setLoading] = useState(false);
   const [submitDisabled, setSubmitDisabled] = useState(false);
   const confirmRole = useRoleConfirmation();
@@ -46,6 +43,18 @@ export default function CheckInView(props: CheckInViewProps) {
   const validate = useValidation(zCheckInFormData);
   const router = useRouter();
 
+  /*
+    This function is responsible for calling the check in api endpoint and
+    getting volunteer checked in on the backend.
+    It handles three cases:
+    1. The volunteer is new
+    2. The volunteer is already in the system and has been edited
+    3. The volunteer is already in the system and has not been edited
+
+    In the first case, the volunteer is created and passed to the api as the `volunteer` field
+    In the second and third cases, the `volunteer` field is the object ID of the vol
+    In the third case, the `updatedVolunteer` field is the updated volunteer object
+  */
   const onCheckIn = async () => {
     setLoading(true);
     // Validate the form
@@ -145,7 +154,6 @@ export default function CheckInView(props: CheckInViewProps) {
                 : null,
           } as CheckInFormData);
           showSnackbar('Volunteer already checked in', 'error');
-          setOriginalVol(null);
           setLoading(false);
           return;
         }
@@ -162,7 +170,6 @@ export default function CheckInView(props: CheckInViewProps) {
             : null,
       } as CheckInFormData);
       showSnackbar('Checked in successfully', 'success');
-      setOriginalVol(null);
       router.refresh();
       setLoading(false);
     } catch (e) {
@@ -188,8 +195,6 @@ export default function CheckInView(props: CheckInViewProps) {
           organizations={props.organizations}
           errors={validationErrors}
           setSubmitDisabled={setSubmitDisabled}
-          originalVol={originalVol}
-          setOriginalVol={setOriginalVol}
         />
       </Grid2>
       <Grid2 xs={12}>

@@ -39,10 +39,8 @@ export async function POST(
 
     const evReq = validationResult.data;
 
-    // if isEdited is true, update the volunteer
-    if (evReq.isEdited) {
-      await updateVolunteer(evReq.volunteer, evReq.updatedVolunteer);
-    } else if (typeof evReq.volunteer === 'object') {
+    // if isEdited is false and we have an object, first create the volunteer
+    if (!evReq.isEdited && typeof evReq.volunteer === 'object') {
       const newVolunteerId = await createVolunteer(evReq.volunteer);
       evReq.volunteer = newVolunteerId;
     }
@@ -53,6 +51,7 @@ export async function POST(
       const updateRequest: UpdateVolunteerRequest = {
         previousRole: evReq.role,
         previousOrganization: evReq.organization,
+        ...(evReq.isEdited ? evReq.updatedVolunteer : {}),
       };
 
       await updateVolunteer(evReq.volunteer as string, updateRequest);
