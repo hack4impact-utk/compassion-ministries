@@ -1,5 +1,4 @@
 import Providers from '../components/Providers';
-import Navbar from '../components/Navbar';
 import { Box } from '@mui/material';
 
 export const dynamic = 'force-dynamic';
@@ -18,7 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body style={{ margin: 0 }}>
         <Providers>
-          <Navbar />
+          {/* <Appbar /> TODO: add during hookup */}
           <Box component="main" sx={{ p: 2 }}>
             {children}
           </Box>
