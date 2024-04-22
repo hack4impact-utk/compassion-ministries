@@ -27,7 +27,7 @@ export default function ConfirmContent({ changed }: ConfirmContentProps) {
         const [oldValue, newValue] = changed[key];
         return (
           <Fragment key={key}>
-            <Grid2 xs={12}>
+            <Grid2 xs={12} sx={{ mt: 1, mb: -1 }}>
               <Typography variant="subtitle1" color="GrayText">
                 {camelCaseToTitleCase(key)}
               </Typography>
@@ -41,7 +41,11 @@ export default function ConfirmContent({ changed }: ConfirmContentProps) {
                   pr: 3,
                 }}
               >
-                <Typography variant="h6" color="black">
+                <Typography
+                  variant="h6"
+                  color="black"
+                  sx={{ wordWrap: 'break-word', maxWidth: '70%' }}
+                >
                   {oldValue}
                 </Typography>
                 <ArrowForward />
