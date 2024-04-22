@@ -12,7 +12,6 @@ export async function userAuth() {
 
 export async function adminAuth() {
   const session = await userAuth();
-  console.log(session.user);
   if (!session.user.isAdmin) {
     throw new CMError(CMErrorType.Forbidden);
   }
