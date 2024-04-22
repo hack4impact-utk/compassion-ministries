@@ -19,8 +19,6 @@ export default function EventVolunteerList({
   const search = useSearch();
   const router = useRouter();
 
-  console.log(eventVolunteers);
-
   if (search.length > 0) {
     eventVolunteers = eventVolunteers.filter((res) =>
       `${res.volunteer.firstName} ${res.volunteer.lastName}`
@@ -40,6 +38,7 @@ export default function EventVolunteerList({
               onClick={() => router.push(`/volunteers/${ev.volunteer._id}`)}
               sx={{ pl: 0 }}
             >
+              {/** Displays bullet and org name only if org is present */}
               <ListItemText
                 primary={`${ev.volunteer.firstName} ${ev.volunteer.lastName}`}
                 secondary={`${ev.volunteer.email} ${

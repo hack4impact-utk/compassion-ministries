@@ -61,8 +61,6 @@ export default function Event({
       >
         Volunteers
       </Typography>
-      {/* TODO remove the below and replace with EventVolounteerList component */}
-
       <EventVolunteerList eventVolunteers={eventVolunteers} />
     </Box>
   );
