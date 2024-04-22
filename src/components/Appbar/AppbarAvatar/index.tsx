@@ -38,7 +38,6 @@ export default function AppbarAvatar() {
   return (
     <>
       <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-        {/* TODO: update this src with session info */}
         <Avatar src={session?.user.image || ''} />
       </IconButton>
       <Menu
