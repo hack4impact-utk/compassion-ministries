@@ -9,3 +9,11 @@ export async function userAuth() {
   }
   return session;
 }
+
+export async function adminAuth() {
+  const session = await userAuth();
+  if (!session.user.isAdmin) {
+    throw new CMError(CMErrorType.Forbidden);
+  }
+  return session;
+}
