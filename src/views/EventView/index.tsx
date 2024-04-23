@@ -21,6 +21,11 @@ export default function EventView({
           Check-in
         </Button>
       </Link>
+      <Link href={`/events/${event._id}/edit`}>
+        <Button variant="contained" fullWidth sx={{ mb: 2 }}>
+          Edit
+        </Button>
+      </Link>
       <Event event={event} eventVolunteers={eventVolunteers} />
     </Box>
   );
