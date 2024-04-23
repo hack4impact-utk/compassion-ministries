@@ -29,6 +29,9 @@ export default function EditVolunteerView({
 
   const submitData = async () => {
     // Validate the data
+    // remove the formatting from the phone number from the volunteer
+    volunteerData.phoneNumber = volunteerData.phoneNumber.replace(/\D/g, '');
+
     const validationResult = validate(volunteerData);
     if (validationResult) {
       setValidationErrors(validationResult);

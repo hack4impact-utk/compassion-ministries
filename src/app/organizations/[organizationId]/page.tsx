@@ -13,15 +13,11 @@ export default async function Page({
 }) {
   let org: OrganizationResponse;
   try {
-    org = JSON.parse(
-      JSON.stringify(await getOrganization(params.organizationId))
-    );
+    org = await getOrganization(params.organizationId);
   } catch (e) {
     return <h1>Organization not found</h1>;
   }
-  const vols = JSON.parse(
-    JSON.stringify(await getVolunteersByOrganization(params.organizationId))
-  );
+  const vols = await getVolunteersByOrganization(params.organizationId);
   const organizationProps: OrganizationViewProps = {
     organization: org,
     volunteers: vols,

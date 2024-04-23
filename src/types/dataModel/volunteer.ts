@@ -9,6 +9,7 @@ export const backgroundCheckStatuses = [
   'In Progress',
 ] as const;
 export const zBackgroundCheckStatus = z.enum(backgroundCheckStatuses);
+export type BackgroundCheckStatus = z.infer<typeof zBackgroundCheckStatus>;
 
 const zVolunteer = z.object({
   firstName: z.string(),
@@ -30,12 +31,14 @@ const zVolunteer = z.object({
 
 export const zVolunteerEntity = zVolunteer.extend({
   ...zBase.shape,
-  previousOrganization: zObjectId,
+  previousOrganization: zObjectId.optional(),
 });
 
 export const zVolunteerResponse = zVolunteerEntity.extend({
   previousOrganization: zOrganizationResponse.optional(),
 });
+
+export const zUnpopulatedVolunteerResponse = zVolunteerEntity;
 
 export const zCreateVolunteerRequest = zVolunteer.omit({
   roleVerifications: true,
@@ -58,6 +61,8 @@ export const zUpdateVolunteerRequest = zVolunteer
 export interface Volunteer extends z.infer<typeof zVolunteer> {}
 export interface VolunteerEntity extends z.infer<typeof zVolunteerEntity> {}
 export interface VolunteerResponse extends z.infer<typeof zVolunteerResponse> {}
+export interface UnpopulatedVolunteerResponse
+  extends z.infer<typeof zUnpopulatedVolunteerResponse> {}
 export interface CreateVolunteerRequest
   extends z.infer<typeof zCreateVolunteerRequest> {}
 export interface UpdateVolunteerRequest

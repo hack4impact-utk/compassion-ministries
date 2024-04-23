@@ -19,8 +19,12 @@ import {
   RadioGroup,
   TextField,
   createFilterOptions,
+  LinearProgress,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { formatPhoneNumber } from '@/utils/phone-number';
+import createBarcodeScanner from '@/utils/barcode/listener';
+import { capitalizeWords } from '@/utils/string';
 
 interface Props {
   volunteers: VolunteerResponse[];
@@ -41,6 +45,35 @@ export default function CheckInForm(props: Props) {
   const [volunteerOptions, setVolunteerOptions] = useState<VolunteerResponse[]>(
     props.volunteers
   );
+  const [licenseLoading, setLicenseLoading] = useState(false);
+  const emailRef = useRef<HTMLInputElement>(null);
+
+  // add barcode listeners
+  useEffect(() => {
+    createBarcodeScanner(200);
+
+    // add listeners for barcode events
+    window.addEventListener('onbarcode', (e: any) => {
+      props.setSubmitDisabled?.(false);
+      setLicenseLoading(false);
+      const { data } = e.detail;
+
+      const first = capitalizeWords(data.firstName);
+      const last = capitalizeWords(data.lastName);
+      const street = capitalizeWords(data.addressStreet);
+      const city = capitalizeWords(data.addressCity);
+      const zip = data.addressPostalCode.substr(0, 5);
+      const state = data.addressState;
+      const address = `${street}, ${city}, ${state} ${zip}`;
+
+      autofillFromLicense(first, last, address);
+    });
+
+    window.addEventListener('onbarcodestart', () => {
+      setLicenseLoading(true);
+      props.setSubmitDisabled?.(true);
+    });
+  }, []);
 
   // when the parent updates the volunteers it's passing in, update our state
   // TODO this can be removed once SSR provides props
@@ -113,28 +146,67 @@ export default function CheckInForm(props: Props) {
     }
   }
 
-  function formatPhoneNumber(input: string) {
-    input = input.replace(/\D/g, '');
-    const size = input.length;
-    if (size > 0) {
-      input = '(' + input;
+  function autofillFromLicense(
+    firstName: string,
+    lastName: string,
+    address: string
+  ) {
+    const volunteerMatches = props.volunteers.filter((vol) => {
+      return (
+        vol.firstName.toLowerCase() === firstName.toLowerCase() &&
+        vol.lastName.toLowerCase() === lastName.toLowerCase() &&
+        vol.address.toLowerCase() === address.toLowerCase()
+      );
+    });
+
+    if (volunteerMatches.length === 1) {
+      const vol = volunteerMatches[0];
+      const updatedFormData = {
+        ...props.checkInData,
+        firstName: vol.firstName,
+        lastName: vol.lastName,
+        email: vol.email,
+        phoneNumber: formatPhoneNumber(vol.phoneNumber),
+        address: vol.address,
+        organization: vol.previousOrganization,
+      };
+
+      // ensure we only set the role if the event has it
+      if (
+        vol.previousRole &&
+        props?.event?.eventRoles.includes(vol.previousRole)
+      ) {
+        updatedFormData.role = vol.previousRole;
+      }
+      props.onChange(updatedFormData);
+    } else {
+      const updatedFormData = {
+        ...props.checkInData,
+        firstName,
+        lastName,
+        address,
+      };
+
+      props.onChange(updatedFormData);
+
+      // focus email input if there is no match
+      // this is a hacky way to do it, but necessary due to react internals
+      setTimeout(() => {
+        emailRef.current?.focus();
+      }, 50);
     }
-    if (size > 3) {
-      input = input.slice(0, 4) + ') ' + input.slice(4, 11);
-    }
-    if (size > 6) {
-      input = input.slice(0, 9) + '-' + input.slice(9);
-    }
-    return input;
   }
 
   function onEmailChange(email: string) {
-    const volunteerMatches = props.volunteers.filter(
-      (vol) => vol.email === email
+    const volunteerRegex = new RegExp(email, 'i');
+    const volunteerMatches = props.volunteers.filter((vol) =>
+      volunteerRegex.test(vol.email)
     );
+
     if (volunteerMatches.length === 1) {
       const match = volunteerMatches[0];
       const updatedFormData = {
+        ...props.checkInData,
         firstName: match.firstName,
         lastName: match.lastName,
         email: match.email,
@@ -156,6 +228,7 @@ export default function CheckInForm(props: Props) {
 
   return (
     <>
+      {licenseLoading && <LinearProgress />}
       <Box pt={2}>
         {/* Last name */}
         <Autocomplete
@@ -196,6 +269,7 @@ export default function CheckInForm(props: Props) {
             onNameChange(value, 'last');
             props.onChange({ ...props.checkInData, lastName: value });
           }}
+          disabled={licenseLoading}
         />
 
         {/* First name */}
@@ -236,6 +310,7 @@ export default function CheckInForm(props: Props) {
             onNameChange(value, 'first');
             props.onChange({ ...props.checkInData, firstName: value });
           }}
+          disabled={licenseLoading}
         />
 
         {/* Email */}
@@ -266,6 +341,7 @@ export default function CheckInForm(props: Props) {
               }}
               error={!!props.errors?.email}
               helperText={props.errors?.email}
+              inputRef={emailRef}
             />
           )}
           onInputChange={(_, value) => {
@@ -274,8 +350,14 @@ export default function CheckInForm(props: Props) {
               onEmailChange(value);
               return;
             }
-            props.onChange({} as CheckInFormData);
+            props.onChange({
+              role:
+                props.event.eventRoles.length === 1
+                  ? props.event.eventRoles[0]
+                  : null,
+            } as CheckInFormData);
           }}
+          disabled={licenseLoading}
         />
 
         {/* Phone Number */}
@@ -294,6 +376,7 @@ export default function CheckInForm(props: Props) {
           error={!!props.errors?.phoneNumber}
           helperText={props.errors?.phoneNumber}
           inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+          disabled={licenseLoading}
         />
 
         {/* Address */}
@@ -307,6 +390,7 @@ export default function CheckInForm(props: Props) {
           error={!!props.errors?.address}
           helperText={props.errors?.address}
           fullWidth
+          disabled={licenseLoading}
         />
       </Box>
 
@@ -315,6 +399,7 @@ export default function CheckInForm(props: Props) {
         error={!!props.errors?.role}
         variant="standard"
         sx={{ py: 2 }}
+        disabled={licenseLoading}
       >
         <FormLabel id="role-label">Volunteer Role:</FormLabel>
         <RadioGroup
@@ -364,10 +449,10 @@ export default function CheckInForm(props: Props) {
 
           // what is typed in the field
           const { inputValue } = params;
+          const OrganizationRegex = new RegExp(params.inputValue, 'i');
 
-          // Checks if the inputValue match an existing organization
-          const isExisting = options.some(
-            (option) => inputValue === option.name
+          const isExisting = options.some((option) =>
+            OrganizationRegex.test(option.name)
           );
 
           // If the inputValue does not match an existing organization, display it as `Add "[inputValue]"`
@@ -412,6 +497,7 @@ export default function CheckInForm(props: Props) {
             });
           }
         }}
+        disabled={licenseLoading}
       />
     </>
   );

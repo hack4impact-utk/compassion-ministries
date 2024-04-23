@@ -2,6 +2,7 @@ import { deleteEventVolunteer } from '@/server/actions/Volunteer';
 import { zObjectId } from '@/types/dataModel/base';
 import { NextRequest, NextResponse } from 'next/server';
 import CMError, { CMErrorResponse, CMErrorType } from '@/utils/cmerror';
+import { userAuth } from '@/utils/auth';
 
 // @route DELETE /api/events/[eventId]/volunteers/[volunteerId]/check-in - Delete an EventVolunteer
 export async function DELETE(
@@ -9,6 +10,8 @@ export async function DELETE(
   { params }: { params: { eventId: string; volunteerId: string } }
 ) {
   try {
+    await userAuth();
+
     // Check Volunteer ID
     const validationVolunteer = zObjectId.safeParse(params.volunteerId);
     if (!validationVolunteer.success) {
