@@ -3,7 +3,7 @@ import { useConfirm } from 'material-ui-confirm';
 import { ChangeRecord } from '@/utils/change';
 import useResponsive from '../useResponsive';
 
-export default function useRoleConfirmation() {
+export default function useEditConfirmation() {
   const confirm = useConfirm();
   const { isMobile } = useResponsive();
 
