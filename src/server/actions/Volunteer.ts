@@ -377,6 +377,7 @@ export async function inititateBackgroundCheck(volunteerId: string) {
 
   // try and find if theres another volunteer that already has a background check
   const volunteers = await VolunteerSchema.find({
+    _id: { $ne: volunteerId },
     email: volunteer.email,
     backgroundCheck: { $exists: true },
   });

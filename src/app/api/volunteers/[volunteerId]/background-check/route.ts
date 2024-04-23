@@ -2,7 +2,7 @@ import { inititateBackgroundCheck } from '@/server/actions/Volunteer';
 import { zObjectId } from '@/types/dataModel/base';
 import { adminAuth } from '@/utils/auth';
 import CMError, { CMErrorResponse, CMErrorType } from '@/utils/cmerror';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(
   _req: NextRequest,
@@ -16,6 +16,8 @@ export async function POST(
     }
 
     inititateBackgroundCheck(params.volunteerId);
+
+    return new NextResponse(undefined, { status: 204 });
   } catch (e) {
     return CMErrorResponse(e);
   }
