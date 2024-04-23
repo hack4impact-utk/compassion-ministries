@@ -1,23 +1,21 @@
-// In route.ts
-import express from 'express';
-import { initiateBackgroundCheck } from '@/server/actions/BackgroundCheck';
+import { inititateBackgroundCheck } from '@/server/actions/Volunteer';
+import { zObjectId } from '@/types/dataModel/base';
+import CMError, { CMErrorResponse, CMErrorType } from '@/utils/cmerror';
+import { NextRequest } from 'next/server';
 
-const router = express.Router();
-
-router.post('/api/volunteers/:volunteerId/background-check', async (req: { params: { volunteerId: any; }; body: { email: any; }; }, res: { status: (arg0: number) => { (): any; new(): any; send: { (arg0: string): void; new(): any; }; }; }) => {
-    const volunteerId = req.params.volunteerId;
-    // Assuming you extract email from request body or somewhere else
-    const email = req.body.email;
-
-    try {
-        // Call the function to initiate background check
-        await initiateBackgroundCheck(email);
-        // Send success response
-        res.status(200).send('Background check initiated successfully');
-    } catch (error) {
-        // Send error response
-        res.status(500).send('Failed to initiate background check');
+export async function POST(
+  _req: NextRequest,
+  { params }: { params: { volunteerId: string } }
+) {
+  try {
+    // await adminAuth();
+    const validationResult = zObjectId.safeParse(params.volunteerId);
+    if (!validationResult.success) {
+      return new CMError(CMErrorType.BadValue, 'Volunteer Id').toNextResponse();
     }
-});
 
-export default router;
+    inititateBackgroundCheck(params.volunteerId);
+  } catch (e) {
+    return CMErrorResponse(e);
+  }
+}

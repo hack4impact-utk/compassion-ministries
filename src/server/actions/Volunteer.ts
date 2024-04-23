@@ -19,6 +19,7 @@ import EventSchema from '@/server/models/Event';
 import { RoleVerificationRequest } from '@/types/dataModel/roles';
 import CMError, { CMErrorType } from '@/utils/cmerror';
 import { mongo } from 'mongoose';
+import BackgroundCheckService from '@/services/BackgroundCheckService';
 OrganizationSchema;
 EventSchema;
 
@@ -367,4 +368,44 @@ export async function getVolunteersByOrganization(
     console.log(error);
     throw new CMError(CMErrorType.InternalError);
   }
+}
+
+export async function inititateBackgroundCheck(volunteerId: string) {
+  await dbConnect();
+
+  const volunteer = await getVolunteer(volunteerId);
+
+  // try and find if theres another volunteer that already has a background check
+  const volunteers = await VolunteerSchema.find({
+    email: volunteer.email,
+    backgroundCheck: { $exists: true },
+  });
+
+  // if so, reject the attempt
+  if (volunteers.length > 0) {
+    throw new CMError(
+      CMErrorType.InternalError,
+      `Background check already initiated for ${volunteer.email}`
+    );
+  }
+
+  // initiate background check
+  const ok = await BackgroundCheckService.initiateBackgroundCheck(
+    volunteer.email
+  );
+
+  if (!ok) {
+    throw new CMError(
+      CMErrorType.InternalError,
+      'Failed to initiate background check'
+    );
+  }
+
+  // update volunteer background check status
+  await VolunteerSchema.findByIdAndUpdate(volunteerId, {
+    backgroundCheck: {
+      status: 'In Progress',
+      lastUpdated: new Date(),
+    },
+  });
 }

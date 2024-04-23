@@ -11,6 +11,9 @@ declare global {
       GOOGLE_CLIENT_ID: string;
       GOOGLE_CLIENT_SECRET: string;
       ALLOWED_EMAILS: string;
+      BV_BASE_URL: string;
+      BV_USER: string;
+      BV_PASS: string;
     }
   }
 }
