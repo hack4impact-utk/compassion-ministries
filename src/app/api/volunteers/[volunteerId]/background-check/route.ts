@@ -1,5 +1,6 @@
 import { inititateBackgroundCheck } from '@/server/actions/Volunteer';
 import { zObjectId } from '@/types/dataModel/base';
+import { adminAuth } from '@/utils/auth';
 import CMError, { CMErrorResponse, CMErrorType } from '@/utils/cmerror';
 import { NextRequest } from 'next/server';
 
@@ -8,7 +9,7 @@ export async function POST(
   { params }: { params: { volunteerId: string } }
 ) {
   try {
-    // await adminAuth();
+    await adminAuth();
     const validationResult = zObjectId.safeParse(params.volunteerId);
     if (!validationResult.success) {
       return new CMError(CMErrorType.BadValue, 'Volunteer Id').toNextResponse();
