@@ -4,47 +4,72 @@ import { EmailFormData } from '@/types/forms/email';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { Button, TextField } from '@mui/material';
+import { useConfirm } from 'material-ui-confirm';
+import { EventResponse } from '@/types/dataModel/event';
+import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
+import useSnackbar from '@/hooks/useSnackbar';
 
 interface EmailEditorProps {
-  formData: EmailFormData;
-  eventId: string;
+  event: EventResponse;
+  volunteers: EventVolunteerResponse[];
 }
 
 export default function EmailEditor({
-  formData,
-  eventId,
+  event,
+  volunteers,
 }: EmailEditorProps): React.ReactElement {
-  eventId;
-  const onChange: (formData: EmailFormData) => void = () => {};
-
+  const numVols = volunteers.length;
+  const [formData, setFormData] = useState<EmailFormData>({
+    subject: '',
+    emailbody: '',
+  });
+  const { showSnackbar } = useSnackbar();
+  const confirm = useConfirm();
   const [value, setValue] = useState(formData.emailbody);
   const [subject, setSubject] = useState(formData.subject);
 
-  // number of volunteers of time EventVolunteerResponse[]
-
   const handleSubjectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSubject(e.target.value);
-    onChange({ ...formData, subject: e.target.value });
+    setFormData({ ...formData, subject: e.target.value });
   };
 
   const handleBodyChange = (value: string) => {
     setValue(value);
-    onChange({ ...formData, emailbody: value });
+    setFormData({ ...formData, emailbody: value });
   };
 
-  const [showConfirmation, setShowConfirmation] = useState(false);
-
-  const handleSendEmail = () => {
-    setShowConfirmation(true);
-  };
-
-  const handleConfirmation = (confirmed: boolean) => {
-    if (confirmed) {
-      // Logic to send the email
-    } else {
-      // Logic if user cancels sending the email
+  const handleSendEmail = async () => {
+    try {
+      await confirm({
+        title: 'Are you sure?',
+        description: ` This will send an email to ${numVols} volunteers`,
+        confirmationText: 'Yes',
+        cancellationText: 'No',
+      });
+    } catch (error) {
+      return;
     }
-    setShowConfirmation(false);
+
+    try {
+      const res = await fetch(`/api/events/${event._id}/email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ subject, emailbody: value }),
+      });
+
+      if (res.status !== 204) {
+        const data = await res.json();
+        showSnackbar(data.message, 'error');
+        return;
+      }
+
+      showSnackbar('Email sent successfully', 'success');
+    } catch (error) {
+      showSnackbar('Error sending email', 'error');
+      console.error(error);
+    }
   };
 
   return (
@@ -72,14 +97,6 @@ export default function EmailEditor({
       >
         Send Email
       </Button>
-
-      {showConfirmation && (
-        <div>
-          Are you sure you want to send this email?
-          <Button onClick={() => handleConfirmation(true)}>Yes</Button>
-          <Button onClick={() => handleConfirmation(false)}>No</Button>
-        </div>
-      )}
     </div>
   );
 }
