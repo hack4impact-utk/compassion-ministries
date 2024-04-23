@@ -126,15 +126,13 @@ export default function Volunteer({
               {volunteer.firstName} {volunteer.lastName}
             </Typography>
             {isAdmin && (
-              <Box sx={{ width: isMobile ? '100%' : '' }}>
-                <Button
-                  variant="outlined"
-                  fullWidth={isMobile}
-                  onClick={startBackgroundCheck}
-                >
-                  Run background check
-                </Button>
-              </Box>
+              <Button
+                variant="outlined"
+                fullWidth={isMobile}
+                onClick={startBackgroundCheck}
+              >
+                Run background check
+              </Button>
             )}
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
