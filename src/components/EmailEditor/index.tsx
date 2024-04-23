@@ -4,23 +4,29 @@ import { EmailFormData } from '@/types/forms/email';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { Button, TextField } from '@mui/material';
+import { EventResponse } from '@/types/dataModel/event';
+import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
 
 interface EmailEditorProps {
   formData: EmailFormData;
-  eventId: string;
+  event: EventResponse;
+  volunteers: EventVolunteerResponse[];
 }
 
 export default function EmailEditor({
   formData,
-  eventId,
+  event,
+  volunteers,
 }: EmailEditorProps): React.ReactElement {
-  eventId;
+  event;
+  volunteers;
   const onChange: (formData: EmailFormData) => void = () => {};
 
   const [value, setValue] = useState(formData.emailbody);
   const [subject, setSubject] = useState(formData.subject);
 
-  // number of volunteers of time EventVolunteerResponse[]
+  // number of volunteers of type EventVolunteerResponse[]
+  //const numVolunteers = volunteers.length;
 
   const handleSubjectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSubject(e.target.value);
