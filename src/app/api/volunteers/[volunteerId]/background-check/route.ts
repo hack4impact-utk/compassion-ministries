@@ -15,7 +15,7 @@ export async function POST(
       return new CMError(CMErrorType.BadValue, 'Volunteer Id').toNextResponse();
     }
 
-    inititateBackgroundCheck(params.volunteerId);
+    await inititateBackgroundCheck(params.volunteerId);
 
     return new NextResponse(undefined, { status: 204 });
   } catch (e) {

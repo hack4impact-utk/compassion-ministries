@@ -371,42 +371,50 @@ export async function getVolunteersByOrganization(
 }
 
 export async function inititateBackgroundCheck(volunteerId: string) {
-  await dbConnect();
+  try {
+    await dbConnect();
 
-  const volunteer = await getVolunteer(volunteerId);
+    const volunteer = await getVolunteer(volunteerId);
 
-  // try and find if theres another volunteer that already has a background check
-  const volunteers = await VolunteerSchema.find({
-    _id: { $ne: volunteerId },
-    email: volunteer.email,
-    backgroundCheck: { $exists: true },
-  });
+    // try and find if theres another volunteer that already has a background check
+    const volunteers = await VolunteerSchema.find({
+      _id: { $ne: volunteerId },
+      email: volunteer.email,
+      backgroundCheck: { $exists: true },
+    });
 
-  // if so, reject the attempt
-  if (volunteers.length > 0) {
-    throw new CMError(
-      CMErrorType.InternalError,
-      `Background check already initiated for ${volunteer.email}`
+    // if so, reject the attempt
+    if (volunteers.length > 0) {
+      throw new CMError(
+        CMErrorType.InternalError,
+        `Background check already initiated for ${volunteer.email}`
+      );
+    }
+
+    // initiate background check
+    const ok = await BackgroundCheckService.initiateBackgroundCheck(
+      volunteer.email
     );
+
+    if (!ok) {
+      throw new CMError(
+        CMErrorType.InternalError,
+        'Failed to initiate background check'
+      );
+    }
+
+    // update volunteer background check status
+    await VolunteerSchema.findByIdAndUpdate(volunteerId, {
+      backgroundCheck: {
+        status: 'In Progress',
+        lastUpdated: new Date(),
+      },
+    });
+  } catch (e) {
+    if (e instanceof CMError) {
+      throw e;
+    }
+
+    throw new CMError(CMErrorType.InternalError);
   }
-
-  // initiate background check
-  const ok = await BackgroundCheckService.initiateBackgroundCheck(
-    volunteer.email
-  );
-
-  if (!ok) {
-    throw new CMError(
-      CMErrorType.InternalError,
-      'Failed to initiate background check'
-    );
-  }
-
-  // update volunteer background check status
-  await VolunteerSchema.findByIdAndUpdate(volunteerId, {
-    backgroundCheck: {
-      status: 'In Progress',
-      lastUpdated: new Date(),
-    },
-  });
 }

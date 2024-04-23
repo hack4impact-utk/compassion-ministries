@@ -1,3 +1,5 @@
+import CMError, { CMErrorType } from '@/utils/cmerror';
+
 const BASE_URL = process.env.BV_BASE_URL;
 
 class BackgroundCheckService {
@@ -56,8 +58,13 @@ class BackgroundCheckService {
       },
     });
 
-    const { data } = await res.json();
-    return data.id;
+    // if a vol already exists with this email, delete it and create a new one
+    if (res.status === 409) {
+      throw new CMError(CMErrorType.DuplicateKey, 'Volunteer');
+    }
+
+    const data = await res.json();
+    return data.data.id;
   }
 
   /**
