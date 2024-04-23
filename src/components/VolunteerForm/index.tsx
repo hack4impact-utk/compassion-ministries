@@ -4,7 +4,6 @@ import { UpsertVolunteerFormData } from '@/types/forms/volunteer';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { useEffect } from 'react';
 import { ValidationErrors } from '@/utils/validation';
-import { formatPhoneNumber } from '@/utils/phone-number';
 interface VolunteerFormProps {
   onChange: (volunteer: UpsertVolunteerFormData) => void;
   currentVolunteer?: VolunteerResponse;
@@ -25,7 +24,7 @@ function VolunteerForm({
         firstName: currentVolunteer.firstName || '',
         lastName: currentVolunteer.lastName || '',
         email: currentVolunteer.email || '',
-        phoneNumber: formatPhoneNumber(currentVolunteer.phoneNumber) || '',
+        phoneNumber: currentVolunteer.phoneNumber || '',
         address: currentVolunteer.address || '',
       });
     }
@@ -69,16 +68,12 @@ function VolunteerForm({
         label="Phone Number"
         value={volunteerData.phoneNumber || ''}
         onChange={(e) =>
-          onChange({
-            ...volunteerData,
-            phoneNumber: formatPhoneNumber(e.target.value),
-          })
+          onChange({ ...volunteerData, phoneNumber: e.target.value })
         }
         InputLabelProps={{ shrink: !!volunteerData.phoneNumber }}
         sx={{ mb: 2 }}
         error={!!errors?.phoneNumber}
         helperText={errors?.phoneNumber}
-        inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
       />
       <TextField
         label="Address"

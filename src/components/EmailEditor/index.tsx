@@ -4,10 +4,10 @@ import { EmailFormData } from '@/types/forms/email';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { Button, TextField } from '@mui/material';
-import { useConfirm } from 'material-ui-confirm';
 import { EventResponse } from '@/types/dataModel/event';
 import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
 import useSnackbar from '@/hooks/useSnackbar';
+import { useConfirm } from 'material-ui-confirm';
 
 interface EmailEditorProps {
   event: EventResponse;

@@ -9,7 +9,6 @@ export const backgroundCheckStatuses = [
   'In Progress',
 ] as const;
 export const zBackgroundCheckStatus = z.enum(backgroundCheckStatuses);
-export type BackgroundCheckStatus = z.infer<typeof zBackgroundCheckStatus>;
 
 const zVolunteer = z.object({
   firstName: z.string(),

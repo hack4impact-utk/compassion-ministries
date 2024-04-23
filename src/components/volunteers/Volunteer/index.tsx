@@ -8,7 +8,6 @@ import { UpsertRoleVerificationFormData } from '@/types/forms/role-verifications
 import RoleIconList from '@/components/RoleIconList';
 import { useRouter } from 'next/navigation';
 import AddRoleVerificationDialog from '@/components/AddRoleVerificationDialog';
-import { formatPhoneNumber } from '@/utils/phone-number';
 // Use VolunteerResponse Props
 interface VolunteerProps {
   volunteer: VolunteerResponse;
@@ -48,7 +47,6 @@ export default function Volunteer({
     }
   };
 
-  const formattedPhoneNumber = formatPhoneNumber(volunteer.phoneNumber);
   const router = useRouter();
   return (
     <>
@@ -69,8 +67,11 @@ export default function Volunteer({
             <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
               Phone number:
             </Typography>
-            <Typography display="inline" fontWeight="normal" variant="h6">
-              {formattedPhoneNumber}
+            <Typography display="inline">{volunteer.phoneNumber}</Typography>
+          </Box>
+          <Box sx={{ display: 'flex' }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', pr: 1 }}>
+              Previous role:
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>

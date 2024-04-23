@@ -23,8 +23,6 @@ export default function NewVolunteerView() {
   const validate = useValidation(zUpsertVolunteerFormData);
 
   const submitData = async () => {
-    // remove the phone number formatting
-    volunteer.phoneNumber = volunteer.phoneNumber.replace(/\D/g, '');
     // Validate the form
     const validationResult = validate(volunteer);
     if (validationResult) {

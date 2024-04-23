@@ -25,10 +25,9 @@ interface CheckInViewProps {
 }
 
 export default function CheckInView(props: CheckInViewProps) {
-  const [formData, setFormData] = useState<CheckInFormData>({
-    role:
-      props.event.eventRoles.length === 1 ? props.event.eventRoles[0] : null,
-  } as CheckInFormData);
+  const [formData, setFormData] = useState<CheckInFormData>(
+    {} as CheckInFormData
+  );
   const [validationErrors, setValidationErrors] = useState<
     ValidationErrors<CheckInFormData> | undefined
   >(undefined);
@@ -109,12 +108,7 @@ export default function CheckInView(props: CheckInViewProps) {
         // handle duplicate entry, we don't want to display duplicate message
         // to the user
         if (res.status === 409) {
-          setFormData({
-            role:
-              props.event.eventRoles.length === 1
-                ? props.event.eventRoles[0]
-                : null,
-          } as CheckInFormData);
+          setFormData({} as CheckInFormData);
           showSnackbar('Volunteer already checked in', 'error');
           setLoading(false);
           return;
@@ -125,12 +119,7 @@ export default function CheckInView(props: CheckInViewProps) {
         return;
       }
       // reset form
-      setFormData({
-        role:
-          props.event.eventRoles.length === 1
-            ? props.event.eventRoles[0]
-            : null,
-      } as CheckInFormData);
+      setFormData({} as CheckInFormData);
       showSnackbar('Checked in successfully', 'success');
       router.refresh();
       setLoading(false);

@@ -1,6 +1,6 @@
 module.exports = {
-  // Type check TypeScript files (we now do this in an action)
-  // '**/*.(ts|tsx)': () => 'npx tsc --noEmit',
+  // Type check TypeScript files
+  '**/*.(ts|tsx)': () => 'npx tsc --noEmit',
 
   // Lint & Prettify TS and JS files
   '**/*.(ts|tsx|js)': (filenames) => [
