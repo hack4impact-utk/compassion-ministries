@@ -17,4 +17,18 @@ export const zEventFormData = z.object({
   }),
 });
 
+export const zUpsertEventFormData = z.object({
+  name: z.string().nonempty('Required'),
+  description: z.string().optional(),
+  eventLocation: z.string().optional(),
+  startAt: zDayJs,
+  endAt: zDayJs,
+  date: zDayJs,
+  eventRoles: z.array(zRole, {
+    required_error: 'At least one role is required',
+  }),
+});
+
+export interface UpsertEventFormData
+  extends z.infer<typeof zUpsertEventFormData> {}
 export interface EventFormData extends z.infer<typeof zEventFormData> {}
