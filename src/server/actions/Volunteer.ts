@@ -66,6 +66,36 @@ export async function getAllVolunteers(): Promise<VolunteerResponse[]> {
 }
 
 /**
+ * Gets all volunteers that have not been checked in to an event yet
+ * @param eventId The ID of the event
+ * @returns All volunteers that have not been checked in to the event
+ */
+export async function getAllVolunteersForCheckIn(
+  eventId: string
+): Promise<VolunteerResponse[]> {
+  let volunteers: VolunteerResponse[];
+  try {
+    await dbConnect();
+    volunteers = await VolunteerSchema.find({ softDelete: { $ne: true } })
+      .populate('previousOrganization')
+      .lean();
+
+    const eventVolunteers = await EventVolunteerSchema.find({ event: eventId });
+
+    const nonCheckedInVolunteers = volunteers.filter((volunteer) => {
+      return !eventVolunteers.some(
+        (eventVolunteer) =>
+          eventVolunteer.volunteer.toString() === volunteer._id.toString()
+      );
+    });
+
+    return nonCheckedInVolunteers;
+  } catch (error) {
+    throw new CMError(CMErrorType.InternalError);
+  }
+}
+
+/**
  * Creates a volunteer
  * @param request The CreateVolunteerRequest containing data for the new volunteer
  * @returns The id of the new volunteer
@@ -281,13 +311,14 @@ export async function getVolunteerEventsByOrganization(
     await dbConnect();
     volunteerEvents = await EventVolunteerSchema.find({
       organization: organizationId,
-    }).populate('event').lean();
+    })
+      .populate('event')
+      .lean();
 
     volunteerEvents.map((volunteerEvent) => {
       volunteerEvent.volunteer = volunteerEvent.volunteer.toString();
       return volunteerEvent;
     });
-
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }
