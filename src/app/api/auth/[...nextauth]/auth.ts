@@ -54,16 +54,7 @@ export const handler: NextAuthOptions = {
 
       // if the user is not on the allow-list in the settings collection
       const settings = await getSettings();
-      const isAllowedToSignIn = settings.allowedEmails.includes(userEmail);
-
-      if (isAllowedToSignIn) {
-        return true;
-      } else {
-        // Return false to display a default error message
-        return false;
-        // Or you can return a URL to redirect to:
-        // return '/unauthorized'
-      }
+      return settings.allowedEmails.includes(userEmail);
     },
   },
 
