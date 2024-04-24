@@ -3,6 +3,8 @@ import CheckInForm from '@/components/CheckInForm';
 import LoadingButton from '@/components/LoadingButton';
 import useEditConfirmation from '@/hooks/useEditConfirmation';
 import useRoleConfirmation from '@/hooks/useRoleConfirmation';
+import useRoleConfirmation from '@/hooks/useRoleConfirmation';
+// import useRoleConfirmation from '@/hooks/useRoleConfirmation'; UNCOMMENT AFTER FIELD TEST
 import useSnackbar from '@/hooks/useSnackbar';
 import useValidation from '@/hooks/useValidation';
 import type { EventResponse } from '@/types/dataModel/event';
@@ -39,6 +41,7 @@ export default function CheckInView(props: CheckInViewProps) {
   const [submitDisabled, setSubmitDisabled] = useState(false);
   const confirmRole = useRoleConfirmation();
   const confirmEdit = useEditConfirmation();
+  const confirmRole = useRoleConfirmation();
   const { showSnackbar } = useSnackbar();
   const validate = useValidation(zCheckInFormData);
   const router = useRouter();
@@ -62,6 +65,7 @@ export default function CheckInView(props: CheckInViewProps) {
     if (validationResult) {
       setValidationErrors(validationResult);
       setLoading(false);
+      showSnackbar("Role verification failed. Check in again to verify volunteer");
       return;
     }
 
@@ -102,6 +106,7 @@ export default function CheckInView(props: CheckInViewProps) {
         updatedVolunteer = constructedVol;
       }
     }
+
 
     let verifier: string | null = null;
 
