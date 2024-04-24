@@ -3,7 +3,6 @@ import CheckInForm from '@/components/CheckInForm';
 import LoadingButton from '@/components/LoadingButton';
 import useEditConfirmation from '@/hooks/useEditConfirmation';
 import useRoleConfirmation from '@/hooks/useRoleConfirmation';
-import useRoleConfirmation from '@/hooks/useRoleConfirmation';
 // import useRoleConfirmation from '@/hooks/useRoleConfirmation'; UNCOMMENT AFTER FIELD TEST
 import useSnackbar from '@/hooks/useSnackbar';
 import useValidation from '@/hooks/useValidation';
@@ -41,7 +40,6 @@ export default function CheckInView(props: CheckInViewProps) {
   const [submitDisabled, setSubmitDisabled] = useState(false);
   const confirmRole = useRoleConfirmation();
   const confirmEdit = useEditConfirmation();
-  const confirmRole = useRoleConfirmation();
   const { showSnackbar } = useSnackbar();
   const validate = useValidation(zCheckInFormData);
   const router = useRouter();
@@ -56,7 +54,8 @@ export default function CheckInView(props: CheckInViewProps) {
 
     In the first case, the volunteer is created and passed to the api as the `volunteer` field
     In the second and third cases, the `volunteer` field is the object ID of the vol
-    In the third case, the `updatedVolunteer` field is the updated volunteer object
+    In the third case, the `updatedVolunteer` field is the updated volunteer object 
+    
   */
   const onCheckIn = async () => {
     setLoading(true);
