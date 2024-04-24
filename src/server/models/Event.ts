@@ -61,6 +61,24 @@ const EventSchema = new Schema(
   }
 );
 
+EventSchema.post('find', function (docs: EventEntity[]) {
+  docs.forEach((doc) => {
+    doc._id = doc._id.toString();
+  });
+});
+
+EventSchema.post('findOne', function (doc: EventEntity) {
+  if (doc) {
+    doc._id = doc._id.toString();
+  }
+});
+
+EventSchema.post(/findById/, function (doc: EventEntity) {
+  if (doc) {
+    doc._id = doc._id.toString();
+  }
+});
+
 export interface EventDocument extends Omit<EventEntity, '_id'>, Document {}
 
 export default (models.Event as Model<EventDocument>) ||

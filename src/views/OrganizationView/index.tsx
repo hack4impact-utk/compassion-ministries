@@ -7,6 +7,7 @@ import { Button } from '@mui/material';
 import Link from 'next/link';
 import useSnackbar from '@/hooks/useSnackbar';
 import { useRouter } from 'next/navigation';
+import useDeleteConfirmation from '@/hooks/useDeleteConfirmation';
 
 export interface OrganizationViewProps {
   organization: OrganizationResponse;
@@ -19,11 +20,19 @@ export function OrganizationView({
 }: OrganizationViewProps) {
   const { showSnackbar } = useSnackbar();
   const router = useRouter();
+  const confirmDelete = useDeleteConfirmation({
+    resourceName: 'organization',
+    confirmationKeyword: organization.name,
+  });
 
   const organizationId = organization._id.toString();
 
   const handleDelete = async () => {
     try {
+      if (!(await confirmDelete())) {
+        return;
+      }
+
       // Call the DELETE API endpoint
       const res = await fetch(`/api/organizations/${organizationId}`, {
         method: 'DELETE',

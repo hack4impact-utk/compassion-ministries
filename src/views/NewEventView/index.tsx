@@ -2,8 +2,8 @@
 import EventForm from '@/components/EventForm';
 import useSnackbar from '@/hooks/useSnackbar';
 import useValidation from '@/hooks/useValidation';
-import { CreateEventRequest } from '@/types/dataModel/event';
 import { EventFormData, zEventFormData } from '@/types/forms/events';
+import { createEventTransformer } from '@/utils/transformers/event';
 import { ValidationErrors } from '@/utils/validation';
 import { Typography, Button } from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2';
@@ -30,16 +30,8 @@ export default function NewEventView() {
     // Clear validation errors
     setValidationErrors(undefined);
 
-    const reqBody: CreateEventRequest = {
-      name: formData.name,
-      description: formData.description,
-      eventLocation: formData.eventLocation,
-      startAt: new Date(formData.startAt.toString()),
-      endAt: new Date(formData.endAt.toString()),
-      date: new Date(formData.date.toString()),
-      eventRoles: formData.eventRoles,
-      isRecurring: false,
-    };
+    const reqBody = createEventTransformer(formData);
+
     try {
       const res = await fetch('/api/events', {
         method: 'POST',

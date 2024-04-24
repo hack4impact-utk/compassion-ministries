@@ -86,7 +86,28 @@ const VolunteerSchema = new Schema(
   }
 );
 
-VolunteerSchema.index({ firstName: 1, lastName: 1, email: 1}, { unique: true });
+VolunteerSchema.post('find', function (docs: VolunteerEntity[]) {
+  docs.forEach((doc) => {
+    doc._id = doc._id.toString();
+  });
+});
+
+VolunteerSchema.post('findOne', function (doc: VolunteerEntity) {
+  if (doc) {
+    doc._id = doc._id.toString();
+  }
+});
+
+VolunteerSchema.post(/findById/, function (doc: VolunteerEntity) {
+  if (doc) {
+    doc._id = doc._id.toString();
+  }
+});
+
+VolunteerSchema.index(
+  { firstName: 1, lastName: 1, email: 1 },
+  { unique: true }
+);
 export interface VolunteerDocument
   extends Omit<VolunteerEntity, '_id'>,
     Document {}
