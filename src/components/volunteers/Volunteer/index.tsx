@@ -2,13 +2,23 @@
 import React from 'react';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { VolunteerEventResponse } from '@/types/dataModel/eventVolunteer';
-import { Typography, Box, ListItemButton, ListItemText } from '@mui/material';
+import {
+  Typography,
+  Box,
+  ListItemButton,
+  ListItemText,
+  Button,
+} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { UpsertRoleVerificationFormData } from '@/types/forms/role-verifications';
 import RoleIconList from '@/components/RoleIconList';
 import { useRouter } from 'next/navigation';
 import AddRoleVerificationDialog from '@/components/AddRoleVerificationDialog';
 import { formatPhoneNumber } from '@/utils/phone-number';
+import useResponsive from '@/hooks/useResponsive';
+import { useConfirm } from 'material-ui-confirm';
+import useSnackbar from '@/hooks/useSnackbar';
+import { useSession } from 'next-auth/react';
 // Use VolunteerResponse Props
 interface VolunteerProps {
   volunteer: VolunteerResponse;
@@ -21,6 +31,12 @@ export default function Volunteer({
   events,
 }: VolunteerProps): React.ReactElement {
   const [open, setOpen] = React.useState(false);
+  const confirm = useConfirm();
+  const { showSnackbar } = useSnackbar();
+  const { data: session } = useSession();
+
+  const isAdmin = session?.user?.isAdmin;
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -48,15 +64,77 @@ export default function Volunteer({
     }
   };
 
+  const startBackgroundCheck = async () => {
+    const alreadyPassed =
+      volunteer.backgroundCheck?.status &&
+      volunteer.backgroundCheck?.status === 'Passed';
+    const fullName = `${volunteer.firstName} ${volunteer.lastName}`;
+    try {
+      await confirm({
+        title: alreadyPassed
+          ? `${fullName} passed a background check on ${volunteer.backgroundCheck?.lastUpdated.toLocaleDateString()}. Are you sure you want to run a new background check?`
+          : `Are you sure you want to run a background check on ${fullName}?`,
+        description: `This will charge $15 to Compassion Ministries. Type "${fullName}" to confirm`,
+        confirmationKeyword: fullName,
+        confirmationKeywordTextFieldProps: {
+          placeholder: fullName,
+        },
+      });
+    } catch (e) {
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        `/api/volunteers/${volunteer._id}/background-check`,
+        {
+          method: 'POST',
+        }
+      );
+      if (res.status == 204) {
+        showSnackbar('Background check started', 'success');
+        router.refresh();
+      } else if (res.status === 409) {
+        showSnackbar('Volunteer already has background check', 'error');
+      } else {
+        const data = await res.json();
+        showSnackbar('Failed to start background check', 'error');
+        console.error(data);
+      }
+    } catch (error) {
+      showSnackbar('Failed to start background check', 'error');
+      console.error(error);
+    }
+  };
+
   const formattedPhoneNumber = formatPhoneNumber(volunteer.phoneNumber);
   const router = useRouter();
+  const { isMobile } = useResponsive();
   return (
     <>
       <Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <Typography variant="h3" pt={2} pb={2}>
-            {volunteer.firstName} {volunteer.lastName}
-          </Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexDirection: isMobile ? 'column' : 'row',
+            }}
+          >
+            <Typography variant="h3" pt={2} pb={2}>
+              {volunteer.firstName} {volunteer.lastName}
+            </Typography>
+            {isAdmin && (
+              <Button
+                variant="outlined"
+                fullWidth={isMobile}
+                onClick={startBackgroundCheck}
+              >
+                Run background check
+              </Button>
+            )}
+          </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
               Email:
