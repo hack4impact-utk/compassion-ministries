@@ -4,10 +4,10 @@ import dbConnect from '@/utils/db-connect';
 import Settings from '../models/Settings';
 
 export async function getSettings(): Promise<SettingsResponse> {
-  await dbConnect();
   let settingsArr: SettingsResponse[] = [];
 
   try {
+    await dbConnect();
     settingsArr = await Settings.find({});
 
     // there should always be exactly one settins object in the db
