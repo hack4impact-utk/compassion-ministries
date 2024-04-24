@@ -7,8 +7,6 @@ export default async function EventPage({
 }: {
   params: { eventId: string };
 }) {
-  const event: EventResponse = JSON.parse(
-    JSON.stringify(await getEvent(params.eventId))
-  );
+  const event: EventResponse = await getEvent(params.eventId);
   return <EditEventView event={event} />;
 }
