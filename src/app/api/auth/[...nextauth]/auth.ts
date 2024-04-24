@@ -4,6 +4,7 @@ import { NextAuthOptions } from 'next-auth';
 import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google';
 import dbConnect from '@/utils/db-connect';
 import { getUserByEmail } from '@/server/actions/User';
+import { getSettings } from '@/server/actions/Settings';
 
 //NextAuth using Google Provider and JWT trategy
 const clientPromise = dbConnect().then((mon) => {
@@ -23,8 +24,8 @@ export const handler: NextAuthOptions = {
           email: profile.email,
           image: profile.picture,
           isAdmin: false,
-        }
-      }
+        };
+      },
     }),
   ],
   callbacks: {
@@ -38,12 +39,24 @@ export const handler: NextAuthOptions = {
       if (token.email) {
         try {
           const user = await getUserByEmail(token.email);
-          token.data = user
-        }
-        catch { }
+          token.data = user;
+        } catch {}
       }
-      return token
-    }
+      return token;
+    },
+    async signIn(verificationRequest) {
+      const isAllowedToSignIn = (await getSettings()).allowedEmails.includes(
+        verificationRequest.user.email!
+      );
+      if (isAllowedToSignIn) {
+        return true;
+      } else {
+        // Return false to display a default error message
+        return false;
+        // Or you can return a URL to redirect to:
+        // return '/unauthorized'
+      }
+    },
   },
 
   session: {
