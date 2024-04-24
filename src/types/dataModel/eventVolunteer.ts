@@ -30,7 +30,8 @@ export const zCreateEventVolunteerRequestBase = zEventVolunteer.extend({
   volunteer: z.union([zObjectId, zCreateVolunteerRequest]),
   verifier: z.string().optional(),
 });
-
+ // If `isEdited` is false (when updating an existing volunteer during checkin), zCreateEventVolunteerRequest will just be zCreateEventVolunteerRequestBase.
+ // Otherwise, the volunteer field will be an ObjectId, and `updatedVolunteer` will exist
 export const zCreateEventVolunteerRequest = z.discriminatedUnion('isEdited', [
   zCreateEventVolunteerRequestBase.extend({
     isEdited: z.literal(false),
