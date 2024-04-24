@@ -5,9 +5,12 @@ import Settings from '../models/Settings';
 
 export async function getSettings(): Promise<SettingsResponse> {
   await dbConnect();
-  const settingsArr: SettingsResponse[] = [];
+  let settingsArr: SettingsResponse[] = [];
+
   try {
-    const settingsArr: SettingsResponse[] = await Settings.find({});
+    settingsArr = await Settings.find({});
+
+    // there should always be exactly one settins object in the db
     if (settingsArr.length !== 1) {
       throw new CMError(
         CMErrorType.InternalError,
