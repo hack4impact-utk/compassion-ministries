@@ -1,5 +1,5 @@
-import { Typography } from '@mui/material';
+import EventsPage from './events/page';
 
 export default async function Home() {
-  return <Typography variant="h3">Home Page</Typography>;
+  return <EventsPage />;
 }
