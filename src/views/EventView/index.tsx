@@ -5,6 +5,7 @@ import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
 import { Box, Button } from '@mui/material';
 import Link from 'next/link';
 
+// changes
 export default function EventView({
   event,
   eventVolunteers,
