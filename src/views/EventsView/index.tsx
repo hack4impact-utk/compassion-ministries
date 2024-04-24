@@ -11,12 +11,14 @@ interface EventsViewProps {
   events: EventResponse[]
 }
 
+//Sort Events Ascending Order
 const sortEventsByDateAsc = (events: EventResponse[]) => {
   return events.sort((a, b) => {
     return dayjs(a.date).valueOf() - dayjs(b.date).valueOf();
   });
 };
 
+//Sort Events Descending Order
 const sortEventsByDateDesc = (events: EventResponse[]) => {
   return events.sort((a, b) => {
     return dayjs(b.date).valueOf() - dayjs(a.date).valueOf();
@@ -26,12 +28,14 @@ const sortEventsByDateDesc = (events: EventResponse[]) => {
 export default function EventsPage({events}: EventsViewProps) {
     const search = useSearch();
 
+    //Search Filter
     if (search.length > 0) {
       events = events.filter((event) =>
         `${event.name}`.toLowerCase().includes(search.toLowerCase())
       );
     }
 
+    //Set Showing Events by Tabs
     let upcomingEvents: EventResponse[];
     let pastEvents: EventResponse[];
 
@@ -42,6 +46,7 @@ export default function EventsPage({events}: EventsViewProps) {
     upcomingEvents = sortEventsByDateAsc(eventsTodayAndAfter);
     pastEvents = sortEventsByDateDesc(eventsBeforeToday);
 
+    //Change Tabs
     const [tabIndex, setTabIndex] = React.useState(0);
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
       setTabIndex(newValue);
