@@ -9,6 +9,18 @@ export const zTime = z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, {
 
 const zDayJs = z.custom<Dayjs>((val) => val instanceof dayjs, 'Invalid date');
 
+export const zUpsertEventFormData = z.object({
+  name: z.string().nonempty('Required'),
+  description: z.string().optional(),
+  eventLocation: z.string().optional(),
+  startAt: zDayJs,
+  endAt: zDayJs,
+  date: zDayJs,
+  eventRoles: z.array(zRole, {
+    required_error: 'At least one role is required',
+  }),
+});
+
 export const zEventFormData = z
   .object({
     name: z.string().nonempty('Required'),
@@ -36,3 +48,5 @@ export const zEventFormData = z
   );
 
 export interface EventFormData extends z.infer<typeof zEventFormData> {}
+export interface UpsertEventFormData
+  extends z.infer<typeof zUpsertEventFormData> {}

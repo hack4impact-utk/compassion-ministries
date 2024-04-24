@@ -1,10 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { EventResponse } from '@/types/dataModel/event';
-import {
-  UpsertEventFormData,
-  zUpsertEventFormData,
-} from '@/types/forms/events';
+import { EventFormData, zEventFormData } from '@/types/forms/events';
 import { ValidationErrors } from '@/utils/validation';
 import { useRouter } from 'next/navigation';
 import useValidation from '@/hooks/useValidation';
@@ -13,15 +10,15 @@ import EventForm from '@/components/EventForm';
 import { Box, Button } from '@mui/material';
 
 export default function EditEventView({ event }: { event: EventResponse }) {
-  const [eventData, setEventData] = useState<UpsertEventFormData>(
-    {} as UpsertEventFormData
+  const [eventData, setEventData] = useState<EventFormData>(
+    {} as EventFormData
   );
   const [validationErrors, setValidationErrors] = useState<
-    ValidationErrors<UpsertEventFormData> | undefined
+    ValidationErrors<EventFormData> | undefined
   >(undefined);
   const { showSnackbar } = useSnackbar();
   const router = useRouter();
-  const validate = useValidation(zUpsertEventFormData);
+  const validate = useValidation(zEventFormData);
 
   const submitData = async () => {
     // Validate the data
