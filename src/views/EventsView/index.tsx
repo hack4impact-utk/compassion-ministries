@@ -1,5 +1,5 @@
 'use client';
-import React, {useState} from 'react';
+import React from 'react';
 import { Box, Button, Link, Tab, Tabs, Typography } from '@mui/material';
 import { EventResponse } from '@/types/dataModel/event';
 import dayjs from 'dayjs';
