@@ -212,8 +212,7 @@ export async function getAllVolunteersForEvent(
   return eventVols;
 }
 
-// unfinished
-// will send email to all volunteers at event
+// Sends an email to all volunteers have been checked in for this event
 export async function sendEventEmail(
   eventId: string,
   createEmailRequest: CreateEmailRequest
