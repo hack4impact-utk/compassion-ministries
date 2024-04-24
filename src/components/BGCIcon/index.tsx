@@ -3,19 +3,18 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import PendingIcon from '@mui/icons-material/Pending';
 import { BackgroundCheckStatus } from '@/types/dataModel/volunteer';
 
-const iconSize: string = '30px';
-
 interface BGCIconProps {
-  backgroundCheckStatus: BackgroundCheckStatus;
+  status: BackgroundCheckStatus;
+  size: 'small' | 'medium' | 'large' | string;
 }
 
-export default function BGCIcon({ backgroundCheckStatus }: BGCIconProps) {
-  return BGCIcons[backgroundCheckStatus];
+export default function BGCIcon({ status, size }: BGCIconProps) {
+  return BGCIcons(size)[status];
 }
 
 // SVG icons for each event Background Check Status
-export const BGCIcons = {
-  Passed: <CheckCircleIcon sx={{ fontSize: iconSize }} color="success" />,
-  Failed: <CancelIcon sx={{ fontSize: iconSize }} color="error" />,
-  'In Progress': <PendingIcon sx={{ fontSize: iconSize }} color="warning" />,
-};
+export const BGCIcons = (size: string) => ({
+  Passed: <CheckCircleIcon sx={{ fontSize: size }} color="success" />,
+  Failed: <CancelIcon sx={{ fontSize: size }} color="error" />,
+  'In Progress': <PendingIcon sx={{ fontSize: size }} color="warning" />,
+});

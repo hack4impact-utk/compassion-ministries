@@ -19,6 +19,7 @@ import useResponsive from '@/hooks/useResponsive';
 import { useConfirm } from 'material-ui-confirm';
 import useSnackbar from '@/hooks/useSnackbar';
 import { useSession } from 'next-auth/react';
+import BGCIcon from '@/components/BGCIcon';
 // Use VolunteerResponse Props
 interface VolunteerProps {
   volunteer: VolunteerResponse;
@@ -215,6 +216,42 @@ export default function Volunteer({
             </Box>
           ))}
         </Box>
+        {volunteer.backgroundCheck && (
+          <>
+            <Box sx={{ display: 'flex', alignItems: 'center' }} pt={4}>
+              <Typography variant="h5">Background check</Typography>
+            </Box>
+            <Box>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
+                  Status:
+                </Typography>
+                <Typography
+                  display="inline"
+                  variant="h6"
+                  fontWeight="normal"
+                  sx={{ mr: 1 }}
+                >
+                  {volunteer.backgroundCheck?.status}
+                </Typography>
+                <BGCIcon
+                  status={volunteer.backgroundCheck?.status}
+                  size="28px"
+                />
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
+                  Check date:
+                </Typography>
+                <Typography display="inline" variant="h6" fontWeight="normal">
+                  {new Date(
+                    volunteer.backgroundCheck?.lastUpdated
+                  ).toLocaleDateString()}
+                </Typography>
+              </Box>
+            </Box>
+          </>
+        )}
 
         {events.length > 0 && (
           <Box>
