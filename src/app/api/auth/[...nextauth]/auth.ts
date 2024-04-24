@@ -45,9 +45,17 @@ export const handler: NextAuthOptions = {
       return token;
     },
     async signIn(verificationRequest) {
-      const isAllowedToSignIn = (await getSettings()).allowedEmails.includes(
-        verificationRequest.user.email!
-      );
+      const userEmail = verificationRequest.user.email!;
+
+      // if the user has a compassion ministries domain, immediately allow their sign-in
+      if (userEmail.endsWith('@compassionministries.net')) {
+        return true;
+      }
+
+      // if the user is not on the allow-list in the settings collection
+      const settings = await getSettings();
+      const isAllowedToSignIn = settings.allowedEmails.includes(userEmail);
+
       if (isAllowedToSignIn) {
         return true;
       } else {
