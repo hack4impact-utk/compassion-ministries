@@ -10,7 +10,6 @@ interface ConfirmContentProps {
 }
 
 export default function ConfirmContent({ changed }: ConfirmContentProps) {
-  console.log(changed);
   return (
     <Grid2 container>
       <Grid2 xs={6}>
