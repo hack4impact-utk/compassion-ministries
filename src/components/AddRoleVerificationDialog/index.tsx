@@ -7,6 +7,7 @@ import {
 import { useState } from 'react';
 import { ValidationErrors } from '@/utils/validation';
 import useValidation from '@/hooks/useValidation';
+import LoadingButton from '../LoadingButton';
 
 interface AddRoleVerificationDialogProps {
   open: boolean;
@@ -27,6 +28,7 @@ export default function AddRoleVerificationDialog({
   >(undefined);
   const validate = useValidation(zUpsertRoleVerificationFormData);
 
+  const [isLoading, setIsLoading] = useState(false);
   const handleSubmit = async () => {
     // Validate the data
     const validationErrors = validate(formData);
@@ -39,10 +41,17 @@ export default function AddRoleVerificationDialog({
     setValidationErrors(undefined);
 
     // Submit the data
-    await onSubmit(formData);
+    try{
+      setIsLoading(true);
+      await onSubmit(formData);
+    }
+    finally{
+      setIsLoading(false);
+    }
   };
 
   const handleClose = () => {
+
     setFormData({} as UpsertRoleVerificationFormData);
     setValidationErrors(undefined);
     onClose();
@@ -63,9 +72,9 @@ export default function AddRoleVerificationDialog({
         <Button variant="text" onClick={handleClose}>
           Cancel
         </Button>
-        <Button variant="text" onClick={handleSubmit}>
+        <LoadingButton loading={isLoading} variant="text" onClick={handleSubmit}>
           Submit
-        </Button>
+        </LoadingButton>
       </DialogActions>
     </Dialog>
   );
