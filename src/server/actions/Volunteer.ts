@@ -370,6 +370,12 @@ export async function getVolunteersByOrganization(
   }
 }
 
+/*
+  Since multiple volunteers can share the same email, but the background check provider only allows one background check per email,
+  we need to ensure that only one background check is initiated per email.
+
+  We do that by checking if there are any other other volunteers with the same email that already have a background check initiated.
+*/
 export async function inititateBackgroundCheck(volunteerId: string) {
   await dbConnect();
 

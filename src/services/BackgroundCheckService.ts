@@ -23,8 +23,13 @@ class BackgroundCheckService {
   // ================
   // Public Methods
   // ================
+  /**
+   * Initiates a background check for a given email.
+   * @param email The email of the volunteer to initiate a background check for.
+   * @returns Whether the background check was successfully initiated.
+   */
   async initiateBackgroundCheck(email: string) {
-    const inviteId = await this.#inviteVolunteer([email]);
+    const inviteId = await this.#inviteVolunteers([email]);
     return this.#payForInvite(inviteId);
   }
 
@@ -37,7 +42,7 @@ class BackgroundCheckService {
    * @param emails The emails of the volunteers to invite.
    * @returns The ID of the background check.
    */
-  async #inviteVolunteer(emails: string[]) {
+  async #inviteVolunteers(emails: string[]) {
     await this.#login();
 
     const res = await this.#post('/v2-api/company/employee/invite', {
