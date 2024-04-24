@@ -2,14 +2,24 @@
 import React from 'react';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { VolunteerEventResponse } from '@/types/dataModel/eventVolunteer';
-import { Typography, Box, ListItemButton } from '@mui/material';
+import {
+  Typography,
+  Box,
+  ListItemButton,
+  ListItemText,
+  Button,
+} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { UpsertRoleVerificationFormData } from '@/types/forms/role-verifications';
-import IconList from '@/components/IconList';
+import RoleIconList from '@/components/RoleIconList';
 import { useRouter } from 'next/navigation';
 import AddRoleVerificationDialog from '@/components/AddRoleVerificationDialog';
 import { formatPhoneNumber } from '@/utils/phone-number';
-
+import useResponsive from '@/hooks/useResponsive';
+import { useConfirm } from 'material-ui-confirm';
+import useSnackbar from '@/hooks/useSnackbar';
+import { useSession } from 'next-auth/react';
+import BGCIcon from '@/components/BGCIcon';
 // Use VolunteerResponse Props
 interface VolunteerProps {
   volunteer: VolunteerResponse;
@@ -22,6 +32,12 @@ export default function Volunteer({
   events,
 }: VolunteerProps): React.ReactElement {
   const [open, setOpen] = React.useState(false);
+  const confirm = useConfirm();
+  const { showSnackbar } = useSnackbar();
+  const { data: session } = useSession();
+
+  const isAdmin = session?.user?.isAdmin;
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -49,39 +65,122 @@ export default function Volunteer({
     }
   };
 
+  const startBackgroundCheck = async () => {
+    const alreadyPassed =
+      volunteer.backgroundCheck?.status &&
+      volunteer.backgroundCheck?.status === 'Passed';
+    const fullName = `${volunteer.firstName} ${volunteer.lastName}`;
+    try {
+      await confirm({
+        title: alreadyPassed
+          ? `${fullName} passed a background check on ${volunteer.backgroundCheck?.lastUpdated.toLocaleDateString()}. Are you sure you want to run a new background check?`
+          : `Are you sure you want to run a background check on ${fullName}?`,
+        description: `This will charge $15 to Compassion Ministries. Type "${fullName}" to confirm`,
+        confirmationKeyword: fullName,
+        confirmationKeywordTextFieldProps: {
+          placeholder: fullName,
+        },
+      });
+    } catch (e) {
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        `/api/volunteers/${volunteer._id}/background-check`,
+        {
+          method: 'POST',
+        }
+      );
+      if (res.status == 204) {
+        showSnackbar('Background check started', 'success');
+        router.refresh();
+      } else if (res.status === 409) {
+        showSnackbar('Volunteer already has background check', 'error');
+      } else {
+        const data = await res.json();
+        showSnackbar('Failed to start background check', 'error');
+        console.error(data);
+      }
+    } catch (error) {
+      showSnackbar('Failed to start background check', 'error');
+      console.error(error);
+    }
+  };
+
   const formattedPhoneNumber = formatPhoneNumber(volunteer.phoneNumber);
   const router = useRouter();
+  const { isMobile } = useResponsive();
   return (
     <>
       <Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <Typography variant="h3" pt={2} pb={2}>
-            {volunteer.firstName} {volunteer.lastName}
-          </Typography>
-          <Box sx={{ display: 'flex' }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', pr: 1 }}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexDirection: isMobile ? 'column' : 'row',
+            }}
+          >
+            <Typography variant="h3" pt={2} pb={2}>
+              {volunteer.firstName} {volunteer.lastName}
+            </Typography>
+            {isAdmin && (
+              <Button
+                variant="outlined"
+                fullWidth={isMobile}
+                onClick={startBackgroundCheck}
+              >
+                Run background check
+              </Button>
+            )}
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
               Email:
             </Typography>
-            <Typography display="inline">{volunteer.email}</Typography>
+            <Typography display="inline" fontWeight="normal" variant="h6">
+              {volunteer.email}
+            </Typography>
           </Box>
-          <Box sx={{ display: 'flex' }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', pr: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
               Phone number:
             </Typography>
-            <Typography display="inline">{formattedPhoneNumber}</Typography>
-          </Box>
-          <Box sx={{ display: 'flex' }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', pr: 1 }}>
-              Previous role:
+            <Typography display="inline" fontWeight="normal" variant="h6">
+              {formattedPhoneNumber}
             </Typography>
-            <Typography display="inline">{volunteer.previousRole}</Typography>
           </Box>
-          <Box sx={{ display: 'flex' }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', pr: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
+              Address:
+            </Typography>
+            <Typography display="inline" fontWeight="normal" variant="h6">
+              {volunteer.address}
+            </Typography>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
               Previous organization:
             </Typography>
-            <Typography display="inline">
-              {volunteer.previousOrganization?.name}
+            <Typography display="inline" variant="h6">
+              <ListItemButton
+                key={volunteer.previousOrganization?._id}
+                onClick={() =>
+                  router.push(
+                    `/organizations/${volunteer.previousOrganization?._id}`
+                  )
+                }
+              >
+                <ListItemText
+                  primary={volunteer.previousOrganization?.name}
+                  primaryTypographyProps={{
+                    variant: 'h6',
+                    fontWeight: 'normal',
+                  }}
+                />
+              </ListItemButton>
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }} pt={4}>
@@ -91,39 +190,68 @@ export default function Volunteer({
           {volunteer.roleVerifications?.map((verification, index) => (
             <Box key={index}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Typography
-                  variant="subtitle1"
-                  sx={{ fontWeight: 'bold', pr: 1 }}
-                >
+                <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
                   Role:
                 </Typography>
-                <Typography display="inline">{verification.role}</Typography>
+                <Typography display="inline" variant="h6" fontWeight="normal">
+                  {verification.role}
+                </Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Typography
-                  variant="subtitle1"
-                  sx={{ fontWeight: 'bold', pr: 1 }}
-                >
+                <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
                   Verified by:
                 </Typography>
-                <Typography display="inline">
+                <Typography display="inline" variant="h6" fontWeight="normal">
                   {verification.verifier}
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Typography
-                  variant="subtitle1"
-                  sx={{ fontWeight: 'bold', pr: 1 }}
-                >
+                <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
                   Verification date:
                 </Typography>
-                <Typography display="inline">
+                <Typography display="inline" variant="h6" fontWeight="normal">
                   {new Date(verification.lastUpdated).toLocaleDateString()}
                 </Typography>
               </Box>
             </Box>
           ))}
         </Box>
+        {volunteer.backgroundCheck && (
+          <>
+            <Box sx={{ display: 'flex', alignItems: 'center' }} pt={4}>
+              <Typography variant="h5">Background check</Typography>
+            </Box>
+            <Box>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
+                  Status:
+                </Typography>
+                <Typography
+                  display="inline"
+                  variant="h6"
+                  fontWeight="normal"
+                  sx={{ mr: 1 }}
+                >
+                  {volunteer.backgroundCheck?.status}
+                </Typography>
+                <BGCIcon
+                  status={volunteer.backgroundCheck?.status}
+                  size="28px"
+                />
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
+                  Check date:
+                </Typography>
+                <Typography display="inline" variant="h6" fontWeight="normal">
+                  {new Date(
+                    volunteer.backgroundCheck?.lastUpdated
+                  ).toLocaleDateString()}
+                </Typography>
+              </Box>
+            </Box>
+          </>
+        )}
 
         {events.length > 0 && (
           <Box>
@@ -140,13 +268,20 @@ export default function Volunteer({
                 onClick={() =>
                   router.push(`/events/${volunteerEvent.event._id}`)
                 }
+                sx={{ pl: 0 }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center' }} pt={1}>
-                  <IconList roles={[volunteerEvent.role]}></IconList>
-                  <Typography pl={2} variant="h5">
-                    {volunteerEvent.event.name}
-                  </Typography>
+                <Box>
+                  <RoleIconList roles={[volunteerEvent.role]}></RoleIconList>
                 </Box>
+                <ListItemText
+                  sx={{ pl: 1 }}
+                  primary={`${volunteerEvent.event.name}`}
+                  primaryTypographyProps={{
+                    variant: 'h5',
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                />
               </ListItemButton>
             ))}
           </Box>

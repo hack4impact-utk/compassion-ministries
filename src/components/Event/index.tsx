@@ -3,7 +3,7 @@ import { EventResponse } from '@/types/dataModel/event';
 import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
 import { Box, ListItemButton, ListItemText, Typography } from '@mui/material';
 import React from 'react';
-import IconList from '../IconList';
+import RoleIconList from '../RoleIconList';
 import { useRouter } from 'next/navigation';
 
 interface EventProps {
@@ -54,7 +54,7 @@ export default function Event({
         {formatTime(new Date(event.startAt))} -{' '}
         {formatTime(new Date(event.endAt))}
       </Typography>
-      <IconList roles={event.eventRoles} />
+      <RoleIconList roles={event.eventRoles} />
       <Typography
         sx={{ textDecoration: 'underline', fontWeight: 'bold' }}
         variant="h6"
@@ -77,7 +77,7 @@ export default function Event({
               primaryTypographyProps={{ variant: 'h5' }}
             />
             <Box>
-              <IconList roles={[ev.role]}></IconList>
+              <RoleIconList roles={[ev.role]}></RoleIconList>
             </Box>
           </ListItemButton>
         ))

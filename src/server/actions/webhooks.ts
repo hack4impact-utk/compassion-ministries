@@ -3,6 +3,12 @@ import CMError, { CMErrorType } from '@/utils/cmerror';
 import { BackgroundCheckWebhookPayload } from '@/types/dataModel/backgroundCheckWebhookPayload';
 import VolunteerSchema from '@/server/models/Volunteer';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
+
+const statusMap = <const>{
+  VERIFIED: 'Passed',
+  FAILED: 'Failed',
+};
+
 /**
  * Get a specific volunteer and update background check
  * @param payload // BackgroundCheckWebhookPayload
@@ -15,6 +21,9 @@ export async function handleBackgroundCheckWebhook(
 
   try {
     await dbConnect();
+
+    const status = statusMap[payload.data.overall_status];
+
     res = await VolunteerSchema.findOneAndUpdate(
       {
         email: payload?.data.employee_email,
@@ -22,9 +31,7 @@ export async function handleBackgroundCheckWebhook(
       },
       {
         $set: {
-          'backgroundCheck.status':
-            payload.data.overall_status.charAt(0).toUpperCase() +
-            payload.data.overall_status.slice(1).toLowerCase(),
+          'backgroundCheck.status': status,
         },
       }
     );

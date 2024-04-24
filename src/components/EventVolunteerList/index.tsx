@@ -3,7 +3,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
-import IconList from '../IconList';
+import RoleIconList from '../RoleIconList';
 import SearchField from '@/components/SearchField';
 import useSearch from '@/hooks/useSearch';
 import { Box } from '@mui/material';
@@ -45,7 +45,7 @@ export default function EventVolunteerList({
               secondary={`With ${eventVolunteer.organization}`}
             />
             {/* Display Icons of the Volunteer's Role */}
-            <IconList roles={[eventVolunteer.role]} />
+            <RoleIconList roles={[eventVolunteer.role]} />
           </ListItem>
         ))}
       </List>

@@ -6,6 +6,7 @@ import {
   zCreateEventVolunteerRequest,
 } from '@/types/dataModel/eventVolunteer';
 import { UpdateVolunteerRequest } from '@/types/dataModel/volunteer';
+import { userAuth } from '@/utils/auth';
 import CMError, { CMErrorResponse, CMErrorType } from '@/utils/cmerror';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -15,6 +16,8 @@ export async function POST(
   { params }: { params: { eventId: string } }
 ) {
   try {
+    await userAuth();
+
     // Check Event ID
     const validationEvent = zObjectId.safeParse(params.eventId);
     if (!validationEvent.success) {
@@ -39,8 +42,8 @@ export async function POST(
 
     const evReq = validationResult.data;
 
-    // if volunteer is an object, we need to create a new volunteer
-    if (typeof evReq.volunteer === 'object') {
+    // if isEdited is false and we have an object, first create the volunteer
+    if (!evReq.isEdited && typeof evReq.volunteer === 'object') {
       const newVolunteerId = await createVolunteer(evReq.volunteer);
       evReq.volunteer = newVolunteerId;
     }
@@ -51,9 +54,10 @@ export async function POST(
       const updateRequest: UpdateVolunteerRequest = {
         previousRole: evReq.role,
         previousOrganization: evReq.organization,
+        ...(evReq.isEdited ? evReq.updatedVolunteer : {}),
       };
 
-      await updateVolunteer(evReq.volunteer, updateRequest);
+      await updateVolunteer(evReq.volunteer as string, updateRequest);
     }
 
     return NextResponse.json({ id: res }, { status: 201 });
