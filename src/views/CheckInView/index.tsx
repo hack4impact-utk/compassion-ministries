@@ -16,10 +16,11 @@ import { CheckInFormData, zCheckInFormData } from '@/types/forms/checkIn';
 import { getChanges } from '@/utils/change';
 import { transformCheckInFormDataToCreateEventVolunteerRequest } from '@/utils/transformers/check-in';
 import { ValidationErrors } from '@/utils/validation';
-import { Typography } from '@mui/material';
+import { Button, ButtonGroup, Menu, MenuItem, Typography } from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { ArrowDropDownIcon } from '@mui/x-date-pickers/icons';
 
 interface CheckInViewProps {
   event: EventResponse;
@@ -37,6 +38,9 @@ export default function CheckInView(props: CheckInViewProps) {
   >(undefined);
   const [loading, setLoading] = useState(false);
   const [submitDisabled, setSubmitDisabled] = useState(false);
+  const [checkInButtonAnchorEl, setCheckInButtonAnchorEl] =
+    useState<null | HTMLElement>(null);
+  const checkInButtonMenuOpen = !!checkInButtonAnchorEl;
   const confirmRole = useRoleConfirmation();
   const confirmEdit = useEditConfirmation();
   const { showSnackbar } = useSnackbar();
@@ -55,7 +59,7 @@ export default function CheckInView(props: CheckInViewProps) {
     In the second and third cases, the `volunteer` field is the object ID of the vol
     In the third case, the `updatedVolunteer` field is the updated volunteer object
   */
-  const onCheckIn = async () => {
+  const onCheckIn = async (multiCheckIn?: boolean) => {
     setLoading(true);
     // Validate the form
     const validationResult = validate(formData);
@@ -163,12 +167,25 @@ export default function CheckInView(props: CheckInViewProps) {
         return;
       }
       // reset form
-      setFormData({
-        role:
-          props.event.eventRoles.length === 1
-            ? props.event.eventRoles[0]
-            : null,
-      } as CheckInFormData);
+      if (multiCheckIn) {
+        // add volutneer family member on next check-in -- copies over email/phone/address/role/org when clearing form
+        setFormData({
+          address: formData.address,
+          email: formData.email,
+          phoneNumber: formData.phoneNumber,
+          organization: formData.organization,
+          role: formData.role,
+        } as CheckInFormData);
+        setCheckInButtonAnchorEl(null);
+      } else {
+        setFormData({
+          role:
+            props.event.eventRoles.length === 1
+              ? props.event.eventRoles[0]
+              : null,
+        } as CheckInFormData);
+      }
+
       showSnackbar('Checked in successfully', 'success');
       router.refresh();
       setLoading(false);
@@ -198,18 +215,36 @@ export default function CheckInView(props: CheckInViewProps) {
         />
       </Grid2>
       <Grid2 xs={12}>
-        <LoadingButton
-          buttonProps={{
-            variant: 'contained',
-            fullWidth: true,
-            onClick: onCheckIn,
-            disabled: submitDisabled,
-          }}
-          loading={loading}
-          loadingSize={24}
-        >
-          Check in
-        </LoadingButton>
+        <ButtonGroup variant="contained" fullWidth>
+          <LoadingButton
+            buttonProps={{
+              fullWidth: true,
+              onClick: () => onCheckIn(),
+              disabled: submitDisabled,
+            }}
+            loading={loading}
+            loadingSize={24}
+          >
+            Check in
+          </LoadingButton>
+          <Button
+            size="small"
+            sx={{ width: '2.5%' }}
+            onClick={(e) => setCheckInButtonAnchorEl(e.currentTarget)}
+          >
+            <ArrowDropDownIcon />
+          </Button>
+          <Menu
+            anchorEl={checkInButtonAnchorEl}
+            open={checkInButtonMenuOpen}
+            onClose={() => setCheckInButtonAnchorEl(null)}
+          >
+            {/* Prepopulates the next checkin form with all info except name. Used for family members that share info */}
+            <MenuItem onClick={() => onCheckIn(true)}>
+              Check in volunteer and add family member
+            </MenuItem>
+          </Menu>
+        </ButtonGroup>
       </Grid2>
     </Grid2>
   );
