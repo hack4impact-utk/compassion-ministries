@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { zRole } from '../dataModel/roles';
 import { zOrganizationResponse } from '../dataModel/organization';
+import { zObjectId } from '../dataModel/base';
 
 export const zCheckInFormData = z.object({
   firstName: z.string().nonempty('Required'),
@@ -10,6 +11,7 @@ export const zCheckInFormData = z.object({
   address: z.string().nonempty('Required'),
   role: zRole,
   organization: zOrganizationResponse.optional(),
+  volunteerId: zObjectId.optional(),
 });
 
 export interface CheckInFormData extends z.infer<typeof zCheckInFormData> {}
