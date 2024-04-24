@@ -1,20 +1,21 @@
 import { Button, ButtonProps, CircularProgress } from '@mui/material';
 
-interface LoadingButtonProps {
-  buttonProps?: ButtonProps;
+interface LoadingButtonProps extends ButtonProps {
   loading: boolean;
   children?: React.ReactNode;
   loadingSize?: number;
 }
 
-export default function LoadingButton(props: LoadingButtonProps) {
-  const disabled = props.loading || props.buttonProps?.disabled;
+export default function LoadingButton({
+  loading, loadingSize, children,
+  ...buttonProps
+}: LoadingButtonProps) {
   return (
-    <Button {...props.buttonProps} disabled={disabled}>
-      {props.loading ? (
-        <CircularProgress size={`${props.loadingSize}px`} />
+    <Button {...buttonProps} disabled={loading || buttonProps.disabled}>
+      {loading ? (
+        <CircularProgress size={`${loadingSize}px`} />
       ) : (
-        props.children
+        children
       )}
     </Button>
   );
