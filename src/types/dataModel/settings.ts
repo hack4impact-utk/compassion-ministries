@@ -8,5 +8,12 @@ const zSettings = z.object({
 const zSettingsEntity = zSettings.extend(zBase.shape);
 const zSettingsResponse = zSettingsEntity;
 
-export interface SettingsEntity extends z.infer<typeof zSettingsEntity> {}
-export interface SettingsResponse extends z.infer<typeof zSettingsResponse> {}
+const zEmail = z.object({
+  email: z.string()
+});
+
+export const zRemoveAllowedEmailRequest = zEmail;
+
+export interface SettingsEntity extends z.infer<typeof zSettingsEntity> { }
+export interface SettingsResponse extends z.infer<typeof zSettingsResponse> { }
+export interface RemoveAllowedEmailRequest extends z.infer<typeof zRemoveAllowedEmailRequest> { }
