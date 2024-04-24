@@ -1,5 +1,5 @@
 import { ChangeRecord } from '@/utils/change';
-import { camelCaseToTitleCase } from '@/utils/string';
+import { camelCaseToPascalCase } from '@/utils/string';
 import { ArrowForward } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
@@ -28,7 +28,7 @@ export default function ConfirmContent({ changed }: ConfirmContentProps) {
           <Fragment key={key}>
             <Grid2 xs={12} sx={{ mt: 1, mb: -1 }}>
               <Typography variant="subtitle1" color="GrayText">
-                {camelCaseToTitleCase(key)}
+                {camelCaseToPascalCase(key)}
               </Typography>
             </Grid2>
             <Grid2 xs={6}>
