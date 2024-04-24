@@ -1,11 +1,15 @@
 import { VolunteerEventResponse } from '@/types/dataModel/eventVolunteer';
 import { getRangesOverlap } from '@/utils/math';
-import { getAllEventsForVolunteer, getVolunteerEventsByOrganization } from './Volunteer';
+import {
+  getAllEventsForVolunteer,
+  getVolunteerEventsByOrganization,
+} from './Volunteer';
 
 export interface OrganizationReportResponse {
   organization: string;
   numVolunteers: number;
   numHours: number;
+  numEvents: number;
 }
 
 /**
@@ -21,11 +25,15 @@ export async function getOrganizationReport(
   endDate?: Date
 ): Promise<OrganizationReportResponse> {
   // Return object
-  const report = {
+  const report: OrganizationReportResponse = {
     organization: organizationId,
     numVolunteers: 0,
     numHours: 0,
+    numEvents: 0,
   };
+
+  // used to count number of unique events
+  const eventsSet = new Set();
 
   // Get search range
   const fromTime = startDate?.valueOf();
@@ -41,6 +49,7 @@ export async function getOrganizationReport(
     const volunteerIds: Set<string> = new Set<string>();
     let volunteerTime: number = 0;
     for (const volunteerEvent of volunteerEvents) {
+      eventsSet.add(volunteerEvent._id);
       // Get event time range
       let timeRange: [number, number] | undefined = [
         volunteerEvent.event.startAt.valueOf(),
@@ -68,6 +77,8 @@ export async function getOrganizationReport(
     report.numVolunteers = volunteerIds.size;
     report.numHours = volunteerTime / 3600000; // convert milliseconds to hours
   }
+
+  report.numEvents = eventsSet.size;
 
   return report;
 }
