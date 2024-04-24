@@ -13,6 +13,8 @@ export enum CMErrorType {
   BadValue,
   NoSuchKey,
   DuplicateKey,
+  Unauthorized,
+  Forbidden,
 }
 
 /*  
@@ -31,6 +33,8 @@ const CMERRORTYPE_DEFS = [
   [CMErrorType.BadValue, 400, 'Invalid %s', 'Invalid value'],
   [CMErrorType.NoSuchKey, 404, '%s not found', 'Key not found'],
   [CMErrorType.DuplicateKey, 409, 'Duplicate %s', 'Duplicate key'],
+  [CMErrorType.Unauthorized, 401, 'Unauthorized %s', 'Unauthorized'],
+  [CMErrorType.Forbidden, 403, 'Forbidden %s', 'Forbidden'],
 ] as const;
 
 // Corresponding response status codes for error types

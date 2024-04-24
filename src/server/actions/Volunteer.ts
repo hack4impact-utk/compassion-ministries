@@ -19,6 +19,7 @@ import EventSchema from '@/server/models/Event';
 import { RoleVerificationRequest } from '@/types/dataModel/roles';
 import CMError, { CMErrorType } from '@/utils/cmerror';
 import { mongo } from 'mongoose';
+import BackgroundCheckService from '@/services/BackgroundCheckService';
 OrganizationSchema;
 EventSchema;
 
@@ -63,6 +64,36 @@ export async function getAllVolunteers(): Promise<VolunteerResponse[]> {
     throw new CMError(CMErrorType.InternalError);
   }
   return volunteers;
+}
+
+/**
+ * Gets all volunteers that have not been checked in to an event yet
+ * @param eventId The ID of the event
+ * @returns All volunteers that have not been checked in to the event
+ */
+export async function getAllVolunteersForCheckIn(
+  eventId: string
+): Promise<VolunteerResponse[]> {
+  let volunteers: VolunteerResponse[];
+  try {
+    await dbConnect();
+    volunteers = await VolunteerSchema.find({ softDelete: { $ne: true } })
+      .populate('previousOrganization')
+      .lean();
+
+    const eventVolunteers = await EventVolunteerSchema.find({ event: eventId });
+
+    const nonCheckedInVolunteers = volunteers.filter((volunteer) => {
+      return !eventVolunteers.some(
+        (eventVolunteer) =>
+          eventVolunteer.volunteer.toString() === volunteer._id.toString()
+      );
+    });
+
+    return nonCheckedInVolunteers;
+  } catch (error) {
+    throw new CMError(CMErrorType.InternalError);
+  }
 }
 
 /**
@@ -281,13 +312,14 @@ export async function getVolunteerEventsByOrganization(
     await dbConnect();
     volunteerEvents = await EventVolunteerSchema.find({
       organization: organizationId,
-    }).populate('event').lean();
+    })
+      .populate('event')
+      .lean();
 
     volunteerEvents.map((volunteerEvent) => {
       volunteerEvent.volunteer = volunteerEvent.volunteer.toString();
       return volunteerEvent;
     });
-
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }
@@ -334,6 +366,61 @@ export async function getVolunteersByOrganization(
     return uniqueVolunteers;
   } catch (error) {
     console.log(error);
+    throw new CMError(CMErrorType.InternalError);
+  }
+}
+
+/*
+  Since multiple volunteers can share the same email, but the background check provider only allows one background check per email,
+  we need to ensure that only one background check is initiated per email.
+
+  We do that by checking if there are any other other volunteers with the same email that already have a background check initiated.
+*/
+export async function inititateBackgroundCheck(volunteerId: string) {
+  try {
+    await dbConnect();
+
+    const volunteer = await getVolunteer(volunteerId);
+
+    // try and find if theres another volunteer that already has a background check
+    const volunteers = await VolunteerSchema.find({
+      _id: { $ne: volunteerId },
+      email: volunteer.email,
+      backgroundCheck: { $exists: true },
+    });
+
+    // if so, reject the attempt
+    if (volunteers.length > 0) {
+      throw new CMError(
+        CMErrorType.InternalError,
+        `Background check already initiated for ${volunteer.email}`
+      );
+    }
+
+    // initiate background check
+    const ok = await BackgroundCheckService.initiateBackgroundCheck(
+      volunteer.email
+    );
+
+    if (!ok) {
+      throw new CMError(
+        CMErrorType.InternalError,
+        'Failed to initiate background check'
+      );
+    }
+
+    // update volunteer background check status
+    await VolunteerSchema.findByIdAndUpdate(volunteerId, {
+      backgroundCheck: {
+        status: 'In Progress',
+        lastUpdated: new Date(),
+      },
+    });
+  } catch (e) {
+    if (e instanceof CMError) {
+      throw e;
+    }
+
     throw new CMError(CMErrorType.InternalError);
   }
 }

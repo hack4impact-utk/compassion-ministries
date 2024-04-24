@@ -4,6 +4,7 @@ import {
   CreateEmailRequest,
   zCreateEmailRequest,
 } from '@/types/dataModel/event';
+import { userAuth } from '@/utils/auth';
 import CMError, { CMErrorResponse, CMErrorType } from '@/utils/cmerror';
 import { NextRequest } from 'next/server';
 
@@ -12,6 +13,8 @@ export async function POST(
   { params }: { params: { eventId: string } }
 ) {
   try {
+    await userAuth();
+
     // Check Event ID
     const validationEvent = zObjectId.safeParse(params.eventId);
     if (!validationEvent.success) {

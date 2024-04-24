@@ -1,5 +1,6 @@
 import { getAllEventsForVolunteer } from '@/server/actions/Volunteer';
 import { zObjectId } from '@/types/dataModel/base';
+import { userAuth } from '@/utils/auth';
 import CMError, { CMErrorResponse, CMErrorType } from '@/utils/cmerror';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -8,11 +9,14 @@ import { NextRequest, NextResponse } from 'next/server';
  * @param _request
  * @returns all the events the volunteer attended
  */
+// TODO: remove
 export async function GET(
   _request: NextRequest,
   { params }: { params: { volunteerId: string } }
 ) {
   try {
+    await userAuth();
+
     const validationResult = zObjectId.safeParse(params.volunteerId);
     if (!validationResult.success) {
       return new CMError(CMErrorType.BadValue, 'Volunteer Id').toNextResponse();

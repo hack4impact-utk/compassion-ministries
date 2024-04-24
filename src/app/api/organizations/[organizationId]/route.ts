@@ -6,6 +6,7 @@ import { zObjectId } from '@/types/dataModel/base';
 import { zUpdateOrganizationRequest } from '@/types/dataModel/organization';
 import { NextRequest, NextResponse } from 'next/server';
 import CMError, { CMErrorResponse, CMErrorType } from '@/utils/cmerror';
+import { userAuth } from '@/utils/auth';
 
 // @route DELETE /api/organizations/[organizationId] - Soft deletes an organization
 export async function DELETE(
@@ -13,6 +14,8 @@ export async function DELETE(
   { params }: { params: { organizationId: string } }
 ) {
   try {
+    await userAuth();
+
     const validationResult = zObjectId.safeParse(params.organizationId);
     if (!validationResult.success) {
       return new CMError(
@@ -34,6 +37,8 @@ export async function PUT(
   { params }: { params: { organizationId: string } }
 ) {
   try {
+    await userAuth();
+
     const validationResult = zObjectId.safeParse(params.organizationId);
     if (!validationResult.success) {
       return new CMError(

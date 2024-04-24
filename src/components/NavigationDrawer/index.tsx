@@ -11,7 +11,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 
 interface NavigationDrawerProps {
   open: boolean;
-  setOpen: (val: boolean) => void;
+  closeDrawer: () => void;
 }
 
 const routes: { text: string; icon: React.ReactNode; href: string }[] = [
@@ -43,21 +43,15 @@ export default function NavigationDrawer(props: NavigationDrawerProps) {
 
   function clickHandler(href: string) {
     router.push(href);
-    props.setOpen(false);
+    props.closeDrawer();
   }
 
   return (
     <Drawer
       variant={responsive.isDesktop ? 'permanent' : 'temporary'}
       open={props.open}
-      onClose={() => props.setOpen(false)}
-      sx={{
-        '& .MuiDrawer-paper': {
-          width: '280px',
-          overflowX: 'hidden',
-          boxSizing: 'border-box',
-        },
-      }}
+      onClose={props.closeDrawer}
+      sx={{ width: 280 }}
     >
       <Box>
         <Image
