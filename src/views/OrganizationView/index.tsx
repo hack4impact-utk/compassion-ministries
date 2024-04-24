@@ -1,6 +1,6 @@
 'use client';
 import { OrganizationResponse } from '@/types/dataModel/organization';
-import React, { useState } from 'react';
+import React from 'react';
 import Organization from '@/components/Organization';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { Button } from '@mui/material';
@@ -8,9 +8,6 @@ import Link from 'next/link';
 import useSnackbar from '@/hooks/useSnackbar';
 import { useRouter } from 'next/navigation';
 import useDeleteConfirmation from '@/hooks/useDeleteConfirmation';
-import LoadingButton from '@/components/LoadingButton';
-import { getOrganizationReport } from '@/server/actions/Reporting';
-import OrganizationReporting from '@/components/OrganizationReporting';
 
 export interface OrganizationViewProps {
   organization: OrganizationResponse;
@@ -27,10 +24,6 @@ export function OrganizationView({
     resourceName: 'organization',
     confirmationKeyword: organization.name,
   });
-  const [loading, setLoading] = useState<boolean>(false);
-  const [report, setReport] = useState<OrganizationResponse>(
-    {} as OrganizationResponse
-  );
 
   const organizationId = organization._id.toString();
 
@@ -60,23 +53,8 @@ export function OrganizationView({
     }
   };
 
-  async function onLoadReporting() {
-    setLoading(true);
-    const res = await fetch(`/organizations/${organizationId}`);
-
-    setLoading(false);
-  }
-
   return (
     <div>
-      {/* Organization Reporting */}
-      <LoadingButton
-        loading={loading}
-        buttonProps={{ onClick: onLoadReporting }}
-      />
-
-      <OrganizationReporting report={report} />
-
       {/* Display organization information */}
       <Organization organization={organization} volunteers={volunteers} />
 
