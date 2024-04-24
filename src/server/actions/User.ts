@@ -1,7 +1,9 @@
-import { UserResponse } from '@/types/dataModel/user';
+import { UpdateAllowedUsersRequest, UserResponse } from '@/types/dataModel/user';
 import dbConnect from '@/utils/db-connect';
 import UserSchema from '@/server/models/User';
 import CMError, { CMErrorType } from '@/utils/cmerror';
+import Settings from '../models/Settings';
+import { getSettings } from './Settings';
 
 export async function getUserByEmail(email: string): Promise<UserResponse> {
   let user: UserResponse | null = null;
@@ -45,5 +47,16 @@ export async function removeAdmin(userId: string): Promise<void> {
     await UserSchema.updateOne({ _id: userId }, { isAdmin: false });
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
+  }
+}
+
+export async function updateAllowedUsers(req: UpdateAllowedUsersRequest) {
+  try {
+    await dbConnect();
+
+    await addAdmins(req.adminIds)
+    await Settings.updateOne({ _id: (await getSettings())._id }, { allowedEmails: req.userEmails })
+  } catch (e) {
+    throw new CMError(CMErrorType.InternalError)
   }
 }
