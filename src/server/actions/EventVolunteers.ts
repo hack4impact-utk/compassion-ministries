@@ -15,7 +15,7 @@ export async function getEventVolunteersByRole(
   let evs: EventVolunteerResponse[];
   try {
     await dbConnect();
-    evs = await EventVolunteerSchema.find({ role }).populate('event').lean();
+    evs = await EventVolunteerSchema.find({ role }).populate('event').populate('organization').lean();
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }
