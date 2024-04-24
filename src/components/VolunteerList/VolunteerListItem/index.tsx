@@ -4,7 +4,7 @@ import React from 'react';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import Box from '@mui/material/Box';
 import { useRouter } from 'next/navigation';
-import IconList from '@/components/IconList';
+import RoleIconList from '@/components/RoleIconList';
 
 interface VolunteerListItemProps {
   volunteer: VolunteerResponse;
@@ -15,7 +15,7 @@ export default function VolunteerListItem({
   volunteer,
 }: VolunteerListItemProps) {
   const router = useRouter();
-
+  volunteer.backgroundCheck?.status;
   return (
     <ListItemButton
       key={volunteer._id}
@@ -29,9 +29,9 @@ export default function VolunteerListItem({
         secondaryTypographyProps={{ variant: 'body1' }}
       />
       <Box>
-        <IconList
+        <RoleIconList
           roles={volunteer.roleVerifications!.map((verif) => verif.role)}
-        ></IconList>
+        ></RoleIconList>
       </Box>
     </ListItemButton>
   );

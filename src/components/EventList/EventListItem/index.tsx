@@ -1,5 +1,5 @@
 'use client';
-import IconList from '@/components/IconList';
+import RoleIconList from '@/components/RoleIconList';
 import { Stack, Typography } from '@mui/material';
 import { EventResponse } from '@/types/dataModel/event';
 import { ListItemButton } from '@mui/material';
@@ -29,7 +29,7 @@ export default function EventListItem({ event }: { event: EventResponse }) {
           </Typography>
         )}
         <Stack direction="row" justifyContent="flex-end">
-          <IconList roles={event.eventRoles}></IconList>
+          <RoleIconList roles={event.eventRoles}></RoleIconList>
         </Stack>
       </Stack>
     </ListItemButton>

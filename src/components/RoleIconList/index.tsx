@@ -10,7 +10,7 @@ interface IconListProps {
   roles: Role[];
 }
 
-export default function IconList({ roles }: IconListProps) {
+export default function RoleIconList({ roles }: IconListProps) {
   return getRoleIcons(sortRoles(roles));
 }
 

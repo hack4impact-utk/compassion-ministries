@@ -1,12 +1,14 @@
-import { getEventsBetweenDates } from "@/server/actions/Event";
-import { NextResponse } from "next/server";
+import { getEventsBetweenDates } from '@/server/actions/Event';
+import { userAuth } from '@/utils/auth';
+import { NextResponse } from 'next/server';
 
 // @GET function that calls getEventsBetweenDates
 // Path: src/app/api/events/%5BeventId%5D/events/route.ts
 
-export async function GET(
-) {
+// TODO: remove
+export async function GET() {
   try {
+    await userAuth();
 
     const startDate = new Date();
     const endDate = new Date();
@@ -16,6 +18,9 @@ export async function GET(
 
     return NextResponse.json(res);
   } catch (e) {
-    return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { message: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }

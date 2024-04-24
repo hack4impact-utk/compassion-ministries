@@ -22,7 +22,7 @@ export default function EventsView({ events }: EventsViewProps) {
   return (
     <Box>
       <SearchField />
-      <Typography variant="h3" sx={{ mb: 2 }}>
+      <Typography variant="h3" sx={{ my: 2 }}>
         Events
       </Typography>
       <Link href="/events/new">
