@@ -14,6 +14,7 @@ export function transformCheckInFormDataToCreateEventVolunteerRequest(
   isEdited: boolean = false,
   updatedVolunteer?: UpdateVolunteerRequest
 ): CreateEventVolunteerRequest {
+// if an existing volunteer's information was changed during checkin
   if (isEdited) {
     if (!updatedVolunteer) {
       throw new Error('updatedVolunteer is required when isEdited is true');
