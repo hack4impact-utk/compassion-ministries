@@ -4,7 +4,7 @@ import CMError, { CMErrorResponse, CMErrorType } from '@/utils/cmerror';
 import { userAuth } from '@/utils/auth';
 import { getOrganizationReport } from '@/server/actions/Reporting';
 
-// @route GET /api/organizations/[organizationId] - Gets a report about the organizaton
+// @route GET /api/organizations/[organizationId]/report - Gets a report about the organizaton
 export async function GET(
   _request: NextRequest,
   { params }: { params: { organizationId: string } }
@@ -27,7 +27,7 @@ export async function GET(
         { status: 404 }
       );
     }
-    return new NextResponse({ id: res }, { status: 200 });
+    return NextResponse.json(res, { status: 200 });
   } catch (error) {
     return CMErrorResponse(error);
   }
