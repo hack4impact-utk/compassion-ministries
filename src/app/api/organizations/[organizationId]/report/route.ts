@@ -23,7 +23,7 @@ export async function GET(
     const res = await getOrganizationReport(params.organizationId);
     if (!res) {
       return NextResponse.json(
-        { id: 'Organization not found' },
+        { message: 'Organization not found' },
         { status: 404 }
       );
     }
