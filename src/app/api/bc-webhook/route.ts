@@ -7,7 +7,6 @@ import { CMErrorResponse } from '@/utils/cmerror';
 export async function POST(request: NextRequest) {
   try {
     const req = await request.json();
-    console.log(req);
     const validationResult = zBackgroundCheckWebhookPayload.safeParse(req);
     if (!validationResult.success) {
       // return early but with a 200 status code for adding a webhook
