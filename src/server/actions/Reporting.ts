@@ -45,6 +45,8 @@ export async function getOrganizationReport(
     const volunteerEvents: VolunteerEventResponse[] =
       await getVolunteerEventsByOrganization(organizationId);
 
+    report.organization = volunteerEvents[0].organization!.name;
+
     // Iterate over eventVolunteers to get unique volunteer ids and total time for all records within search range
     const volunteerIds: Set<string> = new Set<string>();
     let volunteerTime: number = 0;
@@ -79,6 +81,7 @@ export async function getOrganizationReport(
   }
 
   report.numEvents = eventsSet.size;
+  report.numHours = Math.round(report.numHours);
 
   return report;
 }

@@ -313,6 +313,7 @@ export async function getVolunteerEventsByOrganization(
       organization: organizationId,
     })
       .populate('event')
+      .populate('organization')
       .lean();
 
     volunteerEvents.map((volunteerEvent) => {

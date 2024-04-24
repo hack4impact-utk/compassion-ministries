@@ -8,12 +8,21 @@ interface OrganizationReportingProps {
 export default function OrganizationReporting(
   props: OrganizationReportingProps
 ) {
+  const volunteerText =
+    props.report.numVolunteers > 1
+      ? `a total of ${props.report.numVolunteers} have volunteered`
+      : `one volunteer has volunteered`;
+  const hoursText = `${props.report.numHours} hour${
+    props.report.numHours > 1 ? 's' : ''
+  }`;
+  const eventText =
+    props.report.numEvents === 1
+      ? `at one event!`
+      : `at ${props.report.numEvents} different events!`;
   return (
-    <Typography>
-      Through {props.report.organization}, a total of{' '}
-      {props.report.numVolunteers} volunteers have volunteered{' '}
-      {props.report.numHours} hours at {props.report.numEvents} different
-      events!
+    <Typography variant="h6">
+      Through {props.report.organization}, {volunteerText} {hoursText}{' '}
+      {eventText}
     </Typography>
   );
 }
