@@ -1,13 +1,19 @@
 import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
-import EditCheckInView from '@/views/EditCheckinView';
-import getVo
+//import EditCheckInView from '@/views/EditCheckinView';
+import { getEventVolunteer } from '@/server/actions/EventVolunteers';
 
 export default async function EditCheckInPage({
   params,
 }: {
-  params: { eventVol: string };
+  params: { eventVolunteerId: string };
 }) {
   // find the event volunteer with that id
-  const volunteer: EventVolunteerResponse = await getEventVolunteer(
-    return <EditCheckInView eventId={params.eventVol} />;
+  let volunteer: EventVolunteerResponse | null = null;
+  try {
+    volunteer = await getEventVolunteer(params.eventVolunteerId);
+    console.log(volunteer);
+  } catch (e) {
+    return <h1>Event Volunteer not found</h1>;
+  }
+  //return <EditCheckInView eventVolunteer={volunteer} />;
 }
