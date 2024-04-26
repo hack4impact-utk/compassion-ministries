@@ -1,10 +1,17 @@
 'use client';
 import { EventResponse } from '@/types/dataModel/event';
 import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
-import { Box, Typography } from '@mui/material';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Typography,
+} from '@mui/material';
 import React from 'react';
 import RoleIconList from '../RoleIconList';
 import EventVolunteerList from '../EventVolunteerList';
+import EmailList from '../EmailList';
 
 interface EventProps {
   event: EventResponse;
@@ -54,6 +61,18 @@ export default function Event({
         {formatTime(new Date(event.endAt))}
       </Typography>
       <RoleIconList roles={event.eventRoles} />
+      <Accordion>
+        <AccordionSummary>
+          <Typography>Previously sent emails</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          {event.emails ? (
+            <EmailList emails={event.emails} />
+          ) : (
+            <Typography>No emails sent</Typography>
+          )}
+        </AccordionDetails>
+      </Accordion>
       <Typography
         sx={{ textDecoration: 'underline', fontWeight: 'bold' }}
         variant="h6"
