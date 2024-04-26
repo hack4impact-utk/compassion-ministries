@@ -52,6 +52,7 @@ export const zCreateEventRequest = z.discriminatedUnion('isRecurring', [
 
 export const zCreateEmailRequest = EmailFormData.extend({});
 
+export interface Email extends z.infer<typeof zEmail> { }
 export interface Event extends z.infer<typeof zEvent> { }
 export interface EventEntity extends z.infer<typeof zEventEntity> { }
 export type EventResponse = z.infer<typeof zEventResponse>;
