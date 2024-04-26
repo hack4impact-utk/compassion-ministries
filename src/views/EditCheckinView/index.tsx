@@ -1,7 +1,9 @@
 'use client';
 import CheckInForm from '@/components/CheckInForm';
 import LoadingButton from '@/components/LoadingButton';
+import useSnackbar from '@/hooks/useSnackbar';
 import { EventResponse } from '@/types/dataModel/event';
+import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
 import { OrganizationResponse } from '@/types/dataModel/organization';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { CheckInFormData } from '@/types/forms/checkIn';
@@ -14,6 +16,7 @@ interface EditCheckInViewProps {
   event: EventResponse;
   volunteers: VolunteerResponse[];
   organizations: OrganizationResponse[];
+  eventVolunteer: EventVolunteerResponse;
 }
 
 export default function EditCheckInView(props: EditCheckInViewProps) {
@@ -27,10 +30,38 @@ export default function EditCheckInView(props: EditCheckInViewProps) {
   const [submitDisabled, setSubmitDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const { showSnackbar } = useSnackbar();
+
   setLoading;
   setValidationErrors;
 
-  const onEditCheckIn = async () => {};
+  // call the PUT API at src/app/api/events/check-in/[eventVolunteerId]
+  const onEditCheckIn = async () => {
+    try {
+      const res = await fetch(
+        `/api/events/check-in/${props.eventVolunteer._id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (res.status !== 200) {
+        showSnackbar('Failed to update checked in Volunteer', 'error');
+        return;
+      }
+
+      // redirect to the event page
+      window.location.href = `/events/${props.event._id}`;
+      showSnackbar('Check in updated successfully', 'success');
+    } catch (e) {
+      showSnackbar('Failed to update checked in Volunteer', 'error');
+      setLoading(false);
+    }
+  };
 
   return (
     <Grid2 container spacing={2} sx={{ mt: 2 }}>
