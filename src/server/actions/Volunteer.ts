@@ -438,7 +438,6 @@ export async function getVolunteersForEvent(
     volunteers = await VolunteerSchema.find({ _id: { $in: volunteerIds } })
       .populate('previousOrganization')
       .lean();
-    console.log(volunteers);
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }
