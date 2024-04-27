@@ -49,11 +49,11 @@ export async function updateEventVolunteer(
 
 export async function getEventVolunteer(
   id: string
-): Promise<EventVolunteerResponse | null> {
+): Promise<EventVolunteerResponse> {
   let ev: EventVolunteerResponse | null = null;
   try {
     await dbConnect();
-    ev = await EventVolunteerSchema.findById(id).populate('volunteer').lean();
+    ev = await EventVolunteerSchema.findById(id).lean();
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }

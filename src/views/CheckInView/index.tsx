@@ -195,7 +195,6 @@ export default function CheckInView(props: CheckInViewProps) {
           organizations={props.organizations}
           errors={validationErrors}
           setSubmitDisabled={setSubmitDisabled}
-          editCheckIn={true}
         />
       </Grid2>
       <Grid2 xs={12}>

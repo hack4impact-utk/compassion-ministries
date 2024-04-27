@@ -38,6 +38,7 @@ export default function EditCheckInView(props: EditCheckInViewProps) {
   // call the PUT API at src/app/api/events/check-in/[eventVolunteerId]
   const onEditCheckIn = async () => {
     try {
+      console.log('formData', formData);
       const res = await fetch(
         `/api/events/check-in/${props.eventVolunteer._id}`,
         {
@@ -48,8 +49,8 @@ export default function EditCheckInView(props: EditCheckInViewProps) {
           body: JSON.stringify(formData),
         }
       );
-
-      if (res.status !== 200) {
+      console.log(res);
+      if (res.status !== 204) {
         showSnackbar('Failed to update checked in Volunteer', 'error');
         return;
       }
