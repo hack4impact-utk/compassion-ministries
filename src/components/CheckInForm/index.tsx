@@ -56,6 +56,7 @@ interface Props {
   onChange: (checkInData: CheckInFormData) => void;
   errors?: ValidationErrors<CheckInFormData>;
   setSubmitDisabled?: (disabled: boolean) => void;
+  editCheckIn?: boolean;
 }
 
 type OrganizationOption = OrganizationResponse & { display?: string };
@@ -363,7 +364,11 @@ export default function CheckInForm(props: Props) {
             onNameChange(value, 'last');
             props.onChange({ ...props.checkInData, lastName: value });
           }}
-          disabled={licenseLoading || (hasVolunteer && !editingFields.lastName)}
+          disabled={
+            props.editCheckIn ||
+            licenseLoading ||
+            (hasVolunteer && !editingFields.lastName)
+          }
         />
 
         {/* First name */}
@@ -412,7 +417,9 @@ export default function CheckInForm(props: Props) {
             props.onChange({ ...props.checkInData, firstName: value });
           }}
           disabled={
-            licenseLoading || (hasVolunteer && !editingFields.firstName)
+            props.editCheckIn ||
+            licenseLoading ||
+            (hasVolunteer && !editingFields.firstName)
           }
         />
 
@@ -461,7 +468,11 @@ export default function CheckInForm(props: Props) {
               return;
             }
           }}
-          disabled={licenseLoading || (hasVolunteer && !editingFields.email)}
+          disabled={
+            props.editCheckIn ||
+            licenseLoading ||
+            (hasVolunteer && !editingFields.email)
+          }
         />
 
         {/* Phone Number */}
@@ -484,7 +495,9 @@ export default function CheckInForm(props: Props) {
             pattern: '[0-9]*',
           }}
           disabled={
-            licenseLoading || (hasVolunteer && !editingFields.phoneNumber)
+            props.editCheckIn ||
+            licenseLoading ||
+            (hasVolunteer && !editingFields.phoneNumber)
           }
           InputProps={{
             endAdornment: fieldEndAdornment('phoneNumber'),
@@ -503,7 +516,11 @@ export default function CheckInForm(props: Props) {
           error={!!props.errors?.address}
           helperText={props.errors?.address}
           fullWidth
-          disabled={licenseLoading || (hasVolunteer && !editingFields.address)}
+          disabled={
+            props.editCheckIn ||
+            licenseLoading ||
+            (hasVolunteer && !editingFields.address)
+          }
           InputProps={{
             endAdornment: fieldEndAdornment('address'),
             sx: { paddingRight: '9px' },

@@ -5,7 +5,6 @@ import useSnackbar from '@/hooks/useSnackbar';
 import { EventResponse } from '@/types/dataModel/event';
 import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
 import { OrganizationResponse } from '@/types/dataModel/organization';
-import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { CheckInFormData } from '@/types/forms/checkIn';
 import { ValidationErrors } from '@/utils/validation';
 import { Typography } from '@mui/material';
@@ -14,7 +13,6 @@ import { useState } from 'react';
 
 interface EditCheckInViewProps {
   event: EventResponse;
-  volunteers: VolunteerResponse[];
   organizations: OrganizationResponse[];
   eventVolunteer: EventVolunteerResponse;
 }
@@ -30,6 +28,19 @@ export default function EditCheckInView(props: EditCheckInViewProps) {
   const [submitDisabled, setSubmitDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // fill formData with the eventVolunteer.volunteer data
+  if (props.eventVolunteer.volunteer) {
+    setFormData({
+      ...formData,
+      firstName: props.eventVolunteer.volunteer.firstName,
+      lastName: props.eventVolunteer.volunteer.lastName,
+      email: props.eventVolunteer.volunteer.email,
+      phoneNumber: props.eventVolunteer.volunteer.phoneNumber,
+      address: props.eventVolunteer.volunteer.address,
+      volunteerId: props.eventVolunteer.volunteer._id,
+      role: props.eventVolunteer.role,
+    });
+  }
   const { showSnackbar } = useSnackbar();
 
   setLoading;
@@ -49,7 +60,6 @@ export default function EditCheckInView(props: EditCheckInViewProps) {
           body: JSON.stringify(formData),
         }
       );
-      console.log(res);
       if (res.status !== 204) {
         showSnackbar('Failed to update checked in Volunteer', 'error');
         return;
@@ -78,10 +88,11 @@ export default function EditCheckInView(props: EditCheckInViewProps) {
             setFormData(e);
           }}
           event={props.event}
-          volunteers={props.volunteers}
+          volunteers={[]}
           organizations={props.organizations}
           errors={validationErrors}
           setSubmitDisabled={setSubmitDisabled}
+          editCheckIn={true}
         />
       </Grid2>
       <Grid2 xs={12}>
