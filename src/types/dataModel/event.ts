@@ -4,9 +4,9 @@ import zBase, { zObjectId } from './base';
 import { EmailFormData } from '../forms/email';
 
 const zEmail = z.object({
-  subject: z.string(),
-  body: z.string(),
-  sentDate: z.string(),
+  subject: z.string().optional(),
+  body: z.string().min(1, "Required"),
+  sentDate: z.date(),
 })
 
 const zEvent = z.object({
@@ -17,7 +17,7 @@ const zEvent = z.object({
   endAt: z.coerce.date(),
   date: z.coerce.date().optional(),
   eventRoles: z.array(zRole),
-  emails: z.array(zEmail).optional(),
+  emails: z.array(zEmail),
   isRecurring: z.boolean(),
   parentEvent: zObjectId, // we'll never populate this
 });

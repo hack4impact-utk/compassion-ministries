@@ -37,7 +37,7 @@ const EventSchema = new Schema(
         },
       ],
     },
-    emailBodies: {
+    emails: {
       type: [
         {
           subject: {
@@ -46,14 +46,16 @@ const EventSchema = new Schema(
           },
           body: {
             type: String,
-            required: false,
+            required: true,
           },
           sentDate: {
-            type: String,
-            required: false,
+            type: Date,
+            required: true,
           }
         },
       ],
+      required: true,
+      default: [],
     },
     isRecurring: {
       type: Boolean,
