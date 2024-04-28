@@ -14,15 +14,13 @@ interface EventVolunteerListProps {
 }
 
 export default function EventVolunteerList({
-  eventVolunteers: initialEventVolunteers,
+  eventVolunteers,
 }: EventVolunteerListProps): React.ReactElement {
   const search = useSearch();
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedVolunteer, setSelectedVolunteer] =
     useState<EventVolunteerResponse | null>(null);
-
-  let eventVolunteers = initialEventVolunteers;
 
   if (search.length > 0) {
     eventVolunteers = eventVolunteers.filter((res) =>
@@ -44,14 +42,14 @@ export default function EventVolunteerList({
     setAnchorEl(null);
   };
 
-  const handleOption1Click = () => {
+  const handleViewVolunteer = () => {
     if (selectedVolunteer) {
       router.push(`/volunteers/${selectedVolunteer.volunteer._id}`);
     }
     handleMenuClose();
   };
 
-  const handleOption2Click = () => {
+  const handleEditVolunteerCheckIn = () => {
     if (selectedVolunteer) {
       router.push(`/events/check-in/${selectedVolunteer.volunteer._id}/edit`);
     }
@@ -88,13 +86,9 @@ export default function EventVolunteerList({
           </Typography>
         )}
       </List>
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleMenuClose}
-      >
-        <MenuItem onClick={handleOption1Click}>View Volunteer</MenuItem>
-        <MenuItem onClick={handleOption2Click}>
+      <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleMenuClose}>
+        <MenuItem onClick={handleViewVolunteer}>View Volunteer</MenuItem>
+        <MenuItem onClick={handleEditVolunteerCheckIn}>
           Edit Volunteer Check In
         </MenuItem>
       </Menu>
