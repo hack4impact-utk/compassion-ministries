@@ -32,7 +32,7 @@ export default function EditEventView({ event }: { event: EventResponse }) {
     // Clear the validation errors
     setValidationErrors(undefined);
 
-    // NOTE: Actual submitting does not work yet, waiting on a dependancy
+    // NOTE: Actual submitting does not work yet, waiting on a dependency
     try {
       const res = await fetch(`/api/events/${event._id}`, {
         method: 'PUT',
