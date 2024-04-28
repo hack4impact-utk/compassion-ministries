@@ -1,5 +1,4 @@
-import { Typography } from '@mui/material';
-
+import { redirect } from 'next/navigation';
 export default async function Home() {
-  return <Typography variant="h3">Home Page</Typography>;
+  redirect('/events');
 }
