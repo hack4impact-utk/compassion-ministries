@@ -53,7 +53,7 @@ export async function getEventVolunteer(
   let ev: EventVolunteerResponse | null = null;
   try {
     await dbConnect();
-    ev = await EventVolunteerSchema.findById(id).lean();
+    ev = await EventVolunteerSchema.findById(id).populate('volunteer').lean();
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }
