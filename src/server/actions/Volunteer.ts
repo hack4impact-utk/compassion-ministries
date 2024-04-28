@@ -424,22 +424,3 @@ export async function inititateBackgroundCheck(volunteerId: string) {
     throw new CMError(CMErrorType.InternalError);
   }
 }
-
-export async function getVolunteersForEvent(
-  eventId: string
-): Promise<VolunteerResponse[]> {
-  let volunteers: VolunteerResponse[] = []; // Initialize volunteers as an empty array
-  try {
-    await dbConnect();
-    const eventVolunteers = await EventVolunteerSchema.find({ event: eventId });
-
-    const volunteerIds = eventVolunteers.map((ev) => ev.volunteer);
-
-    volunteers = await VolunteerSchema.find({ _id: { $in: volunteerIds } })
-      .populate('previousOrganization')
-      .lean();
-  } catch (error) {
-    throw new CMError(CMErrorType.InternalError);
-  }
-  return volunteers;
-}
