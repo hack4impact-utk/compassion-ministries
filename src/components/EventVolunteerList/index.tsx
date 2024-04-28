@@ -19,7 +19,7 @@ export default function EventVolunteerList({
   const search = useSearch();
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedVolunteer, setSelectedVolunteer] =
+  const [eventVolunteer, setEventVolunteer] =
     useState<EventVolunteerResponse | null>(null);
 
   if (search.length > 0) {
@@ -34,7 +34,7 @@ export default function EventVolunteerList({
     volunteer: EventVolunteerResponse,
     event: React.MouseEvent<HTMLElement>
   ) => {
-    setSelectedVolunteer(volunteer);
+    setEventVolunteer(volunteer);
     setAnchorEl(event.currentTarget);
   };
 
@@ -43,15 +43,15 @@ export default function EventVolunteerList({
   };
 
   const handleViewVolunteer = () => {
-    if (selectedVolunteer) {
-      router.push(`/volunteers/${selectedVolunteer.volunteer._id}`);
+    if (eventVolunteer) {
+      router.push(`/volunteers/${eventVolunteer.volunteer._id}`);
     }
     handleMenuClose();
   };
 
   const handleEditVolunteerCheckIn = () => {
-    if (selectedVolunteer) {
-      router.push(`/events/check-in/${selectedVolunteer.volunteer._id}/edit`);
+    if (eventVolunteer) {
+      router.push(`/events/check-in/${eventVolunteer._id}/edit`);
     }
     handleMenuClose();
   };
