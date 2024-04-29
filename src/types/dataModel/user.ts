@@ -14,8 +14,8 @@ export const zUserResponse = zUserEntity;
 export const zAddAdminRequest = z.array(zObjectId);
 
 export const zUpdateAllowedUsersRequest = z.object({
-  userEmails: z.array(z.string()),
-  adminIds: z.array(zObjectId),
+  userEmails: z.array(z.string().email()).optional(),
+  adminIds: z.array(zObjectId).optional(),
 })
 
 export interface User extends z.infer<typeof zUser> { }

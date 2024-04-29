@@ -14,7 +14,7 @@ export async function PUT(request: NextRequest) {
       throw new CMError(CMErrorType.BadValue, 'Request')
     }
 
-    updateAllowedUsers(req)
+    updateAllowedUsers(validationResult.data)
     return new NextResponse(undefined, { status: 204 })
   } catch (e) {
     return CMErrorResponse(e)

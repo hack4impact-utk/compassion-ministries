@@ -54,8 +54,14 @@ export async function updateAllowedUsers(req: UpdateAllowedUsersRequest) {
   try {
     await dbConnect();
 
-    await addAdmins(req.adminIds)
-    await Settings.updateOne({ _id: (await getSettings())._id }, { allowedEmails: req.userEmails })
+    if (req.userEmails) {
+      const currentSettings = await getSettings()
+      const newAllowedEmails = currentSettings.allowedEmails.concat(req.userEmails)
+      await Settings.updateOne({ _id: (await getSettings())._id }, { allowedEmails: newAllowedEmails })
+    }
+    if (req.adminIds) {
+      await addAdmins(req.adminIds)
+    }
   } catch (e) {
     throw new CMError(CMErrorType.InternalError)
   }
