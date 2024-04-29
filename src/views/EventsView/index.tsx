@@ -35,16 +35,14 @@ export default function EventsPage({events}: EventsViewProps) {
       );
     }
 
-    //Set Showing Events by Tabs
-    let upcomingEvents: EventResponse[];
-    let pastEvents: EventResponse[];
-
+    //Check Days
     const today = dayjs().startOf('day').toDate();
     const eventsBeforeToday = events.filter(event => dayjs(event.date).isBefore(today));
     const eventsTodayAndAfter = events.filter(event => dayjs(event.date).isSame(today, 'day') || dayjs(event.date).isAfter(today));
-        
-    upcomingEvents = sortEventsByDateAsc(eventsTodayAndAfter);
-    pastEvents = sortEventsByDateDesc(eventsBeforeToday);
+    
+    //Set Showing Events by Tabs
+    const upcomingEvents = sortEventsByDateAsc(eventsTodayAndAfter);
+    const pastEvents = sortEventsByDateDesc(eventsBeforeToday);
 
     //Change Tabs
     const [tabIndex, setTabIndex] = React.useState(0);
