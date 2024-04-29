@@ -54,11 +54,15 @@ export async function updateAllowedUsers(req: UpdateAllowedUsersRequest) {
   try {
     await dbConnect();
 
+    // if userEmails is defined, append new unique emails to array
     if (req.userEmails) {
       const currentSettings = await getSettings()
-      const newAllowedEmails = currentSettings.allowedEmails.concat(req.userEmails)
+      // Concatenate values, then cast to set and back to remove duplicate entries
+      const newAllowedEmails = [...new Set(currentSettings.allowedEmails.concat(req.userEmails))]
+      // Replace old arr with new arr
       await Settings.updateOne({ _id: (await getSettings())._id }, { allowedEmails: newAllowedEmails })
     }
+    // if adminIds is defined, flag users as admins
     if (req.adminIds) {
       await addAdmins(req.adminIds)
     }
