@@ -11,7 +11,7 @@ const zDayJs = z.custom<Dayjs>((val) => val instanceof dayjs, 'Invalid date');
 
 export const zEventFormData = z
   .object({
-    name: z.string().nonempty('Required'),
+    name: z.string().min(1, 'Required'),
     description: z.string().optional(),
     eventLocation: z.string().optional(),
     date: zDayJs,
