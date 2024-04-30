@@ -10,6 +10,7 @@ import { CheckInFormData, zCheckInFormData } from '@/types/forms/checkIn';
 import { ValidationErrors } from '@/utils/validation';
 import { Typography } from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 interface EditCheckInViewProps {
@@ -29,6 +30,7 @@ export default function EditCheckInView(props: EditCheckInViewProps) {
   const [submitDisabled, setSubmitDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
   const validate = useValidation(zCheckInFormData);
+  const router = useRouter();
 
   // fill formData with the existing data from eventvolunteer
   useEffect(() => {
@@ -79,7 +81,8 @@ export default function EditCheckInView(props: EditCheckInViewProps) {
       }
 
       // redirect to the event page
-      window.location.href = `/events/${props.event._id}`;
+      router.push(`/events/${props.event._id}`);
+      router.refresh();
       showSnackbar('Check in updated successfully', 'success');
     } catch (e) {
       showSnackbar('Failed to update checked in Volunteer', 'error');
