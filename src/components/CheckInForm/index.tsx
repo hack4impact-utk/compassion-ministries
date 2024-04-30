@@ -185,6 +185,11 @@ export default function CheckInForm(props: Props) {
             lastNameRegex.test(vol.lastName)
         )
       );
+      autofill({
+        firstName: value,
+        lastName: props.checkInData.lastName,
+        email: props.checkInData.email || '',
+      });
     } else {
       // if both name text boxes are cleared, it should go back to displaying all options
       if (!value && !props.checkInData.firstName) {
@@ -201,6 +206,12 @@ export default function CheckInForm(props: Props) {
             lastNameRegex.test(vol.lastName)
         )
       );
+
+      autofill({
+        firstName: props.checkInData.firstName,
+        lastName: value,
+        email: props.checkInData.email || '',
+      });
     }
   }
 
