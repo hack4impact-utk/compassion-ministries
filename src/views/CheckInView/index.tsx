@@ -64,7 +64,6 @@ export default function CheckInView(props: CheckInViewProps) {
     if (validationResult) {
       setValidationErrors(validationResult);
       setLoading(false);
-      showSnackbar("Role verification failed. Check in again to verify volunteer");
       return;
     }
 
@@ -106,7 +105,6 @@ export default function CheckInView(props: CheckInViewProps) {
       }
     }
 
-
     let verifier: string | null = null;
 
     // if:
@@ -124,6 +122,9 @@ export default function CheckInView(props: CheckInViewProps) {
       // return if not confirmed
       if (!verifier) {
         setLoading(false);
+        showSnackbar(
+          'Role verification failed. Check in again to verify volunteer'
+        );
         return;
       }
     }
