@@ -8,6 +8,7 @@ import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
 import { EmailFormData } from '@/types/forms/email';
 import useSnackbar from '@/hooks/useSnackbar';
 import { useConfirm } from 'material-ui-confirm';
+import LoadingButton from '../LoadingButton';
 
 interface EmailEditorProps {
   event: EventResponse;
@@ -28,6 +29,7 @@ export default function EmailEditor({
   const confirm = useConfirm();
   const [value, setValue] = useState(formData.emailbody);
   const [subject, setSubject] = useState(formData.subject);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubjectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSubject(e.target.value);
@@ -40,6 +42,7 @@ export default function EmailEditor({
   };
 
   const handleSendEmail = async () => {
+    setIsLoading(true);
     try {
       await confirm({
         title: 'Are you sure?',
@@ -48,6 +51,7 @@ export default function EmailEditor({
         cancellationText: 'No',
       });
     } catch {
+      setIsLoading(false);
       return;
     }
 
@@ -70,6 +74,8 @@ export default function EmailEditor({
     } catch (error) {
       console.error(error);
       showSnackbar('An error occurred. Please try again.', 'error');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -94,14 +100,15 @@ export default function EmailEditor({
       </Box>
 
       {/* Button to send email */}
-      <Button
+      <LoadingButton
         variant="contained"
         fullWidth
         sx={{ my: 2 }}
         onClick={handleSendEmail}
+        loading={isLoading}
       >
         Send Email
-      </Button>
+      </LoadingButton>
     </Box>
   );
 }

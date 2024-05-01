@@ -1,4 +1,6 @@
 'use client';
+import {useState} from 'react';
+import LoadingButton from '@/components/LoadingButton';
 import Volunteer from '@/components/volunteers/Volunteer';
 import useDeleteConfirmation from '@/hooks/useDeleteConfirmation';
 import useSnackbar from '@/hooks/useSnackbar';
@@ -21,13 +23,13 @@ export default function VolunteerView({
     resourceName: 'volunteer',
     confirmationKeyword: `${volunteer.firstName} ${volunteer.lastName}`,
   });
-
+  const [isLoading, setIsLoading] = useState(false);
   const onDelete = async () => {
     try {
       if (!(await confirmDelete())) {
         return;
       }
-
+      setIsLoading(true);
       const res = await fetch(`/api/volunteers/${volunteer._id}`, {
         method: 'DELETE',
       });
@@ -44,6 +46,8 @@ export default function VolunteerView({
     } catch (e) {
       showSnackbar('Failed to delete volunteer', 'error');
       console.error(e);
+    } finally{
+      setIsLoading(false);
     }
   };
   return (
@@ -55,9 +59,13 @@ export default function VolunteerView({
             Edit
           </Button>
         </Link>
-        <Button onClick={onDelete} variant="contained" color="error">
+        <LoadingButton 
+          loading={isLoading} 
+          onClick={onDelete} 
+          variant="contained" 
+          color="error">
           Delete
-        </Button>
+        </LoadingButton>
       </Box>
     </>
   );
