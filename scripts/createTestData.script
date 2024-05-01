@@ -96,7 +96,7 @@ db.volunteers.insertMany([
     "_id": volunteerId1,
     "firstName": "John",
     "lastName": "Doe",
-    "email": "john.doe@example.com",
+    "body": "john.doe@example.com",
     "phoneNumber": "1234567890",
     "address": "123 Main St, Anytown, USA",
     "previousRole": "Medical",
@@ -120,7 +120,7 @@ db.volunteers.insertMany([
     "_id": volunteerId2,
     "firstName": "Jane",
     "lastName": "Smith",
-    "email": "jane.smith@example.com",
+    "body": "jane.smith@example.com",
     "phoneNumber": "2345678901",
     "address": "456 Elm St, Sometown, USA",
     "previousRole": "Food",
@@ -138,7 +138,7 @@ db.volunteers.insertMany([
     "_id": volunteerId3,
     "firstName": "Alice",
     "lastName": "Johnson",
-    "email": "alice.johnson@example.com",
+    "body": "alice.johnson@example.com",
     "phoneNumber": "3456789012",
     "address": "789 Oak St, Anycity, USA",
     "backgroundCheck": {
@@ -154,7 +154,7 @@ db.volunteers.insertMany([
     "_id": volunteerId4,
     "firstName": "Michael",
     "lastName": "Brown",
-    "email": "michael.brown@example.com",
+    "body": "michael.brown@example.com",
     "phoneNumber": "4567890123",
     "address": "101 Pine St, Mytown, USA",
     "previousRole": "Save the Babies",
@@ -182,7 +182,7 @@ db.volunteers.insertMany([
     "_id": volunteerId5,
     "firstName": "Emily",
     "lastName": "White",
-    "email": "emily.white@example.com",
+    "body": "emily.white@example.com",
     "phoneNumber": "5678901234",
     "address": "202 Cherry St, Yourtown, USA",
     "backgroundCheck": {
@@ -204,7 +204,7 @@ db.volunteers.insertMany([
     "_id": volunteerId6,
     "firstName": "David",
     "lastName": "Harris",
-    "email": "david.harris@example.com",
+    "body": "david.harris@example.com",
     "phoneNumber": "6789012345",
     "address": "303 Birch St, Ourtown, USA",
     "previousRole": "Dental",
@@ -227,7 +227,7 @@ db.volunteers.insertMany([
     "_id": volunteerId7,
     "firstName": "Olivia",
     "lastName": "Lewis",
-    "email": "olivia.lewis@example.com",
+    "body": "olivia.lewis@example.com",
     "phoneNumber": "7890123456",
     "address": "404 Maple St, Webtown, USA",
     "previousRole": "Food",
@@ -245,7 +245,7 @@ db.volunteers.insertMany([
     "_id": volunteerId8,
     "firstName": "Ethan",
     "lastName": "Clark",
-    "email": "ethan.clark@example.com",
+    "body": "ethan.clark@example.com",
     "phoneNumber": "8901234567",
     "address": "505 Walnut St, Cloudtown, USA",
     "previousRole": "Save the Babies",
@@ -269,7 +269,7 @@ db.volunteers.insertMany([
     "_id": volunteerId9,
     "firstName": "Sophia",
     "lastName": "Martinez",
-    "email": "sophia.martinez@example.com",
+    "body": "sophia.martinez@example.com",
     "phoneNumber": "9012345678",
     "address": "606 Cedar St, Rivertown, USA",
     "backgroundCheck": {
@@ -291,7 +291,7 @@ db.volunteers.insertMany([
     "_id": volunteerId10,
     "firstName": "Liam",
     "lastName": "Sanchez",
-    "email": "liam.sanchez@example.com",
+    "body": "liam.sanchez@example.com",
     "phoneNumber": "0123456789",
     "address": "707 Spruce St, Laketown, USA",
     "previousRole": "Food",
@@ -309,7 +309,7 @@ db.volunteers.insertMany([
     "_id": volunteerId11,
     "firstName": "Charlotte",
     "lastName": "Rodriguez",
-    "email": "charlotte.rodriguez@example.com",
+    "body": "charlotte.rodriguez@example.com",
     "phoneNumber": "1234509876",
     "address": "808 Palm St, Hilltown, USA",
     "backgroundCheck": {
@@ -325,7 +325,7 @@ db.volunteers.insertMany([
     "_id": volunteerId12,
     "firstName": "Isabella",
     "lastName": "Garcia",
-    "email": "isabella.garcia@example.com",
+    "body": "isabella.garcia@example.com",
     "phoneNumber": "1987654321",
     "address": "909 Willow St, Mountainview, USA",
     "previousRole": "Medical",
@@ -343,7 +343,7 @@ db.volunteers.insertMany([
     "_id": volunteerId13,
     "firstName": "Noah",
     "lastName": "Martinez",
-    "email": "noah.martinez@example.com",
+    "body": "noah.martinez@example.com",
     "phoneNumber": "1897654321",
     "address": "1010 Redwood St, Silicon Valley, USA",
     "previousRole": "Dental",
@@ -367,7 +367,7 @@ db.volunteers.insertMany([
     "_id": volunteerId14,
     "firstName": "Mia",
     "lastName": "Lee",
-    "email": "mia.lee@example.com",
+    "body": "mia.lee@example.com",
     "phoneNumber": "1787654321",
     "address": "1111 Pine St, Seaside, USA",
     "previousRole": "Food",
@@ -380,7 +380,7 @@ db.volunteers.insertMany([
     "_id": volunteerId15,
     "firstName": "Aiden",
     "lastName": "Kim",
-    "email": "aiden.kim@example.com",
+    "body": "aiden.kim@example.com",
     "phoneNumber": "1677654321",
     "address": "1212 Maple Drive, Lakeside, USA",
     "previousRole": "Save the Babies",
@@ -400,7 +400,7 @@ db.volunteers.insertMany([
     "_id": volunteerId16,
     "firstName": "Ava",
     "lastName": "Wilson",
-    "email": "ava.wilson@example.com",
+    "body": "ava.wilson@example.com",
     "phoneNumber": "1567654321",
     "address": "1313 Birch Circle, Highland, USA",
     "previousRole": "Food",
@@ -424,7 +424,7 @@ db.volunteers.insertMany([
     "_id": volunteerId17,
     "firstName": "Oliver",
     "lastName": "Smith",
-    "email": "oliver.smith@example.com",
+    "body": "oliver.smith@example.com",
     "phoneNumber": "1457654321",
     "address": "1414 Cedar Ave, Summit, USA",
     "previousRole": "Dental",
@@ -453,7 +453,7 @@ db.volunteers.insertMany([
     "_id": volunteerId18,
     "firstName": "Sophie",
     "lastName": "Nguyen",
-    "email": "sophie.nguyen@example.com",
+    "body": "sophie.nguyen@example.com",
     "phoneNumber": "1347654321",
     "address": "1515 Oak St, Meadowview, USA",
     "previousRole": "Food",
@@ -470,7 +470,7 @@ db.volunteers.insertMany([
     "_id": volunteerId19,
     "firstName": "William",
     "lastName": "Thompson",
-    "email": "william.thompson@example.com",
+    "body": "william.thompson@example.com",
     "phoneNumber": "1237654321",
     "address": "1616 Willow Way, Maplewood, USA",
     "previousOrganization": organizationId6,
@@ -493,7 +493,7 @@ db.volunteers.insertMany([
     "_id": volunteerId20,
     "firstName": "Zoe",
     "lastName": "Anderson",
-    "email": "zoe.anderson@example.com",
+    "body": "zoe.anderson@example.com",
     "phoneNumber": "1127654321",
     "address": "1717 Palm Road, Greenfield, USA",
     "previousRole": "Food",
@@ -511,7 +511,7 @@ db.volunteers.insertMany([
     "_id": volunteerId21,
     "firstName": "Lucas",
     "lastName": "Hernandez",
-    "email": "lucas.hernandez@example.com",
+    "body": "lucas.hernandez@example.com",
     "phoneNumber": "1017654321",
     "address": "1818 Cherry St, Pinecrest, USA",
     "previousRole": "Dental",
@@ -535,7 +535,7 @@ db.volunteers.insertMany([
     "_id": volunteerId22,
     "firstName": "Ethan",
     "lastName": "Brown",
-    "email": "ethan.brown@example.com",
+    "body": "ethan.brown@example.com",
     "phoneNumber": "2012345678",
     "address": "1919 Maple Avenue, Springtown, USA",
     "previousRole": "Food",
@@ -552,7 +552,7 @@ db.volunteers.insertMany([
     "_id": volunteerId23,
     "firstName": "Emily",
     "lastName": "Davis",
-    "email": "emily.davis@example.com",
+    "body": "emily.davis@example.com",
     "phoneNumber": "2023456789",
     "address": "2020 Birchwood Road, Lakeville, USA",
     "previousRole": "Dental",
@@ -576,7 +576,7 @@ db.volunteers.insertMany([
     "_id": volunteerId24,
     "firstName": "Olivia",
     "lastName": "Miller",
-    "email": "olivia.miller@example.com",
+    "body": "olivia.miller@example.com",
     "phoneNumber": "2034567890",
     "address": "2121 Cedar Lane, Ridgewood, USA",
     "previousRole": "Food",
@@ -595,7 +595,7 @@ db.volunteers.insertMany([
     "_id": volunteerId25,
     "firstName": "James",
     "lastName": "Taylor",
-    "email": "james.taylor@example.com",
+    "body": "james.taylor@example.com",
     "phoneNumber": "2045678901",
     "address": "2222 Pine Street, Westview, USA",
     "previousRole": "Save the Babies",
@@ -619,7 +619,7 @@ db.volunteers.insertMany([
     "_id": volunteerId26,
     "firstName": "Grace",
     "lastName": "Wilson",
-    "email": "grace.wilson@example.com",
+    "body": "grace.wilson@example.com",
     "phoneNumber": "2056789012",
     "address": "2333 Elm Street, Eastville, USA",
     "previousRole": "Medical",
@@ -639,7 +639,7 @@ db.volunteers.insertMany([
     "_id": volunteerId27,
     "firstName": "Jackson",
     "lastName": "Martinez",
-    "email": "jackson.martinez@example.com",
+    "body": "jackson.martinez@example.com",
     "phoneNumber": "2067890123",
     "address": "2444 Oak Avenue, Northtown, USA",
     "previousRole": "Food",
@@ -656,7 +656,7 @@ db.volunteers.insertMany([
     "_id": volunteerId28,
     "firstName": "Amelia",
     "lastName": "Hernandez",
-    "email": "amelia.hernandez@example.com",
+    "body": "amelia.hernandez@example.com",
     "phoneNumber": "2078901234",
     "address": "2555 Maple Court, Southtown, USA",
     "previousRole": "Food",
@@ -674,7 +674,7 @@ db.volunteers.insertMany([
     "_id": volunteerId29,
     "firstName": "Mia",
     "lastName": "Garcia",
-    "email": "mia.garcia@example.com",
+    "body": "mia.garcia@example.com",
     "phoneNumber": "2089012345",
     "address": "2666 Walnut Street, Rivertown, USA",
     "previousRole": "Save the Babies",
@@ -697,7 +697,7 @@ db.volunteers.insertMany([
     "_id": volunteerId30,
     "firstName": "Aiden",
     "lastName": "Robinson",
-    "email": "aiden.robinson@example.com",
+    "body": "aiden.robinson@example.com",
     "phoneNumber": "2090123456",
     "address": "2777 Birchwood Park, Creekview, USA",
     "previousRole": "Food",
@@ -715,7 +715,7 @@ db.volunteers.insertMany([
     "_id": volunteerId31,
     "firstName": "Sophia",
     "lastName": "Lee",
-    "email": "sophia.lee@example.com",
+    "body": "sophia.lee@example.com",
     "phoneNumber": "2101234567",
     "address": "2888 Cedarwood Road, Hillside, USA",
     "previousRole": "Food",
@@ -749,12 +749,12 @@ db.events.insertMany([
     "eventRoles": ["Dental", "Food"],
     "emails": [
       {
-        "email": "I want to extend my heartfelt gratitude to each and every one of you for your dedication and hard work at the Feast of Sharing. Your efforts helped serve over 2,000 meals to members of our community in need, bringing warmth and joy during this festive season. Your kindness and generosity truly made a significant difference, and we are deeply thankful for your invaluable support.\nWarm regards,\nJimmy Shoelace",
+        "body": "I want to extend my heartfelt gratitude to each and every one of you for your dedication and hard work at the Feast of Sharing. Your efforts helped serve over 2,000 meals to members of our community in need, bringing warmth and joy during this festive season. Your kindness and generosity truly made a significant difference, and we are deeply thankful for your invaluable support.\nWarm regards,\nJimmy Shoelace",
         "subject": "Feast of Sharing Thanks",
         "sentDate": new Date(ISODate().getTime())
       },
       {
-        "email": "Dear Volunteer,\n\nWe hope this message finds you well. We're excited to announce that we will be hosting another heartwarming event, the 'Community Unity Dinner,' in just two weeks! The dinner will take place at the Sunshine Community Center located at 123 Main Street next Saturday, starting at 5:00 PM. We greatly appreciate your previous support and hope to see you there to make this event a success once again.\n\nBest regards,\nEmily Waterbottle",
+        "body": "Dear Volunteer,\n\nWe hope this message finds you well. We're excited to announce that we will be hosting another heartwarming event, the 'Community Unity Dinner,' in just two weeks! The dinner will take place at the Sunshine Community Center located at 123 Main Street next Saturday, starting at 5:00 PM. We greatly appreciate your previous support and hope to see you there to make this event a success once again.\n\nBest regards,\nEmily Waterbottle",
         "subject": "Feast of Sharing Follow-up event",
         "sentDate": new Date(ISODate().getTime())
       }
@@ -772,7 +772,7 @@ db.events.insertMany([
     "eventRoles": ["Medical", "Dental", "Food", "Save the Babies"],
     "emails": [
       {
-        "email": "Dear Volunteers,\n\nI wanted to extend a heartfelt thank you for your invaluable contributions at the Health for All Fair. Your dedication and hard work helped provide vital healthcare services to over 500 community members in need. Your impact truly embodies the spirit of compassion and service. Thank you again for your commitment to making a difference in our community.\nWarm regards,\nHarry Pencil",
+        "body": "Dear Volunteers,\n\nI wanted to extend a heartfelt thank you for your invaluable contributions at the Health for All Fair. Your dedication and hard work helped provide vital healthcare services to over 500 community members in need. Your impact truly embodies the spirit of compassion and service. Thank you again for your commitment to making a difference in our community.\nWarm regards,\nHarry Pencil",
         "subject": "Health for All Fair Recap",
         "sentDate": new Date(ISODate().getTime())
       }
@@ -790,7 +790,7 @@ db.events.insertMany([
     "eventRoles": ["Save the Babies", "Medical", "Food"],
     "emails": [
       {
-        "email": "Dear Volunteers,\n\nI hope this email finds you well. I wanted to take a moment to express my heartfelt gratitude for your invaluable support and dedication during our recent Community Dental Day. Your efforts truly made a significant impact on our community, and we couldn't have achieved such success without your generosity.\n\nThroughout the day, your unwavering commitment to providing dental care to those in need was truly inspiring. Your kindness and compassion shone brightly as you worked tirelessly to ensure that every individual received the attention and care they deserved.\n\nThanks to your hard work, we were able to provide dental services to over 200 individuals, many of whom would otherwise have struggled to access essential dental care. Your willingness to give your time and expertise not only improved the oral health of our community members but also left a lasting impression on everyone you interacted with.\n\nThe smiles and gratitude we witnessed from those who benefited from your services serve as a testament to the profound impact of your volunteer efforts. Your selflessness has undoubtedly made a difference in the lives of so many, and for that, we are incredibly grateful.\n\nOnce again, thank you for your unwavering dedication and commitment to serving our community. Your kindness and generosity have touched the hearts of many and have made Community Dental Day a resounding success.\n\nWarm regards,\n\nSally Horseshoe\nVolunteer Coordinator\nsally.horseshoe@horselovers.com",
+        "body": "Dear Volunteers,\n\nI hope this email finds you well. I wanted to take a moment to express my heartfelt gratitude for your invaluable support and dedication during our recent Community Dental Day. Your efforts truly made a significant impact on our community, and we couldn't have achieved such success without your generosity.\n\nThroughout the day, your unwavering commitment to providing dental care to those in need was truly inspiring. Your kindness and compassion shone brightly as you worked tirelessly to ensure that every individual received the attention and care they deserved.\n\nThanks to your hard work, we were able to provide dental services to over 200 individuals, many of whom would otherwise have struggled to access essential dental care. Your willingness to give your time and expertise not only improved the oral health of our community members but also left a lasting impression on everyone you interacted with.\n\nThe smiles and gratitude we witnessed from those who benefited from your services serve as a testament to the profound impact of your volunteer efforts. Your selflessness has undoubtedly made a difference in the lives of so many, and for that, we are incredibly grateful.\n\nOnce again, thank you for your unwavering dedication and commitment to serving our community. Your kindness and generosity have touched the hearts of many and have made Community Dental Day a resounding success.\n\nWarm regards,\n\nSally Horseshoe\nVolunteer Coordinator\nsally.horseshoe@horselovers.com",
         "subject": "Community Dental Day Recap",
         "sentDate": new Date(ISODate().getTime())
       }
@@ -808,12 +808,12 @@ db.events.insertMany([
     "eventRoles": ["Food"],
     "emails": [
       {
-        "email": "Dear Volunteers,\n\nThank you immensely for your dedication and hard work at the Nutrition and Wellness Drive. Your efforts have directly impacted over 500 families in our community, ensuring access to essential nutrition and wellness resources. Your kindness and commitment have truly made a significant difference.\n\nWarm regards,\nJoanne 'The animal' Lewis",
+        "body": "Dear Volunteers,\n\nThank you immensely for your dedication and hard work at the Nutrition and Wellness Drive. Your efforts have directly impacted over 500 families in our community, ensuring access to essential nutrition and wellness resources. Your kindness and commitment have truly made a significant difference.\n\nWarm regards,\nJoanne 'The animal' Lewis",
         "subject": "Nutrition and Wellness Drive Impact",
         "sentDate": new Date(ISODate().getTime())
       },
       {
-        "email": "Dear Volunteers,\n\nWe hope this email finds you well and filled with the same enthusiasm for community wellness as before!\n\nWe wanted to extend our heartfelt gratitude for your invaluable support during the recent Nutrition and Wellness Drive event. Your dedication and hard work truly made a significant impact on our community's health and well-being.\n\nWe are excited to inform you that we will be hosting another exciting event, the 'Healthy Living Fair,' in just two weeks' time! Details for the event are as follows:\n\nEvent Name: Healthy Living Fair\nDate: Saturday\nTime: 10:00 AM - 2:00 PM\nLocation: Greenfield Community Center, 123 Main Street, Greenfield, USA\n\nWe would be thrilled if you could join us once again to continue our mission of promoting nutrition and wellness within our community. Your passion and commitment are instrumental in making these events successful, and we truly appreciate your ongoing support.\n\nPlease let us know if you are available to volunteer for the Healthy Living Fair. Your participation will undoubtedly contribute to making a positive impact on the lives of many.\n\nLooking forward to hearing from you soon!\n\nBest regards,\nJackson Mississippi",
+        "body": "Dear Volunteers,\n\nWe hope this email finds you well and filled with the same enthusiasm for community wellness as before!\n\nWe wanted to extend our heartfelt gratitude for your invaluable support during the recent Nutrition and Wellness Drive event. Your dedication and hard work truly made a significant impact on our community's health and well-being.\n\nWe are excited to inform you that we will be hosting another exciting event, the 'Healthy Living Fair,' in just two weeks' time! Details for the event are as follows:\n\nEvent Name: Healthy Living Fair\nDate: Saturday\nTime: 10:00 AM - 2:00 PM\nLocation: Greenfield Community Center, 123 Main Street, Greenfield, USA\n\nWe would be thrilled if you could join us once again to continue our mission of promoting nutrition and wellness within our community. Your passion and commitment are instrumental in making these events successful, and we truly appreciate your ongoing support.\n\nPlease let us know if you are available to volunteer for the Healthy Living Fair. Your participation will undoubtedly contribute to making a positive impact on the lives of many.\n\nLooking forward to hearing from you soon!\n\nBest regards,\nJackson Mississippi",
         "subject": "Elm Drive Volunteering Event",
         "sentDate": new Date(ISODate().getTime())
       }
@@ -831,7 +831,7 @@ db.events.insertMany([
     "eventRoles": ["Medical", "Save the Babies"],
     "emails": [
       {
-        "email": "Dear Volunteer,\n\nI hope this message finds you well. On behalf of the entire Hope Medical Camp team, I want to express our deepest gratitude for your exceptional dedication and hard work during the recent medical camp.\n\nYour selfless contributions played a pivotal role in making the event a resounding success. Your unwavering commitment to providing quality healthcare services to the community truly made a significant impact. Together, we were able to serve [number] patients, offering them vital medical assistance and support.\n\nThe positive feedback from the attendees has been overwhelming, highlighting the genuine care and compassion you demonstrated in every interaction. Your willingness to go above and beyond has not only improved the health and well-being of those we served but has also left a lasting impression on the community.\n\nThe success of the Hope Medical Camp is a testament to the collective effort of individuals like you, who understand the importance of giving back and making a difference in the lives of others. Your time and skills have made a real impact on the health of our community, and we are truly grateful for your invaluable contribution.\n\nOnce again, thank you for your hard work, dedication, and the positive energy you brought to the Hope Medical Camp. We look forward to continuing our mission together and creating a healthier, happier community.\n\nWarm regards,\n\nAshley Ashlingtonsbergerton\nChief Medicine Holder\nHope Medical Camp Team",
+        "body": "Dear Volunteer,\n\nI hope this message finds you well. On behalf of the entire Hope Medical Camp team, I want to express our deepest gratitude for your exceptional dedication and hard work during the recent medical camp.\n\nYour selfless contributions played a pivotal role in making the event a resounding success. Your unwavering commitment to providing quality healthcare services to the community truly made a significant impact. Together, we were able to serve [number] patients, offering them vital medical assistance and support.\n\nThe positive feedback from the attendees has been overwhelming, highlighting the genuine care and compassion you demonstrated in every interaction. Your willingness to go above and beyond has not only improved the health and well-being of those we served but has also left a lasting impression on the community.\n\nThe success of the Hope Medical Camp is a testament to the collective effort of individuals like you, who understand the importance of giving back and making a difference in the lives of others. Your time and skills have made a real impact on the health of our community, and we are truly grateful for your invaluable contribution.\n\nOnce again, thank you for your hard work, dedication, and the positive energy you brought to the Hope Medical Camp. We look forward to continuing our mission together and creating a healthier, happier community.\n\nWarm regards,\n\nAshley Ashlingtonsbergerton\nChief Medicine Holder\nHope Medical Camp Team",
         "subject": "Hope Medical Camp Shoutout",
         "sentDate": new Date(ISODate().getTime())
       }
@@ -849,7 +849,7 @@ db.events.insertMany([
     "eventRoles": ["Food", "Dental"],
     "emails": [
       {
-        "email": "Dear Volunteer,\n\nI want to express my sincere gratitude for your invaluable contribution at the Food for Thought Evening. Your dedication and hard work significantly enhanced the event, ensuring its success. Thanks to your efforts, we were able to serve over 500 meals, raising $10,000 for local food banks. Your commitment truly made a difference in the lives of those in need.\n\nWarm regards,\nDr. E. Mail",
+        "body": "Dear Volunteer,\n\nI want to express my sincere gratitude for your invaluable contribution at the Food for Thought Evening. Your dedication and hard work significantly enhanced the event, ensuring its success. Thanks to your efforts, we were able to serve over 500 meals, raising $10,000 for local food banks. Your commitment truly made a difference in the lives of those in need.\n\nWarm regards,\nDr. E. Mail",
         "subject": "Evening Thoughts About Food For Thought Evening",
         "sentDate": new Date(ISODate().getTime())
       }
@@ -867,7 +867,7 @@ db.events.insertMany([
     "eventRoles": ["Dental", "Medical"],
     "emails": [
       {
-        "email": "Dear Volunteers,\n\nI wanted to extend my heartfelt gratitude to each and every one of you for your invaluable dedication and hard work during the Smiles Dental Campaign. Your tireless efforts have truly made a monumental impact, providing essential dental care to over 500 underserved individuals in our community. Your compassion and commitment to improving oral health have touched the lives of so many, and we are immensely grateful for your selflessness. Thank you for being the driving force behind this transformative initiative!\n\nWarm regards,\nKaylin OvalOffice",
+        "body": "Dear Volunteers,\n\nI wanted to extend my heartfelt gratitude to each and every one of you for your invaluable dedication and hard work during the Smiles Dental Campaign. Your tireless efforts have truly made a monumental impact, providing essential dental care to over 500 underserved individuals in our community. Your compassion and commitment to improving oral health have touched the lives of so many, and we are immensely grateful for your selflessness. Thank you for being the driving force behind this transformative initiative!\n\nWarm regards,\nKaylin OvalOffice",
         "subject": "Smiles Dental Campain Thanks!",
         "sentDate": new Date(ISODate().getTime())
       }
@@ -885,7 +885,7 @@ db.events.insertMany([
     "eventRoles": ["Dental"],
     "emails": [
       {
-        "email": "Dear Volunteers,\n\nI wanted to extend my sincere gratitude to each of you for your unwavering dedication and hard work at the Harvest of Health Expo. Your passion and commitment were palpable, especially when you went the extra mile to assist Mrs. Johnson, who arrived with limited mobility, ensuring she could fully participate in the event. Thanks to your kindness and attentiveness, moments like these made the expo truly impactful, leaving a lasting impression on our community. Your selflessness and dedication embody the spirit of giving back. Thank you immensely for your invaluable contributions!\n\nWarm regards,\nBarack Obama II",
+        "body": "Dear Volunteers,\n\nI wanted to extend my sincere gratitude to each of you for your unwavering dedication and hard work at the Harvest of Health Expo. Your passion and commitment were palpable, especially when you went the extra mile to assist Mrs. Johnson, who arrived with limited mobility, ensuring she could fully participate in the event. Thanks to your kindness and attentiveness, moments like these made the expo truly impactful, leaving a lasting impression on our community. Your selflessness and dedication embody the spirit of giving back. Thank you immensely for your invaluable contributions!\n\nWarm regards,\nBarack Obama II",
         "subject": "Harvest of Health Impact Summary",
         "sentDate": new Date(ISODate().getTime())
       }
@@ -903,7 +903,7 @@ db.events.insertMany([
     "eventRoles": ["Medical", "Save the Babies"],
     "emails": [
       {
-        "email": "Dear Volunteer,\n\nI hope this email finds you well. I wanted to extend my deepest gratitude to each and every one of you for your invaluable contributions to the success of the Well-being and Care Fest last weekend. Your dedication and enthusiasm truly made a difference in the lives of many attendees.\n\nOne heartwarming moment that stands out is when a group of elderly participants joined our yoga session led by Jane, our volunteer instructor. Witnessing their smiles and sense of tranquility reminded us of the profound impact of our collective efforts.\n\nYour commitment to spreading joy and wellness resonated with everyone present, and we couldn't have achieved such positive outcomes without your unwavering support. Thank you once again for being the driving force behind this meaningful event.\n\nWarm regards,\nRobert Painting",
+        "body": "Dear Volunteer,\n\nI hope this email finds you well. I wanted to extend my deepest gratitude to each and every one of you for your invaluable contributions to the success of the Well-being and Care Fest last weekend. Your dedication and enthusiasm truly made a difference in the lives of many attendees.\n\nOne heartwarming moment that stands out is when a group of elderly participants joined our yoga session led by Jane, our volunteer instructor. Witnessing their smiles and sense of tranquility reminded us of the profound impact of our collective efforts.\n\nYour commitment to spreading joy and wellness resonated with everyone present, and we couldn't have achieved such positive outcomes without your unwavering support. Thank you once again for being the driving force behind this meaningful event.\n\nWarm regards,\nRobert Painting",
         "subject": "Well-being and Care Fest impact report",
         "sentDate": new Date(ISODate().getTime())
       }

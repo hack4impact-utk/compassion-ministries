@@ -8,6 +8,7 @@ import {
   ListItemButton,
   ListItemText,
   Button,
+  ButtonBase,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { UpsertRoleVerificationFormData } from '@/types/forms/role-verifications';
@@ -179,24 +180,17 @@ export default function Volunteer({
             <Typography variant="h6" sx={{ fontWeight: 'bold', pr: 1 }}>
               Previous organization:
             </Typography>
-            <Typography display="inline" variant="h6">
-              <ListItemButton
-                key={volunteer.previousOrganization?._id}
-                onClick={() =>
-                  router.push(
-                    `/organizations/${volunteer.previousOrganization?._id}`
-                  )
-                }
-              >
-                <ListItemText
-                  primary={volunteer.previousOrganization?.name}
-                  primaryTypographyProps={{
-                    variant: 'h6',
-                    fontWeight: 'normal',
-                  }}
-                />
-              </ListItemButton>
-            </Typography>
+            <ButtonBase
+              onClick={() =>
+                router.push(
+                  `/organizations/${volunteer.previousOrganization?._id}`
+                )
+              }
+            >
+              <Typography display="inline" variant="h6">
+                {volunteer.previousOrganization?.name}
+              </Typography>
+            </ButtonBase>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }} pt={4}>
             <Typography variant="h5">Role Verifications</Typography>

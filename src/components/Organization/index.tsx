@@ -43,11 +43,9 @@ export default function Organization({
         ) : (
           <LoadingButton
             loading={loading}
-            buttonProps={{
-              onClick: onLoadReporting,
-              variant: 'contained',
-              fullWidth: true,
-            }}
+            onClick={onLoadReporting}
+            variant="contained"
+            fullWidth={true}
           >
             View organization statistics
           </LoadingButton>
