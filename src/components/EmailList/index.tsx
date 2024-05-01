@@ -7,6 +7,7 @@ import {
   Typography,
 } from '@mui/material';
 import React from 'react';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 interface EmailListProps {
   emails: Email[];
@@ -19,8 +20,8 @@ export default function EmailList({
     <Box>
       {emails.map((email) => {
         return (
-          <Accordion key={email.subject}>
-            <AccordionSummary>
+          <Accordion key={email.subject} defaultExpanded={emails.length == 1}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Typography>{email.subject}</Typography>
             </AccordionSummary>
             <AccordionDetails>
