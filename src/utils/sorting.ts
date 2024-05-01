@@ -1,10 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// gets a property given a path
-function getNestedValue<T>(obj: T, path: string): any {
-  return path.split('.').reduce((acc: any, part) => acc && acc[part], obj);
-}
-
 // sort an array by a specified path. e.g. 'volunteer.name'
+
+import { getNestedValue } from './array';
+
 // supports strings and types that work with < and > comparison operators
 export function sortByPath<T>(
   items: T[],
