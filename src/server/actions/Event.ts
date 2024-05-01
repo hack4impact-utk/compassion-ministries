@@ -125,7 +125,7 @@ export async function getEventsBetweenDates(
           endAt: recurringEvent.event.endAt,
           date,
           eventRoles: recurringEvent.event.eventRoles,
-          emailBodies: recurringEvent.event.emailBodies,
+          emails: recurringEvent.event.emails,
           isRecurring: true,
           parentEvent: recurringEvent.event.parentEvent,
           recurrence: recurringEvent.recurrence,
@@ -177,7 +177,7 @@ export async function getEvent(eventId: string): Promise<EventResponse> {
     endAt: doc.endAt,
     date: doc.date,
     eventRoles: doc.eventRoles,
-    emailBodies: doc.emailBodies,
+    emails: doc.emails,
     parentEvent: doc.parentEvent,
     createdAt: doc.createdAt,
     updatedAt: doc.updatedAt,
@@ -212,8 +212,7 @@ export async function getAllVolunteersForEvent(
   return eventVols;
 }
 
-// unfinished
-// will send email to all volunteers at event
+// Sends an email to all volunteers have been checked in for this event
 export async function sendEventEmail(
   eventId: string,
   createEmailRequest: CreateEmailRequest

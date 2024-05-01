@@ -61,7 +61,7 @@ const zEventVolunteerResponse = zEventVolunteerEntity.extend({
 
 const zVolunteerEventResponse = zEventVolunteerEntity.extend({
   event: zEventResponse,
-  organization: zOrganization.optional(),
+  organization: zOrganizationResponse.optional(),
 });
 
 export const zPopulatedEventVolunteerResponse = zEventVolunteerEntity.extend({
