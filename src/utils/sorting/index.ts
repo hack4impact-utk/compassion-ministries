@@ -24,3 +24,23 @@ export function sortByPath<T>(
     }
   });
 }
+
+export function sortByLastName<T>(
+  items: T[],
+  firstNamePath: string,
+  lastNamePath: string,
+  ascending: boolean = true
+): T[] {
+  return items.sort((a, b) => {
+    const firstNameA = getNestedValue(a, firstNamePath);
+    const firstNameB = getNestedValue(b, firstNamePath);
+    const lastNameA = getNestedValue(a, lastNamePath);
+    const lastNameB = getNestedValue(b, lastNamePath);
+
+    return ascending
+      ? `${lastNameA} ${firstNameA}`.localeCompare(`${lastNameB} ${firstNameB}`)
+      : `${lastNameB} ${firstNameB}`.localeCompare(
+          `${lastNameA} ${firstNameA}`
+        );
+  });
+}
