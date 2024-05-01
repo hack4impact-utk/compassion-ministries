@@ -10,7 +10,7 @@ export default function OrganizationReporting(
 ) {
   const volunteerText =
     props.report.numVolunteers > 1
-      ? `a total of ${props.report.numVolunteers} have volunteered`
+      ? `a total of ${props.report.numVolunteers} volunteers have volunteered`
       : `one volunteer has volunteered`;
   const hoursText = `${props.report.numHours} hour${
     props.report.numHours > 1 ? 's' : ''
