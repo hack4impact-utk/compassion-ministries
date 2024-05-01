@@ -12,6 +12,14 @@ export interface OrganizationReportResponse {
   numEvents: number;
 }
 
+export interface VolunteerReportResponse {
+  num_events: number;
+  num_hours: number;
+  organizations: {
+    [key: string]: { organizationName: string; hoursWithOrganization: number };
+  }; // key is organizationId
+}
+
 /**
  * Gets statistics for volunteering efforts for an organization, optionally bounded to events within a search range
  * @param organizationId Id of organization to generate statistics for
@@ -97,16 +105,12 @@ export async function getVolunteerReport(
   volunteerId: string,
   startDate?: Date,
   endDate?: Date
-): Promise<{
-  volunteer: string;
-  num_events: number;
-  num_hours: number;
-}> {
+): Promise<VolunteerReportResponse> {
   // Return object
-  const report = {
-    volunteer: volunteerId,
+  const report: VolunteerReportResponse = {
     num_events: 0,
     num_hours: 0,
+    organizations: {},
   };
 
   // Get search range
@@ -144,11 +148,36 @@ export async function getVolunteerReport(
         // Add event time within search range to total time volunteered
         volunteerTime += timeRange[1] - timeRange[0];
       }
+
+      // accumulates all organization information
+      if (volunteerEvent.organization) {
+        if (volunteerEvent.organization._id in report.organizations) {
+          report.organizations[
+            volunteerEvent.organization._id
+          ].hoursWithOrganization +=
+            volunteerEvent.event.endAt.getTime() -
+            volunteerEvent.event.startAt.getTime();
+        } else {
+          report.organizations[volunteerEvent.organization._id] = {
+            hoursWithOrganization:
+              volunteerEvent.event.endAt.getTime() -
+              volunteerEvent.event.startAt.getTime(),
+            organizationName: volunteerEvent.organization.name,
+          };
+        }
+      }
     }
 
     // Update return object
     report.num_events = eventsId.size;
-    report.num_hours = volunteerTime / 3600000; // convert milliseconds to hours
+    report.num_hours = Math.round(volunteerTime / 3600000); // convert milliseconds to hours
+
+    // convert hours for all organizations to hours + rounds the result
+    for (const orgId in report.organizations) {
+      report.organizations[orgId].hoursWithOrganization = Math.round(
+        report.organizations[orgId].hoursWithOrganization / 3600000
+      );
+    }
   }
 
   return report;
