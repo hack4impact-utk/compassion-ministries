@@ -3,7 +3,6 @@ import CheckInForm from '@/components/CheckInForm';
 import LoadingButton from '@/components/LoadingButton';
 import useEditConfirmation from '@/hooks/useEditConfirmation';
 import useRoleConfirmation from '@/hooks/useRoleConfirmation';
-// import useRoleConfirmation from '@/hooks/useRoleConfirmation'; UNCOMMENT AFTER FIELD TEST
 import useSnackbar from '@/hooks/useSnackbar';
 import useValidation from '@/hooks/useValidation';
 import type { EventResponse } from '@/types/dataModel/event';

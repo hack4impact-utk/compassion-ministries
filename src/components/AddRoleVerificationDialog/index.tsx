@@ -26,6 +26,7 @@ export default function AddRoleVerificationDialog({
     ValidationErrors<UpsertRoleVerificationFormData> | undefined
   >(undefined);
   const validate = useValidation(zUpsertRoleVerificationFormData);
+
   const handleSubmit = async () => {
     // Validate the data
     const validationErrors = validate(formData);
