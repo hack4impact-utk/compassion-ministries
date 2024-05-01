@@ -29,9 +29,10 @@ export default function EmailList({
             </AccordionSummary>
             <AccordionDetails>
               <Box>
-                <Typography>
+                <Typography sx={{ fontWeight: 'bold' }}>
                   Sent On: {email.sentDate.toDateString()}
                 </Typography>
+                <br />
                 <Typography>{email.body}</Typography>
               </Box>
             </AccordionDetails>

@@ -89,11 +89,14 @@ export default function Event({
           </AccordionSummary>
         </Accordion>
       )}
-
-      <Button variant="contained" fullWidth onClick={handleClick}>
+      <Button
+        variant="contained"
+        fullWidth
+        onClick={handleClick}
+        sx={{ my: 2 }}
+      >
         New Email
       </Button>
-
       {showEmail && <EmailEditor event={event} volunteers={eventVolunteers} />}
 
       <Typography
