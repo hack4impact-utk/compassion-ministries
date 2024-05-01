@@ -7,6 +7,7 @@ import SearchField from '@/components/SearchField';
 import useSearch from '@/hooks/useSearch';
 import { Box, ListItemButton, Typography, Menu, MenuItem } from '@mui/material';
 import { useRouter } from 'next/navigation';
+import { sortByLastName } from '@/utils/sorting';
 
 // Prop Array with Objects
 interface EventVolunteerListProps {
@@ -62,31 +63,29 @@ export default function EventVolunteerList({
       <List>
         {/* Sort volunteers by last name */}
         {eventVolunteers.length ? (
-          eventVolunteers
-            .sort((a, b) =>
-              `${a.volunteer.lastName} ${a.volunteer.firstName}`.localeCompare(
-                `${b.volunteer.lastName} ${b.volunteer.firstName}`
-              )
-            )
-            .map((ev) => (
-              <ListItemButton
-                key={ev._id}
-                onClick={(event) => handleVolunteerClick(ev, event)}
-                sx={{ pl: 0 }}
-              >
-                {/** Displays bullet and org name only if org is present */}
-                <ListItemText
-                  primary={`${ev.volunteer.firstName} ${ev.volunteer.lastName}`}
-                  secondary={`${ev.volunteer.email} ${
-                    ev.organization ? '• ' + ev.organization.name : ''
-                  }`}
-                  primaryTypographyProps={{ variant: 'h5' }}
-                />
-                <Box>
-                  <RoleIconList roles={[ev.role]}></RoleIconList>
-                </Box>
-              </ListItemButton>
-            ))
+          sortByLastName<EventVolunteerResponse>(
+            eventVolunteers,
+            'volunteer.firstName',
+            'volunteer.lastName'
+          ).map((ev) => (
+            <ListItemButton
+              key={ev._id}
+              onClick={(event) => handleVolunteerClick(ev, event)}
+              sx={{ pl: 0 }}
+            >
+              {/** Displays bullet and org name only if org is present */}
+              <ListItemText
+                primary={`${ev.volunteer.firstName} ${ev.volunteer.lastName}`}
+                secondary={`${ev.volunteer.email} ${
+                  ev.organization ? '• ' + ev.organization.name : ''
+                }`}
+                primaryTypographyProps={{ variant: 'h5' }}
+              />
+              <Box>
+                <RoleIconList roles={[ev.role]}></RoleIconList>
+              </Box>
+            </ListItemButton>
+          ))
         ) : (
           <Typography variant="h5" pt={2}>
             No volunteers!
