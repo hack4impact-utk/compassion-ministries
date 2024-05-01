@@ -1,6 +1,6 @@
 // sort an array by a specified path. e.g. 'volunteer.name'
 
-import { getNestedValue } from './array';
+import { getNestedValue, removeDuplicatesByPath } from './array';
 
 // supports strings and types that work with < and > comparison operators
 export function sortByPath<T>(
@@ -40,4 +40,13 @@ export function sortByLastName<T>(
           `${lastNameA} ${firstNameA}`
         );
   });
+}
+
+export function removeDuplicatesAndSortByPath<T>(
+  items: T[],
+  path: string,
+  ascending: boolean = true
+): T[] {
+  const arrWithoutDuplicates = removeDuplicatesByPath<T>(items, path);
+  return sortByPath<T>(arrWithoutDuplicates, path, ascending);
 }
