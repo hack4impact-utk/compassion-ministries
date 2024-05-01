@@ -12,7 +12,7 @@ export default function LoadingButton(props: LoadingButtonProps) {
   return (
     <Button {...props.buttonProps} disabled={disabled}>
       {props.loading ? (
-        <CircularProgress size={`${props.loadingSize}px`} />
+        <CircularProgress size={props.loadingSize} />
       ) : (
         props.children
       )}
