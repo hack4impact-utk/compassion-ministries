@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { VolunteerEventResponse } from '@/types/dataModel/eventVolunteer';
 import {
@@ -20,6 +20,9 @@ import { useConfirm } from 'material-ui-confirm';
 import useSnackbar from '@/hooks/useSnackbar';
 import { useSession } from 'next-auth/react';
 import BGCIcon from '@/components/BGCIcon';
+import VolunteerReporting from '../VolunteerReporting';
+import LoadingButton from '@/components/LoadingButton';
+import { VolunteerReportResponse } from '@/server/actions/Reporting';
 // Use VolunteerResponse Props
 interface VolunteerProps {
   volunteer: VolunteerResponse;
@@ -32,6 +35,8 @@ export default function Volunteer({
   events,
 }: VolunteerProps): React.ReactElement {
   const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [report, setReport] = useState<VolunteerReportResponse | null>(null);
   const confirm = useConfirm();
   const { showSnackbar } = useSnackbar();
   const { data: session } = useSession();
@@ -44,6 +49,16 @@ export default function Volunteer({
   const handleClose = () => {
     setOpen(false);
   };
+
+  async function onLoadReporting() {
+    setLoading(true);
+    const res = await fetch(`/api/volunteers/${volunteer._id}/report`);
+    const response = await res.json();
+
+    setReport(response);
+
+    setLoading(false);
+  }
 
   const handleSubmit = async (formData: UpsertRoleVerificationFormData) => {
     try {
@@ -251,6 +266,26 @@ export default function Volunteer({
               </Box>
             </Box>
           </>
+        )}
+
+        {/* Volunteer Reporting */}
+        {events.length > 0 && (
+          <Box sx={{ pt: 4 }}>
+            {report?.num_events ? (
+              <VolunteerReporting report={report} volunteer={volunteer} />
+            ) : (
+              <LoadingButton
+                loading={loading}
+                buttonProps={{
+                  onClick: onLoadReporting,
+                  variant: 'contained',
+                  fullWidth: true,
+                }}
+              >
+                View volunteer statistics
+              </LoadingButton>
+            )}
+          </Box>
         )}
 
         {events.length > 0 && (
