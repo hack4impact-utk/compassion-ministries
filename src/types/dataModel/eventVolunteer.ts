@@ -30,8 +30,8 @@ export const zCreateEventVolunteerRequestBase = zEventVolunteer.extend({
   volunteer: z.union([zObjectId, zCreateVolunteerRequest]),
   verifier: z.string().optional(),
 });
- // If `isEdited` is false (when updating an existing volunteer during checkin), zCreateEventVolunteerRequest will just be zCreateEventVolunteerRequestBase.
- // Otherwise, the volunteer field will be an ObjectId, and `updatedVolunteer` will exist
+// If `isEdited` is false (when updating an existing volunteer during checkin), zCreateEventVolunteerRequest will just be zCreateEventVolunteerRequestBase.
+// Otherwise, the volunteer field will be an ObjectId, and `updatedVolunteer` will exist
 export const zCreateEventVolunteerRequest = z.discriminatedUnion('isEdited', [
   zCreateEventVolunteerRequestBase.extend({
     isEdited: z.literal(false),
@@ -68,13 +68,13 @@ export const zPopulatedEventVolunteerResponse = zEventVolunteerEntity.extend({
   volunteer: zVolunteerResponse,
 });
 
-export interface EventVolunteer extends z.infer<typeof zEventVolunteer> { }
+export interface EventVolunteer extends z.infer<typeof zEventVolunteer> {}
 export interface EventVolunteerEntity
-  extends z.infer<typeof zEventVolunteerEntity> { }
+  extends z.infer<typeof zEventVolunteerEntity> {}
 export interface EventVolunteerResponse
-  extends z.infer<typeof zEventVolunteerResponse> { }
+  extends z.infer<typeof zEventVolunteerResponse> {}
 export interface VolunteerEventResponse
-  extends z.infer<typeof zVolunteerEventResponse> { }
+  extends z.infer<typeof zVolunteerEventResponse> {}
 export interface PopulatedEventVolunteerResponse
   extends z.infer<typeof zPopulatedEventVolunteerResponse> {}
 export type CreateEventVolunteerRequest = z.infer<

@@ -11,7 +11,7 @@ import { ValidationErrors } from '@/utils/validation';
 import { Typography } from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface EditCheckInViewProps {
   event: EventResponse;
@@ -21,8 +21,14 @@ interface EditCheckInViewProps {
 
 export default function EditCheckInView(props: EditCheckInViewProps) {
   const [formData, setFormData] = useState<CheckInFormData>({
-    role:
-      props.event.eventRoles.length === 1 ? props.event.eventRoles[0] : null,
+    firstName: props.eventVolunteer.volunteer.firstName,
+    lastName: props.eventVolunteer.volunteer.lastName,
+    email: props.eventVolunteer.volunteer.email,
+    phoneNumber: props.eventVolunteer.volunteer.phoneNumber,
+    address: props.eventVolunteer.volunteer.address,
+    volunteerId: props.eventVolunteer.volunteer._id,
+    role: props.eventVolunteer.role,
+    organization: props.eventVolunteer.organization,
   } as CheckInFormData);
   const [validationErrors, setValidationErrors] = useState<
     ValidationErrors<CheckInFormData> | undefined
@@ -32,7 +38,7 @@ export default function EditCheckInView(props: EditCheckInViewProps) {
   const validate = useValidation(zCheckInFormData);
   const router = useRouter();
 
-  // fill formData with the existing data from eventvolunteer
+  /* fill formData with the existing data from eventvolunteer
   useEffect(() => {
     if (props.eventVolunteer.volunteer) {
       setFormData((prevFormData) => ({
@@ -46,7 +52,7 @@ export default function EditCheckInView(props: EditCheckInViewProps) {
         role: props.eventVolunteer.role,
       }));
     }
-  }, [props.eventVolunteer, setFormData]);
+  }, [props.eventVolunteer, setFormData]);*/
   const { showSnackbar } = useSnackbar();
   setLoading;
   setValidationErrors;
@@ -72,7 +78,10 @@ export default function EditCheckInView(props: EditCheckInViewProps) {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify({
+            ...formData,
+            organization: formData.organization?._id,
+          }),
         }
       );
       if (res.status !== 204) {
