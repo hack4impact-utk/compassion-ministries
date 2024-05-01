@@ -12,17 +12,20 @@ export default function OrganizationList({
   const router = useRouter();
   return (
     <List>
-      {organizations.map((organization) => (
-        <ListItemButton
-          key={organization._id}
-          onClick={() => router.push(`/organizations/${organization._id}`)}
-        >
-          <ListItemText
-            primary={organization.name}
-            primaryTypographyProps={{ variant: 'h5' }}
-          />
-        </ListItemButton>
-      ))}
+      {/* Sorted by name */}
+      {organizations
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map((organization) => (
+          <ListItemButton
+            key={organization._id}
+            onClick={() => router.push(`/organizations/${organization._id}`)}
+          >
+            <ListItemText
+              primary={organization.name}
+              primaryTypographyProps={{ variant: 'h5' }}
+            />
+          </ListItemButton>
+        ))}
     </List>
   );
 }
