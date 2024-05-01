@@ -262,28 +262,31 @@ export default function Volunteer({
             >
               Attended Events
             </Typography>
-            {events.map((volunteerEvent, i) => (
-              <ListItemButton
-                key={i}
-                onClick={() =>
-                  router.push(`/events/${volunteerEvent.event._id}`)
-                }
-                sx={{ pl: 0 }}
-              >
-                <Box>
-                  <RoleIconList roles={[volunteerEvent.role]}></RoleIconList>
-                </Box>
-                <ListItemText
-                  sx={{ pl: 1 }}
-                  primary={`${volunteerEvent.event.name}`}
-                  primaryTypographyProps={{
-                    variant: 'h5',
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                />
-              </ListItemButton>
-            ))}
+            {/* Sort events by date */}
+            {events
+              .sort((a, b) => (a.event.date! > b.event.date! ? 1 : -1))
+              .map((volunteerEvent, i) => (
+                <ListItemButton
+                  key={i}
+                  onClick={() =>
+                    router.push(`/events/${volunteerEvent.event._id}`)
+                  }
+                  sx={{ pl: 0 }}
+                >
+                  <Box>
+                    <RoleIconList roles={[volunteerEvent.role]}></RoleIconList>
+                  </Box>
+                  <ListItemText
+                    sx={{ pl: 1 }}
+                    primary={`${volunteerEvent.event.name}`}
+                    primaryTypographyProps={{
+                      variant: 'h5',
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  />
+                </ListItemButton>
+              ))}
           </Box>
         )}
       </Box>
