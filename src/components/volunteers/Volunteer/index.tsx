@@ -24,6 +24,7 @@ import BGCIcon from '@/components/BGCIcon';
 import VolunteerReporting from '../VolunteerReporting';
 import LoadingButton from '@/components/LoadingButton';
 import { VolunteerReportResponse } from '@/server/actions/Reporting';
+import { sortByPath } from '@/utils/sorting';
 // Use VolunteerResponse Props
 interface VolunteerProps {
   volunteer: VolunteerResponse;
@@ -270,11 +271,9 @@ export default function Volunteer({
             ) : (
               <LoadingButton
                 loading={loading}
-                buttonProps={{
-                  onClick: onLoadReporting,
-                  variant: 'contained',
-                  fullWidth: true,
-                }}
+                onClick={onLoadReporting}
+                variant="contained"
+                fullWidth={true}
               >
                 View volunteer statistics
               </LoadingButton>
@@ -292,30 +291,28 @@ export default function Volunteer({
               Attended Events
             </Typography>
             {/* Sort events by date */}
-            {events
-              .sort((a, b) => (a.event.date! > b.event.date! ? 1 : -1))
-              .map((volunteerEvent, i) => (
-                <ListItemButton
-                  key={i}
-                  onClick={() =>
-                    router.push(`/events/${volunteerEvent.event._id}`)
-                  }
-                  sx={{ pl: 0 }}
-                >
-                  <Box>
-                    <RoleIconList roles={[volunteerEvent.role]}></RoleIconList>
-                  </Box>
-                  <ListItemText
-                    sx={{ pl: 1 }}
-                    primary={`${volunteerEvent.event.name}`}
-                    primaryTypographyProps={{
-                      variant: 'h5',
-                      display: 'flex',
-                      alignItems: 'center',
-                    }}
-                  />
-                </ListItemButton>
-              ))}
+            {sortByPath(events, 'event.date').map((volunteerEvent, i) => (
+              <ListItemButton
+                key={i}
+                onClick={() =>
+                  router.push(`/events/${volunteerEvent.event._id}`)
+                }
+                sx={{ pl: 0 }}
+              >
+                <Box>
+                  <RoleIconList roles={[volunteerEvent.role]}></RoleIconList>
+                </Box>
+                <ListItemText
+                  sx={{ pl: 1 }}
+                  primary={`${volunteerEvent.event.name}`}
+                  primaryTypographyProps={{
+                    variant: 'h5',
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                />
+              </ListItemButton>
+            ))}
           </Box>
         )}
       </Box>
