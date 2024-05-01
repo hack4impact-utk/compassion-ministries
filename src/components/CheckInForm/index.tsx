@@ -28,7 +28,7 @@ import { formatPhoneNumber } from '@/utils/phone-number';
 import createBarcodeScanner from '@/utils/barcode/listener';
 import { capitalizeWords } from '@/utils/string';
 import { Check, Edit } from '@mui/icons-material';
-import { removeDuplicatesByPath } from '@/utils/array';
+import { removeDuplicatesAndSortByPath } from '@/utils/sorting';
 
 /*
 This component has a lot going on. It primarily does three things:
@@ -324,7 +324,7 @@ export default function CheckInForm(props: Props) {
           freeSolo
           autoComplete
           value={props.checkInData.lastName || ''}
-          options={removeDuplicatesByPath<VolunteerResponse>(
+          options={removeDuplicatesAndSortByPath<VolunteerResponse>(
             computedVolunteerOptions,
             'lastName'
           )}
@@ -375,7 +375,7 @@ export default function CheckInForm(props: Props) {
           sx={{ mt: 2 }}
           freeSolo
           value={props.checkInData.firstName || ''}
-          options={removeDuplicatesByPath<VolunteerResponse>(
+          options={removeDuplicatesAndSortByPath<VolunteerResponse>(
             computedVolunteerOptions,
             'firstName'
           )}
@@ -429,7 +429,7 @@ export default function CheckInForm(props: Props) {
           freeSolo
           autoComplete
           value={props.checkInData.email || ''}
-          options={removeDuplicatesByPath<VolunteerResponse>(
+          options={removeDuplicatesAndSortByPath<VolunteerResponse>(
             computedVolunteerOptions,
             'email'
           )}
