@@ -40,21 +40,6 @@ export default function EditCheckInView(props: EditCheckInViewProps) {
   const router = useRouter();
   const confirmRole = useRoleConfirmation();
 
-  /* fill formData with the existing data from eventvolunteer
-  useEffect(() => {
-    if (props.eventVolunteer.volunteer) {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        firstName: props.eventVolunteer.volunteer.firstName,
-        lastName: props.eventVolunteer.volunteer.lastName,
-        email: props.eventVolunteer.volunteer.email,
-        phoneNumber: props.eventVolunteer.volunteer.phoneNumber,
-        address: props.eventVolunteer.volunteer.address,
-        volunteerId: props.eventVolunteer.volunteer._id,
-        role: props.eventVolunteer.role,
-      }));
-    }
-  }, [props.eventVolunteer, setFormData]);*/
   const { showSnackbar } = useSnackbar();
   setLoading;
   setValidationErrors;
