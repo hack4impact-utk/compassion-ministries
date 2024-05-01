@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { TextField } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import { EventResponse } from '@/types/dataModel/event';
 import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
 import { EmailFormData } from '@/types/forms/email';
@@ -80,7 +80,7 @@ export default function EmailEditor({
   };
 
   return (
-    <div>
+    <Box>
       {/* Text field for subject */}
       <TextField
         label="Subject"
@@ -90,23 +90,25 @@ export default function EmailEditor({
       />
 
       {/* Rich text editor for email body */}
-      <ReactQuill
-        theme="snow"
-        value={value}
-        onChange={handleBodyChange}
-        style={{ height: '200px' }} // Increase the height here
-      />
+      <Box sx={{ height: '200px', mb: 4 }}>
+        <ReactQuill
+          theme="snow"
+          value={value}
+          onChange={handleBodyChange}
+          style={{ height: '100%' }}
+        />
+      </Box>
 
       {/* Button to send email */}
       <LoadingButton
         variant="contained"
         fullWidth
-        sx={{ mb: 2 }}
+        sx={{ my: 2 }}
         onClick={handleSendEmail}
         loading={isLoading}
       >
         Send Email
       </LoadingButton>
-    </div>
+    </Box>
   );
 }
