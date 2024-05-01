@@ -1,4 +1,5 @@
 import { OrganizationResponse } from '@/types/dataModel/organization';
+import { sortByPath } from '@/utils/sorting';
 import { List, ListItemButton, ListItemText } from '@mui/material';
 import { useRouter } from 'next/navigation';
 
@@ -13,9 +14,8 @@ export default function OrganizationList({
   return (
     <List>
       {/* Sorted by name */}
-      {organizations
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .map((organization) => (
+      {sortByPath<OrganizationResponse>(organizations, 'name').map(
+        (organization) => (
           <ListItemButton
             key={organization._id}
             onClick={() => router.push(`/organizations/${organization._id}`)}
@@ -25,7 +25,8 @@ export default function OrganizationList({
               primaryTypographyProps={{ variant: 'h5' }}
             />
           </ListItemButton>
-        ))}
+        )
+      )}
     </List>
   );
 }
