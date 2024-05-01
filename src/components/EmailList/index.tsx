@@ -26,7 +26,9 @@ export default function EmailList({
             </AccordionSummary>
             <AccordionDetails>
               <Box>
-                <Typography>Sent On: {email.sentDate}</Typography>
+                <Typography>
+                  Sent On: {email.sentDate.toDateString()}
+                </Typography>
                 <Typography>{email.body}</Typography>
               </Box>
             </AccordionDetails>

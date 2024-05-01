@@ -6,7 +6,7 @@ import { EmailFormData } from '../forms/email';
 const zEmail = z.object({
   subject: z.string(),
   body: z.string(),
-  sentDate: z.string(),
+  sentDate: z.date(),
 })
 
 const zEvent = z.object({
