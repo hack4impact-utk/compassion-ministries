@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Box, Button, Container, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import OrganizationForm from '@/components/OrganizationForm';
 import {
   UpsertOrganizationFormData,
@@ -10,6 +10,7 @@ import useSnackbar from '@/hooks/useSnackbar';
 import { useRouter } from 'next/navigation';
 import useValidation from '@/hooks/useValidation';
 import { ValidationErrors } from '@/utils/validation';
+import LoadingButton from '@/components/LoadingButton';
 
 const NewOrganizationView: React.FC = () => {
   //Take new Organization update
@@ -28,6 +29,7 @@ const NewOrganizationView: React.FC = () => {
   const router = useRouter();
   const validate = useValidation(zUpsertOrganizationFormData);
 
+  const [isLoading, setIsLoading] = useState(false);
   // hits post organization endpoint to add to database
   const onClick = async () => {
     // vaildate the form
@@ -41,6 +43,7 @@ const NewOrganizationView: React.FC = () => {
     setValidationErrors(undefined);
 
     try {
+      setIsLoading(true);
       const res = await fetch('/api/organizations', {
         method: 'POST',
         body: JSON.stringify(organizationData),
@@ -59,6 +62,9 @@ const NewOrganizationView: React.FC = () => {
       showSnackbar('Failed to create organization', 'error');
       console.error(e);
     }
+    finally{
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -72,9 +78,13 @@ const NewOrganizationView: React.FC = () => {
         errors={validationErrors}
       />
       <Box mt={2}>
-        <Button variant="contained" onClick={onClick} fullWidth>
-          Submit
-        </Button>
+        <LoadingButton 
+          loading = {isLoading}
+          variant="contained" 
+          onClick={onClick} 
+          fullWidth>
+            Submit
+        </LoadingButton>
       </Box>
     </Container>
   );

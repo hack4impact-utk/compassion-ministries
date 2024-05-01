@@ -8,5 +8,5 @@ const zSettings = z.object({
 const zSettingsEntity = zSettings.extend(zBase.shape);
 const zSettingsResponse = zSettingsEntity;
 
-export interface SettingsEntity extends z.infer<typeof zSettingsEntity> {}
-export interface SettingsResponse extends z.infer<typeof zSettingsResponse> {}
+export interface SettingsEntity extends z.infer<typeof zSettingsEntity> { }
+export interface SettingsResponse extends z.infer<typeof zSettingsResponse> { }

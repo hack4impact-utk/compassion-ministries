@@ -1,10 +1,20 @@
 'use client';
 import { EventResponse } from '@/types/dataModel/event';
 import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
-import { Box, ListItemButton, ListItemText, Typography } from '@mui/material';
-import React from 'react';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Button,
+  Typography,
+} from '@mui/material';
+import React, { useState } from 'react';
 import RoleIconList from '../RoleIconList';
-import { useRouter } from 'next/navigation';
+import EventVolunteerList from '../EventVolunteerList';
+import EmailList from '../EmailList';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import EmailEditor from '../EmailEditor';
 
 interface EventProps {
   event: EventResponse;
@@ -15,7 +25,6 @@ export default function Event({
   event,
   eventVolunteers,
 }: EventProps): React.ReactElement {
-  const router = useRouter();
   // Format the date to a localized string
   const formatDate = (date: Date): string => {
     const option: Intl.DateTimeFormatOptions = {
@@ -33,6 +42,12 @@ export default function Event({
       minute: 'numeric' as const,
     };
     return date.toLocaleTimeString(undefined, option);
+  };
+
+  const [showEmail, setShowEmail] = useState(false);
+
+  const handleClick = () => {
+    setShowEmail(true);
   };
 
   return (
@@ -55,6 +70,35 @@ export default function Event({
         {formatTime(new Date(event.endAt))}
       </Typography>
       <RoleIconList roles={event.eventRoles} />
+
+      {event.emails && event.emails.length > 0 ? (
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>
+              Previously sent emails ({event.emails.length})
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <EmailList emails={event.emails} />
+          </AccordionDetails>
+        </Accordion>
+      ) : (
+        <Accordion disabled>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>No previously sent emails</Typography>
+          </AccordionSummary>
+        </Accordion>
+      )}
+      <Button
+        variant="contained"
+        fullWidth
+        onClick={handleClick}
+        sx={{ my: 2 }}
+      >
+        New Email
+      </Button>
+      {showEmail && <EmailEditor event={event} volunteers={eventVolunteers} />}
+
       <Typography
         sx={{ textDecoration: 'underline', fontWeight: 'bold' }}
         variant="h6"
@@ -62,30 +106,7 @@ export default function Event({
       >
         Volunteers
       </Typography>
-      {/* TODO remove the below and replace with EventVolounteerList component */}
-
-      {eventVolunteers.length ? (
-        eventVolunteers.map((ev) => (
-          <ListItemButton
-            key={ev._id}
-            onClick={() => router.push(`/volunteers/${ev.volunteer._id}`)}
-            sx={{ pl: 0 }}
-          >
-            <ListItemText
-              primary={`${ev.volunteer.firstName} ${ev.volunteer.lastName}`}
-              secondary={ev.volunteer.email}
-              primaryTypographyProps={{ variant: 'h5' }}
-            />
-            <Box>
-              <RoleIconList roles={[ev.role]}></RoleIconList>
-            </Box>
-          </ListItemButton>
-        ))
-      ) : (
-        <Typography variant="h5" pt={2}>
-          No volunteers yet!
-        </Typography>
-      )}
+      <EventVolunteerList eventVolunteers={eventVolunteers} />
     </Box>
   );
 }

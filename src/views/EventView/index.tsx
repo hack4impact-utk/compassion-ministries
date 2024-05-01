@@ -1,11 +1,11 @@
 'use client';
 import Event from '@/components/Event';
-import EmailEditor from '@/components/EmailEditor';
 import { EventResponse } from '@/types/dataModel/event';
 import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
 import { Box, Button } from '@mui/material';
 import Link from 'next/link';
 import React, { useState } from 'react';
+import EmailEditor from '@/components/EmailEditor';
 
 // changes
 export default function EventView({

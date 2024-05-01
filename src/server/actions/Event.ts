@@ -9,7 +9,6 @@ import {
   CreateEventVolunteerRequest,
   EventVolunteerResponse,
 } from '@/types/dataModel/eventVolunteer';
-import EventVolunteer from '../models/EventVolunteer';
 import dbConnect from '@/utils/db-connect';
 import EventSchema from '@/server/models/Event';
 import CMError, { CMErrorType } from '@/utils/cmerror';
@@ -67,7 +66,7 @@ export async function checkInVolunteer(
       delete createEventVolunteerRequest.verifier;
     }
 
-    const res = await EventVolunteer.create(createEventVolunteerRequest);
+    const res = await EventVolunteerSchema.create(createEventVolunteerRequest);
 
     // TODO for #58 handle a duplicate entry fail case here (duplicate event+volunteer ID combination)
     if (!res) {
@@ -126,7 +125,7 @@ export async function getEventsBetweenDates(
           endAt: recurringEvent.event.endAt,
           date,
           eventRoles: recurringEvent.event.eventRoles,
-          emailBodies: recurringEvent.event.emailBodies,
+          emails: recurringEvent.event.emails,
           isRecurring: true,
           parentEvent: recurringEvent.event.parentEvent,
           recurrence: recurringEvent.recurrence,
@@ -178,7 +177,7 @@ export async function getEvent(eventId: string): Promise<EventResponse> {
     endAt: doc.endAt,
     date: doc.date,
     eventRoles: doc.eventRoles,
-    emailBodies: doc.emailBodies,
+    emails: doc.emails,
     parentEvent: doc.parentEvent,
     createdAt: doc.createdAt,
     updatedAt: doc.updatedAt,
@@ -196,6 +195,7 @@ export async function getAllVolunteersForEvent(
     await dbConnect();
     eventVols = await EventVolunteerSchema.find({ event: eventId })
       .populate('volunteer')
+      .populate('organization')
       .lean();
 
     // convert ObjectId's to strings
@@ -203,7 +203,7 @@ export async function getAllVolunteersForEvent(
       ev.volunteer.previousOrganization =
         ev.volunteer.previousOrganization?.toString();
       ev.event = ev.event.toString();
-      ev.organization = ev.organization?.toString();
+      ev.organization = ev.organization;
     });
   } catch (error) {
     console.error(error);
@@ -212,8 +212,7 @@ export async function getAllVolunteersForEvent(
   return eventVols;
 }
 
-// unfinished
-// will send email to all volunteers at event
+// Sends an email to all volunteers have been checked in for this event
 export async function sendEventEmail(
   eventId: string,
   createEmailRequest: CreateEmailRequest
