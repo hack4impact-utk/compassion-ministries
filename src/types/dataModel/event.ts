@@ -4,8 +4,8 @@ import zBase, { zObjectId } from './base';
 import { EmailFormData } from '../forms/email';
 
 const zEmail = z.object({
-  subject: z.string(),
-  body: z.string(),
+  subject: z.string().optional(),
+  body: z.string().min(1, "Required"),
   sentDate: z.date(),
 })
 
