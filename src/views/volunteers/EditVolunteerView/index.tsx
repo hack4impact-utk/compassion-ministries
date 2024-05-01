@@ -6,11 +6,12 @@ import {
   UpsertVolunteerFormData,
   zUpsertVolunteerFormData,
 } from '@/types/forms/volunteer';
-import { Button, Box } from '@mui/material';
+import { Box } from '@mui/material';
 import useSnackbar from '@/hooks/useSnackbar';
 import { useRouter } from 'next/navigation';
 import useValidation from '@/hooks/useValidation';
 import { ValidationErrors } from '@/utils/validation';
+import LoadingButton from '@/components/LoadingButton';
 
 export default function EditVolunteerView({
   volunteer,
@@ -27,6 +28,7 @@ export default function EditVolunteerView({
   const router = useRouter();
   const validate = useValidation(zUpsertVolunteerFormData);
 
+  const [isLoading, setIsLoading] = useState(false);
   const submitData = async () => {
     // Validate the data
     // remove the formatting from the phone number from the volunteer
@@ -42,6 +44,7 @@ export default function EditVolunteerView({
     setValidationErrors(undefined);
 
     try {
+      setIsLoading(true);
       const res = await fetch(`/api/volunteers/${volunteer._id}`, {
         method: 'PUT',
         headers: {
@@ -62,6 +65,8 @@ export default function EditVolunteerView({
     } catch (e) {
       showSnackbar('Failed to update volunteer', 'error');
       console.error(e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -73,9 +78,15 @@ export default function EditVolunteerView({
         currentVolunteer={volunteer}
         errors={validationErrors}
       />
-      <Button variant="contained" fullWidth type="submit" onClick={submitData}>
+      <LoadingButton
+        loading={isLoading}
+        variant="contained"
+        fullWidth
+        type="submit"
+        onClick={submitData}
+      >
         Submit
-      </Button>
+      </LoadingButton>
     </Box>
   );
 }
