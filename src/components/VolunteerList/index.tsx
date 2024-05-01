@@ -10,9 +10,16 @@ interface VolunteerListProps {
 export default function VolunteerList({ volunteers }: VolunteerListProps) {
   return (
     <List>
-      {volunteers.map((volunteer) => (
-        <VolunteerListItem key={volunteer._id} volunteer={volunteer} />
-      ))}
+      {/* Sorts volunteerse by last name */}
+      {volunteers
+        .sort((a, b) =>
+          `${a.lastName} ${a.firstName}`.localeCompare(
+            `${b.lastName} ${b.firstName}`
+          )
+        )
+        .map((volunteer) => (
+          <VolunteerListItem key={volunteer._id} volunteer={volunteer} />
+        ))}
     </List>
   );
 }
