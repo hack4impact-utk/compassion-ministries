@@ -1,57 +1,63 @@
 'use client';
-import LoadingButton from '@/components/LoadingButton';
-import { OrganizationResponse } from '@/types/dataModel/organization';
-import { Box, List, ListItemText, Typography } from '@mui/material';
-import { useState } from 'react';
+import { VolunteerReportResponse } from '@/server/actions/Reporting';
+import { VolunteerResponse } from '@/types/dataModel/volunteer';
+import {
+  Box,
+  List,
+  ListItemButton,
+  ListItemText,
+  Typography,
+} from '@mui/material';
+import { useRouter } from 'next/navigation';
 
-export default function VolunteerReporting() {
-  const orgsPlaceholder: OrganizationResponse[] = [];
-  const [reportingVisible, setReportingVisible] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+interface VolunteerReportingProps {
+  report: VolunteerReportResponse;
+  volunteer: VolunteerResponse;
+}
 
-  async function onReportingClick() {
-    setLoading(true);
-
-    // get reporting info from db
-    setLoading(false);
-    setReportingVisible(true);
-  }
-
+export default function VolunteerReporting({
+  report,
+  volunteer,
+}: VolunteerReportingProps) {
+  const router = useRouter();
   return (
     <>
-      {!reportingVisible ? (
-        <LoadingButton
-          buttonProps={{ variant: 'contained', onClick: onReportingClick }}
-          loading={loading}
+      <Box>
+        <Typography variant="h5">
+          {volunteer.firstName} has volunteered for a total of{' '}
+          {report.num_hours} hour{report.num_hours > 1 ? 's' : ''} at{' '}
+          {report.num_events} event{report.num_events > 1 ? 's' : ''}.
+        </Typography>
+        <Typography
+          sx={{ textDecoration: 'underline', fontWeight: 'bold' }}
+          variant="h6"
+          mt={4}
         >
-          Display Statistics
-        </LoadingButton>
-      ) : (
-        <Box>
-          <Typography>
-            NAME has volunteered for a total of ### hours at ### events
-          </Typography>
-          <Typography>
-            NAME has volunteered with the following organizations in the past
-          </Typography>
-          <List>
-            {orgsPlaceholder.map((organization, i) => {
-              // get all events with that org id, calculate their duration, and add them up
-              const organizationName = '';
-              const hoursWithOrganization = 10;
-              return (
+          Affiliated Organizations
+        </Typography>
+        <List>
+          {Object.keys(report.organizations).map((organizationId, i) => {
+            const organizationName =
+              report.organizations[organizationId].organizationName;
+            const hoursWithOrganization =
+              report.organizations[organizationId].hoursWithOrganization;
+            return (
+              <ListItemButton
+                key={i}
+                onClick={() => router.push(`/organizations/${organizationId}`)}
+                sx={{ pl: 0 }}
+              >
                 <ListItemText
-                  key={i}
                   primary={organizationName}
                   secondary={`${hoursWithOrganization} hours`}
                   primaryTypographyProps={{ variant: 'h5' }}
                   secondaryTypographyProps={{ variant: 'body1' }}
                 />
-              );
-            })}
-          </List>
-        </Box>
-      )}
+              </ListItemButton>
+            );
+          })}
+        </List>
+      </Box>
     </>
   );
 }
