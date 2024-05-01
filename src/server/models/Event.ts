@@ -37,13 +37,25 @@ const EventSchema = new Schema(
         },
       ],
     },
-    emailBodies: {
+    emails: {
       type: [
         {
-          type: String,
-          required: true,
+          subject: {
+            type: String,
+            required: false,
+          },
+          body: {
+            type: String,
+            required: true,
+          },
+          sentDate: {
+            type: Date,
+            required: true,
+          }
         },
       ],
+      required: true,
+      default: [],
     },
     isRecurring: {
       type: Boolean,
@@ -79,7 +91,7 @@ EventSchema.post(/findById/, function (doc: EventEntity) {
   }
 });
 
-export interface EventDocument extends Omit<EventEntity, '_id'>, Document {}
+export interface EventDocument extends Omit<EventEntity, '_id'>, Document { }
 
 export default (models.Event as Model<EventDocument>) ||
   model<EventDocument>('Event', EventSchema);

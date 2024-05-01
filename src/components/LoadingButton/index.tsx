@@ -9,13 +9,10 @@ interface LoadingButtonProps {
 
 export default function LoadingButton(props: LoadingButtonProps) {
   const disabled = props.loading || props.buttonProps?.disabled;
+  const size = props.loadingSize || 24;
   return (
     <Button {...props.buttonProps} disabled={disabled}>
-      {props.loading ? (
-        <CircularProgress size={`${props.loadingSize}px`} />
-      ) : (
-        props.children
-      )}
+      {props.loading ? <CircularProgress size={`${size}px`} /> : props.children}
     </Button>
   );
 }
