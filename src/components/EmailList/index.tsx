@@ -20,9 +20,12 @@ export default function EmailList({
     <Box>
       {emails.map((email) => {
         return (
-          <Accordion key={email.subject} defaultExpanded={emails.length == 1}>
+          <Accordion
+            key={email.sentDate.toDateString()}
+            defaultExpanded={emails.length == 1}
+          >
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography>{email.subject}</Typography>
+              <Typography>{email.subject ?? '(No subject)'}</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Box>
