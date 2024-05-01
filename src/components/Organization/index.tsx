@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { OrganizationReportResponse } from '@/server/actions/Reporting';
 import LoadingButton from '../LoadingButton';
 import OrganizationReporting from '../OrganizationReporting';
+import { sortByLastName } from '@/utils/sorting';
 
 // Use OrganizationResponse Props
 interface OrganizationProps {
@@ -60,23 +61,21 @@ export default function Organization({
         Volunteers
       </Typography>
       {/* Sort volunteers by last name */}
-      {volunteers
-        .sort((a, b) =>
-          `${a.lastName} ${a.firstName}`.localeCompare(
-            `${b.lastName} ${b.firstName}`
-          )
-        )
-        .map((volunteer, index) => (
-          <ListItemButton
-            key={index}
-            onClick={() => router.push(`/volunteers/${volunteer._id}`)}
-            sx={{ pl: 0 }}
-          >
-            <Typography variant="h5">
-              {volunteer.firstName} {volunteer.lastName}
-            </Typography>
-          </ListItemButton>
-        ))}
+      {sortByLastName<VolunteerResponse>(
+        volunteers,
+        'firstName',
+        'lastName'
+      ).map((volunteer, index) => (
+        <ListItemButton
+          key={index}
+          onClick={() => router.push(`/volunteers/${volunteer._id}`)}
+          sx={{ pl: 0 }}
+        >
+          <Typography variant="h5">
+            {volunteer.firstName} {volunteer.lastName}
+          </Typography>
+        </ListItemButton>
+      ))}
     </Box>
   );
 }
