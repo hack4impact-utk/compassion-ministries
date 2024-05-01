@@ -60,6 +60,7 @@ export default function EventVolunteerList({
     <Box>
       <SearchField />
       <List>
+        {/* Sort volunteers by last name */}
         {eventVolunteers.length ? (
           eventVolunteers
             .sort((a, b) =>

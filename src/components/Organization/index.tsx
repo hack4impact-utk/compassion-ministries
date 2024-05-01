@@ -61,17 +61,24 @@ export default function Organization({
       >
         Volunteers
       </Typography>
-      {volunteers.map((volunteer, index) => (
-        <ListItemButton
-          key={index}
-          onClick={() => router.push(`/volunteers/${volunteer._id}`)}
-          sx={{ pl: 0 }}
-        >
-          <Typography variant="h5">
-            {volunteer.firstName} {volunteer.lastName}
-          </Typography>
-        </ListItemButton>
-      ))}
+      {/* Sort volunteers by last name */}
+      {volunteers
+        .sort((a, b) =>
+          `${a.lastName} ${a.firstName}`.localeCompare(
+            `${b.lastName} ${b.firstName}`
+          )
+        )
+        .map((volunteer, index) => (
+          <ListItemButton
+            key={index}
+            onClick={() => router.push(`/volunteers/${volunteer._id}`)}
+            sx={{ pl: 0 }}
+          >
+            <Typography variant="h5">
+              {volunteer.firstName} {volunteer.lastName}
+            </Typography>
+          </ListItemButton>
+        ))}
     </Box>
   );
 }
