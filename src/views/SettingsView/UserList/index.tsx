@@ -15,14 +15,17 @@ interface UserListProps {
 export default function UserList({ users, secondaryAction }: UserListProps) {
   return (
     <List>
-      {users.map((user) => (
-        <ListItem key={user._id} secondaryAction={secondaryAction}>
-          <ListItemAvatar>
-            <Avatar src={user.image || ''} />
-          </ListItemAvatar>
-          <ListItemText primary={user.name} secondary={user.email} />
-        </ListItem>
-      ))}
+      {/* Sorted by name */}
+      {users
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map((user) => (
+          <ListItem key={user._id} secondaryAction={secondaryAction}>
+            <ListItemAvatar>
+              <Avatar src={user.image || ''} />
+            </ListItemAvatar>
+            <ListItemText primary={user.name} secondary={user.email} />
+          </ListItem>
+        ))}
     </List>
   );
 }
