@@ -12,6 +12,7 @@ import { Typography } from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import useRoleConfirmation from '@/hooks/useRoleConfirmation';
 
 interface EditCheckInViewProps {
   event: EventResponse;
@@ -37,6 +38,7 @@ export default function EditCheckInView(props: EditCheckInViewProps) {
   const [loading, setLoading] = useState(false);
   const validate = useValidation(zCheckInFormData);
   const router = useRouter();
+  const confirmRole = useRoleConfirmation();
 
   /* fill formData with the existing data from eventvolunteer
   useEffect(() => {
@@ -69,6 +71,16 @@ export default function EditCheckInView(props: EditCheckInViewProps) {
     }
 
     setValidationErrors(undefined);
+
+    let verifier: string | null = null;
+    if (formData.role !== 'Food') {
+      verifier = await confirmRole(formData.role);
+      // return if not confirmed
+      if (!verifier) {
+        setLoading(false);
+        return;
+      }
+    }
 
     try {
       const res = await fetch(
