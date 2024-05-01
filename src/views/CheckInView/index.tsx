@@ -53,7 +53,8 @@ export default function CheckInView(props: CheckInViewProps) {
 
     In the first case, the volunteer is created and passed to the api as the `volunteer` field
     In the second and third cases, the `volunteer` field is the object ID of the vol
-    In the third case, the `updatedVolunteer` field is the updated volunteer object
+    In the third case, the `updatedVolunteer` field is the updated volunteer object 
+    
   */
   const onCheckIn = async () => {
     setLoading(true);
@@ -120,6 +121,9 @@ export default function CheckInView(props: CheckInViewProps) {
       // return if not confirmed
       if (!verifier) {
         setLoading(false);
+        showSnackbar(
+          'Role verification failed. Check in again to verify volunteer'
+        );
         return;
       }
     }
