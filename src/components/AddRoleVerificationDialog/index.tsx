@@ -41,17 +41,12 @@ export default function AddRoleVerificationDialog({
     setValidationErrors(undefined);
 
     // Submit the data
-    try{
-      setIsLoading(true);
-      await onSubmit(formData);
-    }
-    finally{
-      setIsLoading(false);
-    }
+    setIsLoading(true);
+    await onSubmit(formData);
+    setIsLoading(false);
   };
 
   const handleClose = () => {
-
     setFormData({} as UpsertRoleVerificationFormData);
     setValidationErrors(undefined);
     onClose();
@@ -72,7 +67,11 @@ export default function AddRoleVerificationDialog({
         <Button variant="text" onClick={handleClose}>
           Cancel
         </Button>
-        <LoadingButton loading={isLoading} variant="text" onClick={handleSubmit}>
+        <LoadingButton
+          loading={isLoading}
+          variant="text"
+          onClick={handleSubmit}
+        >
           Submit
         </LoadingButton>
       </DialogActions>

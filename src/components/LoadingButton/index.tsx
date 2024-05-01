@@ -7,16 +7,16 @@ interface LoadingButtonProps extends ButtonProps {
 }
 
 export default function LoadingButton({
-  loading, loadingSize, children,
+  loading,
+  loadingSize,
+  children,
   ...buttonProps
 }: LoadingButtonProps) {
+  const disabled = loading || buttonProps?.disabled;
+  const size = loadingSize || 24;
   return (
-    <Button {...buttonProps} disabled={loading || buttonProps.disabled}>
-      {loading ? (
-        <CircularProgress size={`${loadingSize}px`} />
-      ) : (
-        children
-      )}
+    <Button {...buttonProps} disabled={disabled}>
+      {loading ? <CircularProgress size={`${size}px`} /> : children}
     </Button>
   );
 }

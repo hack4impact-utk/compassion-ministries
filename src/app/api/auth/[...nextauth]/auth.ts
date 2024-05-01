@@ -4,6 +4,7 @@ import { NextAuthOptions } from 'next-auth';
 import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google';
 import dbConnect from '@/utils/db-connect';
 import { getUserByEmail } from '@/server/actions/User';
+import { getSettings } from '@/server/actions/Settings';
 
 //NextAuth using Google Provider and JWT trategy
 const clientPromise = dbConnect().then((mon) => {
@@ -23,8 +24,8 @@ export const handler: NextAuthOptions = {
           email: profile.email,
           image: profile.picture,
           isAdmin: false,
-        }
-      }
+        };
+      },
     }),
   ],
   callbacks: {
@@ -38,12 +39,23 @@ export const handler: NextAuthOptions = {
       if (token.email) {
         try {
           const user = await getUserByEmail(token.email);
-          token.data = user
-        }
-        catch { }
+          token.data = user;
+        } catch {}
       }
-      return token
-    }
+      return token;
+    },
+    async signIn(verificationRequest) {
+      const userEmail = verificationRequest.user.email!;
+
+      // if the user has a compassion ministries domain, immediately allow their sign-in
+      if (userEmail.endsWith('@compassionministries.net')) {
+        return true;
+      }
+
+      // if the user is not on the allow-list in the settings collection
+      const settings = await getSettings();
+      return settings.allowedEmails.includes(userEmail);
+    },
   },
 
   session: {
