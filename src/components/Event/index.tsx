@@ -6,12 +6,15 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
+  Button,
   Typography,
 } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import RoleIconList from '../RoleIconList';
 import EventVolunteerList from '../EventVolunteerList';
 import EmailList from '../EmailList';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import EmailEditor from '../EmailEditor';
 
 interface EventProps {
   event: EventResponse;
@@ -41,6 +44,12 @@ export default function Event({
     return date.toLocaleTimeString(undefined, option);
   };
 
+  const [showEmail, setShowEmail] = useState(false);
+
+  const handleClick = () => {
+    setShowEmail(true);
+  };
+
   return (
     <Box>
       {/* Display the event name with different font size based on its length */}
@@ -61,18 +70,32 @@ export default function Event({
         {formatTime(new Date(event.endAt))}
       </Typography>
       <RoleIconList roles={event.eventRoles} />
-      <Accordion>
-        <AccordionSummary>
-          <Typography>Previously sent emails</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          {event.emails ? (
+
+      {event.emails && event.emails.length > 0 ? (
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>
+              Previously sent emails ({event.emails.length})
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
             <EmailList emails={event.emails} />
-          ) : (
-            <Typography>No emails sent</Typography>
-          )}
-        </AccordionDetails>
-      </Accordion>
+          </AccordionDetails>
+        </Accordion>
+      ) : (
+        <Accordion disabled>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>No previously sent emails</Typography>
+          </AccordionSummary>
+        </Accordion>
+      )}
+
+      <Button variant="contained" fullWidth onClick={handleClick}>
+        New Email
+      </Button>
+
+      {showEmail && <EmailEditor event={event} volunteers={eventVolunteers} />}
+
       <Typography
         sx={{ textDecoration: 'underline', fontWeight: 'bold' }}
         variant="h6"
