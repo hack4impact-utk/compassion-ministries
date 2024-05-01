@@ -1,10 +1,11 @@
 'use client';
-import { ListItemButton, ListItemText } from '@mui/material';
+import { ListItemButton, ListItemText, Typography } from '@mui/material';
 import React from 'react';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import Box from '@mui/material/Box';
 import { useRouter } from 'next/navigation';
-import IconList from '@/components/IconList';
+import RoleIconList from '@/components/RoleIconList';
+import BGCIcon from '@/components/BGCIcon';
 
 interface VolunteerListItemProps {
   volunteer: VolunteerResponse;
@@ -15,7 +16,7 @@ export default function VolunteerListItem({
   volunteer,
 }: VolunteerListItemProps) {
   const router = useRouter();
-
+  volunteer.backgroundCheck?.status;
   return (
     <ListItemButton
       key={volunteer._id}
@@ -23,15 +24,27 @@ export default function VolunteerListItem({
       sx={{ pl: 0, pr: 0 }}
     >
       <ListItemText
-        primary={`${volunteer.firstName} ${volunteer.lastName}`}
+        primary={
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography sx={{ mr: 1 }}>
+              {volunteer.firstName} {volunteer.lastName}
+            </Typography>
+            {volunteer.backgroundCheck?.status && (
+              <BGCIcon
+                status={volunteer.backgroundCheck?.status}
+                size="large"
+              />
+            )}
+          </Box>
+        }
         secondary={volunteer.email}
         primaryTypographyProps={{ variant: 'h5' }}
         secondaryTypographyProps={{ variant: 'body1' }}
       />
       <Box>
-        <IconList
+        <RoleIconList
           roles={volunteer.roleVerifications!.map((verif) => verif.role)}
-        ></IconList>
+        ></RoleIconList>
       </Box>
     </ListItemButton>
   );

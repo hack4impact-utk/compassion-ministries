@@ -1,6 +1,13 @@
 import { z } from 'zod';
 import { zRole } from './roles';
 import zBase, { zObjectId } from './base';
+import { EmailFormData } from '../forms/email';
+
+const zEmail = z.object({
+  subject: z.string().optional(),
+  body: z.string().min(1, "Required"),
+  sentDate: z.date(),
+})
 
 const zEvent = z.object({
   name: z.string(),
@@ -10,7 +17,7 @@ const zEvent = z.object({
   endAt: z.coerce.date(),
   date: z.coerce.date().optional(),
   eventRoles: z.array(zRole),
-  emailBodies: z.array(z.string()).optional(),
+  emails: z.array(zEmail).optional(),
   isRecurring: z.boolean(),
   parentEvent: zObjectId, // we'll never populate this
 });
@@ -43,9 +50,13 @@ export const zCreateEventRequest = z.discriminatedUnion('isRecurring', [
   zEvent.omit({ parentEvent: true }).extend({ isRecurring: z.literal(false) }),
 ]);
 
-export interface Event extends z.infer<typeof zEvent> {}
-export interface EventEntity extends z.infer<typeof zEventEntity> {}
+export const zCreateEmailRequest = EmailFormData.extend({});
+
+export interface Event extends z.infer<typeof zEvent> { }
+export interface EventEntity extends z.infer<typeof zEventEntity> { }
 export type EventResponse = z.infer<typeof zEventResponse>;
 export type CreateEventRequest = z.infer<typeof zCreateEventRequest>; // needs to be a type to support discriminated union
+
+export type CreateEmailRequest = z.infer<typeof zCreateEmailRequest>;
 
 export default zEvent;

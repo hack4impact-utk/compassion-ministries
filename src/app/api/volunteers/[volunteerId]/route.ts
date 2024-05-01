@@ -2,6 +2,7 @@ import { updateVolunteer } from '@/server/actions/Volunteer';
 import { softDeleteVolunteer, getVolunteer } from '@/server/actions/Volunteer';
 import { zObjectId } from '@/types/dataModel/base';
 import { zUpdateVolunteerRequest } from '@/types/dataModel/volunteer';
+import { userAuth } from '@/utils/auth';
 import CMError, { CMErrorResponse, CMErrorType } from '@/utils/cmerror';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -11,6 +12,8 @@ export async function DELETE(
   { params }: { params: { volunteerId: string } }
 ) {
   try {
+    await userAuth();
+
     const validationResult = zObjectId.safeParse(params.volunteerId);
     if (!validationResult.success) {
       return new CMError(CMErrorType.BadValue, 'Volunteer Id').toNextResponse();
@@ -29,6 +32,8 @@ export async function PUT(
 ) {
   // validate volunteer id
   try {
+    await userAuth();
+
     const objectIdValidationResult = zObjectId.safeParse(params.volunteerId);
     if (!objectIdValidationResult.success) {
       return new CMError(CMErrorType.BadValue, 'Volunteer Id').toNextResponse();

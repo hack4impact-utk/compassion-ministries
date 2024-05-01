@@ -1,11 +1,14 @@
-import { CreateEventRequest, EventResponse } from '@/types/dataModel/event';
+import {
+  CreateEmailRequest,
+  CreateEventRequest,
+  EventResponse,
+} from '@/types/dataModel/event';
 import Event from '../models/Event';
 import { createRecurringEvent } from './RecurringEvent';
 import {
   CreateEventVolunteerRequest,
   EventVolunteerResponse,
 } from '@/types/dataModel/eventVolunteer';
-import EventVolunteer from '../models/EventVolunteer';
 import dbConnect from '@/utils/db-connect';
 import EventSchema from '@/server/models/Event';
 import CMError, { CMErrorType } from '@/utils/cmerror';
@@ -16,6 +19,7 @@ import { RecurringEventResponse } from '@/types/dataModel/recurringEvent';
 import { upsertVolunteerRoleVerification } from './Volunteer';
 import { VerifiedRole } from '@/types/dataModel/roles';
 import { mongo } from 'mongoose';
+import nodemailer from 'nodemailer';
 
 export async function createEvent(
   createEventReq: CreateEventRequest
@@ -62,7 +66,7 @@ export async function checkInVolunteer(
       delete createEventVolunteerRequest.verifier;
     }
 
-    const res = await EventVolunteer.create(createEventVolunteerRequest);
+    const res = await EventVolunteerSchema.create(createEventVolunteerRequest);
 
     // TODO for #58 handle a duplicate entry fail case here (duplicate event+volunteer ID combination)
     if (!res) {
@@ -97,11 +101,12 @@ export async function getEventsBetweenDates(
       $gte: startDate,
       $lte: endDate,
     },
+    softDelete: { $ne: true },
   }).lean();
 
-  const recurringEvents = (await RecurringEventSchema.find().populate(
-    'event'
-  )) as RecurringEventResponse[];
+  const recurringEvents = (await RecurringEventSchema.find({
+    softDelete: false,
+  }).populate('event')) as RecurringEventResponse[];
 
   for (const recurringEvent of recurringEvents) {
     const dates = datesBetweenFromRrule(
@@ -120,7 +125,7 @@ export async function getEventsBetweenDates(
           endAt: recurringEvent.event.endAt,
           date,
           eventRoles: recurringEvent.event.eventRoles,
-          emailBodies: recurringEvent.event.emailBodies,
+          emails: recurringEvent.event.emails,
           isRecurring: true,
           parentEvent: recurringEvent.event.parentEvent,
           recurrence: recurringEvent.recurrence,
@@ -172,7 +177,7 @@ export async function getEvent(eventId: string): Promise<EventResponse> {
     endAt: doc.endAt,
     date: doc.date,
     eventRoles: doc.eventRoles,
-    emailBodies: doc.emailBodies,
+    emails: doc.emails,
     parentEvent: doc.parentEvent,
     createdAt: doc.createdAt,
     updatedAt: doc.updatedAt,
@@ -190,6 +195,7 @@ export async function getAllVolunteersForEvent(
     await dbConnect();
     eventVols = await EventVolunteerSchema.find({ event: eventId })
       .populate('volunteer')
+      .populate('organization')
       .lean();
 
     // convert ObjectId's to strings
@@ -197,11 +203,51 @@ export async function getAllVolunteersForEvent(
       ev.volunteer.previousOrganization =
         ev.volunteer.previousOrganization?.toString();
       ev.event = ev.event.toString();
-      ev.organization = ev.organization?.toString();
+      ev.organization = ev.organization;
     });
   } catch (error) {
     console.error(error);
     throw new CMError(CMErrorType.InternalError);
   }
   return eventVols;
+}
+
+// Sends an email to all volunteers have been checked in for this event
+export async function sendEventEmail(
+  eventId: string,
+  createEmailRequest: CreateEmailRequest
+): Promise<string[]> {
+  try {
+    const evs: EventVolunteerResponse[] =
+      await getAllVolunteersForEvent(eventId);
+    const emails: string[] = evs.map((ev) => {
+      return ev.volunteer.email;
+    });
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        type: 'OAuth2',
+        user: process.env.EVENTS_EMAIL_ADDR,
+        clientId: process.env.EVENTS_EMAIL_CLIENT_ID,
+        clientSecret: process.env.EVENTS_EMAIL_CLIENT_SECRET,
+        refreshToken: process.env.EVENTS_EMAIL_REFRESH_TOKEN,
+      }
+    });
+
+    const emailOptions = {
+      from: process.env.EVENTS_EMAIL_PASS,
+      to: emails.join(','),
+      subject: createEmailRequest.subject,
+      text: createEmailRequest.emailbody,
+    };
+
+    await transporter.sendMail(emailOptions);
+
+    return emails;
+
+  } catch (error) {
+    console.log(error);
+    throw new CMError(CMErrorType.InternalError);
+  }
 }
