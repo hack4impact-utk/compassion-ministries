@@ -22,7 +22,7 @@ export default function EmailList({
         return (
           <Accordion
             key={email.sentDate.toDateString()}
-            defaultExpanded={emails.length == 1}
+            defaultExpanded={emails.length === 1}
           >
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Typography>{email.subject ?? '(No subject)'}</Typography>
@@ -32,7 +32,6 @@ export default function EmailList({
                 <Typography sx={{ fontWeight: 'bold' }}>
                   Sent On: {email.sentDate.toDateString()}
                 </Typography>
-                <br />
                 <Typography>{email.body}</Typography>
               </Box>
             </AccordionDetails>
