@@ -203,14 +203,12 @@ export default function CheckInView(props: CheckInViewProps) {
       </Grid2>
       <Grid2 xs={12}>
         <LoadingButton
-          buttonProps={{
-            variant: 'contained',
-            fullWidth: true,
-            onClick: onCheckIn,
-            disabled: submitDisabled,
-          }}
           loading={loading}
           loadingSize={24}
+          onClick={onCheckIn}
+          disabled= {submitDisabled}
+          variant="contained"
+          fullWidth={true}
         >
           Check in
         </LoadingButton>
