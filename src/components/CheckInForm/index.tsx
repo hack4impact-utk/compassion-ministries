@@ -186,6 +186,11 @@ export default function CheckInForm(props: Props) {
             lastNameRegex.test(vol.lastName)
         )
       );
+      autofill({
+        firstName: value,
+        lastName: props.checkInData.lastName,
+        email: props.checkInData.email || '',
+      });
     } else {
       // if both name text boxes are cleared, it should go back to displaying all options
       if (!value && !props.checkInData.firstName) {
@@ -202,6 +207,12 @@ export default function CheckInForm(props: Props) {
             lastNameRegex.test(vol.lastName)
         )
       );
+
+      autofill({
+        firstName: props.checkInData.firstName,
+        lastName: value,
+        email: props.checkInData.email || '',
+      });
     }
   }
 
@@ -344,13 +355,13 @@ export default function CheckInForm(props: Props) {
               {...params}
               label="Last Name"
               onChange={(e) => {
-                onNameChange(e.target.value, 'last');
                 props.onChange({
                   ...props.checkInData,
                   lastName:
                     e.target.value.charAt(0).toUpperCase() +
                     e.target.value.slice(1),
                 });
+                onNameChange(e.target.value, 'last');
               }}
               error={!!props.errors?.lastName}
               helperText={props.errors?.lastName}
@@ -364,8 +375,8 @@ export default function CheckInForm(props: Props) {
             />
           )}
           onInputChange={(_, value) => {
-            onNameChange(value, 'last');
             props.onChange({ ...props.checkInData, lastName: value });
+            onNameChange(value, 'last');
           }}
           disabled={licenseLoading || (hasVolunteer && !editingFields.lastName)}
         />
@@ -395,13 +406,13 @@ export default function CheckInForm(props: Props) {
               {...params}
               label="First Name"
               onChange={(e) => {
-                onNameChange(e.target.value, 'first');
                 props.onChange({
                   ...props.checkInData,
                   firstName:
                     e.target.value.charAt(0).toUpperCase() +
                     e.target.value.slice(1),
                 });
+                onNameChange(e.target.value, 'first');
               }}
               error={!!props.errors?.firstName}
               helperText={props.errors?.firstName}
