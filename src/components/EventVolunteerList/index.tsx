@@ -7,6 +7,7 @@ import SearchField from '@/components/SearchField';
 import useSearch from '@/hooks/useSearch';
 import { Box, ListItemButton, Typography, Menu, MenuItem } from '@mui/material';
 import { useRouter } from 'next/navigation';
+import { sortByLastName } from '@/utils/sorting';
 
 // Prop Array with Objects
 interface EventVolunteerListProps {
@@ -60,8 +61,13 @@ export default function EventVolunteerList({
     <Box>
       <SearchField />
       <List>
+        {/* Sort volunteers by last name */}
         {eventVolunteers.length ? (
-          eventVolunteers.map((ev) => (
+          sortByLastName<EventVolunteerResponse>(
+            eventVolunteers,
+            'volunteer.firstName',
+            'volunteer.lastName'
+          ).map((ev) => (
             <ListItemButton
               key={ev._id}
               onClick={(event) => handleVolunteerClick(ev, event)}

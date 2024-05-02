@@ -28,6 +28,7 @@ import { formatPhoneNumber } from '@/utils/phone-number';
 import createBarcodeScanner from '@/utils/barcode/listener';
 import { capitalizeWords } from '@/utils/string';
 import { Check, Edit } from '@mui/icons-material';
+import { removeDuplicatesAndSortByPath } from '@/utils/sorting';
 
 /*
 This component has a lot going on. It primarily does three things:
@@ -323,7 +324,10 @@ export default function CheckInForm(props: Props) {
           freeSolo
           autoComplete
           value={props.checkInData.lastName || ''}
-          options={computedVolunteerOptions}
+          options={removeDuplicatesAndSortByPath<VolunteerResponse>(
+            computedVolunteerOptions,
+            'lastName'
+          )}
           isOptionEqualToValue={(option, value) => option._id === value._id}
           getOptionLabel={(vol) =>
             typeof vol === 'string' ? vol : vol.lastName
@@ -371,7 +375,10 @@ export default function CheckInForm(props: Props) {
           sx={{ mt: 2 }}
           freeSolo
           value={props.checkInData.firstName || ''}
-          options={computedVolunteerOptions}
+          options={removeDuplicatesAndSortByPath<VolunteerResponse>(
+            computedVolunteerOptions,
+            'firstName'
+          )}
           isOptionEqualToValue={(option, value) => option._id === value._id}
           getOptionLabel={(vol) =>
             typeof vol === 'string' ? vol : vol.firstName
@@ -422,7 +429,10 @@ export default function CheckInForm(props: Props) {
           freeSolo
           autoComplete
           value={props.checkInData.email || ''}
-          options={computedVolunteerOptions}
+          options={removeDuplicatesAndSortByPath<VolunteerResponse>(
+            computedVolunteerOptions,
+            'email'
+          )}
           isOptionEqualToValue={(option, value) => option._id === value._id}
           getOptionLabel={(vol) => (typeof vol === 'string' ? vol : vol.email)}
           renderOption={(props, option) => {

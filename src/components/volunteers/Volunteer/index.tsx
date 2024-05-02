@@ -24,6 +24,7 @@ import BGCIcon from '@/components/BGCIcon';
 import VolunteerReporting from '../VolunteerReporting';
 import LoadingButton from '@/components/LoadingButton';
 import { VolunteerReportResponse } from '@/server/actions/Reporting';
+import { sortByPath } from '@/utils/sorting';
 // Use VolunteerResponse Props
 interface VolunteerProps {
   volunteer: VolunteerResponse;
@@ -289,7 +290,8 @@ export default function Volunteer({
             >
               Attended Events
             </Typography>
-            {events.map((volunteerEvent, i) => (
+            {/* Sort events by date */}
+            {sortByPath(events, 'event.date').map((volunteerEvent, i) => (
               <ListItemButton
                 key={i}
                 onClick={() =>

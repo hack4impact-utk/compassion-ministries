@@ -1,4 +1,5 @@
 import { OrganizationResponse } from '@/types/dataModel/organization';
+import { sortByPath } from '@/utils/sorting';
 import { List, ListItemButton, ListItemText } from '@mui/material';
 import { useRouter } from 'next/navigation';
 
@@ -12,17 +13,20 @@ export default function OrganizationList({
   const router = useRouter();
   return (
     <List>
-      {organizations.map((organization) => (
-        <ListItemButton
-          key={organization._id}
-          onClick={() => router.push(`/organizations/${organization._id}`)}
-        >
-          <ListItemText
-            primary={organization.name}
-            primaryTypographyProps={{ variant: 'h5' }}
-          />
-        </ListItemButton>
-      ))}
+      {/* Sorted by name */}
+      {sortByPath<OrganizationResponse>(organizations, 'name').map(
+        (organization) => (
+          <ListItemButton
+            key={organization._id}
+            onClick={() => router.push(`/organizations/${organization._id}`)}
+          >
+            <ListItemText
+              primary={organization.name}
+              primaryTypographyProps={{ variant: 'h5' }}
+            />
+          </ListItemButton>
+        )
+      )}
     </List>
   );
 }

@@ -36,26 +36,35 @@ export default function VolunteerReporting({
           Affiliated Organizations
         </Typography>
         <List>
-          {Object.keys(report.organizations).map((organizationId, i) => {
-            const organizationName =
-              report.organizations[organizationId].organizationName;
-            const hoursWithOrganization =
-              report.organizations[organizationId].hoursWithOrganization;
-            return (
-              <ListItemButton
-                key={i}
-                onClick={() => router.push(`/organizations/${organizationId}`)}
-                sx={{ pl: 0 }}
-              >
-                <ListItemText
-                  primary={organizationName}
-                  secondary={`${hoursWithOrganization} hours`}
-                  primaryTypographyProps={{ variant: 'h5' }}
-                  secondaryTypographyProps={{ variant: 'body1' }}
-                />
-              </ListItemButton>
-            );
-          })}
+          {/* Sort by organization name */}
+          {Object.keys(report.organizations)
+            .sort((a, b) =>
+              report.organizations[a].organizationName.localeCompare(
+                report.organizations[b].organizationName
+              )
+            )
+            .map((organizationId, i) => {
+              const organizationName =
+                report.organizations[organizationId].organizationName;
+              const hoursWithOrganization =
+                report.organizations[organizationId].hoursWithOrganization;
+              return (
+                <ListItemButton
+                  key={i}
+                  onClick={() =>
+                    router.push(`/organizations/${organizationId}`)
+                  }
+                  sx={{ pl: 0 }}
+                >
+                  <ListItemText
+                    primary={organizationName}
+                    secondary={`${hoursWithOrganization} hours`}
+                    primaryTypographyProps={{ variant: 'h5' }}
+                    secondaryTypographyProps={{ variant: 'body1' }}
+                  />
+                </ListItemButton>
+              );
+            })}
         </List>
       </Box>
     </>

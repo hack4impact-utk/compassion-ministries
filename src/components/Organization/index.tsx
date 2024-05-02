@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { OrganizationReportResponse } from '@/server/actions/Reporting';
 import LoadingButton from '../LoadingButton';
 import OrganizationReporting from '../OrganizationReporting';
+import { sortByLastName } from '@/utils/sorting';
 
 // Use OrganizationResponse Props
 interface OrganizationProps {
@@ -59,7 +60,12 @@ export default function Organization({
       >
         Volunteers
       </Typography>
-      {volunteers.map((volunteer, index) => (
+      {/* Sort volunteers by last name */}
+      {sortByLastName<VolunteerResponse>(
+        volunteers,
+        'firstName',
+        'lastName'
+      ).map((volunteer, index) => (
         <ListItemButton
           key={index}
           onClick={() => router.push(`/volunteers/${volunteer._id}`)}
