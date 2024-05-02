@@ -16,6 +16,11 @@ declare global {
       BV_PASS: string;
     }
   }
+
+  interface WindowEventMap {
+    onbarcode: Event;
+    onbarcodestart: Event;
+  }
 }
 
 export {};
