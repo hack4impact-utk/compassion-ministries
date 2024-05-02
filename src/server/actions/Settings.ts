@@ -8,7 +8,7 @@ export async function getSettings(): Promise<SettingsResponse> {
 
   try {
     await dbConnect();
-    settingsArr = await Settings.find({});
+    settingsArr = await Settings.find({}).lean();
 
     // there should always be exactly one settins object in the db
     if (settingsArr.length !== 1) {
