@@ -178,7 +178,6 @@ export default function CheckInView(props: CheckInViewProps) {
           email: formData.email,
           phoneNumber: formData.phoneNumber,
           organization: formData.organization,
-          role: formData.role,
         } as CheckInFormData);
         setCheckInButtonAnchorEl(null);
       } else {
