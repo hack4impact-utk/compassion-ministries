@@ -10,8 +10,8 @@ const sortEventsByDateDesc = (events: EventResponse[]) => {
 };
 
 export default async function EventsPage() {
-  const startOfMonth = dayjs().startOf('month').toDate();
-  const endOfMonth = dayjs().endOf('month').toDate();
+  const startOfMonth = dayjs().startOf('year').toDate();
+  const endOfMonth = dayjs().endOf('year').toDate();
   const events = await getEventsBetweenDates(startOfMonth, endOfMonth);
   let sortedEvents: EventResponse[];
   if (!events) {
