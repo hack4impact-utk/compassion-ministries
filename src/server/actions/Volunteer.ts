@@ -154,8 +154,8 @@ export async function updateVolunteer(
 export async function deleteEventVolunteer(
   volunteerId: string,
   eventId: string
-): Promise<EventVolunteerEntity | null> {
-  let res: EventVolunteerEntity | null = null;
+): Promise<void> {
+  let res = null;
   try {
     await dbConnect();
     res = await EventVolunteerSchema.findOneAndDelete({
@@ -168,7 +168,6 @@ export async function deleteEventVolunteer(
   if (!res) {
     throw new CMError(CMErrorType.NoSuchKey, 'EventVolunteer');
   }
-  return res;
 }
 
 /**
