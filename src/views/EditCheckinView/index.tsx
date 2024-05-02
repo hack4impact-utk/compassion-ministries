@@ -58,7 +58,10 @@ export default function EditCheckInView(props: EditCheckInViewProps) {
     setValidationErrors(undefined);
 
     let verifier: string | null = null;
-    if (formData.role !== 'Food') {
+    if (
+      formData.role !== 'Food' &&
+      formData.role !== props.eventVolunteer.role
+    ) {
       verifier = await confirmRole(formData.role);
       // return if not confirmed
       if (!verifier) {
