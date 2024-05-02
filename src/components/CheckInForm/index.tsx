@@ -456,6 +456,7 @@ export default function CheckInForm(props: Props) {
           renderInput={(params) => (
             <TextField
               {...params}
+              type="email"
               label="Email Address"
               onChange={(e) => {
                 props.onChange({
