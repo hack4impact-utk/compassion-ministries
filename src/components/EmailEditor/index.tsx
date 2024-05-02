@@ -2,12 +2,13 @@
 import React, { useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { Button, TextField } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import { EventResponse } from '@/types/dataModel/event';
 import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
 import { EmailFormData } from '@/types/forms/email';
 import useSnackbar from '@/hooks/useSnackbar';
 import { useConfirm } from 'material-ui-confirm';
+import LoadingButton from '../LoadingButton';
 
 interface EmailEditorProps {
   event: EventResponse;
@@ -28,6 +29,7 @@ export default function EmailEditor({
   const confirm = useConfirm();
   const [value, setValue] = useState(formData.emailbody);
   const [subject, setSubject] = useState(formData.subject);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubjectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSubject(e.target.value);
@@ -40,6 +42,7 @@ export default function EmailEditor({
   };
 
   const handleSendEmail = async () => {
+    setIsLoading(true);
     try {
       await confirm({
         title: 'Are you sure?',
@@ -48,6 +51,7 @@ export default function EmailEditor({
         cancellationText: 'No',
       });
     } catch {
+      setIsLoading(false);
       return;
     }
 
@@ -70,11 +74,13 @@ export default function EmailEditor({
     } catch (error) {
       console.error(error);
       showSnackbar('An error occurred. Please try again.', 'error');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div>
+    <Box>
       {/* Text field for subject */}
       <TextField
         label="Subject"
@@ -84,22 +90,25 @@ export default function EmailEditor({
       />
 
       {/* Rich text editor for email body */}
-      <ReactQuill
-        theme="snow"
-        value={value}
-        onChange={handleBodyChange}
-        style={{ height: '200px' }} // Increase the height here
-      />
+      <Box sx={{ height: '200px', mb: 4 }}>
+        <ReactQuill
+          theme="snow"
+          value={value}
+          onChange={handleBodyChange}
+          style={{ height: '100%' }}
+        />
+      </Box>
 
       {/* Button to send email */}
-      <Button
+      <LoadingButton
         variant="contained"
         fullWidth
-        sx={{ mb: 2 }}
+        sx={{ my: 2 }}
         onClick={handleSendEmail}
+        loading={isLoading}
       >
         Send Email
-      </Button>
-    </div>
+      </LoadingButton>
+    </Box>
   );
 }

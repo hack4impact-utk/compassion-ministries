@@ -1,12 +1,12 @@
 'use client';
 import Event from '@/components/Event';
-import EmailEditor from '@/components/EmailEditor';
 import { EventResponse } from '@/types/dataModel/event';
 import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
 import { Box, Button } from '@mui/material';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React from 'react';
 
+// changes
 export default function EventView({
   event,
   eventVolunteers,
@@ -14,11 +14,6 @@ export default function EventView({
   event: EventResponse;
   eventVolunteers: EventVolunteerResponse[];
 }) {
-  const [showEmail, setShowEmail] = useState(false);
-
-  const handleClick = () => {
-    setShowEmail(true);
-  };
   return (
     <Box>
       {/* TODO: Add back in after demo/implementation */}
@@ -28,11 +23,12 @@ export default function EventView({
           Check-in
         </Button>
       </Link>
-      <Button variant="contained" fullWidth onClick={handleClick}>
-        New Email
-      </Button>
+      <Link href={`/events/${event._id}/edit`}>
+        <Button variant="contained" fullWidth sx={{ mb: 2 }}>
+          Edit
+        </Button>
+      </Link>
       <Event event={event} eventVolunteers={eventVolunteers} />
-      {showEmail && <EmailEditor event={event} volunteers={eventVolunteers} />}
     </Box>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 import { OrganizationResponse } from '@/types/dataModel/organization';
-import React from 'react';
+import React, {useState} from 'react';
 import Organization from '@/components/Organization';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { Button } from '@mui/material';
@@ -8,6 +8,7 @@ import Link from 'next/link';
 import useSnackbar from '@/hooks/useSnackbar';
 import { useRouter } from 'next/navigation';
 import useDeleteConfirmation from '@/hooks/useDeleteConfirmation';
+import LoadingButton from '@/components/LoadingButton';
 
 export interface OrganizationViewProps {
   organization: OrganizationResponse;
@@ -27,12 +28,14 @@ export function OrganizationView({
 
   const organizationId = organization._id.toString();
 
+  const [isLoading, setIsLoading] = useState(false);
   const handleDelete = async () => {
     try {
       if (!(await confirmDelete())) {
         return;
       }
 
+      setIsLoading(true);
       // Call the DELETE API endpoint
       const res = await fetch(`/api/organizations/${organizationId}`, {
         method: 'DELETE',
@@ -50,6 +53,8 @@ export function OrganizationView({
     } catch (e) {
       showSnackbar('Failed to delete organization', 'error');
       console.error(e);
+    } finally{
+      setIsLoading(false);
     }
   };
 
@@ -64,9 +69,13 @@ export function OrganizationView({
       </Link>
 
       {/* Button for deleting organization */}
-      <Button variant="contained" color="error" onClick={handleDelete}>
+      <LoadingButton 
+        loading={isLoading}
+        variant="contained" 
+        color="error" 
+        onClick={handleDelete}>
         Delete
-      </Button>
+      </LoadingButton>
     </div>
   );
 }

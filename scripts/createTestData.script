@@ -2,10 +2,10 @@ use("test")
 
 // if specified, clear out all existing collections (except the users collection)
 if (true) {
-   db.volunteers.deleteMany({})
-   db.organizations.deleteMany({})
-   db.eventVolunteers.deleteMany({})
-   db.events.deleteMany({})
+   db.volunteers.deleteMany({});
+   db.organizations.deleteMany({});
+   db.eventVolunteers.deleteMany({});
+   db.events.deleteMany({});
 }
 
 // create 10 organizationId variables
@@ -747,9 +747,17 @@ db.events.insertMany([
     "endAt": new Date('01 January 2024 12:00'),
     "date": new Date(ISODate().getTime() - 1000 * 3600 * 24 * -70),
     "eventRoles": ["Dental", "Food"],
-    "emailBodies": 
-    [ "I want to extend my heartfelt gratitude to each and every one of you for your dedication and hard work at the Feast of Sharing. Your efforts helped serve over 2,000 meals to members of our community in need, bringing warmth and joy during this festive season. Your kindness and generosity truly made a significant difference, and we are deeply thankful for your invaluable support.\nWarm regards,\nJimmy Shoelace",
-      "Dear Volunteer,\n\nWe hope this message finds you well. We're excited to announce that we will be hosting another heartwarming event, the 'Community Unity Dinner,' in just two weeks! The dinner will take place at the Sunshine Community Center located at 123 Main Street next Saturday, starting at 5:00 PM. We greatly appreciate your previous support and hope to see you there to make this event a success once again.\n\nBest regards,\nEmily Waterbottle"
+    "emails": [
+      {
+        "body": "I want to extend my heartfelt gratitude to each and every one of you for your dedication and hard work at the Feast of Sharing. Your efforts helped serve over 2,000 meals to members of our community in need, bringing warmth and joy during this festive season. Your kindness and generosity truly made a significant difference, and we are deeply thankful for your invaluable support.\nWarm regards,\nJimmy Shoelace",
+        "subject": "Feast of Sharing Thanks",
+        "sentDate": new Date(ISODate().getTime())
+      },
+      {
+        "body": "Dear Volunteer,\n\nWe hope this message finds you well. We're excited to announce that we will be hosting another heartwarming event, the 'Community Unity Dinner,' in just two weeks! The dinner will take place at the Sunshine Community Center located at 123 Main Street next Saturday, starting at 5:00 PM. We greatly appreciate your previous support and hope to see you there to make this event a success once again.\n\nBest regards,\nEmily Waterbottle",
+        "subject": "Feast of Sharing Follow-up event",
+        "sentDate": new Date(ISODate().getTime())
+      }
     ],
     "isRecurring": false
   },
@@ -762,8 +770,12 @@ db.events.insertMany([
     "endAt": new Date('01 January 2024 04:00'),
     "date": new Date(ISODate().getTime() - 1000 * 3600 * 24 * -2),
     "eventRoles": ["Medical", "Dental", "Food", "Save the Babies"],
-    "emailBodies": [
-      "Dear Volunteers,\n\nI wanted to extend a heartfelt thank you for your invaluable contributions at the Health for All Fair. Your dedication and hard work helped provide vital healthcare services to over 500 community members in need. Your impact truly embodies the spirit of compassion and service. Thank you again for your commitment to making a difference in our community.\nWarm regards,\nHarry Pencil"
+    "emails": [
+      {
+        "body": "Dear Volunteers,\n\nI wanted to extend a heartfelt thank you for your invaluable contributions at the Health for All Fair. Your dedication and hard work helped provide vital healthcare services to over 500 community members in need. Your impact truly embodies the spirit of compassion and service. Thank you again for your commitment to making a difference in our community.\nWarm regards,\nHarry Pencil",
+        "subject": "Health for All Fair Recap",
+        "sentDate": new Date(ISODate().getTime())
+      }
     ],
     "isRecurring": false
   },
@@ -776,8 +788,12 @@ db.events.insertMany([
     "endAt": new Date('01 January 2024 14:15'),
     "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * -50),
     "eventRoles": ["Save the Babies", "Medical", "Food"],
-    "emailBodies": [
-      "Dear Volunteers,\n\nI hope this email finds you well. I wanted to take a moment to express my heartfelt gratitude for your invaluable support and dedication during our recent Community Dental Day. Your efforts truly made a significant impact on our community, and we couldn't have achieved such success without your generosity.\n\nThroughout the day, your unwavering commitment to providing dental care to those in need was truly inspiring. Your kindness and compassion shone brightly as you worked tirelessly to ensure that every individual received the attention and care they deserved.\n\nThanks to your hard work, we were able to provide dental services to over 200 individuals, many of whom would otherwise have struggled to access essential dental care. Your willingness to give your time and expertise not only improved the oral health of our community members but also left a lasting impression on everyone you interacted with.\n\nThe smiles and gratitude we witnessed from those who benefited from your services serve as a testament to the profound impact of your volunteer efforts. Your selflessness has undoubtedly made a difference in the lives of so many, and for that, we are incredibly grateful.\n\nOnce again, thank you for your unwavering dedication and commitment to serving our community. Your kindness and generosity have touched the hearts of many and have made Community Dental Day a resounding success.\n\nWarm regards,\n\nSally Horseshoe\nVolunteer Coordinator\nsally.horseshoe@horselovers.com",
+    "emails": [
+      {
+        "body": "Dear Volunteers,\n\nI hope this email finds you well. I wanted to take a moment to express my heartfelt gratitude for your invaluable support and dedication during our recent Community Dental Day. Your efforts truly made a significant impact on our community, and we couldn't have achieved such success without your generosity.\n\nThroughout the day, your unwavering commitment to providing dental care to those in need was truly inspiring. Your kindness and compassion shone brightly as you worked tirelessly to ensure that every individual received the attention and care they deserved.\n\nThanks to your hard work, we were able to provide dental services to over 200 individuals, many of whom would otherwise have struggled to access essential dental care. Your willingness to give your time and expertise not only improved the oral health of our community members but also left a lasting impression on everyone you interacted with.\n\nThe smiles and gratitude we witnessed from those who benefited from your services serve as a testament to the profound impact of your volunteer efforts. Your selflessness has undoubtedly made a difference in the lives of so many, and for that, we are incredibly grateful.\n\nOnce again, thank you for your unwavering dedication and commitment to serving our community. Your kindness and generosity have touched the hearts of many and have made Community Dental Day a resounding success.\n\nWarm regards,\n\nSally Horseshoe\nVolunteer Coordinator\nsally.horseshoe@horselovers.com",
+        "subject": "Community Dental Day Recap",
+        "sentDate": new Date(ISODate().getTime())
+      }
     ],
     "isRecurring": false
   },
@@ -790,9 +806,17 @@ db.events.insertMany([
     "endAt": new Date('01 January 2024 22:30'),
     "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * -7),
     "eventRoles": ["Food"],
-    "emailBodies": [
-      "Dear Volunteers,\n\nThank you immensely for your dedication and hard work at the Nutrition and Wellness Drive. Your efforts have directly impacted over 500 families in our community, ensuring access to essential nutrition and wellness resources. Your kindness and commitment have truly made a significant difference.\n\nWarm regards,\nJoanne 'The animal' Lewis",
-      "Dear Volunteers,\n\nWe hope this email finds you well and filled with the same enthusiasm for community wellness as before!\n\nWe wanted to extend our heartfelt gratitude for your invaluable support during the recent Nutrition and Wellness Drive event. Your dedication and hard work truly made a significant impact on our community's health and well-being.\n\nWe are excited to inform you that we will be hosting another exciting event, the 'Healthy Living Fair,' in just two weeks' time! Details for the event are as follows:\n\nEvent Name: Healthy Living Fair\nDate: Saturday\nTime: 10:00 AM - 2:00 PM\nLocation: Greenfield Community Center, 123 Main Street, Greenfield, USA\n\nWe would be thrilled if you could join us once again to continue our mission of promoting nutrition and wellness within our community. Your passion and commitment are instrumental in making these events successful, and we truly appreciate your ongoing support.\n\nPlease let us know if you are available to volunteer for the Healthy Living Fair. Your participation will undoubtedly contribute to making a positive impact on the lives of many.\n\nLooking forward to hearing from you soon!\n\nBest regards,\nJackson Mississippi"
+    "emails": [
+      {
+        "body": "Dear Volunteers,\n\nThank you immensely for your dedication and hard work at the Nutrition and Wellness Drive. Your efforts have directly impacted over 500 families in our community, ensuring access to essential nutrition and wellness resources. Your kindness and commitment have truly made a significant difference.\n\nWarm regards,\nJoanne 'The animal' Lewis",
+        "subject": "Nutrition and Wellness Drive Impact",
+        "sentDate": new Date(ISODate().getTime())
+      },
+      {
+        "body": "Dear Volunteers,\n\nWe hope this email finds you well and filled with the same enthusiasm for community wellness as before!\n\nWe wanted to extend our heartfelt gratitude for your invaluable support during the recent Nutrition and Wellness Drive event. Your dedication and hard work truly made a significant impact on our community's health and well-being.\n\nWe are excited to inform you that we will be hosting another exciting event, the 'Healthy Living Fair,' in just two weeks' time! Details for the event are as follows:\n\nEvent Name: Healthy Living Fair\nDate: Saturday\nTime: 10:00 AM - 2:00 PM\nLocation: Greenfield Community Center, 123 Main Street, Greenfield, USA\n\nWe would be thrilled if you could join us once again to continue our mission of promoting nutrition and wellness within our community. Your passion and commitment are instrumental in making these events successful, and we truly appreciate your ongoing support.\n\nPlease let us know if you are available to volunteer for the Healthy Living Fair. Your participation will undoubtedly contribute to making a positive impact on the lives of many.\n\nLooking forward to hearing from you soon!\n\nBest regards,\nJackson Mississippi",
+        "subject": "Elm Drive Volunteering Event",
+        "sentDate": new Date(ISODate().getTime())
+      }
     ],
     "isRecurring": false
   },
@@ -805,8 +829,12 @@ db.events.insertMany([
     "endAt": new Date('01 January 2024 09:00'),
     "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * -123),
     "eventRoles": ["Medical", "Save the Babies"],
-    "emailBodies": [
-      "Dear Volunteer,\n\nI hope this message finds you well. On behalf of the entire Hope Medical Camp team, I want to express our deepest gratitude for your exceptional dedication and hard work during the recent medical camp.\n\nYour selfless contributions played a pivotal role in making the event a resounding success. Your unwavering commitment to providing quality healthcare services to the community truly made a significant impact. Together, we were able to serve [number] patients, offering them vital medical assistance and support.\n\nThe positive feedback from the attendees has been overwhelming, highlighting the genuine care and compassion you demonstrated in every interaction. Your willingness to go above and beyond has not only improved the health and well-being of those we served but has also left a lasting impression on the community.\n\nThe success of the Hope Medical Camp is a testament to the collective effort of individuals like you, who understand the importance of giving back and making a difference in the lives of others. Your time and skills have made a real impact on the health of our community, and we are truly grateful for your invaluable contribution.\n\nOnce again, thank you for your hard work, dedication, and the positive energy you brought to the Hope Medical Camp. We look forward to continuing our mission together and creating a healthier, happier community.\n\nWarm regards,\n\nAshley Ashlingtonsbergerton\nChief Medicine Holder\nHope Medical Camp Team",
+    "emails": [
+      {
+        "body": "Dear Volunteer,\n\nI hope this message finds you well. On behalf of the entire Hope Medical Camp team, I want to express our deepest gratitude for your exceptional dedication and hard work during the recent medical camp.\n\nYour selfless contributions played a pivotal role in making the event a resounding success. Your unwavering commitment to providing quality healthcare services to the community truly made a significant impact. Together, we were able to serve [number] patients, offering them vital medical assistance and support.\n\nThe positive feedback from the attendees has been overwhelming, highlighting the genuine care and compassion you demonstrated in every interaction. Your willingness to go above and beyond has not only improved the health and well-being of those we served but has also left a lasting impression on the community.\n\nThe success of the Hope Medical Camp is a testament to the collective effort of individuals like you, who understand the importance of giving back and making a difference in the lives of others. Your time and skills have made a real impact on the health of our community, and we are truly grateful for your invaluable contribution.\n\nOnce again, thank you for your hard work, dedication, and the positive energy you brought to the Hope Medical Camp. We look forward to continuing our mission together and creating a healthier, happier community.\n\nWarm regards,\n\nAshley Ashlingtonsbergerton\nChief Medicine Holder\nHope Medical Camp Team",
+        "subject": "Hope Medical Camp Shoutout",
+        "sentDate": new Date(ISODate().getTime())
+      }
     ],
     "isRecurring": false
   },
@@ -819,8 +847,12 @@ db.events.insertMany([
     "endAt": new Date('01 January 2024 17:30'),
     "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * -95),
     "eventRoles": ["Food", "Dental"],
-    "emailBodies": [
-      "Dear Volunteer,\n\nI want to express my sincere gratitude for your invaluable contribution at the Food for Thought Evening. Your dedication and hard work significantly enhanced the event, ensuring its success. Thanks to your efforts, we were able to serve over 500 meals, raising $10,000 for local food banks. Your commitment truly made a difference in the lives of those in need.\n\nWarm regards,\nDr. E. Mail",
+    "emails": [
+      {
+        "body": "Dear Volunteer,\n\nI want to express my sincere gratitude for your invaluable contribution at the Food for Thought Evening. Your dedication and hard work significantly enhanced the event, ensuring its success. Thanks to your efforts, we were able to serve over 500 meals, raising $10,000 for local food banks. Your commitment truly made a difference in the lives of those in need.\n\nWarm regards,\nDr. E. Mail",
+        "subject": "Evening Thoughts About Food For Thought Evening",
+        "sentDate": new Date(ISODate().getTime())
+      }
     ],
     "isRecurring": false,
   },
@@ -833,8 +865,12 @@ db.events.insertMany([
     "endAt": new Date('01 January 2024 12:34'),
     "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * -12),
     "eventRoles": ["Dental", "Medical"],
-    "emailBodies": [
-      "Dear Volunteers,\n\nI wanted to extend my heartfelt gratitude to each and every one of you for your invaluable dedication and hard work during the Smiles Dental Campaign. Your tireless efforts have truly made a monumental impact, providing essential dental care to over 500 underserved individuals in our community. Your compassion and commitment to improving oral health have touched the lives of so many, and we are immensely grateful for your selflessness. Thank you for being the driving force behind this transformative initiative!\n\nWarm regards,\nKaylin OvalOffice",
+    "emails": [
+      {
+        "body": "Dear Volunteers,\n\nI wanted to extend my heartfelt gratitude to each and every one of you for your invaluable dedication and hard work during the Smiles Dental Campaign. Your tireless efforts have truly made a monumental impact, providing essential dental care to over 500 underserved individuals in our community. Your compassion and commitment to improving oral health have touched the lives of so many, and we are immensely grateful for your selflessness. Thank you for being the driving force behind this transformative initiative!\n\nWarm regards,\nKaylin OvalOffice",
+        "subject": "Smiles Dental Campain Thanks!",
+        "sentDate": new Date(ISODate().getTime())
+      }
     ],
     "isRecurring": false,
   },
@@ -847,8 +883,12 @@ db.events.insertMany([
     "endAt": new Date('01 January 2024 04:22'),
     "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * -12),
     "eventRoles": ["Dental"],
-    "emailBodies": [
-      "Dear Volunteers,\n\nI wanted to extend my sincere gratitude to each of you for your unwavering dedication and hard work at the Harvest of Health Expo. Your passion and commitment were palpable, especially when you went the extra mile to assist Mrs. Johnson, who arrived with limited mobility, ensuring she could fully participate in the event. Thanks to your kindness and attentiveness, moments like these made the expo truly impactful, leaving a lasting impression on our community. Your selflessness and dedication embody the spirit of giving back. Thank you immensely for your invaluable contributions!\n\nWarm regards,\nBarack Obama II",
+    "emails": [
+      {
+        "body": "Dear Volunteers,\n\nI wanted to extend my sincere gratitude to each of you for your unwavering dedication and hard work at the Harvest of Health Expo. Your passion and commitment were palpable, especially when you went the extra mile to assist Mrs. Johnson, who arrived with limited mobility, ensuring she could fully participate in the event. Thanks to your kindness and attentiveness, moments like these made the expo truly impactful, leaving a lasting impression on our community. Your selflessness and dedication embody the spirit of giving back. Thank you immensely for your invaluable contributions!\n\nWarm regards,\nBarack Obama II",
+        "subject": "Harvest of Health Impact Summary",
+        "sentDate": new Date(ISODate().getTime())
+      }
     ],
     "isRecurring": false,
   },
@@ -861,8 +901,12 @@ db.events.insertMany([
     "endAt": new Date('01 January 2024 08:00'),
     "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * -33),
     "eventRoles": ["Medical", "Save the Babies"],
-    "emailBodies": [
-      "Dear Volunteer,\n\nI hope this email finds you well. I wanted to extend my deepest gratitude to each and every one of you for your invaluable contributions to the success of the Well-being and Care Fest last weekend. Your dedication and enthusiasm truly made a difference in the lives of many attendees.\n\nOne heartwarming moment that stands out is when a group of elderly participants joined our yoga session led by Jane, our volunteer instructor. Witnessing their smiles and sense of tranquility reminded us of the profound impact of our collective efforts.\n\nYour commitment to spreading joy and wellness resonated with everyone present, and we couldn't have achieved such positive outcomes without your unwavering support. Thank you once again for being the driving force behind this meaningful event.\n\nWarm regards,\nRobert Painting",
+    "emails": [
+      {
+        "body": "Dear Volunteer,\n\nI hope this email finds you well. I wanted to extend my deepest gratitude to each and every one of you for your invaluable contributions to the success of the Well-being and Care Fest last weekend. Your dedication and enthusiasm truly made a difference in the lives of many attendees.\n\nOne heartwarming moment that stands out is when a group of elderly participants joined our yoga session led by Jane, our volunteer instructor. Witnessing their smiles and sense of tranquility reminded us of the profound impact of our collective efforts.\n\nYour commitment to spreading joy and wellness resonated with everyone present, and we couldn't have achieved such positive outcomes without your unwavering support. Thank you once again for being the driving force behind this meaningful event.\n\nWarm regards,\nRobert Painting",
+        "subject": "Well-being and Care Fest impact report",
+        "sentDate": new Date(ISODate().getTime())
+      }
     ],
     "isRecurring": false,
   },
@@ -875,8 +919,7 @@ db.events.insertMany([
     "endAt": new Date('01 January 2024 23:59'),
     "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * -480),
     "eventRoles": ["Medical"],
-    "emailBodies": [
-    ],
+    "emails": [],
     "isRecurring": false,
   },
   {
@@ -888,8 +931,7 @@ db.events.insertMany([
     "endAt": new Date('01 January 2024 23:59'),
     "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * -4),
     "eventRoles": ["Medical"],
-    "emailBodies": [
-    ],
+    "emails": [],
     "isRecurring": false,
   },
   {
@@ -901,7 +943,7 @@ db.events.insertMany([
     "endAt": new Date('01 January 2024 12:00'),
     "date": new Date(ISODate().getTime() - 1000 * 3600 * 24 * 3),
     "eventRoles": ["Dental"],
-    "emailBodies": [],
+    "emails": [],
     "isRecurring": false
   },
   {
@@ -914,7 +956,7 @@ db.events.insertMany([
     "endAt": new Date('01 January 2024 04:00'),
     "date": new Date(ISODate().getTime() - 1000 * 3600 * 24 * 2),
     "eventRoles": ["Food"],
-    "emailBodies": [],
+    "emails": [],
     "isRecurring": false
   },
   {
@@ -926,7 +968,7 @@ db.events.insertMany([
     "endAt": new Date('01 January 2024 14:15'),
     "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 3),
     "eventRoles": ["Medical"],
-    "emailBodies": [],
+    "emails": [],
     "isRecurring": false
   },
   {
@@ -938,7 +980,7 @@ db.events.insertMany([
     "endAt": new Date('01 January 2024 22:30'),
     "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 7),
     "eventRoles": ["Save the Babies"],
-    "emailBodies": [],
+    "emails": [],
     "isRecurring": false
   },
   {
@@ -950,7 +992,7 @@ db.events.insertMany([
     "endAt": new Date('01 January 2024 09:00'),
     "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 123),
     "eventRoles": ["Medical"],
-    "emailBodies": [],
+    "emails": [],
     "isRecurring": false
   },
   {
@@ -962,7 +1004,7 @@ db.events.insertMany([
     "endAt": new Date('01 January 2024 17:30'),
     "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 95),
     "eventRoles": ["Food"],
-    "emailBodies": [],
+    "emails": [],
     "isRecurring": false
   },
   {
@@ -974,7 +1016,7 @@ db.events.insertMany([
     "endAt": new Date('01 January 2024 04:22'),
     "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 12),
     "eventRoles": ["Dental"],
-    "emailBodies": [],
+    "emails": [],
     "isRecurring": false
   },
   {
@@ -986,7 +1028,7 @@ db.events.insertMany([
     "endAt": new Date('01 January 2024 08:00'),
     "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 33),
     "eventRoles": ["Save the Babies"],
-    "emailBodies": [],
+    "emails": [],
     "isRecurring": false
   },
   {
@@ -998,7 +1040,7 @@ db.events.insertMany([
     "endAt": new Date('01 January 2024 23:59'),
     "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 480),
     "eventRoles": ["Medical"],
-    "emailBodies": [],
+    "emails": [],
     "isRecurring": false
   },
   {
@@ -1010,10 +1052,10 @@ db.events.insertMany([
     "endAt": new Date('01 January 2024 12:00'),
     "date": new Date(ISODate().getTime() - 1000 * 3600 * 24 * 3),
     "eventRoles": ["Food"],
-    "emailBodies": [],
+    "emails": [],
     "isRecurring": false
   }
-])
+]);
 
 // creates 150 eventVolunteerId variables
 for (let i = 1; i <= 150; i++) {
@@ -2206,4 +2248,3 @@ db.eventVolunteers.insertMany([
         "updatedAt": new Date()
     },
 ])
-

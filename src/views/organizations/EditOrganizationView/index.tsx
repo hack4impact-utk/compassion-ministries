@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Box, Button, Container, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import OrganizationForm from '@/components/OrganizationForm';
 import { OrganizationResponse } from '@/types/dataModel/organization';
 import {
@@ -11,6 +11,7 @@ import useSnackbar from '@/hooks/useSnackbar';
 import { useRouter } from 'next/navigation';
 import { ValidationErrors } from '@/utils/validation';
 import useValidation from '@/hooks/useValidation';
+import LoadingButton from '@/components/LoadingButton';
 
 // Organization props
 interface EditOrganizationViewProps {
@@ -36,6 +37,7 @@ function EditOrganizationView({
   };
 
   // hit put organization endpoint
+  const [isLoading, setIsLoading] = useState(false);
   const onClick = async () => {
     // validate the form
     const validationResult = validate(organizationData);
@@ -48,6 +50,7 @@ function EditOrganizationView({
     setValidationErrors(undefined);
 
     try {
+      setIsLoading(true);
       const res = await fetch(`/api/organizations/${currentOrganization._id}`, {
         method: 'PUT',
         body: JSON.stringify(organizationData),
@@ -66,6 +69,9 @@ function EditOrganizationView({
       showSnackbar('Failed to update organization', 'error');
       console.error(e);
     }
+    finally{
+      setIsLoading(false)
+    }
   };
 
   return (
@@ -80,9 +86,13 @@ function EditOrganizationView({
         errors={validationErrors}
       />
       <Box mt={2}>
-        <Button variant="contained" onClick={onClick} fullWidth>
-          Submit
-        </Button>
+        <LoadingButton 
+          loading={isLoading}
+          variant="contained" 
+          onClick={onClick} 
+          fullWidth>
+            Submit
+        </LoadingButton>
       </Box>
     </Container>
   );

@@ -5,7 +5,7 @@ import zVolunteer, {
   zUpdateVolunteerRequest,
   zVolunteerResponse,
 } from './volunteer';
-import zOrganization from './organization';
+import zOrganization, { zOrganizationResponse } from './organization';
 import zBase, { zObjectId } from './base';
 import { zRole } from './roles';
 import zEvent, { zEventResponse } from './event';
@@ -30,8 +30,8 @@ export const zCreateEventVolunteerRequestBase = zEventVolunteer.extend({
   volunteer: z.union([zObjectId, zCreateVolunteerRequest]),
   verifier: z.string().optional(),
 });
- // If `isEdited` is false (when updating an existing volunteer during checkin), zCreateEventVolunteerRequest will just be zCreateEventVolunteerRequestBase.
- // Otherwise, the volunteer field will be an ObjectId, and `updatedVolunteer` will exist
+// If `isEdited` is false (when updating an existing volunteer during checkin), zCreateEventVolunteerRequest will just be zCreateEventVolunteerRequestBase.
+// Otherwise, the volunteer field will be an ObjectId, and `updatedVolunteer` will exist
 export const zCreateEventVolunteerRequest = z.discriminatedUnion('isEdited', [
   zCreateEventVolunteerRequestBase.extend({
     isEdited: z.literal(false),
@@ -56,11 +56,12 @@ export const zUpdateEventVolunteerRequest = z.union([
 
 const zEventVolunteerResponse = zEventVolunteerEntity.extend({
   volunteer: zUnpopulatedVolunteerResponse,
+  organization: zOrganizationResponse,
 });
 
 const zVolunteerEventResponse = zEventVolunteerEntity.extend({
   event: zEventResponse,
-  organization: zOrganization.optional(),
+  organization: zOrganizationResponse.optional(),
 });
 
 export const zPopulatedEventVolunteerResponse = zEventVolunteerEntity.extend({
