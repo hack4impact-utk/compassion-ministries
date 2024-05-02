@@ -12,9 +12,9 @@ export default function Appbar({ setDrawerOpen, children }: AppbarProps) {
   return (
     <Responsive
       mobile={
-        <MobileAppbar setDrawerOpen={setDrawerOpen} children={children} />
+        <MobileAppbar setDrawerOpen={setDrawerOpen}>{children}</MobileAppbar>
       }
-      desktop={<DesktopAppbar children={children} />}
+      desktop={<DesktopAppbar>{children}</DesktopAppbar>}
     />
   );
 }
