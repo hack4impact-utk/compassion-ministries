@@ -5,13 +5,16 @@ import MobileAppbar from './MobileAppbar';
 
 interface AppbarProps {
   setDrawerOpen: () => void;
+  children?: React.ReactNode;
 }
 
-export default function Appbar({ setDrawerOpen }: AppbarProps) {
+export default function Appbar({ setDrawerOpen, children }: AppbarProps) {
   return (
     <Responsive
-      mobile={<MobileAppbar setDrawerOpen={setDrawerOpen} />}
-      desktop={<DesktopAppbar />}
+      mobile={
+        <MobileAppbar setDrawerOpen={setDrawerOpen} children={children} />
+      }
+      desktop={<DesktopAppbar children={children} />}
     />
   );
 }

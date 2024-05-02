@@ -4,9 +4,13 @@ import { Menu } from '@mui/icons-material';
 
 interface MobileAppbarProps {
   setDrawerOpen: () => void;
+  children?: React.ReactNode;
 }
 
-export default function HeaderAppBar({ setDrawerOpen }: MobileAppbarProps) {
+export default function HeaderAppBar({
+  setDrawerOpen,
+  children,
+}: MobileAppbarProps) {
   const theme = useTheme();
   return (
     <>
@@ -33,6 +37,7 @@ export default function HeaderAppBar({ setDrawerOpen }: MobileAppbarProps) {
             >
               <Menu />
             </IconButton>
+            {children}
           </Box>
           {/* keeps the sign in user circle in the right most corner */}
 

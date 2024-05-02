@@ -8,14 +8,16 @@ export const metadata = {
 
 export default function RootLayout({
   children,
+  appbar,
 }: {
   children: React.ReactNode;
+  appbar?: React.ReactNode;
 }) {
   //Render HTML body with Providers and Navbar components, including children.
   return (
     <html lang="en">
       <body style={{ margin: 0 }}>
-        <AppLayout>{children}</AppLayout>
+        <AppLayout appbar={appbar}>{children}</AppLayout>
       </body>
     </html>
   );
