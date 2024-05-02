@@ -1,4 +1,7 @@
-import { UpdateAllowedUsersRequest, UserResponse } from '@/types/dataModel/user';
+import {
+  UpdateAllowedUsersRequest,
+  UserResponse,
+} from '@/types/dataModel/user';
 import dbConnect from '@/utils/db-connect';
 import UserSchema from '@/server/models/User';
 import CMError, { CMErrorType } from '@/utils/cmerror';
@@ -30,6 +33,15 @@ export async function getAllUsers(): Promise<UserResponse[]> {
   return users;
 }
 
+export async function removeUser(userId: string): Promise<void> {
+  try {
+    await dbConnect();
+    await UserSchema.deleteOne({ _id: userId });
+  } catch (error) {
+    throw new CMError(CMErrorType.InternalError);
+  }
+}
+
 export async function addAdmins(userIds: string[]): Promise<void> {
   try {
     await dbConnect();
@@ -56,17 +68,27 @@ export async function updateAllowedUsers(req: UpdateAllowedUsersRequest) {
 
     // if userEmails is defined, append new unique emails to array
     if (req.userEmails) {
-      const currentSettings = await getSettings()
-      // Concatenate values, then cast to set and back to remove duplicate entries
-      const newAllowedEmails = [...new Set(currentSettings.allowedEmails.concat(req.userEmails))]
+      const currentSettings = await getSettings();
       // Replace old arr with new arr
-      await Settings.updateOne({ _id: (await getSettings())._id }, { allowedEmails: newAllowedEmails })
+      await Settings.updateOne(
+        { _id: currentSettings._id },
+        { allowedEmails: req.userEmails }
+      );
+
+      // Remove users that are no longer allowed
+      const users = await getAllUsers();
+
+      users.forEach(async (user) => {
+        if (!req.userEmails?.includes(user.email)) {
+          await removeUser(user._id);
+        }
+      });
     }
     // if adminIds is defined, flag users as admins
     if (req.adminIds) {
-      await addAdmins(req.adminIds)
+      await addAdmins(req.adminIds);
     }
   } catch (e) {
-    throw new CMError(CMErrorType.InternalError)
+    throw new CMError(CMErrorType.InternalError);
   }
 }
