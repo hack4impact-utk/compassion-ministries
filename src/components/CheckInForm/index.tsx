@@ -351,13 +351,13 @@ export default function CheckInForm(props: Props) {
               {...params}
               label="Last Name"
               onChange={(e) => {
-                onNameChange(e.target.value, 'last');
                 props.onChange({
                   ...props.checkInData,
                   lastName:
                     e.target.value.charAt(0).toUpperCase() +
                     e.target.value.slice(1),
                 });
+                onNameChange(e.target.value, 'last');
               }}
               error={!!props.errors?.lastName}
               helperText={props.errors?.lastName}
@@ -371,8 +371,8 @@ export default function CheckInForm(props: Props) {
             />
           )}
           onInputChange={(_, value) => {
-            onNameChange(value, 'last');
             props.onChange({ ...props.checkInData, lastName: value });
+            onNameChange(value, 'last');
           }}
           disabled={licenseLoading || (hasVolunteer && !editingFields.lastName)}
         />
@@ -399,13 +399,13 @@ export default function CheckInForm(props: Props) {
               {...params}
               label="First Name"
               onChange={(e) => {
-                onNameChange(e.target.value, 'first');
                 props.onChange({
                   ...props.checkInData,
                   firstName:
                     e.target.value.charAt(0).toUpperCase() +
                     e.target.value.slice(1),
                 });
+                onNameChange(e.target.value, 'first');
               }}
               error={!!props.errors?.firstName}
               helperText={props.errors?.firstName}
