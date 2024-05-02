@@ -5,7 +5,6 @@ import {
 } from '@/types/dataModel/volunteer';
 import EventVolunteerSchema from '../models/EventVolunteer';
 import {
-  EventVolunteerEntity,
   VolunteerEventResponse,
   PopulatedEventVolunteerResponse,
 } from '@/types/dataModel/eventVolunteer';
