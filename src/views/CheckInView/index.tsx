@@ -19,8 +19,9 @@ import { ValidationErrors } from '@/utils/validation';
 import { Button, ButtonGroup, Menu, MenuItem, Typography } from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowDropDownIcon } from '@mui/x-date-pickers/icons';
+import { EditableFieldsProvider } from '@/hooks/useEditableFields';
 
 interface CheckInViewProps {
   event: EventResponse;
@@ -46,6 +47,10 @@ export default function CheckInView(props: CheckInViewProps) {
   const { showSnackbar } = useSnackbar();
   const validate = useValidation(zCheckInFormData);
   const router = useRouter();
+
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
 
   /*
     This function is responsible for calling the check in api endpoint and
@@ -205,17 +210,17 @@ export default function CheckInView(props: CheckInViewProps) {
         <Typography variant="h4">Check in for {props.event.name}</Typography>
       </Grid2>
       <Grid2 xs={12}>
-        <CheckInForm
-          checkInData={formData}
-          onChange={(e) => {
-            setFormData(e);
-          }}
-          event={props.event}
-          volunteers={props.volunteers}
-          organizations={props.organizations}
-          errors={validationErrors}
-          setSubmitDisabled={setSubmitDisabled}
-        />
+        <EditableFieldsProvider>
+          <CheckInForm
+            checkInData={formData}
+            onChange={(e) => setFormData(e)}
+            event={props.event}
+            volunteers={props.volunteers}
+            organizations={props.organizations}
+            errors={validationErrors}
+            setSubmitDisabled={setSubmitDisabled}
+          />
+        </EditableFieldsProvider>
       </Grid2>
       <Grid2 xs={12}>
         <ButtonGroup variant="contained" fullWidth>
@@ -232,20 +237,21 @@ export default function CheckInView(props: CheckInViewProps) {
             size="small"
             sx={{ width: '2.5%' }}
             onClick={(e) => setCheckInButtonAnchorEl(e.currentTarget)}
+            disabled={submitDisabled || loading}
           >
             <ArrowDropDownIcon />
           </Button>
-          <Menu
-            anchorEl={checkInButtonAnchorEl}
-            open={checkInButtonMenuOpen}
-            onClose={() => setCheckInButtonAnchorEl(null)}
-          >
-            {/* Prepopulates the next checkin form with all info except name. Used for family members that share info */}
-            <MenuItem onClick={() => onCheckIn(true)}>
-              Check in volunteer and add family member
-            </MenuItem>
-          </Menu>
         </ButtonGroup>
+        <Menu
+          anchorEl={checkInButtonAnchorEl}
+          open={checkInButtonMenuOpen}
+          onClose={() => setCheckInButtonAnchorEl(null)}
+        >
+          {/* Prepopulates the next checkin form with all info except name. Used for family members that share info */}
+          <MenuItem onClick={() => onCheckIn(true)}>
+            Check in volunteer and add family member
+          </MenuItem>
+        </Menu>
       </Grid2>
     </Grid2>
   );
