@@ -213,7 +213,7 @@ export default function CheckInView(props: CheckInViewProps) {
         <EditableFieldsProvider>
           <CheckInForm
             checkInData={formData}
-            onChange={(e) => setFormData(e)}
+            onChange={setFormData}
             event={props.event}
             volunteers={props.volunteers}
             organizations={props.organizations}
