@@ -1,15 +1,11 @@
 'use client';
 import { EventResponse } from '@/types/dataModel/event';
-import {
-  CreateOrganizationRequest,
-  OrganizationResponse,
-} from '@/types/dataModel/organization';
+import { OrganizationResponse } from '@/types/dataModel/organization';
 import { Role } from '@/types/dataModel/roles';
 import { VolunteerResponse } from '@/types/dataModel/volunteer';
 import { CheckInFormData } from '@/types/forms/checkIn';
 import { ValidationErrors } from '@/utils/validation';
 import {
-  Autocomplete,
   Box,
   FormControl,
   FormControlLabel,
@@ -18,17 +14,18 @@ import {
   Radio,
   RadioGroup,
   TextField,
-  createFilterOptions,
   LinearProgress,
-  IconButton,
   Button,
 } from '@mui/material';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useRef } from 'react';
 import { formatPhoneNumber } from '@/utils/phone-number';
-import createBarcodeScanner from '@/utils/barcode/listener';
-import { capitalizeWords } from '@/utils/string';
-import { Check, Edit } from '@mui/icons-material';
+import { capitalizeString, capitalizeWords } from '@/utils/string';
 import { removeDuplicatesAndSortByPath } from '@/utils/sorting';
+import OrganizationAutocomplete from './OrganizationAutocomplete';
+import useLicenseScanner from '@/hooks/useLicenseScanner';
+import EditableTextField from '../EditableTextField';
+import EditableAutocomplete from '../EditableAutocomplete';
+import useEditableFields from '@/hooks/useEditableFields';
 
 /*
 This component has a lot going on. It primarily does three things:
@@ -54,169 +51,149 @@ interface Props {
   event: EventResponse;
   organizations: OrganizationResponse[];
   checkInData: CheckInFormData;
-  onChange: (checkInData: CheckInFormData) => void;
+  onChange: Dispatch<SetStateAction<CheckInFormData>>;
   errors?: ValidationErrors<CheckInFormData>;
   setSubmitDisabled?: (disabled: boolean) => void;
 }
 
-type OrganizationOption = OrganizationResponse & { display?: string };
-
-const filter = createFilterOptions<OrganizationOption>();
-
 // TODO prevent input of role that the volunteer is not verified for
 export default function CheckInForm(props: Props) {
-  const [volunteerOptions, setVolunteerOptions] = useState<VolunteerResponse[]>(
-    props.volunteers
-  );
-  const [editingFields, setEditingFields] = useState<
-    Record<keyof CheckInFormData, string>
-  >({} as Record<keyof CheckInFormData, string>);
-
-  const [licenseLoading, setLicenseLoading] = useState(false);
-  const emailRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
   const hasVolunteer = useMemo(() => {
     return !!props.checkInData.volunteerId;
   }, [props.checkInData.volunteerId]);
+  const inFamilyMode = useMemo(() => {
+    return (
+      !!props.checkInData.email &&
+      !!props.checkInData.phoneNumber &&
+      !!props.checkInData.address
+    );
+  }, [
+    props.checkInData.email,
+    props.checkInData.phoneNumber,
+    props.checkInData.address,
+  ]);
 
-  // add barcode listeners
+  const volunteerOptions = useMemo(() => {
+    // filter based on the currently tracked first, last, and email
+    // fields
+    const filtered = props.volunteers.filter((vol) => {
+      return (
+        (!props.checkInData.firstName ||
+          vol.firstName.toLowerCase() ===
+            props.checkInData.firstName?.toLowerCase()) &&
+        (!props.checkInData.lastName ||
+          vol.lastName.toLowerCase() ===
+            props.checkInData.lastName?.toLowerCase()) &&
+        (!props.checkInData.email ||
+          vol.email.toLowerCase() === props.checkInData.email?.toLowerCase())
+      );
+    });
+
+    // if we have no matches and we are not in family mode, return all volunteers
+    // TODO: this has a slight bug where filling out the first name with something new then
+    //       the last name shows all options (it shouldnt). idk how to fix that rn
+    if (filtered.length === 0 && !inFamilyMode) {
+      return props.volunteers;
+    }
+    return filtered;
+  }, [
+    props.volunteers,
+    props.checkInData.firstName,
+    props.checkInData.lastName,
+    props.checkInData.email,
+    inFamilyMode,
+  ]);
+  const { isEditingAny } = useEditableFields();
+
+  // keep submit button state synced with editing state
   useEffect(() => {
-    createBarcodeScanner(200);
+    props.setSubmitDisabled?.(isEditingAny);
+  }, [isEditingAny, props.setSubmitDisabled]);
 
-    // add listeners for barcode events
-    window.addEventListener('onbarcode', (e: any) => {
-      props.setSubmitDisabled?.(false);
-      setLicenseLoading(false);
-      const { data } = e.detail;
+  const barcodeHandler = (e: any) => {
+    props.setSubmitDisabled?.(false);
 
-      const first = capitalizeWords(data.firstName);
-      const last = capitalizeWords(data.lastName);
-      const street = capitalizeWords(data.addressStreet);
-      const city = capitalizeWords(data.addressCity);
-      const zip = data.addressPostalCode.substr(0, 5);
-      const state = data.addressState;
-      const address = `${street}, ${city}, ${state} ${zip}`;
+    const { data } = e.detail;
+    const first = capitalizeWords(data.firstName);
+    const last = capitalizeWords(data.lastName);
+    const street = capitalizeWords(data.addressStreet);
+    const city = capitalizeWords(data.addressCity);
+    const zip = data.addressPostalCode.substr(0, 5);
+    const state = data.addressState;
+    const address = `${street}, ${city}, ${state} ${zip}`;
 
-      const searchSuccess = autofill({
-        firstName: first,
-        lastName: last,
-        address,
-      });
-
-      // focus email input
-      if (!searchSuccess) {
-        setTimeout(() => {
-          emailRef.current?.focus();
-        }, 50);
-      }
+    const searchSuccess = autofill({
+      firstName: first,
+      lastName: last,
+      address,
     });
 
-    window.addEventListener('onbarcodestart', () => {
-      setLicenseLoading(true);
-      props.setSubmitDisabled?.(true);
-    });
-  }, []);
-
-  // when the parent updates the volunteers it's passing in, update our state
-  // TODO this can be removed once SSR provides props
-  useEffect(() => setVolunteerOptions(props.volunteers), [props.volunteers]);
-
-  function editField(field: keyof CheckInFormData) {
-    props.setSubmitDisabled?.(true);
-    setEditingFields({ ...editingFields, [field]: true });
-  }
-
-  function stopEditingField(field: keyof CheckInFormData) {
-    const updatedEditingFields = { ...editingFields, [field]: false };
-
-    if (
-      Object.keys(updatedEditingFields).every(
-        (key) => !updatedEditingFields[key as keyof CheckInFormData]
-      )
-    ) {
-      props.setSubmitDisabled?.(false);
+    // focus email input
+    if (!searchSuccess) {
+      setTimeout(() => {
+        emailRef.current?.focus();
+      }, 50);
     }
-    setEditingFields(updatedEditingFields);
-  }
-
-  async function createNewOrganization(name: string) {
+  };
+  const barcodeStartHandler = () => {
     props.setSubmitDisabled?.(true);
-    const orgReq: CreateOrganizationRequest = {
-      name,
-    };
+  };
+  const { licenseLoading } = useLicenseScanner(barcodeHandler, {
+    barcodeStartHandler,
+    strokeInterval: 200,
+  });
 
-    // make post req
-    try {
-      const res = await fetch('/api/organizations', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(orgReq),
-      });
-
-      props.setSubmitDisabled?.(false);
-      if (res.status === 201) {
-        const data = await res.json();
-
-        // TODO validate response
-        return data.id;
-      }
-    } catch (e) {
-      console.error('failed to create new organization: ', e);
-      props.setSubmitDisabled?.(false);
-    }
+  function handleChange(name: string, value?: string) {
+    props.onChange((currData) => ({
+      ...currData,
+      [name]: value,
+    }));
   }
 
   // when the user enters in a first/last name, filter the options of the first/last/email fields to match possible values
-  function onNameChange(value: string, type: 'first' | 'last') {
+  function handleNameSelected(value: string, type: 'first' | 'last') {
     // narrow down available options for name/email based on name input
     if (type === 'first') {
-      // if both name text boxes are cleared, it should go back to displaying all options
-      if (!value && !props.checkInData.lastName) {
-        setVolunteerOptions(props.volunteers);
-        return;
+      // autofill if there is a last name, and the form is not already filled
+      if (
+        value &&
+        props.checkInData.lastName &&
+        !hasVolunteer &&
+        inFamilyMode
+      ) {
+        autofill({
+          firstName: value,
+          lastName: props.checkInData.lastName,
+          email: props.checkInData.email || '',
+        });
+      } else {
+        handleChange('firstName', value);
       }
-
-      const firstNameRegex = new RegExp(value, 'i');
-      const lastNameRegex = new RegExp(props.checkInData.lastName, 'i');
-      setVolunteerOptions(
-        props.volunteers.filter(
-          (vol) =>
-            firstNameRegex.test(vol.firstName) &&
-            lastNameRegex.test(vol.lastName)
-        )
-      );
-      autofill({
-        firstName: value,
-        lastName: props.checkInData.lastName,
-        email: props.checkInData.email || '',
-      });
     } else {
-      // if both name text boxes are cleared, it should go back to displaying all options
-      if (!value && !props.checkInData.firstName) {
-        setVolunteerOptions(props.volunteers);
-        return;
+      if (
+        value &&
+        props.checkInData.firstName &&
+        !hasVolunteer &&
+        inFamilyMode
+      ) {
+        autofill({
+          firstName: props.checkInData.firstName,
+          lastName: value,
+          email: props.checkInData.email || '',
+        });
+      } else {
+        handleChange('lastName', value);
       }
-
-      const lastNameRegex = new RegExp(value, 'i');
-      const firstNameRegex = new RegExp(props.checkInData.firstName, 'i');
-      setVolunteerOptions(
-        volunteerOptions.filter(
-          (vol) =>
-            firstNameRegex.test(vol.firstName) &&
-            lastNameRegex.test(vol.lastName)
-        )
-      );
-
-      autofill({
-        firstName: props.checkInData.firstName,
-        lastName: value,
-        email: props.checkInData.email || '',
-      });
     }
   }
 
-  function onEmailChange(email: string) {
+  function handleEmailSelected(email: string | null) {
+    // if no value, clear the form
+    if (!email) {
+      return;
+    }
+
     // if the form is already filled, don't autofill
     if (!hasVolunteer) {
       autofill({ ...props.checkInData, email });
@@ -250,32 +227,36 @@ export default function CheckInForm(props: Props) {
     // if we have a single match, autofill the form
     if (volunteerMatches.length === 1) {
       const vol = volunteerMatches[0];
-      const updatedFormData: CheckInFormData = {
-        ...props.checkInData,
-        firstName: vol.firstName,
-        lastName: vol.lastName,
-        email: vol.email,
-        phoneNumber: formatPhoneNumber(vol.phoneNumber),
-        address: vol.address,
-        organization: vol.previousOrganization,
-        volunteerId: vol._id,
-      };
+      props.onChange((currData) => {
+        const updatedFormData: CheckInFormData = {
+          ...currData,
+          firstName: vol.firstName,
+          lastName: vol.lastName,
+          email: vol.email,
+          phoneNumber: formatPhoneNumber(vol.phoneNumber),
+          address: vol.address,
+          organization: vol.previousOrganization,
+          volunteerId: vol._id,
+        };
 
-      // ensure we only set the role if the event has it
-      if (
-        vol.previousRole &&
-        props?.event?.eventRoles.includes(vol.previousRole)
-      ) {
-        updatedFormData.role = vol.previousRole;
-      }
-      props.onChange(updatedFormData);
+        // ensure we only set the role if the event has it
+        if (
+          vol.previousRole &&
+          props?.event?.eventRoles.includes(vol.previousRole)
+        ) {
+          updatedFormData.role = vol.previousRole;
+        }
+
+        return updatedFormData;
+      });
       return true;
     } else {
       // if we have multiple matches or no matches, just fill the search into the form
-      props.onChange({
-        ...props.checkInData,
+
+      props.onChange((currData) => ({
+        ...currData,
         ...search,
-      });
+      }));
 
       return false;
     }
@@ -288,38 +269,6 @@ export default function CheckInForm(props: Props) {
     } as CheckInFormData);
   }
 
-  function fieldEndAdornment(
-    field: keyof CheckInFormData,
-    endAdornment: React.ReactNode = null
-  ) {
-    return editingFields[field] ? (
-      <>
-        {endAdornment}
-        <IconButton
-          onClick={() => stopEditingField(field)}
-          disabled={
-            !props.checkInData[field] || props.checkInData[field] === ''
-          }
-        >
-          <Check />
-        </IconButton>
-      </>
-    ) : hasVolunteer ? (
-      <IconButton onClick={() => editField(field)}>
-        <Edit />
-      </IconButton>
-    ) : (
-      endAdornment
-    );
-  }
-
-  const computedVolunteerOptions = useMemo(() => {
-    if (!hasVolunteer) {
-      return volunteerOptions;
-    }
-    return [];
-  }, [volunteerOptions, hasVolunteer]);
-
   return (
     <>
       {licenseLoading && <LinearProgress />}
@@ -330,13 +279,15 @@ export default function CheckInForm(props: Props) {
       )}
       <Box pt={2}>
         {/* Last name */}
-        <Autocomplete
+        <EditableAutocomplete
           sx={{ mt: 2 }}
           freeSolo
           autoComplete
+          autoHighlight
           value={props.checkInData.lastName || ''}
+          name="lastName"
           options={removeDuplicatesAndSortByPath<VolunteerResponse>(
-            computedVolunteerOptions,
+            volunteerOptions,
             'lastName'
           )}
           isOptionEqualToValue={(option, value) => option._id === value._id}
@@ -354,40 +305,33 @@ export default function CheckInForm(props: Props) {
             <TextField
               {...params}
               label="Last Name"
-              onChange={(e) => {
-                props.onChange({
-                  ...props.checkInData,
-                  lastName:
-                    e.target.value.charAt(0).toUpperCase() +
-                    e.target.value.slice(1),
-                });
-                onNameChange(e.target.value, 'last');
-              }}
               error={!!props.errors?.lastName}
               helperText={props.errors?.lastName}
-              InputProps={{
-                ...params.InputProps,
-                endAdornment: fieldEndAdornment(
-                  'lastName',
-                  params.InputProps.endAdornment
-                ),
-              }}
             />
           )}
           onInputChange={(_, value) => {
-            props.onChange({ ...props.checkInData, lastName: value });
-            onNameChange(value, 'last');
+            handleChange('lastName', capitalizeString(value));
           }}
-          disabled={licenseLoading || (hasVolunteer && !editingFields.lastName)}
+          onChange={(_, value) => {
+            if (value === null) {
+              handleChange('lastName', undefined);
+            } else if (typeof value !== 'string' && !(value instanceof Array)) {
+              handleNameSelected(value.lastName, 'last');
+            }
+          }}
+          disabled={licenseLoading}
+          requireEditing={hasVolunteer}
         />
 
         {/* First name */}
-        <Autocomplete
+        <EditableAutocomplete
           sx={{ mt: 2 }}
           freeSolo
+          autoHighlight
           value={props.checkInData.firstName || ''}
+          name="firstName"
           options={removeDuplicatesAndSortByPath<VolunteerResponse>(
-            computedVolunteerOptions,
+            volunteerOptions,
             'firstName'
           )}
           isOptionEqualToValue={(option, value) => option._id === value._id}
@@ -405,43 +349,34 @@ export default function CheckInForm(props: Props) {
             <TextField
               {...params}
               label="First Name"
-              onChange={(e) => {
-                props.onChange({
-                  ...props.checkInData,
-                  firstName:
-                    e.target.value.charAt(0).toUpperCase() +
-                    e.target.value.slice(1),
-                });
-                onNameChange(e.target.value, 'first');
-              }}
               error={!!props.errors?.firstName}
               helperText={props.errors?.firstName}
-              InputProps={{
-                ...params.InputProps,
-                endAdornment: fieldEndAdornment(
-                  'firstName',
-                  params.InputProps.endAdornment
-                ),
-              }}
             />
           )}
           onInputChange={(_, value) => {
-            onNameChange(value, 'first');
-            props.onChange({ ...props.checkInData, firstName: value });
+            handleChange('firstName', capitalizeString(value));
           }}
-          disabled={
-            licenseLoading || (hasVolunteer && !editingFields.firstName)
-          }
+          onChange={(_, value) => {
+            if (value === null) {
+              handleChange('firstName', undefined);
+            } else if (typeof value !== 'string' && !(value instanceof Array)) {
+              handleNameSelected(value.firstName, 'first');
+            }
+          }}
+          disabled={licenseLoading}
+          requireEditing={hasVolunteer}
         />
 
         {/* Email */}
-        <Autocomplete
+        <EditableAutocomplete
           sx={{ mt: 2 }}
           freeSolo
           autoComplete
+          autoHighlight
           value={props.checkInData.email || ''}
+          name="email"
           options={removeDuplicatesAndSortByPath<VolunteerResponse>(
-            computedVolunteerOptions,
+            volunteerOptions,
             'email'
           )}
           isOptionEqualToValue={(option, value) => option._id === value._id}
@@ -457,45 +392,32 @@ export default function CheckInForm(props: Props) {
             <TextField
               {...params}
               label="Email Address"
-              onChange={(e) => {
-                props.onChange({
-                  ...props.checkInData,
-                  email: e.target.value,
-                });
-              }}
               error={!!props.errors?.email}
               helperText={props.errors?.email}
               inputRef={emailRef}
-              InputProps={{
-                ...params.InputProps,
-                endAdornment: fieldEndAdornment(
-                  'email',
-                  params.InputProps.endAdornment
-                ),
-              }}
             />
           )}
           onInputChange={(_, value) => {
-            if (value) {
-              props.onChange({ ...props.checkInData, email: value });
-              onEmailChange(value);
-              return;
+            handleChange('email', value);
+          }}
+          onChange={(_, value) => {
+            if (typeof value !== 'string' && !(value instanceof Array)) {
+              handleEmailSelected(value?.email || null);
             }
           }}
-          disabled={licenseLoading || (hasVolunteer && !editingFields.email)}
+          disabled={licenseLoading}
+          requireEditing={hasVolunteer}
         />
 
         {/* Phone Number */}
-        <TextField
+        <EditableTextField
           sx={{ mt: 2 }}
           label="Phone Number"
+          name="phoneNumber"
           value={props.checkInData.phoneNumber || ''}
           onChange={(e) => {
             const formattedNumber = formatPhoneNumber(e.target.value);
-            props.onChange({
-              ...props.checkInData,
-              phoneNumber: formattedNumber,
-            });
+            handleChange('phoneNumber', formattedNumber);
           }}
           fullWidth
           error={!!props.errors?.phoneNumber}
@@ -504,31 +426,30 @@ export default function CheckInForm(props: Props) {
             inputMode: 'numeric',
             pattern: '[0-9]*',
           }}
-          disabled={
-            licenseLoading || (hasVolunteer && !editingFields.phoneNumber)
-          }
+          disabled={licenseLoading}
           InputProps={{
-            endAdornment: fieldEndAdornment('phoneNumber'),
             sx: { paddingRight: '9px' },
           }}
+          requireEditing={hasVolunteer}
         />
 
         {/* Address */}
-        <TextField
+        <EditableTextField
           sx={{ mt: 2 }}
           label="Address"
+          name="address"
           value={props.checkInData.address || ''}
           onChange={(e) => {
-            props.onChange({ ...props.checkInData, address: e.target.value });
+            handleChange('address', e.target.value);
           }}
           error={!!props.errors?.address}
           helperText={props.errors?.address}
           fullWidth
-          disabled={licenseLoading || (hasVolunteer && !editingFields.address)}
+          disabled={licenseLoading}
           InputProps={{
-            endAdornment: fieldEndAdornment('address'),
             sx: { paddingRight: '9px' },
           }}
+          requireEditing={hasVolunteer}
         />
       </Box>
 
@@ -542,12 +463,8 @@ export default function CheckInForm(props: Props) {
         <FormLabel id="role-label">Volunteer Role:</FormLabel>
         <RadioGroup
           value={props.checkInData.role || null}
-          onChange={(e) =>
-            props.onChange({
-              ...props.checkInData,
-              role: e.target.value as Role,
-            })
-          }
+          name="role"
+          onChange={(e) => handleChange('role', e.target.value as Role)}
           aria-labelledby="role-label"
         >
           {props.event.eventRoles.map((role, i) => (
@@ -565,77 +482,17 @@ export default function CheckInForm(props: Props) {
       </FormControl>
 
       {/* Organization */}
-      <Autocomplete
-        freeSolo
-        autoComplete
-        value={(props.checkInData.organization as OrganizationOption) || ''}
-        options={props.organizations as OrganizationOption[]}
-        isOptionEqualToValue={(option, value) => option._id === value._id}
-        getOptionLabel={(org) => (typeof org === 'string' ? org : org.name)}
-        renderOption={(props, option) => {
-          return (
-            <li {...props} key={option._id}>
-              {option.display ?? option.name}
-            </li>
-          );
-        }}
-        renderInput={(params) => (
-          <TextField {...params} label="Organization (optional)" />
-        )}
-        filterOptions={(options, params) => {
-          const filtered = filter(options, params);
-
-          // what is typed in the field
-          const { inputValue } = params;
-          const OrganizationRegex = new RegExp(params.inputValue, 'i');
-
-          const isExisting = options.some((option) =>
-            OrganizationRegex.test(option.name)
-          );
-
-          // If the inputValue does not match an existing organization, display it as `Add "[inputValue]"`
-          if (inputValue !== '' && !isExisting) {
-            filtered.push({
-              name: inputValue,
-              display: `Add "${inputValue}"`,
-              softDelete: false,
-              _id: '-1',
-              createdAt: new Date(),
-              updatedAt: new Date(),
-            });
-          }
-
-          return filtered;
-        }}
-        clearOnBlur
-        autoHighlight
-        onChange={(_, value) => {
-          if (typeof value === 'string') {
-            // TODO: set error state (unknown how this would happen)
-            console.error(
-              'String value in organization autocomplete. Should only be objects'
-            );
-            // if the user has input a custom value
-          } else if (value?.display) {
-            // create new organization
-            createNewOrganization(value.name).then((id) => {
-              // updates the currently selected organization in state
-              if (id) {
-                const newOrg = { ...value, _id: id };
-                props.onChange({ ...props.checkInData, organization: newOrg });
-              }
-            });
-            // if the user selected an existing organization, update it in state
-          } else if (value) {
-            props.onChange({ ...props.checkInData, organization: value });
-          } else {
-            props.onChange({
-              ...props.checkInData,
-              organization: undefined,
-            });
-          }
-        }}
+      <OrganizationAutocomplete
+        value={props.checkInData.organization}
+        options={props.organizations}
         disabled={licenseLoading}
+        onChange={(org) =>
+          props.onChange((currData) => ({
+            ...currData,
+            organization: org,
+          }))
+        }
+        setSubmitDisabled={props.setSubmitDisabled}
       />
     </>
   );
