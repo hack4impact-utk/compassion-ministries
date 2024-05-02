@@ -147,23 +147,19 @@ export async function getVolunteerReport(
         eventsId.add(volunteerEvent.event._id);
         // Add event time within search range to total time volunteered
         volunteerTime += timeRange[1] - timeRange[0];
-      }
 
-      // accumulates all organization information
-      if (volunteerEvent.organization) {
-        if (volunteerEvent.organization._id in report.organizations) {
-          report.organizations[
-            volunteerEvent.organization._id
-          ].hoursWithOrganization +=
-            volunteerEvent.event.endAt.getTime() -
-            volunteerEvent.event.startAt.getTime();
-        } else {
-          report.organizations[volunteerEvent.organization._id] = {
-            hoursWithOrganization:
-              volunteerEvent.event.endAt.getTime() -
-              volunteerEvent.event.startAt.getTime(),
-            organizationName: volunteerEvent.organization.name,
-          };
+        // accumulates all organization information
+        if (volunteerEvent.organization) {
+          if (volunteerEvent.organization._id in report.organizations) {
+            report.organizations[
+              volunteerEvent.organization._id
+            ].hoursWithOrganization += timeRange[1] - timeRange[0];
+          } else {
+            report.organizations[volunteerEvent.organization._id] = {
+              hoursWithOrganization: timeRange[1] - timeRange[0],
+              organizationName: volunteerEvent.organization.name,
+            };
+          }
         }
       }
     }
