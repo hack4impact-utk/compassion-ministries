@@ -15,7 +15,10 @@ export async function getEventVolunteersByRole(
   let evs: EventVolunteerResponse[];
   try {
     await dbConnect();
-    evs = await EventVolunteerSchema.find({ role }).populate('event').populate('organization').lean();
+    evs = await EventVolunteerSchema.find({ role })
+      .populate('event')
+      .populate('organization')
+      .lean();
   } catch (error) {
     throw new CMError(CMErrorType.InternalError);
   }
@@ -42,4 +45,23 @@ export async function updateEventVolunteer(
   } catch (e) {
     throw new CMError(CMErrorType.InternalError);
   }
+}
+
+export async function getEventVolunteer(
+  id: string
+): Promise<EventVolunteerResponse> {
+  let ev: EventVolunteerResponse | null = null;
+  try {
+    await dbConnect();
+    ev = await EventVolunteerSchema.findById(id)
+      .populate('volunteer')
+      .populate('organization')
+      .lean();
+  } catch (error) {
+    throw new CMError(CMErrorType.InternalError);
+  }
+  if (!ev) {
+    throw new CMError(CMErrorType.NoSuchKey, 'Event Volunteer');
+  }
+  return ev;
 }
