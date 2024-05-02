@@ -4,8 +4,7 @@ import { EventResponse } from '@/types/dataModel/event';
 import { EventVolunteerResponse } from '@/types/dataModel/eventVolunteer';
 import { Box, Button } from '@mui/material';
 import Link from 'next/link';
-import React, { useState } from 'react';
-import EmailEditor from '@/components/EmailEditor';
+import React from 'react';
 
 // changes
 export default function EventView({
@@ -15,11 +14,6 @@ export default function EventView({
   event: EventResponse;
   eventVolunteers: EventVolunteerResponse[];
 }) {
-  const [showEmail, setShowEmail] = useState(false);
-
-  const handleClick = () => {
-    setShowEmail(true);
-  };
   return (
     <Box>
       {/* TODO: Add back in after demo/implementation */}
@@ -34,11 +28,7 @@ export default function EventView({
           Edit
         </Button>
       </Link>
-      <Button variant="contained" fullWidth onClick={handleClick}>
-        New Email
-      </Button>
       <Event event={event} eventVolunteers={eventVolunteers} />
-      {showEmail && <EmailEditor event={event} volunteers={eventVolunteers} />}
     </Box>
   );
 }
