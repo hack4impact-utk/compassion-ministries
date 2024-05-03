@@ -14,6 +14,8 @@ export default function RootLayout({
   //Render HTML body with Providers and Navbar components, including children.
   return (
     <html lang="en">
+      <link rel="icon" href="/logo.png" />
+      <title>Compassion Ministries</title>
       <body style={{ margin: 0 }}>
         <AppLayout>{children}</AppLayout>
       </body>
