@@ -87,7 +87,7 @@ db.organizations.insertMany([
 ])
 
 // creates 31 volunteerId variables
-for (let i = 1; i <= 31; i++) {
+for (let i = 1; i <= 32; i++) {
   this[`volunteerId${i}`] = ObjectId();
 }
 
@@ -728,8 +728,21 @@ db.volunteers.insertMany([
     "softDelete": true,
     "createdAt": new Date(),
     "updatedAt": new Date()
+  },
+  {
+    "_id": volunteerId32,
+    "firstName": "Zavier",
+    "lastName": "Miller",
+    "email": "zavierjmiller@gmail.com",
+    "phoneNumber": "2198753753",
+    "address": "718 Watauga Ave, Knoxville, TN 37917",
+    "previousRole": "Food",
+    "roleVerifications": [],
+    "softDelete": false,
+    "createdAt": new Date(),
+    "updatedAt": new Date()
   }
-])
+]);
 
 // creates 30 eventId variables
 for (let i = 1; i <= 150; i++) {
@@ -767,7 +780,7 @@ db.events.insertMany([
     "description": "Providing free medical checkups and health education to the community. This is an overnight event!",
     "eventLocation": "456 Maple Avenue, Nashville, TN 37201",
     "startAt": new Date('01 January 2024 23:00'),
-    "endAt": new Date('01 January 2024 04:00'),
+    "endAt": new Date('02 January 2024 04:00'),
     "date": new Date(ISODate().getTime() - 1000 * 3600 * 24 * -2),
     "eventRoles": ["Medical", "Dental", "Food", "Save the Babies"],
     "emails": [
@@ -898,7 +911,7 @@ db.events.insertMany([
     "description": "A festival celebrating health care workers and offering community health services. This is an overnight telethon starting at midnight!",
     "eventLocation": "901 Spruce Street, Birmingham, AL 35203",
     "startAt": new Date('01 January 2024 23:59'),
-    "endAt": new Date('01 January 2024 08:00'),
+    "endAt": new Date('02 January 2024 08:00'),
     "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * -33),
     "eventRoles": ["Medical", "Save the Babies"],
     "emails": [
@@ -953,7 +966,7 @@ db.events.insertMany([
     "eventLocation": "789 Maple Avenue, Smalltown, USA",
     "eventLocation": "456 Maple Avenue, Nashville, TN 37201",
     "startAt": new Date('01 January 2024 23:00'),
-    "endAt": new Date('01 January 2024 04:00'),
+    "endAt": new Date('02 January 2024 04:00'),
     "date": new Date(ISODate().getTime() - 1000 * 3600 * 24 * 2),
     "eventRoles": ["Food"],
     "emails": [],
@@ -1025,7 +1038,7 @@ db.events.insertMany([
     "description": "An educational seminar on car seat safety and installation for parents and caregivers.",
     "eventLocation": "678 Maplewood Drive, Suburbville, USA",
     "startAt": new Date('01 January 2024 23:59'),
-    "endAt": new Date('01 January 2024 08:00'),
+    "endAt": new Date('02 January 2024 08:00'),
     "date": new Date(ISODate().getTime() + 1000 * 3600 * 24 * 33),
     "eventRoles": ["Save the Babies"],
     "emails": [],
