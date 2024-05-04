@@ -49,7 +49,7 @@ Put an overview of the non-profit you are working with and what you are doing fo
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/hack4impact-utk/[PROJECT NAME].git
+git clone https://github.com/hack4impact-utk/compassion-ministries.git
 ```
 
 ### 2. Open project in VS Code and accept recommended extensions
