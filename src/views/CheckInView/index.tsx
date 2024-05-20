@@ -49,6 +49,21 @@ export default function CheckInView(props: CheckInViewProps) {
   const validate = useValidation(zCheckInFormData);
   const router = useRouter();
 
+  const showConfirmation = async (title: string, description: string) => {
+    try {
+      await confirm({
+        title,
+        description,
+        confirmationText: 'Yes',
+        cancellationText: 'No',
+      });
+    } catch (e) {
+      setLoading(false);
+      showSnackbar('Did not check in volunteer.');
+      throw e;
+    }
+  };
+
   /*
     This function is responsible for calling the check in api endpoint and
     getting volunteer checked in on the backend.
@@ -135,36 +150,17 @@ export default function CheckInView(props: CheckInViewProps) {
     }
 
     if (formData.role !== 'Food') {
-      if (!foundVolunteer?.backgroundCheck) {
-        // if there is no background check, display message
-        try {
-          await confirm({
-            title: `This volunteer does not have a background check.`,
-            description: 'Would you still like to check them in?',
-            confirmationText: 'Yes',
-            cancellationText: 'No',
-          });
-        } catch (e) {
-          setLoading(false);
-          showSnackbar('Did not check in volunteer.');
-          return;
-        }
-      } else if (foundVolunteer.backgroundCheck.status !== 'Passed') {
-        // if there is no background check, display message
-        try {
-          await confirm({
-            title: `${
-              foundVolunteer.firstName
-            }'s background check is ${foundVolunteer.backgroundCheck.status.toLowerCase()}.`,
-            description: 'Would you still like to check them in?',
-            confirmationText: 'Yes',
-            cancellationText: 'No',
-          });
-        } catch (e) {
-          setLoading(false);
-          showSnackbar('Did not check in volunteer.');
-          return;
-        }
+      const { backgroundCheck, firstName } = foundVolunteer || {};
+      if (!backgroundCheck) {
+        await showConfirmation(
+          'This volunteer does not have a background check.',
+          'Would you still like to check them in?'
+        );
+      } else if (backgroundCheck.status !== 'Passed') {
+        await showConfirmation(
+          `${firstName}'s background check is ${backgroundCheck.status.toLowerCase()}.`,
+          'Would you still like to check them in?'
+        );
       }
     }
 
