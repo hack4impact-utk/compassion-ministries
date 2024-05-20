@@ -151,16 +151,20 @@ export default function CheckInView(props: CheckInViewProps) {
 
     if (formData.role !== 'Food') {
       const { backgroundCheck, firstName } = foundVolunteer || {};
-      if (!backgroundCheck) {
-        await showConfirmation(
-          'This volunteer does not have a background check.',
-          'Would you still like to check them in?'
-        );
-      } else if (backgroundCheck.status !== 'Passed') {
-        await showConfirmation(
-          `${firstName}'s background check is ${backgroundCheck.status.toLowerCase()}.`,
-          'Would you still like to check them in?'
-        );
+      try {
+        if (!backgroundCheck) {
+          await showConfirmation(
+            'This volunteer does not have a background check.',
+            'Would you still like to check them in?'
+          );
+        } else if (backgroundCheck.status !== 'Passed') {
+          await showConfirmation(
+            `${firstName}'s background check is ${backgroundCheck.status.toLowerCase()}.`,
+            'Would you still like to check them in?'
+          );
+        }
+      } catch (e) {
+        return;
       }
     }
 
