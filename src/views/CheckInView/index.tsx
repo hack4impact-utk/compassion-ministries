@@ -21,6 +21,7 @@ import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { ArrowDropDownIcon } from '@mui/x-date-pickers/icons';
+import { useConfirm } from 'material-ui-confirm';
 
 interface CheckInViewProps {
   event: EventResponse;
@@ -43,6 +44,7 @@ export default function CheckInView(props: CheckInViewProps) {
   const checkInButtonMenuOpen = !!checkInButtonAnchorEl;
   const confirmRole = useRoleConfirmation();
   const confirmEdit = useEditConfirmation();
+  const confirm = useConfirm();
   const { showSnackbar } = useSnackbar();
   const validate = useValidation(zCheckInFormData);
   const router = useRouter();
@@ -129,6 +131,40 @@ export default function CheckInView(props: CheckInViewProps) {
           'Role verification failed. Check in again to verify volunteer'
         );
         return;
+      }
+    }
+
+    if (formData.role !== 'Food') {
+      if (!foundVolunteer?.backgroundCheck) {
+        // if there is no background check, display message
+        try {
+          await confirm({
+            title: `This volunteer does not have a background check.`,
+            description: 'Would you still like to check them in?',
+            confirmationText: 'Yes',
+            cancellationText: 'No',
+          });
+        } catch (e) {
+          setLoading(false);
+          showSnackbar('Did not check in volunteer.');
+          return;
+        }
+      } else if (foundVolunteer.backgroundCheck.status !== 'Passed') {
+        // if there is no background check, display message
+        try {
+          await confirm({
+            title: `${
+              foundVolunteer.firstName
+            }'s background check is ${foundVolunteer.backgroundCheck.status.toLowerCase()}.`,
+            description: 'Would you still like to check them in?',
+            confirmationText: 'Yes',
+            cancellationText: 'No',
+          });
+        } catch (e) {
+          setLoading(false);
+          showSnackbar('Did not check in volunteer.');
+          return;
+        }
       }
     }
 
