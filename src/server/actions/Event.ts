@@ -232,20 +232,19 @@ export async function sendEventEmail(
         clientId: process.env.EVENTS_EMAIL_CLIENT_ID,
         clientSecret: process.env.EVENTS_EMAIL_CLIENT_SECRET,
         refreshToken: process.env.EVENTS_EMAIL_REFRESH_TOKEN,
-      }
+      },
     });
 
     const emailOptions = {
       from: process.env.EVENTS_EMAIL_PASS,
       to: emails.join(','),
       subject: createEmailRequest.subject,
-      text: createEmailRequest.emailbody,
+      html: createEmailRequest.emailbody,
     };
 
     await transporter.sendMail(emailOptions);
 
     return emails;
-
   } catch (error) {
     console.log(error);
     throw new CMError(CMErrorType.InternalError);
