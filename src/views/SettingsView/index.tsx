@@ -50,8 +50,10 @@ export default function SettingsView({ users, settings }: SettingsViewProps) {
       }
 
       showSnackbar('Settings updated successfully', 'success');
-      setNewAdmins([]);
+      // weird hack
       router.refresh();
+      router.refresh();
+      setNewAdmins([]);
     } catch (e) {
       showSnackbar('Failed to update settings', 'error');
       console.error('Failed to update settings', e);

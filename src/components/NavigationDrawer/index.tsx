@@ -6,7 +6,6 @@ import EventIcon from '@mui/icons-material/Event';
 import Diversity3OutlinedIcon from '@mui/icons-material/Diversity3Outlined';
 import ChurchIcon from '@mui/icons-material/Church';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 interface NavigationDrawerProps {
@@ -39,12 +38,6 @@ const routes: { text: string; icon: React.ReactNode; href: string }[] = [
 
 export default function NavigationDrawer(props: NavigationDrawerProps) {
   const responsive = useResponsive();
-  const router = useRouter();
-
-  function clickHandler(href: string) {
-    router.push(href);
-    props.closeDrawer();
-  }
 
   return (
     <Drawer
@@ -70,7 +63,7 @@ export default function NavigationDrawer(props: NavigationDrawerProps) {
             key={i}
             text={route.text}
             icon={route.icon}
-            onClick={() => clickHandler(route.href)}
+            href={route.href}
           ></NavigationDrawerListItem>
         ))}
       </List>

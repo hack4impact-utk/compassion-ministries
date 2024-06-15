@@ -1,7 +1,11 @@
 import { AppBar, Box, Toolbar } from '@mui/material';
 import AppbarAvatar from '../AppbarAvatar';
 
-export default function DesktopAppbar() {
+interface DesktopAppbarProps {
+  children?: React.ReactNode;
+}
+
+export default function DesktopAppbar({ children }: DesktopAppbarProps) {
   return (
     <AppBar
       position="relative"
@@ -9,9 +13,9 @@ export default function DesktopAppbar() {
       elevation={0}
       sx={{ background: 'white', px: 2 }}
     >
-      <Toolbar disableGutters>
+      <Toolbar disableGutters sx={{ paddingLeft: '280px' }}>
         {/* keeps the sign in user circle in the right most corner */}
-        <Box sx={{ flexGrow: 1, display: 'flex' }}></Box>
+        <Box sx={{ flexGrow: 1, display: 'flex' }}>{children}</Box>
 
         <Box sx={{ flexGrow: 0 }}>
           <AppbarAvatar />

@@ -1,4 +1,5 @@
 'use client';
+import { MIN_YEAR } from '@/utils/constants/year';
 import { ArrowBackIosNew, ArrowForwardIos } from '@mui/icons-material';
 import {
   IconButton,
@@ -10,7 +11,6 @@ import {
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-const MIN_YEAR = 2024;
 export default function YearSelector() {
   // what the year dropdown is tied to. Only visible if !== null
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -38,13 +38,17 @@ export default function YearSelector() {
   useEffect(() => {
     const currYear = new Date().getFullYear();
     setCurrYear(currYear);
-    updateQueryParam(currYear);
+    if (!searchParams.has('year')) {
+      updateQueryParam(currYear);
+    }
   }, [updateQueryParam]);
 
-  // sets initial year options. Includes all years from 2024 to current year
+  const MAX_YEAR = CURR_YEAR + 1;
+
+  // sets initial year options. Includes all years from 2024 to current year + 1
   const YEAR_OPTIONS = useMemo(() => {
     const options: number[] = [];
-    for (let i = CURR_YEAR; i >= MIN_YEAR; i--) {
+    for (let i = MAX_YEAR; i >= MIN_YEAR; i--) {
       options.push(i);
     }
     return options;
@@ -94,7 +98,7 @@ export default function YearSelector() {
 
       <IconButton
         size="small"
-        disabled={selectedYear >= CURR_YEAR}
+        disabled={selectedYear >= MAX_YEAR}
         onClick={() => updateQueryParam(selectedYear + 1)}
       >
         <ArrowForwardIos sx={{ width: 15, height: 15 }} />
