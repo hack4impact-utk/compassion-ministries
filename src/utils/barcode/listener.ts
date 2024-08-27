@@ -83,7 +83,8 @@ async function handleBarcode({
  */
 async function emitOnBarcode() {
   // replace "NumLock0010NumLock" with empty string
-  const parsed = await handleBarcode({ detail: { data: scanBuffer } });
+  const preParsedScanInput = scanBuffer.replaceAll('~', '\n');
+  const parsed = await handleBarcode({ detail: { data: preParsedScanInput } });
   const event = new CustomEvent('onbarcode', {
     detail: {
       data: parsed,
@@ -128,11 +129,16 @@ function handleKeypress(e: KeyboardEvent) {
     scanBuffer = '@';
   }
 
+  // replaces "Enter" with ~ as a segment delimiter
+  if (e.key === 'Enter') {
+    scanBuffer += '~';
+  }
+
   if (!specialKeys.includes(e.key)) {
     scanBuffer += e.key;
   }
 
-  // if enter is pressed, emit event
+  // if Tab is pressed, emit event
   if (
     e.key === 'Tab' &&
     scanBuffer.length > 0 &&
