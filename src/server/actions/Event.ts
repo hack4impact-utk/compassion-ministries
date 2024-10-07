@@ -227,16 +227,13 @@ export async function sendEventEmail(
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        type: 'OAuth2',
         user: process.env.EVENTS_EMAIL_ADDR,
-        clientId: process.env.EVENTS_EMAIL_CLIENT_ID,
-        clientSecret: process.env.EVENTS_EMAIL_CLIENT_SECRET,
-        refreshToken: process.env.EVENTS_EMAIL_REFRESH_TOKEN,
+        pass: process.env.EVENTS_EMAIL_APP_PASS,
       }
     });
 
     const emailOptions = {
-      from: process.env.EVENTS_EMAIL_PASS,
+      from: process.env.EVENTS_EMAIL_ADDR,
       to: emails.join(','),
       subject: createEmailRequest.subject,
       text: createEmailRequest.emailbody,
