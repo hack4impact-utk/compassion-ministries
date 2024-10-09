@@ -6,12 +6,18 @@ import React, { useState } from 'react';
 import Appbar from '../Appbar';
 import NavigationDrawer from '../NavigationDrawer';
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+export default function AppLayout({
+  children,
+  appbar,
+}: {
+  children: React.ReactNode;
+  appbar?: React.ReactNode;
+}) {
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
   return (
     <Providers>
-      <Appbar setDrawerOpen={() => setDrawerOpen(true)} />
+      <Appbar setDrawerOpen={() => setDrawerOpen(true)}>{appbar}</Appbar>
       <Box component="section" sx={{ display: 'flex' }}>
         <NavigationDrawer
           open={drawerOpen}
