@@ -240,7 +240,7 @@ export async function sendEventEmail(
       from: process.env.EVENTS_EMAIL_ADDR,
       to: emails.join(','),
       subject: createEmailRequest.subject,
-      text: createEmailRequest.emailbody,
+      html: createEmailRequest.emailbody,
     };
 
     await transporter.sendMail(emailOptions);
